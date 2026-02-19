@@ -23,7 +23,7 @@ export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
   };
 
   // Default cinematic fallback video
-  const src = videoUrl || "https://www.w3schools.com/html/mov_bbb.mp4";
+  const src = videoUrl || "https://res.cloudinary.com/dazvcuqb2/video/upload/v1771536907/YTDown.com_YouTube_Minecraft-Soothing-Scenes-Relaxing-Firep_Media_FqnAV6tkwzA_003_480p_y059sl.mp4";
 
   return (
     <>
