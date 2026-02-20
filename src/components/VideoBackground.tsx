@@ -23,7 +23,7 @@ export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
   };
 
   // Default cinematic fallback video
-  const src = videoUrl || "https://res.cloudinary.com/dazvcuqb2/video/upload/v1771540164/Video_Project_3_1_avctq5.mp4";
+  const src = videoUrl || "https://res.cloudinary.com/dazvcuqb2/video/upload/v1771615133/173_535__minecraft_music_but_it_hits_hard_1hour_C418_minecraft_ambiance_music_pqddyz.mp4";
 
   return (
     <>
