@@ -130,13 +130,14 @@ export default function PlayersSection() {
             onClick={() => setSelected(null)}
           >
             <motion.div
-              className="glass-card rounded-3xl overflow-hidden max-w-3xl w-full max-h-[90vh] overflow-y-auto"
+              className="glass-card rounded-3xl overflow-hidden max-w-3xl w-full"
               initial={{ scale: 0.9, y: 40 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 40 }}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="grid md:grid-cols-2">
+              <div className="max-h-[90vh] overflow-y-auto overflow-x-hidden [scrollbar-gutter:stable]">
+                <div className="grid md:grid-cols-2">
                 {/* Left */}
                 <div className="relative">
                   {selected.portrait_url ? (
@@ -179,7 +180,7 @@ export default function PlayersSection() {
                 </div>
 
                 {/* Right */}
-                <div className="p-6 space-y-5">
+                <div className="relative p-6 space-y-5">
                   <button onClick={() => setSelected(null)} className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "hsla(var(--cream) / 0.1)", color: "hsl(var(--cream))" }}>
                     <X size={16} />
                   </button>
@@ -250,6 +251,7 @@ export default function PlayersSection() {
                       </div>
                     </div>
                   )}
+                </div>
                 </div>
               </div>
             </motion.div>
