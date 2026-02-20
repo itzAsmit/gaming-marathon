@@ -65,7 +65,7 @@ export default function HeroSection() {
 
             {/* Scroll indicator below APPLY NOW */}
             <motion.div
-              className="flex flex-col items-center gap-1"
+              className="flex flex-col items-center gap-0"
               animate={{ y: [0, 6, 0] }}
               transition={{ duration: 1.8, repeat: Infinity }}
             >
@@ -85,7 +85,6 @@ export default function HeroSection() {
                 }}
                 onClick={() => {}}
               >
-                <span style={{ color: "#25D366", fontSize: "16px" }}>●</span>
                 JOIN WHATSAPP
               </button>
 
@@ -101,7 +100,6 @@ export default function HeroSection() {
                 }}
                 onClick={() => {}}
               >
-                <span style={{ color: "#5865F2", fontSize: "16px" }}>●</span>
                 JOIN DISCORD
               </button>
             </div>
