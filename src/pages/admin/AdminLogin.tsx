@@ -1,16 +1,32 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Eye, EyeOff, Gamepad2 } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, Gamepad2 } from "lucide-react";
 
 export default function AdminLogin() {
   const navigate = useNavigate();
+  const bgRef = useRef<HTMLDivElement>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
   const [remember, setRemember] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!bgRef.current) return;
+    const rect = bgRef.current.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    bgRef.current.style.setProperty("--mx", `${x}%`);
+    bgRef.current.style.setProperty("--my", `${y}%`);
+  };
+
+  const handleMouseLeave = () => {
+    if (!bgRef.current) return;
+    bgRef.current.style.setProperty("--mx", "50%");
+    bgRef.current.style.setProperty("--my", "50%");
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,10 +53,40 @@ export default function AdminLogin() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center p-4"
+      className="relative min-h-screen flex items-center justify-center p-4 overflow-hidden"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       style={{ background: "linear-gradient(135deg, hsl(var(--cream)), hsl(var(--cream-dark)))" }}
     >
-      <div className="w-full max-w-md">
+      <div ref={bgRef} className="pointer-events-none absolute inset-0" style={{ ["--mx" as any]: "50%", ["--my" as any]: "50%" }}>
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(620px circle at var(--mx) var(--my), hsla(var(--gold) / 0.24), transparent 40%), radial-gradient(700px circle at 15% 20%, hsla(var(--brown) / 0.2), transparent 45%), radial-gradient(760px circle at 85% 80%, hsla(var(--brown-light) / 0.18), transparent 42%)",
+          }}
+        />
+        <div
+          className="absolute inset-0 opacity-50"
+          style={{
+            backgroundImage: "radial-gradient(hsla(var(--brown) / 0.14) 1px, transparent 1px)",
+            backgroundSize: "26px 26px",
+          }}
+        />
+        <div className="absolute -top-20 -left-20 w-80 h-80 rounded-full blur-3xl animate-pulse" style={{ background: "hsla(var(--gold) / 0.18)" }} />
+        <div className="absolute -bottom-20 -right-20 w-96 h-96 rounded-full blur-3xl animate-pulse" style={{ background: "hsla(var(--brown) / 0.22)", animationDelay: "800ms" }} />
+      </div>
+
+      <button
+        onClick={() => (window.history.length > 1 ? navigate(-1) : navigate("/"))}
+        className="absolute top-6 left-6 z-20 inline-flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-cinzel tracking-widest transition-all hover:scale-105"
+        style={{ background: "hsla(var(--cream) / 0.8)", color: "hsl(var(--brown-deep))", border: "1px solid hsl(var(--cream-dark))", fontFamily: "Cinzel, serif" }}
+      >
+        <ArrowLeft size={14} />
+        GO BACK
+      </button>
+
+      <div className="relative z-10 w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4" style={{ background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))" }}>
