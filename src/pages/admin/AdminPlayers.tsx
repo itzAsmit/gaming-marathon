@@ -261,7 +261,7 @@ export default function AdminPlayers() {
                 {(["instagram", "twitter", "linkedin"] as const).map((s) => (
                   <div key={s}>
                     <label className="block text-xs font-cinzel tracking-widest mb-1.5 capitalize" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>{s.toUpperCase()}</label>
-                    <input value={(form as any)[s] ?? ""} onChange={(e) => setForm((f) => ({ ...f, [s]: e.target.value }))} className="w-full px-3 py-2 rounded-xl text-xs outline-none" style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} placeholder={`@handle`} />
+                    <input value={(form as any)[s] ?? ""} onChange={(e) => setForm((f) => ({ ...f, [s]: e.target.value }))} className="w-full px-3 py-2 rounded-xl text-xs outline-none" style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} placeholder={`https://www.example.com`} />
                   </div>
                 ))}
               </div>
