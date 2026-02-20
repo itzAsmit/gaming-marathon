@@ -65,11 +65,11 @@ export default function HeroSection() {
 
             {/* Scroll indicator below APPLY NOW */}
             <motion.div
-              className="flex flex-col items-center gap-0"
+              className="flex flex-col items-center gap-0 -my-2"
               animate={{ y: [0, 6, 0] }}
               transition={{ duration: 1.8, repeat: Infinity }}
             >
-              <p className="text-xs tracking-[0.4em] font-cinzel" style={{ color: "hsl(var(--gold) / 0.7)", fontFamily: "Cinzel, serif" }}>
+              <p className="text-xs tracking-[0.4em] font-cinzel leading-tight" style={{ color: "hsl(var(--gold) / 0.7)", fontFamily: "Cinzel, serif" }}>
                 SCROLL
               </p>
             </motion.div>
