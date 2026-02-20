@@ -49,7 +49,21 @@ export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
       </motion.div>
 
       {/* UI Controls */}
-      <div className="fixed top-4 right-4 z-50 flex items-center gap-3">
+      <div className="fixed top-4 right-4 z-50 flex items-center gap-5">
+        <button
+          onClick={() => document.getElementById("players")?.scrollIntoView({ behavior: "smooth" })}
+          className="text-xs font-cinzel tracking-widest transition-all duration-300 hover:opacity-100 opacity-70"
+          style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif", background: "none", border: "none" }}
+        >
+          MEET PLAYERS
+        </button>
+        <button
+          onClick={() => document.getElementById("leaderboard")?.scrollIntoView({ behavior: "smooth" })}
+          className="text-xs font-cinzel tracking-widest transition-all duration-300 hover:opacity-100 opacity-70"
+          style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif", background: "none", border: "none" }}
+        >
+          LEADERBOARD
+        </button>
         <Link
           to="/admin/login"
           className="glass-card px-4 py-2 rounded-full text-cream text-sm font-cinzel tracking-widest hover:glow-gold transition-all duration-300"
