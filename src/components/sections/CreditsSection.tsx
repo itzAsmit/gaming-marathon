@@ -11,7 +11,7 @@ const CREDITS = [
   },
   {
     role: "DEVELOPER",
-    name: "Built with Lovable",
+    name: "Asmit Biswas",
     caption: "Crafted with passion & precision",
     emoji: "⚡",
   },
