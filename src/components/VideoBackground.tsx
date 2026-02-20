@@ -51,18 +51,18 @@ export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
       {/* UI Controls */}
       <div className="fixed top-4 right-4 z-50 flex items-center gap-5">
         <button
-          onClick={() => document.getElementById("players")?.scrollIntoView({ behavior: "smooth" })}
-          className="text-xs font-cinzel tracking-widest transition-all duration-300 hover:opacity-100 opacity-70"
-          style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif", background: "none", border: "none" }}
-        >
-          MEET PLAYERS
-        </button>
-        <button
           onClick={() => document.getElementById("leaderboard")?.scrollIntoView({ behavior: "smooth" })}
           className="text-xs font-cinzel tracking-widest transition-all duration-300 hover:opacity-100 opacity-70"
           style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif", background: "none", border: "none" }}
         >
           LEADERBOARD
+        </button>
+        <button
+          onClick={() => document.getElementById("players")?.scrollIntoView({ behavior: "smooth" })}
+          className="text-xs font-cinzel tracking-widest transition-all duration-300 hover:opacity-100 opacity-70"
+          style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif", background: "none", border: "none" }}
+        >
+          MEET PLAYERS
         </button>
         <Link
           to="/admin/login"
