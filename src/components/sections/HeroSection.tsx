@@ -98,7 +98,7 @@ export default function HeroSection() {
                   fontFamily: "Cinzel, serif",
                   borderLeft: "2px solid #5865F2",
                 }}
-                onClick={() => {}}
+                onClick={() => window.open("https://discord.gg/VwW8ktwzyb", "_blank")}
               >
                 JOIN DISCORD
               </button>
