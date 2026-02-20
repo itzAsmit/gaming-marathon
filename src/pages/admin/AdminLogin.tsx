@@ -9,7 +9,6 @@ export default function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
-  const [remember, setRemember] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -150,18 +149,6 @@ export default function AdminLogin() {
                 </button>
               </div>
             </div>
-
-            {/* Remember me */}
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={remember}
-                onChange={(e) => setRemember(e.target.checked)}
-                className="w-4 h-4 rounded"
-                style={{ accentColor: "hsl(var(--brown))" }}
-              />
-              <span className="text-sm" style={{ color: "hsl(var(--brown-light))" }}>Remember me</span>
-            </label>
 
             {/* Error */}
             {error && (
