@@ -63,8 +63,19 @@ export default function HeroSection() {
               APPLY NOW
             </button>
 
-            {/* Social buttons row */}
-            <div className="flex flex-col sm:flex-row gap-3">
+            {/* Scroll indicator below APPLY NOW */}
+            <motion.div
+              className="flex flex-col items-center gap-1"
+              animate={{ y: [0, 6, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity }}
+            >
+              <p className="text-xs tracking-[0.4em] font-cinzel" style={{ color: "hsl(var(--gold) / 0.7)", fontFamily: "Cinzel, serif" }}>
+                SCROLL
+              </p>
+            </motion.div>
+
+            {/* Social buttons row with gold line divider between them */}
+            <div className="flex flex-row items-center gap-0">
               <button
                 className="px-7 py-3 font-cinzel text-xs tracking-[0.3em] rounded-full glass-card transition-all duration-300 hover:scale-105 flex items-center gap-2"
                 style={{
@@ -77,6 +88,10 @@ export default function HeroSection() {
                 <span style={{ color: "#25D366", fontSize: "16px" }}>●</span>
                 JOIN WHATSAPP
               </button>
+
+              {/* Gold vertical line between buttons */}
+              <div className="w-px h-10 mx-3" style={{ background: "linear-gradient(to bottom, transparent, hsl(var(--gold)), transparent)" }} />
+
               <button
                 className="px-7 py-3 font-cinzel text-xs tracking-[0.3em] rounded-full glass-card transition-all duration-300 hover:scale-105 flex items-center gap-2"
                 style={{
@@ -92,18 +107,6 @@ export default function HeroSection() {
             </div>
           </div>
         </ScrollReveal>
-
-        {/* Scroll indicator */}
-        <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 1.8, repeat: Infinity }}
-        >
-          <p className="text-xs tracking-[0.4em] font-cinzel" style={{ color: "hsl(var(--gold) / 0.7)", fontFamily: "Cinzel, serif" }}>
-            SCROLL
-          </p>
-          <div className="w-px h-10" style={{ background: "linear-gradient(to bottom, hsl(var(--gold)), transparent)" }} />
-        </motion.div>
       </div>
 
       {/* Decorative corner pieces */}
