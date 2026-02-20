@@ -1,5 +1,4 @@
 import VideoBackground from "@/components/VideoBackground";
-import AnimatedCursor from "@/components/AnimatedCursor";
 import HeroSection from "@/components/sections/HeroSection";
 import LeaderboardSection from "@/components/sections/LeaderboardSection";
 import PlayersSection from "@/components/sections/PlayersSection";
@@ -11,7 +10,6 @@ import CreditsSection from "@/components/sections/CreditsSection";
 const Index = () => {
   return (
     <div className="relative min-h-screen" style={{ background: "hsl(var(--brown-deep))" }}>
-      <AnimatedCursor />
       <VideoBackground />
 
       {/* Scrollable content layer */}

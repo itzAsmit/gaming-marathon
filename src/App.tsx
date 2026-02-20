@@ -12,12 +12,14 @@ import AdminGames from "./pages/admin/AdminGames";
 import AdminItems from "./pages/admin/AdminItems";
 import AdminLogs from "./pages/admin/AdminLogs";
 import AdminHallOfFame from "./pages/admin/AdminHallOfFame";
+import AnimatedCursor from "./components/AnimatedCursor";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
+      <AnimatedCursor />
       <Toaster />
       <Sonner />
       <BrowserRouter>
