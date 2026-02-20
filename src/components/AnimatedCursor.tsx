@@ -1,13 +1,15 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
-
-const GAMES = ["AMONG US", "BGMI", "SCRIBBL", "CARROM", "CHESS", "UNO", "LUDO", "SMASH KARTS", "STUMBLE GUYS", "BOBBLE LEAGUE", "CODENAMES"];
+import { useLocation } from "react-router-dom";
 
 type CursorVariant = "default" | "hover" | "click";
 
 export default function AnimatedCursor() {
   const isMobile = useIsMobile();
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith("/admin");
+  const cursorColor = isAdmin ? "30 20% 15%" : "var(--cream)"; // dark brown on admin, cream elsewhere
   const cursorRef = useRef<HTMLDivElement>(null);
   const followerRef = useRef<HTMLDivElement>(null);
   const [variant, setVariant] = useState<CursorVariant>("default");
@@ -89,9 +91,11 @@ export default function AnimatedCursor() {
         style={{
           width: variant === "click" ? "8px" : "12px",
           height: variant === "click" ? "8px" : "12px",
-          backgroundColor: "hsl(var(--cream))",
+          backgroundColor: `hsl(${cursorColor})`,
           borderRadius: "50%",
-          boxShadow: "0 0 10px hsl(var(--cream)), 0 0 20px hsla(var(--cream) / 0.5)",
+          boxShadow: isAdmin
+            ? `0 0 8px hsl(${cursorColor}), 0 0 16px hsla(${cursorColor} / 0.4)`
+            : `0 0 10px hsl(var(--cream)), 0 0 20px hsla(var(--cream) / 0.5)`,
           opacity: visible ? 1 : 0,
           transition: "width 0.2s, height 0.2s, opacity 0.3s, background-color 0.2s",
         }}
@@ -104,12 +108,15 @@ export default function AnimatedCursor() {
           width: variant === "hover" ? "50px" : "40px",
           height: variant === "hover" ? "50px" : "40px",
           borderRadius: "50%",
-          border: `1.5px solid hsl(var(--${variant === "hover" ? "gold" : "cream"}))`,
-          boxShadow:
-            variant === "hover"
-              ? "0 0 15px hsla(var(--gold) / 0.5)"
+          border: isAdmin
+            ? `1.5px solid hsl(${variant === "hover" ? "var(--gold)" : cursorColor})`
+            : `1.5px solid hsl(var(--${variant === "hover" ? "gold" : "cream"}))`,
+          boxShadow: variant === "hover"
+            ? "0 0 15px hsla(var(--gold) / 0.5)"
+            : isAdmin
+              ? `0 0 12px hsla(${cursorColor} / 0.25)`
               : "0 0 15px hsla(var(--cream) / 0.3)",
-          opacity: visible ? (variant === "hover" ? 0.9 : 0.5) : 0,
+          opacity: visible ? (variant === "hover" ? 0.9 : 0.6) : 0,
           transition: "width 0.3s ease, height 0.3s ease, opacity 0.3s, border-color 0.3s, box-shadow 0.3s",
           backgroundColor: variant === "hover" ? "hsla(var(--gold) / 0.05)" : "transparent",
         }}
