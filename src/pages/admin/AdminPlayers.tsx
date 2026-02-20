@@ -21,6 +21,23 @@ interface Player {
 interface Proficiency { game_name: string; proficiency_percent: number; }
 
 const BLANK: Omit<Player, "id"> = { player_id: "", name: "", bio: null, image_url: null, portrait_url: null, instagram: null, twitter: null, linkedin: null };
+const AVATAR_OUTPUT_SIZE = 600;
+const PORTRAIT_WIDTH = 900;
+const PORTRAIT_HEIGHT = 1200;
+
+type CropKind = "avatar" | "portrait";
+
+interface CropDraft {
+  open: boolean;
+  kind: CropKind | null;
+  src: string;
+  fileName: string;
+  imageWidth: number;
+  imageHeight: number;
+  zoom: number;
+  offsetX: number;
+  offsetY: number;
+}
 
 const logActivity = async (action: string, target: string) => {
   await supabase.from("activity_logs").insert({ action, target });
@@ -44,6 +61,20 @@ export default function AdminPlayers() {
   const [portraitFile, setPortraitFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState<Player | null>(null);
+  const [cropDraft, setCropDraft] = useState<CropDraft>({
+    open: false,
+    kind: null,
+    src: "",
+    fileName: "",
+    imageWidth: 0,
+    imageHeight: 0,
+    zoom: 1,
+    offsetX: 0,
+    offsetY: 0,
+  });
+  const [isDraggingCrop, setIsDraggingCrop] = useState(false);
+  const [dragStart, setDragStart] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [dragStartOffset, setDragStartOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const avatarRef = useRef<HTMLInputElement>(null);
   const portraitRef = useRef<HTMLInputElement>(null);
 
@@ -54,6 +85,12 @@ export default function AdminPlayers() {
   };
 
   useEffect(() => { fetchPlayers(); }, []);
+
+  useEffect(() => {
+    return () => {
+      if (cropDraft.src) URL.revokeObjectURL(cropDraft.src);
+    };
+  }, [cropDraft.src]);
 
   const openCreate = () => {
     const nextId = getNextPlayerId(players.map((p) => p.player_id));
@@ -80,6 +117,111 @@ export default function AdminPlayers() {
     if (error) return null;
     const { data } = supabase.storage.from(bucket).getPublicUrl(path);
     return data.publicUrl;
+  };
+
+  const getCropFrame = (kind: CropKind) => {
+    if (kind === "avatar") return { width: 320, height: 320, outWidth: AVATAR_OUTPUT_SIZE, outHeight: AVATAR_OUTPUT_SIZE };
+    return { width: 300, height: 400, outWidth: PORTRAIT_WIDTH, outHeight: PORTRAIT_HEIGHT };
+  };
+
+  const clampOffsets = (kind: CropKind, imageWidth: number, imageHeight: number, zoom: number, offsetX: number, offsetY: number) => {
+    const frame = getCropFrame(kind);
+    const scale = Math.max(frame.width / imageWidth, frame.height / imageHeight) * zoom;
+    const renderedWidth = imageWidth * scale;
+    const renderedHeight = imageHeight * scale;
+    const maxX = Math.max((renderedWidth - frame.width) / 2, 0);
+    const maxY = Math.max((renderedHeight - frame.height) / 2, 0);
+
+    return {
+      x: Math.min(Math.max(offsetX, -maxX), maxX),
+      y: Math.min(Math.max(offsetY, -maxY), maxY),
+    };
+  };
+
+  const openCropper = async (file: File, kind: CropKind) => {
+    const src = URL.createObjectURL(file);
+    try {
+      const img = new Image();
+      img.src = src;
+      await img.decode();
+      setCropDraft({
+        open: true,
+        kind,
+        src,
+        fileName: file.name,
+        imageWidth: img.naturalWidth,
+        imageHeight: img.naturalHeight,
+        zoom: 1,
+        offsetX: 0,
+        offsetY: 0,
+      });
+    } catch {
+      URL.revokeObjectURL(src);
+      toast.error("Could not open this image");
+    }
+  };
+
+  const closeCropper = () => {
+    if (cropDraft.src) URL.revokeObjectURL(cropDraft.src);
+    setCropDraft({
+      open: false,
+      kind: null,
+      src: "",
+      fileName: "",
+      imageWidth: 0,
+      imageHeight: 0,
+      zoom: 1,
+      offsetX: 0,
+      offsetY: 0,
+    });
+    setIsDraggingCrop(false);
+  };
+
+  const applyCrop = async () => {
+    if (!cropDraft.open || !cropDraft.kind) return;
+    const { kind, src, imageWidth, imageHeight, zoom, offsetX, offsetY, fileName } = cropDraft;
+    const frame = getCropFrame(kind);
+    const scale = Math.max(frame.width / imageWidth, frame.height / imageHeight) * zoom;
+    const sourceWidth = frame.width / scale;
+    const sourceHeight = frame.height / scale;
+    const sourceX = imageWidth / 2 - sourceWidth / 2 - offsetX / scale;
+    const sourceY = imageHeight / 2 - sourceHeight / 2 - offsetY / scale;
+
+    const canvas = document.createElement("canvas");
+    canvas.width = frame.outWidth;
+    canvas.height = frame.outHeight;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) {
+      toast.error("Could not crop image");
+      return;
+    }
+
+    const img = new Image();
+    img.src = src;
+    await img.decode();
+
+    ctx.drawImage(
+      img,
+      Math.max(0, sourceX),
+      Math.max(0, sourceY),
+      Math.min(imageWidth, sourceWidth),
+      Math.min(imageHeight, sourceHeight),
+      0,
+      0,
+      frame.outWidth,
+      frame.outHeight,
+    );
+
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.92));
+    if (!blob) {
+      toast.error("Could not crop image");
+      return;
+    }
+
+    const croppedFile = new File([blob], fileName.replace(/\.[^.]+$/, "") + "-cropped.jpg", { type: "image/jpeg" });
+    if (kind === "avatar") setAvatarFile(croppedFile);
+    if (kind === "portrait") setPortraitFile(croppedFile);
+    closeCropper();
   };
 
   const savePlayer = async () => {
@@ -234,7 +376,18 @@ export default function AdminPlayers() {
                     )}
                     <p className="text-xs mt-1" style={{ color: "hsl(var(--brown-light))" }}>Upload</p>
                   </div>
-                  <input ref={avatarRef} type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && setAvatarFile(e.target.files[0])} />
+                  <input
+                    ref={avatarRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      await openCropper(file, "avatar");
+                      e.target.value = "";
+                    }}
+                  />
                 </div>
                 <div>
                   <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>PORTRAIT (3:4)</label>
@@ -252,7 +405,18 @@ export default function AdminPlayers() {
                     )}
                     <p className="text-xs mt-1" style={{ color: "hsl(var(--brown-light))" }}>Upload</p>
                   </div>
-                  <input ref={portraitRef} type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && setPortraitFile(e.target.files[0])} />
+                  <input
+                    ref={portraitRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      await openCropper(file, "portrait");
+                      e.target.value = "";
+                    }}
+                  />
                 </div>
               </div>
 
@@ -316,6 +480,83 @@ export default function AdminPlayers() {
                   {saving ? <RefreshCw size={14} className="animate-spin" /> : null}
                   {saving ? "SAVING..." : editing ? "UPDATE PLAYER" : "CREATE PLAYER"}
                 </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Crop modal */}
+      {cropDraft.open && cropDraft.kind && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4" style={{ background: "rgba(0, 0, 0, 0.8)" }}>
+          <div className="w-full max-w-3xl rounded-2xl overflow-hidden" style={{ background: "#0b0b0b", border: "1px solid rgba(255,255,255,0.15)" }}>
+            <div className="flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: "rgba(255,255,255,0.12)" }}>
+              <button onClick={closeCropper} className="text-sm px-3 py-1.5 rounded-lg" style={{ color: "#f2f2f2", background: "rgba(255,255,255,0.08)" }}>
+                Back
+              </button>
+              <h3 className="text-lg font-semibold" style={{ color: "#fff" }}>Edit media</h3>
+              <button onClick={applyCrop} className="text-sm px-4 py-1.5 rounded-full font-semibold" style={{ color: "#0b0b0b", background: "#f0f4f8" }}>
+                Apply
+              </button>
+            </div>
+
+            <div className="p-6">
+              <div
+                className="mx-auto relative overflow-hidden select-none"
+                style={{
+                  width: `${getCropFrame(cropDraft.kind).width}px`,
+                  height: `${getCropFrame(cropDraft.kind).height}px`,
+                  borderRadius: cropDraft.kind === "avatar" ? "9999px" : "12px",
+                  border: "3px solid #1fb6ff",
+                  cursor: isDraggingCrop ? "grabbing" : "grab",
+                  background: "#050505",
+                  touchAction: "none",
+                }}
+                onPointerDown={(e) => {
+                  (e.currentTarget as HTMLDivElement).setPointerCapture(e.pointerId);
+                  setIsDraggingCrop(true);
+                  setDragStart({ x: e.clientX, y: e.clientY });
+                  setDragStartOffset({ x: cropDraft.offsetX, y: cropDraft.offsetY });
+                }}
+                onPointerMove={(e) => {
+                  if (!isDraggingCrop) return;
+                  const nextX = dragStartOffset.x + (e.clientX - dragStart.x);
+                  const nextY = dragStartOffset.y + (e.clientY - dragStart.y);
+                  const clamped = clampOffsets(cropDraft.kind!, cropDraft.imageWidth, cropDraft.imageHeight, cropDraft.zoom, nextX, nextY);
+                  setCropDraft((d) => ({ ...d, offsetX: clamped.x, offsetY: clamped.y }));
+                }}
+                onPointerUp={() => setIsDraggingCrop(false)}
+                onPointerCancel={() => setIsDraggingCrop(false)}
+              >
+                <img
+                  src={cropDraft.src}
+                  alt="Crop preview"
+                  draggable={false}
+                  className="absolute top-1/2 left-1/2 pointer-events-none"
+                  style={{
+                    transform: `translate(calc(-50% + ${cropDraft.offsetX}px), calc(-50% + ${cropDraft.offsetY}px))`,
+                    width: `${cropDraft.imageWidth * Math.max(getCropFrame(cropDraft.kind).width / cropDraft.imageWidth, getCropFrame(cropDraft.kind).height / cropDraft.imageHeight) * cropDraft.zoom}px`,
+                    height: `${cropDraft.imageHeight * Math.max(getCropFrame(cropDraft.kind).width / cropDraft.imageWidth, getCropFrame(cropDraft.kind).height / cropDraft.imageHeight) * cropDraft.zoom}px`,
+                    maxWidth: "none",
+                  }}
+                />
+              </div>
+
+              <div className="max-w-md mx-auto mt-5">
+                <label className="block text-xs mb-2" style={{ color: "#b7c4d1" }}>Zoom</label>
+                <input
+                  type="range"
+                  min={1}
+                  max={3}
+                  step={0.01}
+                  value={cropDraft.zoom}
+                  onChange={(e) => {
+                    const nextZoom = parseFloat(e.target.value);
+                    const clamped = clampOffsets(cropDraft.kind!, cropDraft.imageWidth, cropDraft.imageHeight, nextZoom, cropDraft.offsetX, cropDraft.offsetY);
+                    setCropDraft((d) => ({ ...d, zoom: nextZoom, offsetX: clamped.x, offsetY: clamped.y }));
+                  }}
+                  className="w-full"
+                />
               </div>
             </div>
           </div>
