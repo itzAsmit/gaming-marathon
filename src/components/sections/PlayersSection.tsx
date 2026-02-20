@@ -161,17 +161,17 @@ export default function PlayersSection() {
                     </h3>
                     <div className="flex gap-3 mt-2">
                       {selected.instagram && (
-                        <a href={`https://instagram.com/${selected.instagram}`} target="_blank" rel="noreferrer" style={{ color: "hsl(var(--gold))" }}>
+                        <a href={`${selected.instagram}`} target="_blank" rel="noreferrer" style={{ color: "hsl(var(--gold))" }}>
                           <Instagram size={16} />
                         </a>
                       )}
                       {selected.twitter && (
-                        <a href={`https://twitter.com/${selected.twitter}`} target="_blank" rel="noreferrer" style={{ color: "hsl(var(--gold))" }}>
+                        <a href={`${selected.twitter}`} target="_blank" rel="noreferrer" style={{ color: "hsl(var(--gold))" }}>
                           <Twitter size={16} />
                         </a>
                       )}
                       {selected.linkedin && (
-                        <a href={`https://linkedin.com/in/${selected.linkedin}`} target="_blank" rel="noreferrer" style={{ color: "hsl(var(--gold))" }}>
+                        <a href={`${selected.linkedin}`} target="_blank" rel="noreferrer" style={{ color: "hsl(var(--gold))" }}>
                           <Linkedin size={16} />
                         </a>
                       )}
