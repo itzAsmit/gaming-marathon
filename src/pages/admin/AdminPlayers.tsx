@@ -92,11 +92,12 @@ export default function AdminPlayers() {
       let avatarUrl = form.image_url;
       let portraitUrl = form.portrait_url;
 
+      const safeId = form.player_id.replace(/[^a-zA-Z0-9-_]/g, "");
       if (avatarFile) {
-        avatarUrl = await uploadFile(avatarFile, "players", `avatars/${form.player_id}-${Date.now()}`);
+        avatarUrl = await uploadFile(avatarFile, "players", `avatars/${safeId}-${Date.now()}`);
       }
       if (portraitFile) {
-        portraitUrl = await uploadFile(portraitFile, "players", `portraits/${form.player_id}-${Date.now()}`);
+        portraitUrl = await uploadFile(portraitFile, "players", `portraits/${safeId}-${Date.now()}`);
       }
 
       const payload = { ...form, image_url: avatarUrl, portrait_url: portraitUrl };
