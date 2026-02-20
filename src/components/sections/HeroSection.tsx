@@ -47,29 +47,49 @@ export default function HeroSection() {
         </ScrollReveal>
 
         <ScrollReveal delay={0.7}>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col items-center gap-4 justify-center">
+            {/* APPLY NOW - primary golden CTA */}
             <button
-              className="px-8 py-3 font-cinzel text-sm tracking-[0.3em] rounded-full transition-all duration-300 hover:scale-105"
+              className="px-12 py-4 font-cinzel text-sm tracking-[0.4em] rounded-full transition-all duration-300 hover:scale-105"
               style={{
                 background: "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-light)))",
                 color: "hsl(var(--brown-deep))",
                 fontFamily: "Cinzel, serif",
-                boxShadow: "0 0 30px hsla(var(--gold) / 0.4)",
+                boxShadow: "0 0 40px hsla(var(--gold) / 0.5), 0 0 80px hsla(var(--gold) / 0.2)",
+                fontWeight: 700,
               }}
-              onClick={() => document.getElementById("leaderboard")?.scrollIntoView({ behavior: "smooth" })}
+              onClick={() => {}}
             >
-              VIEW LEADERBOARD
+              APPLY NOW
             </button>
-            <button
-              className="px-8 py-3 font-cinzel text-sm tracking-[0.3em] rounded-full glass-card transition-all duration-300 hover:scale-105"
-              style={{
-                color: "hsl(var(--cream))",
-                fontFamily: "Cinzel, serif",
-              }}
-              onClick={() => document.getElementById("players")?.scrollIntoView({ behavior: "smooth" })}
-            >
-              MEET PLAYERS
-            </button>
+
+            {/* Social buttons row */}
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                className="px-7 py-3 font-cinzel text-xs tracking-[0.3em] rounded-full glass-card transition-all duration-300 hover:scale-105 flex items-center gap-2"
+                style={{
+                  color: "hsl(var(--cream))",
+                  fontFamily: "Cinzel, serif",
+                  borderLeft: "2px solid #25D366",
+                }}
+                onClick={() => {}}
+              >
+                <span style={{ color: "#25D366", fontSize: "16px" }}>●</span>
+                JOIN WHATSAPP
+              </button>
+              <button
+                className="px-7 py-3 font-cinzel text-xs tracking-[0.3em] rounded-full glass-card transition-all duration-300 hover:scale-105 flex items-center gap-2"
+                style={{
+                  color: "hsl(var(--cream))",
+                  fontFamily: "Cinzel, serif",
+                  borderLeft: "2px solid #5865F2",
+                }}
+                onClick={() => {}}
+              >
+                <span style={{ color: "#5865F2", fontSize: "16px" }}>●</span>
+                JOIN DISCORD
+              </button>
+            </div>
           </div>
         </ScrollReveal>
 
