@@ -99,9 +99,6 @@ export default function LeaderboardSection() {
                   <div className="font-cinzel font-semibold col-span-1" style={{ fontFamily: "Cinzel, serif", color: "hsl(var(--cream))" }}>
                     {entry.players?.name ?? "—"}
                   </div>
-                  <div style={{ color: "hsl(var(--cream-dark) / 0.6)", fontSize: "0.75rem" }}>
-                    {entry.players?.player_id ?? "—"}
-                  </div>
                   <div>{entry.games_played}</div>
                   <div>{entry.events_completed}</div>
                   <div style={{ color: "hsl(var(--gold))", fontWeight: 600 }}>{entry.wins}</div>
