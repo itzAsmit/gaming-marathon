@@ -43,7 +43,7 @@ export default function LeaderboardSection() {
     return () => { supabase.removeChannel(channel); };
   }, []);
 
-  const cols = ["RANK", "PLAYER", "ID", "PLAYED", "EVENTS", "WINS", "2NDS", "3RDS", "POINTS"];
+  const cols = ["RANK", "PLAYER", "PLAYED", "EVENTS", "WINS", "2NDS", "3RDS", "POINTS"];
 
   return (
     <section id="leaderboard" className="relative min-h-screen py-24 px-4">
