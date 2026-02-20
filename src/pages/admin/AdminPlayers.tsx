@@ -189,14 +189,15 @@ export default function AdminPlayers() {
       {/* Player Form Modal */}
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "hsla(var(--brown-deep) / 0.5)", backdropFilter: "blur(8px)" }}>
-          <div className="w-full max-w-2xl rounded-2xl overflow-hidden max-h-[90vh] overflow-y-auto" style={{ background: "white", border: "1px solid hsl(var(--cream-dark))" }}>
-            <div className="sticky top-0 z-20 flex items-center justify-between p-6 border-b" style={{ background: "white", borderColor: "hsl(var(--cream-dark))" }}>
-              <h2 className="text-lg font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>
-                {editing ? "Edit Player" : "Create Player"}
-              </h2>
-              <button onClick={() => setShowForm(false)} style={{ color: "hsl(var(--brown-light))" }}><X size={20} /></button>
-            </div>
-            <div className="p-6 space-y-5">
+          <div className="w-full max-w-2xl rounded-2xl overflow-hidden" style={{ background: "white", border: "1px solid hsl(var(--cream-dark))" }}>
+            <div className="max-h-[90vh] overflow-y-auto [scrollbar-gutter:stable]">
+              <div className="sticky top-0 z-20 flex items-center justify-between p-6 border-b" style={{ background: "white", borderColor: "hsl(var(--cream-dark))" }}>
+                <h2 className="text-lg font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>
+                  {editing ? "Edit Player" : "Create Player"}
+                </h2>
+                <button onClick={() => setShowForm(false)} style={{ color: "hsl(var(--brown-light))" }}><X size={20} /></button>
+              </div>
+              <div className="p-6 space-y-5">
               {/* ID (read-only) */}
               <div>
                 <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>PLAYER ID</label>
@@ -305,16 +306,17 @@ export default function AdminPlayers() {
                 </div>
               </div>
 
-              {/* Save */}
-              <button
-                onClick={savePlayer}
-                disabled={saving}
-                className="w-full py-3 rounded-xl font-cinzel text-sm tracking-widest flex items-center justify-center gap-2"
-                style={{ background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))", color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}
-              >
-                {saving ? <RefreshCw size={14} className="animate-spin" /> : null}
-                {saving ? "SAVING..." : editing ? "UPDATE PLAYER" : "CREATE PLAYER"}
-              </button>
+                {/* Save */}
+                <button
+                  onClick={savePlayer}
+                  disabled={saving}
+                  className="w-full py-3 rounded-xl font-cinzel text-sm tracking-widest flex items-center justify-center gap-2"
+                  style={{ background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))", color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}
+                >
+                  {saving ? <RefreshCw size={14} className="animate-spin" /> : null}
+                  {saving ? "SAVING..." : editing ? "UPDATE PLAYER" : "CREATE PLAYER"}
+                </button>
+              </div>
             </div>
           </div>
         </div>
