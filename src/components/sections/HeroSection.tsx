@@ -47,7 +47,7 @@ export default function HeroSection() {
         </ScrollReveal>
 
         <ScrollReveal delay={0.7}>
-          <div className="relative flex flex-col items-center">
+          <div className="flex flex-col items-center gap-4 justify-center">
             {/* APPLY NOW - primary golden CTA */}
             <button
               className="px-12 py-4 font-cinzel text-sm tracking-[0.4em] rounded-full transition-all duration-300 hover:scale-105"
@@ -62,18 +62,7 @@ export default function HeroSection() {
             >
               APPLY NOW
             </button>
-
-            {/* Scroll indicator below APPLY NOW */}
-            <motion.div
-              className="absolute -top-6 left-1/2 -translate-x-1/2 flex flex-col items-center"
-              animate={{ y: [0, 6, 0] }}
-              transition={{ duration: 1.8, repeat: Infinity }}
-            >
-              <p className="text-xs tracking-[0.4em] font-cinzel leading-tight" style={{ color: "hsl(var(--gold) / 0.7)", fontFamily: "Cinzel, serif" }}>
-                SCROLL
-              </p>
-            </motion.div>
-
+            
             {/* Social buttons row with gold line divider between them */}
             <div className="flex flex-row items-center gap-0">
               <button
