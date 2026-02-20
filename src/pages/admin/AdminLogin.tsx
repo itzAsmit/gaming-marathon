@@ -3,9 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Eye, EyeOff, Gamepad2 } from "lucide-react";
 
-const ADMIN_EMAIL = "marathon@gmail.com";
-const ADMIN_PASSWORD = "mara1234";
-
 export default function AdminLogin() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -20,29 +17,18 @@ export default function AdminLogin() {
     setError("");
     setLoading(true);
 
-    if (email.trim().toLowerCase() !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
-      setError("Invalid credentials. Access denied.");
+    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedPassword = password;
+
+    const { error: authErr } = await supabase.auth.signInWithPassword({
+      email: normalizedEmail,
+      password: normalizedPassword,
+    });
+
+    if (authErr) {
+      setError(authErr.message || "Invalid credentials. Access denied.");
       setLoading(false);
       return;
-    }
-
-    // Sign in with Supabase auth
-    const { error: authErr } = await supabase.auth.signInWithPassword({ email: ADMIN_EMAIL, password: ADMIN_PASSWORD });
-    if (authErr) {
-      // Try to sign up first if user doesn't exist
-      const { error: signUpErr } = await supabase.auth.signUp({ email: ADMIN_EMAIL, password: ADMIN_PASSWORD });
-      if (signUpErr) {
-        // Try sign in again
-        const { error: retryErr } = await supabase.auth.signInWithPassword({ email: ADMIN_EMAIL, password: ADMIN_PASSWORD });
-        if (retryErr) {
-          setError("Auth error. Please try again.");
-          setLoading(false);
-          return;
-        }
-      } else {
-        // If signup succeeded, sign in
-        await supabase.auth.signInWithPassword({ email: ADMIN_EMAIL, password: ADMIN_PASSWORD });
-      }
     }
 
     navigate("/admin/dashboard");
