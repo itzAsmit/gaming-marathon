@@ -111,7 +111,6 @@ export default function GamesSection() {
                         className="text-lg md:text-xl font-semibold leading-none"
                         style={{
                           color: "#f7f6f2",
-                          fontFamily: "'PAQUITO', 'ROWAN', 'Bebas Neue', 'Cinzel', sans-serif",
                           letterSpacing: "0.12em",
                           textShadow: "0 0 12px rgba(255,255,255,0.3)",
                         }}
@@ -192,7 +191,7 @@ export default function GamesSection() {
                     className="text-6xl md:text-8xl font-semibold uppercase px-12 md:px-16 leading-none"
                     style={{
                       color: "#f2f5fb",
-                      fontFamily: "'PAQUITO', 'ROWAN', 'Bebas Neue', 'Cinzel', sans-serif",
+                      fontFamily: "'PAQUITO'",
                       letterSpacing: "0.14em",
                       textShadow: "0 0 12px rgba(255,255,255,0.42), 0 0 28px rgba(211,218,232,0.52)",
                     }}
@@ -274,4 +273,6 @@ export default function GamesSection() {
     </section>
   );
 }
+
+
 
