@@ -108,10 +108,10 @@
 
   .electric-card {
     position: relative;
-    background: linear-gradient(120deg, var(--e1, #59d6ff), var(--e2, #6b7dff), var(--e3, #6dffe2));
+    background: linear-gradient(120deg, #f5f6fa, #d9deea, #ff6a7d, #e8ecf6);
     background-size: 200% 200%;
-    box-shadow: 0 0 10px color-mix(in srgb, var(--e1, #59d6ff) 45%, transparent);
-    animation: electric-drift 7s ease-in-out infinite;
+    box-shadow: 0 0 14px rgba(255, 122, 141, 0.3), 0 0 10px rgba(230, 236, 248, 0.45);
+    animation: electric-drift 5.8s ease-in-out infinite;
   }
 
   .electric-card::before {
@@ -120,12 +120,12 @@
     inset: 0;
     border-radius: inherit;
     pointer-events: none;
-    opacity: 0.55;
+    opacity: 0.75;
     box-shadow:
-      0 0 0.8px var(--e1, #59d6ff),
-      0 0 2px color-mix(in srgb, var(--e1, #59d6ff) 70%, transparent),
-      0 0 6px color-mix(in srgb, var(--e2, #6b7dff) 45%, transparent);
-    animation: electric-pulse 2.2s ease-in-out infinite;
+      0 0 1.2px rgba(255, 255, 255, 0.95),
+      0 0 4px rgba(255, 122, 141, 0.55),
+      0 0 12px rgba(232, 238, 249, 0.42);
+    animation: electric-pulse 1.7s ease-in-out infinite;
   }
 
   /* Cinematic text */

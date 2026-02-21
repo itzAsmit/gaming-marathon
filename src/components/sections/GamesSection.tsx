@@ -24,97 +24,10 @@ interface GameRanking {
   players: { name: string; player_id: string } | null;
 }
 
-interface GamePalette {
-  primary: string;
-  secondary: string;
-  accent: string;
-}
-
-const DEFAULT_PALETTE: GamePalette = {
-  primary: "#59d6ff",
-  secondary: "#6b7dff",
-  accent: "#6dffe2",
-};
-
-const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
-
-const rgbToHex = (r: number, g: number, b: number) =>
-  `#${[r, g, b].map((v) => clamp(Math.round(v), 0, 255).toString(16).padStart(2, "0")).join("")}`;
-
-const brighten = (color: string, amount: number) => {
-  const v = color.replace("#", "");
-  const r = parseInt(v.slice(0, 2), 16);
-  const g = parseInt(v.slice(2, 4), 16);
-  const b = parseInt(v.slice(4, 6), 16);
-  return rgbToHex(r + amount, g + amount, b + amount);
-};
-
-const darken = (color: string, amount: number) => brighten(color, -amount);
-
-const colorDistance = (a: [number, number, number], b: [number, number, number]) => {
-  const dr = a[0] - b[0];
-  const dg = a[1] - b[1];
-  const db = a[2] - b[2];
-  return Math.sqrt(dr * dr + dg * dg + db * db);
-};
-
-const pickPaletteFromImage = async (url: string): Promise<GamePalette> => {
-  const img = new Image();
-  img.crossOrigin = "anonymous";
-  img.src = url;
-  await new Promise<void>((resolve, reject) => {
-    img.onload = () => resolve();
-    img.onerror = () => reject(new Error("image-load"));
-  });
-
-  const canvas = document.createElement("canvas");
-  const size = 36;
-  canvas.width = size;
-  canvas.height = size;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return DEFAULT_PALETTE;
-  ctx.drawImage(img, 0, 0, size, size);
-
-  const data = ctx.getImageData(0, 0, size, size).data;
-  const buckets = new Map<string, { count: number; rgb: [number, number, number] }>();
-  for (let i = 0; i < data.length; i += 4) {
-    const alpha = data[i + 3];
-    if (alpha < 100) continue;
-    const r = Math.floor(data[i] / 24) * 24;
-    const g = Math.floor(data[i + 1] / 24) * 24;
-    const b = Math.floor(data[i + 2] / 24) * 24;
-    const key = `${r}-${g}-${b}`;
-    const existing = buckets.get(key);
-    if (existing) {
-      existing.count += 1;
-    } else {
-      buckets.set(key, { count: 1, rgb: [r, g, b] });
-    }
-  }
-
-  const sorted = Array.from(buckets.values())
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 10)
-    .map((x) => x.rgb);
-
-  if (sorted.length === 0) return DEFAULT_PALETTE;
-
-  const base = sorted[0];
-  let second = sorted.find((c) => colorDistance(c, base) > 45) || sorted[Math.min(1, sorted.length - 1)] || base;
-  let third = sorted.find((c) => colorDistance(c, second) > 40) || sorted[Math.min(2, sorted.length - 1)] || second;
-
-  const primary = brighten(rgbToHex(base[0], base[1], base[2]), 40);
-  const secondary = darken(rgbToHex(second[0], second[1], second[2]), 10);
-  const accent = brighten(rgbToHex(third[0], third[1], third[2]), 55);
-
-  return { primary, secondary, accent };
-};
-
 export default function GamesSection() {
   const [games, setGames] = useState<Game[]>([]);
   const [selected, setSelected] = useState<Game | null>(null);
   const [rankings, setRankings] = useState<GameRanking[]>([]);
-  const [palettes, setPalettes] = useState<Record<string, GamePalette>>({});
 
   const fetchGames = async () => {
     const { data } = await supabase.from("games").select("*").order("game_id");
@@ -131,31 +44,6 @@ export default function GamesSection() {
   };
 
   useEffect(() => { fetchGames(); }, []);
-
-  useEffect(() => {
-    let cancelled = false;
-    const hydratePalettes = async () => {
-      const next: Record<string, GamePalette> = {};
-      await Promise.all(
-        games.map(async (game) => {
-          if (!game.image_url) {
-            next[game.id] = DEFAULT_PALETTE;
-            return;
-          }
-          try {
-            next[game.id] = await pickPaletteFromImage(game.image_url);
-          } catch {
-            next[game.id] = DEFAULT_PALETTE;
-          }
-        })
-      );
-      if (!cancelled) setPalettes(next);
-    };
-    if (games.length > 0) void hydratePalettes();
-    return () => {
-      cancelled = true;
-    };
-  }, [games]);
 
   const formatGameTime = (rawTime: string) => {
     const normalized = rawTime.trim().toUpperCase().replace(/\s+/g, " ");
@@ -192,16 +80,11 @@ export default function GamesSection() {
           <SectionHeader title="GAMES" accent="THE ARENA" subtitle="Battlegrounds where every match tests a different skill" />
         </ScrollReveal>
 
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {games.map((game, i) => (
             <ScrollReveal key={game.id} delay={i * 0.04}>
               <motion.div
-                className="electric-card rounded-2xl p-[1px] overflow-hidden cursor-pointer group"
-                style={{
-                  ["--e1" as any]: palettes[game.id]?.primary ?? DEFAULT_PALETTE.primary,
-                  ["--e2" as any]: palettes[game.id]?.secondary ?? DEFAULT_PALETTE.secondary,
-                  ["--e3" as any]: palettes[game.id]?.accent ?? DEFAULT_PALETTE.accent,
-                }}
+                className="electric-card rounded-2xl p-[1.5px] overflow-hidden cursor-pointer group w-full max-w-[220px] mx-auto"
                 whileHover={{ scale: 1.05, y: -6 }}
                 transition={{ duration: 0.3 }}
                 onClick={() => openGame(game)}
@@ -221,10 +104,10 @@ export default function GamesSection() {
                       </div>
                     )}
                     <div className="absolute inset-x-0 bottom-0 p-3" style={{ background: "linear-gradient(to top, rgba(10, 8, 20, 0.85), rgba(10, 8, 20, 0))" }}>
-                      <p className="text-xs tracking-widest mb-1" style={{ color: palettes[game.id]?.accent ?? DEFAULT_PALETTE.accent, fontFamily: "Cinzel, serif" }}>
+                      <p className="text-xs tracking-widest mb-1" style={{ color: "#d8dce8", fontFamily: "Cinzel, serif" }}>
                         {game.game_id}
                       </p>
-                      <p className="text-sm font-cinzel font-semibold" style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif", letterSpacing: "0.08em" }}>
+                      <p className="text-sm font-cinzel font-semibold" style={{ color: "#f7f6f2", fontFamily: "Cinzel, serif", letterSpacing: "0.08em", textShadow: "0 0 10px rgba(255,255,255,0.28)" }}>
                         {game.name.toUpperCase()}
                       </p>
                     </div>
@@ -288,9 +171,9 @@ export default function GamesSection() {
                   <p
                     className="text-xs font-cinzel tracking-widest"
                     style={{
-                      color: palettes[selected.id]?.accent ?? DEFAULT_PALETTE.accent,
+                      color: "#d4dae8",
                       fontFamily: "Cinzel, serif",
-                      textShadow: `0 0 12px ${palettes[selected.id]?.accent ?? DEFAULT_PALETTE.accent}`,
+                      textShadow: "0 0 10px rgba(236,241,255,0.45)",
                     }}
                   >
                     {selected.game_id}
@@ -303,8 +186,8 @@ export default function GamesSection() {
                       color: "transparent",
                       fontFamily: "Cinzel, serif",
                       letterSpacing: "0.12em",
-                      WebkitTextStroke: `1.6px ${palettes[selected.id]?.primary ?? DEFAULT_PALETTE.primary}`,
-                      textShadow: `0 0 10px ${palettes[selected.id]?.primary ?? DEFAULT_PALETTE.primary}, 0 0 26px ${palettes[selected.id]?.accent ?? DEFAULT_PALETTE.accent}`,
+                      WebkitTextStroke: "1.6px #eef1f7",
+                      textShadow: "0 0 12px rgba(255,255,255,0.38), 0 0 28px rgba(211,218,232,0.55)",
                     }}
                   >
                     {selected.name}
