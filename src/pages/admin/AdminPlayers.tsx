@@ -4,8 +4,6 @@ import AdminLayout from "@/components/admin/AdminLayout";
 import { Plus, Pencil, Trash2, Eye, X, RefreshCw, Upload } from "lucide-react";
 import { toast } from "sonner";
 
-const GAMES_LIST = ["AMONG US", "BGMI", "SCRIBBL", "CARROM", "CHESS", "UNO", "LUDO", "SMASH KARTS", "STUMBLE GUYS", "BOBBLE LEAGUE", "CODENAMES"];
-
 interface Player {
   id: string;
   player_id: string;
@@ -19,6 +17,7 @@ interface Player {
 }
 
 interface Proficiency { game_name: string; proficiency_percent: number; }
+interface GameOption { id: string; name: string; }
 
 const BLANK: Omit<Player, "id"> = { player_id: "", name: "", bio: null, image_url: null, portrait_url: null, instagram: null, twitter: null, linkedin: null };
 const AVATAR_OUTPUT_SIZE = 600;
@@ -61,6 +60,7 @@ export default function AdminPlayers() {
   const [portraitFile, setPortraitFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState<Player | null>(null);
+  const [gameOptions, setGameOptions] = useState<GameOption[]>([]);
   const [cropDraft, setCropDraft] = useState<CropDraft>({
     open: false,
     kind: null,
@@ -84,7 +84,12 @@ export default function AdminPlayers() {
     setLoading(false);
   };
 
-  useEffect(() => { fetchPlayers(); }, []);
+  const fetchGames = async () => {
+    const { data } = await supabase.from("games").select("id, name").order("game_id");
+    if (data) setGameOptions(data as GameOption[]);
+  };
+
+  useEffect(() => { fetchPlayers(); fetchGames(); }, []);
 
   useEffect(() => {
     return () => {
@@ -448,7 +453,7 @@ export default function AdminPlayers() {
                         style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
                       >
                         <option value="">Select game...</option>
-                        {GAMES_LIST.filter((g) => !usedGames.includes(g) || g === prof.game_name).map((g) => (
+                        {gameOptions.map((game) => game.name.toUpperCase()).filter((g) => !usedGames.includes(g) || g === prof.game_name).map((g) => (
                           <option key={g} value={g}>{g}</option>
                         ))}
                       </select>

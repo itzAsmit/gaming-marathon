@@ -60,7 +60,7 @@ const BLANK_GAME: Omit<Game, "id"> = { game_id: "", name: "", bio: null, image_u
 
 const HOURS = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, "0"));
 const MINUTES = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, "0"));
-const GAME_IMAGE_FRAME = { width: 360, height: 202, outWidth: 1280, outHeight: 720 };
+const GAME_IMAGE_FRAME = { width: 300, height: 400, outWidth: 900, outHeight: 1200 };
 const MAX_VIDEO_SECONDS = 60;
 
 const formatSeconds = (total: number) => {
@@ -68,6 +68,12 @@ const formatSeconds = (total: number) => {
   const mins = Math.floor(safe / 60);
   const secs = Math.floor(safe % 60);
   return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+};
+
+const getFileExtension = (fileName: string) => {
+  const clean = fileName.split("?")[0].split("#")[0];
+  const idx = clean.lastIndexOf(".");
+  return idx >= 0 ? clean.slice(idx + 1).toLowerCase() : "";
 };
 
 const toDateString = (date: Date) => {
@@ -342,9 +348,12 @@ export default function AdminGames() {
     setShowForm(true);
   };
 
-  const uploadFile = async (file: File, bucket: string, path: string): Promise<string | null> => {
-    const { error } = await supabase.storage.from(bucket).upload(path, file, { upsert: true });
-    if (error) return null;
+  const uploadFile = async (file: File, bucket: string, path: string): Promise<string> => {
+    const { error } = await supabase.storage.from(bucket).upload(path, file, {
+      upsert: true,
+      contentType: file.type || undefined,
+    });
+    if (error) throw error;
     const { data } = supabase.storage.from(bucket).getPublicUrl(path);
     return data.publicUrl;
   };
@@ -355,8 +364,14 @@ export default function AdminGames() {
     try {
       let imageUrl = form.image_url;
       let videoUrl = form.video_url;
-      if (imageFile) imageUrl = await uploadFile(imageFile, "games", `images/${form.game_id}-${Date.now()}`);
-      if (videoFile) videoUrl = await uploadFile(videoFile, "videos", `${form.game_id}-${Date.now()}`);
+      if (imageFile) {
+        const imageExt = getFileExtension(imageFile.name) || "jpg";
+        imageUrl = await uploadFile(imageFile, "games", `images/${form.game_id}-${Date.now()}.${imageExt}`);
+      }
+      if (videoFile) {
+        const videoExt = getFileExtension(videoFile.name) || (videoFile.type.includes("mp4") ? "mp4" : "webm");
+        videoUrl = await uploadFile(videoFile, "videos", `clips/${form.game_id}-${Date.now()}.${videoExt}`);
+      }
 
       const payload = {
         ...form,
@@ -387,8 +402,9 @@ export default function AdminGames() {
 
       setShowForm(false);
       fetchGames();
-    } catch (e) {
-      toast.error("Error saving game");
+    } catch (e: any) {
+      const message = e?.message || "Error saving game";
+      toast.error(message);
     } finally {
       setSaving(false);
     }
@@ -538,7 +554,13 @@ export default function AdminGames() {
       closeVideoTrimmer();
       toast.success("Video trimmed and ready");
     } catch {
-      toast.error("Could not trim this video in browser");
+      if (videoTrimDraft.duration <= MAX_VIDEO_SECONDS) {
+        setVideoFile(videoTrimDraft.file);
+        closeVideoTrimmer();
+        toast.success("Original video selected");
+        return;
+      }
+      toast.error("Could not trim this video in browser. Try a different format (MP4 preferred).");
       setVideoTrimDraft((d) => ({ ...d, processing: false }));
     }
   };
