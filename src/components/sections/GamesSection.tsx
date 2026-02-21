@@ -183,7 +183,7 @@ export default function GamesSection() {
                   <h3
                     className="text-4xl md:text-6xl font-cinzel font-bold uppercase px-10"
                     style={{
-                      color: "transparent",
+                      color: "solid",
                       fontFamily: "Cinzel, serif",
                       letterSpacing: "0.12em",
                       WebkitTextStroke: "1.6px #eef1f7",
