@@ -111,7 +111,7 @@ export default function GamesSection() {
                         className="text-lg md:text-xl font-semibold leading-none"
                         style={{
                           color: "#f7f6f2",
-                          fontFamily: "'Bebas Neue', sans-serif",
+                          fontFamily: "'PAQUITO', 'ROWAN', 'Bebas Neue', 'Cinzel', sans-serif",
                           letterSpacing: "0.12em",
                           textShadow: "0 0 12px rgba(255,255,255,0.3)",
                         }}
@@ -191,11 +191,10 @@ export default function GamesSection() {
                   <h3
                     className="text-6xl md:text-8xl font-semibold uppercase px-12 md:px-16 leading-none"
                     style={{
-                      color: "transparent",
-                      fontFamily: "'Bebas Neue', sans-serif",
-                      letterSpacing: "0.16em",
-                      WebkitTextStroke: "1.8px #eef1f7",
-                      textShadow: "0 0 14px rgba(255,255,255,0.42), 0 0 34px rgba(211,218,232,0.6)",
+                      color: "#f2f5fb",
+                      fontFamily: "'PAQUITO', 'ROWAN', 'Bebas Neue', 'Cinzel', sans-serif",
+                      letterSpacing: "0.14em",
+                      textShadow: "0 0 12px rgba(255,255,255,0.42), 0 0 28px rgba(211,218,232,0.52)",
                     }}
                   >
                     {selected.name}
@@ -275,3 +274,4 @@ export default function GamesSection() {
     </section>
   );
 }
+
