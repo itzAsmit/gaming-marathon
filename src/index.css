@@ -250,6 +250,15 @@
   .float-delayed {
     animation: float 4s ease-in-out infinite 1.5s;
   }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @keyframes float {

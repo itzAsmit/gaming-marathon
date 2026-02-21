@@ -111,7 +111,9 @@ export default function GamesSection() {
                         className="text-lg md:text-xl font-semibold leading-none"
                         style={{
                           color: "#f7f6f2",
+                          fontFamily: "'ROWAN'",
                           letterSpacing: "0.12em",
+                          WebkitTextStroke: "1px rgba(58, 24, 10, 0.9)",
                           textShadow: "0 0 12px rgba(255,255,255,0.3)",
                         }}
                       >
@@ -157,7 +159,7 @@ export default function GamesSection() {
             onClick={() => setSelected(null)}
           >
             <motion.div
-              className="glass-card rounded-3xl overflow-hidden max-w-4xl w-full max-h-[92vh] overflow-y-auto relative"
+              className="glass-card no-scrollbar rounded-3xl overflow-hidden max-w-4xl w-full max-h-[92vh] overflow-y-auto relative"
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
@@ -191,8 +193,9 @@ export default function GamesSection() {
                     className="text-6xl md:text-8xl font-semibold uppercase px-12 md:px-16 leading-none"
                     style={{
                       color: "#f2f5fb",
-                      fontFamily: "'PAQUITO'",
+                      fontFamily: "'ROWAN'",
                       letterSpacing: "0.14em",
+                      WebkitTextStroke: "2px rgba(75, 34, 16, 0.9)",
                       textShadow: "0 0 12px rgba(255,255,255,0.42), 0 0 28px rgba(211,218,232,0.52)",
                     }}
                   >
