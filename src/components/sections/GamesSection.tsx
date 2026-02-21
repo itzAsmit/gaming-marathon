@@ -107,7 +107,15 @@ export default function GamesSection() {
                       <p className="text-xs tracking-widest mb-1" style={{ color: "#d8dce8", fontFamily: "Cinzel, serif" }}>
                         {game.game_id}
                       </p>
-                      <p className="text-sm font-cinzel font-semibold" style={{ color: "#f7f6f2", fontFamily: "Cinzel, serif", letterSpacing: "0.08em", textShadow: "0 0 10px rgba(255,255,255,0.28)" }}>
+                      <p
+                        className="text-lg md:text-xl font-semibold leading-none"
+                        style={{
+                          color: "#f7f6f2",
+                          fontFamily: "'Bebas Neue', sans-serif",
+                          letterSpacing: "0.12em",
+                          textShadow: "0 0 12px rgba(255,255,255,0.3)",
+                        }}
+                      >
                         {game.name.toUpperCase()}
                       </p>
                     </div>
@@ -181,13 +189,13 @@ export default function GamesSection() {
                 </div>
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                   <h3
-                    className="text-4xl md:text-6xl font-cinzel font-bold uppercase px-10"
+                    className="text-6xl md:text-8xl font-semibold uppercase px-12 md:px-16 leading-none"
                     style={{
-                      color: "solid",
-                      fontFamily: "Cinzel, serif",
-                      letterSpacing: "0.12em",
-                      WebkitTextStroke: "1.6px #eef1f7",
-                      textShadow: "0 0 12px rgba(255,255,255,0.38), 0 0 28px rgba(211,218,232,0.55)",
+                      color: "transparent",
+                      fontFamily: "'Bebas Neue', sans-serif",
+                      letterSpacing: "0.16em",
+                      WebkitTextStroke: "1.8px #eef1f7",
+                      textShadow: "0 0 14px rgba(255,255,255,0.42), 0 0 34px rgba(211,218,232,0.6)",
                     }}
                   >
                     {selected.name}
