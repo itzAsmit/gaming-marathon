@@ -106,6 +106,28 @@
     box-shadow: 0 8px 32px hsla(var(--brown-deep) / 0.3);
   }
 
+  .electric-card {
+    position: relative;
+    background: linear-gradient(120deg, var(--e1, #59d6ff), var(--e2, #6b7dff), var(--e3, #6dffe2));
+    background-size: 200% 200%;
+    box-shadow: 0 0 10px color-mix(in srgb, var(--e1, #59d6ff) 45%, transparent);
+    animation: electric-drift 7s ease-in-out infinite;
+  }
+
+  .electric-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0.55;
+    box-shadow:
+      0 0 0.8px var(--e1, #59d6ff),
+      0 0 2px color-mix(in srgb, var(--e1, #59d6ff) 70%, transparent),
+      0 0 6px color-mix(in srgb, var(--e2, #6b7dff) 45%, transparent);
+    animation: electric-pulse 2.2s ease-in-out infinite;
+  }
+
   /* Cinematic text */
   .text-cinematic {
     font-family: 'Cinzel', serif;
@@ -204,4 +226,15 @@
 @keyframes cursor-pulse {
   0%, 100% { transform: scale(1); opacity: 1; }
   50% { transform: scale(1.2); opacity: 0.7; }
+}
+
+@keyframes electric-drift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes electric-pulse {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.72; }
 }
