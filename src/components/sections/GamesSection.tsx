@@ -19,6 +19,7 @@ interface Game {
   video_url: string | null;
   rules: string | null;
   game_date: string | null;
+  game_time: string | null;
   status: string;
 }
 
@@ -47,6 +48,11 @@ export default function GamesSection() {
   };
 
   useEffect(() => { fetchGames(); }, []);
+
+  const formatGameTime = (rawTime: string) => {
+    const normalized = rawTime.trim().toUpperCase().replace(/\s+/g, " ");
+    return /^([1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM)$/.test(normalized) ? normalized : rawTime;
+  };
 
   const openGame = (game: Game) => {
     setSelected(game);
@@ -156,7 +162,7 @@ export default function GamesSection() {
 
               <div className="p-6 space-y-5">
                 {/* Status & date */}
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 flex-wrap">
                   <span
                     className="px-3 py-1 rounded-full text-xs font-cinzel tracking-widest"
                     style={{
@@ -171,6 +177,11 @@ export default function GamesSection() {
                   {selected.game_date && (
                     <span className="flex items-center gap-1 text-xs" style={{ color: "hsl(var(--cream-dark))" }}>
                       <Calendar size={12} /> {new Date(selected.game_date).toLocaleDateString()}
+                    </span>
+                  )}
+                  {selected.game_time && (
+                    <span className="flex items-center gap-1 text-xs" style={{ color: "hsl(var(--cream-dark))" }}>
+                      <Clock size={12} /> {formatGameTime(selected.game_time)}
                     </span>
                   )}
                 </div>

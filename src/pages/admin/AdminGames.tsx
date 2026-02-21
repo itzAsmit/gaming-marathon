@@ -13,6 +13,7 @@ interface Game {
   video_url: string | null;
   rules: string | null;
   game_date: string | null;
+  game_time: string | null;
   status: string;
 }
 
@@ -29,7 +30,7 @@ function getNextGameId(existing: string[]): string {
   }
 }
 
-const BLANK_GAME: Omit<Game, "id"> = { game_id: "", name: "", bio: null, image_url: null, video_url: null, rules: null, game_date: null, status: "upcoming" };
+const BLANK_GAME: Omit<Game, "id"> = { game_id: "", name: "", bio: null, image_url: null, video_url: null, rules: null, game_date: null, game_time: null, status: "upcoming" };
 
 export default function AdminGames() {
   const [games, setGames] = useState<Game[]>([]);
@@ -92,6 +93,9 @@ export default function AdminGames() {
 
   const saveGame = async () => {
     if (!form.name.trim()) return toast.error("Name is required");
+    if (form.game_time && !/^([1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM)$/i.test(form.game_time.trim())) {
+      return toast.error("Time must be in hh:mm AM/PM format");
+    }
     setSaving(true);
     try {
       let imageUrl = form.image_url;
@@ -99,7 +103,12 @@ export default function AdminGames() {
       if (imageFile) imageUrl = await uploadFile(imageFile, "games", `images/${form.game_id}-${Date.now()}`);
       if (videoFile) videoUrl = await uploadFile(videoFile, "videos", `${form.game_id}-${Date.now()}`);
 
-      const payload = { ...form, image_url: imageUrl, video_url: videoUrl };
+      const payload = {
+        ...form,
+        game_time: form.game_time ? form.game_time.trim().toUpperCase().replace(/\s+/g, " ") : null,
+        image_url: imageUrl,
+        video_url: videoUrl
+      };
 
       if (editing) {
         await supabase.from("games").update(payload).eq("id", editing.id);
@@ -187,14 +196,15 @@ export default function AdminGames() {
       {/* Game Form Modal */}
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "hsla(var(--brown-deep) / 0.5)", backdropFilter: "blur(8px)" }}>
-          <div className="w-full max-w-2xl rounded-2xl overflow-hidden max-h-[90vh] overflow-y-auto" style={{ background: "white" }}>
-            <div className="sticky top-0 flex items-center justify-between p-6 border-b" style={{ background: "white", borderColor: "hsl(var(--cream-dark))" }}>
-              <h2 className="text-lg font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>
-                {editing ? "Edit Game" : "Create Game"}
-              </h2>
-              <button onClick={() => setShowForm(false)} style={{ color: "hsl(var(--brown-light))" }}><X size={20} /></button>
-            </div>
-            <div className="p-6 space-y-4">
+          <div className="w-full max-w-2xl rounded-2xl overflow-hidden" style={{ background: "white", border: "1px solid hsl(var(--cream-dark))" }}>
+            <div className="max-h-[90vh] overflow-y-auto overflow-x-hidden [scrollbar-gutter:stable]">
+              <div className="sticky top-0 z-20 flex items-center justify-between p-6 border-b" style={{ background: "white", borderColor: "hsl(var(--cream-dark))" }}>
+                <h2 className="text-lg font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>
+                  {editing ? "Edit Game" : "Create Game"}
+                </h2>
+                <button onClick={() => setShowForm(false)} style={{ color: "hsl(var(--brown-light))" }}><X size={20} /></button>
+              </div>
+              <div className="p-6 space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>GAME ID</label>
@@ -206,9 +216,21 @@ export default function AdminGames() {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>DATE</label>
-                <input type="date" value={form.game_date ?? ""} onChange={(e) => setForm((f) => ({ ...f, game_date: e.target.value || null }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none" style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>DATE</label>
+                  <input type="date" value={form.game_date ?? ""} onChange={(e) => setForm((f) => ({ ...f, game_date: e.target.value || null }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none" style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} />
+                </div>
+                <div>
+                  <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>TIME (AM/PM)</label>
+                  <input
+                    value={form.game_time ?? ""}
+                    onChange={(e) => setForm((f) => ({ ...f, game_time: e.target.value || null }))}
+                    className="w-full px-4 py-2.5 rounded-xl text-sm outline-none uppercase"
+                    style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
+                    placeholder="07:30 PM"
+                  />
+                </div>
               </div>
 
               <div>
@@ -282,10 +304,11 @@ export default function AdminGames() {
                 </div>
               )}
 
-              <button onClick={saveGame} disabled={saving} className="w-full py-3 rounded-xl font-cinzel text-sm tracking-widest flex items-center justify-center gap-2" style={{ background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))", color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}>
-                {saving ? <RefreshCw size={14} className="animate-spin" /> : null}
-                {saving ? "SAVING..." : editing ? "UPDATE GAME" : "CREATE GAME"}
-              </button>
+                <button onClick={saveGame} disabled={saving} className="w-full py-3 rounded-xl font-cinzel text-sm tracking-widest flex items-center justify-center gap-2" style={{ background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))", color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}>
+                  {saving ? <RefreshCw size={14} className="animate-spin" /> : null}
+                  {saving ? "SAVING..." : editing ? "UPDATE GAME" : "CREATE GAME"}
+                </button>
+              </div>
             </div>
           </div>
         </div>

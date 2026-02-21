@@ -43,6 +43,7 @@ export type Database = {
           bio: string | null
           created_at: string
           game_date: string | null
+          game_time: string | null
           game_id: string
           id: string
           image_url: string | null
@@ -56,6 +57,7 @@ export type Database = {
           bio?: string | null
           created_at?: string
           game_date?: string | null
+          game_time?: string | null
           game_id: string
           id?: string
           image_url?: string | null
@@ -69,6 +71,7 @@ export type Database = {
           bio?: string | null
           created_at?: string
           game_date?: string | null
+          game_time?: string | null
           game_id?: string
           id?: string
           image_url?: string | null
