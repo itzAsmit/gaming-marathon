@@ -4,6 +4,45 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600&family=Bebas+Neue&display=swap');
 
+@font-face {
+  font-family: 'PAQUITO';
+  src:
+    local('PAQUITO'),
+    local('Paquito'),
+    url('/fonts/Paquito-Variable.woff2') format('woff2'),
+    url('/fonts/Paquito-Variable.woff') format('woff'),
+    url('/fonts/Paquito-Variable.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ROWAN';
+  src:
+    local('ROWAN'),
+    local('Rowan'),
+    url('/fonts/Rowan-Variable.woff2') format('woff2'),
+    url('/fonts/Rowan-Variable.woff') format('woff'),
+    url('/fonts/Rowan-Variable.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ROWAN';
+  src:
+    local('ROWAN Italic'),
+    local('Rowan Italic'),
+    url('/fonts/Rowan-VariableItalic.woff2') format('woff2'),
+    url('/fonts/Rowan-VariableItalic.woff') format('woff'),
+    url('/fonts/Rowan-VariableItalic.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
 @layer base {
   :root {
     /* Cream & Brown Esports Theme */
