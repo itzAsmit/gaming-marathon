@@ -195,7 +195,7 @@ export default function GamesSection() {
                       color: "#f2f5fb",
                       fontFamily: "'ROWAN'",
                       letterSpacing: "0.14em",
-                      WebkitTextStroke: "2px rgba(75, 34, 16, 0.9)",
+                      WebkitTextStroke: "2px rgba(241, 239, 255, 0.9)",
                       textShadow: "0 0 12px rgba(255,255,255,0.42), 0 0 28px rgba(211,218,232,0.52)",
                     }}
                   >
