@@ -20,6 +20,7 @@ interface Game {
   rules: string | null;
   game_date: string | null;
   game_time: string | null;
+  game_datetime: string | null;
   status: string;
 }
 
@@ -54,10 +55,28 @@ export default function GamesSection() {
     return /^([1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM)$/.test(normalized) ? normalized : rawTime;
   };
 
+  const getGameDateTime = (game: Game) => {
+    if (game.game_datetime) {
+      const parsed = new Date(game.game_datetime);
+      if (!Number.isNaN(parsed.getTime())) return parsed;
+    }
+    if (!game.game_date) return null;
+    const base = new Date(`${game.game_date}T00:00:00`);
+    if (Number.isNaN(base.getTime())) return null;
+    if (!game.game_time) return base;
+    const match = game.game_time.trim().toUpperCase().match(/^(0?[1-9]|1[0-2]):([0-5][0-9])\s?(AM|PM)$/);
+    if (!match) return base;
+    const [, hourRaw, minute, period] = match;
+    const hour12 = parseInt(hourRaw, 10);
+    base.setHours((hour12 % 12) + (period === "PM" ? 12 : 0), parseInt(minute, 10), 0, 0);
+    return base;
+  };
+
   const openGame = (game: Game) => {
     setSelected(game);
     if (game.status === "completed") fetchRankings(game.id);
   };
+  const selectedGameDateTime = selected ? getGameDateTime(selected) : null;
 
   return (
     <section id="games" className="relative min-h-screen py-24 px-4">
@@ -174,12 +193,17 @@ export default function GamesSection() {
                   >
                     {selected.status.toUpperCase()}
                   </span>
-                  {selected.game_date && (
+                  {selectedGameDateTime && (
                     <span className="flex items-center gap-1 text-xs" style={{ color: "hsl(var(--cream-dark))" }}>
-                      <Calendar size={12} /> {new Date(selected.game_date).toLocaleDateString()}
+                      <Calendar size={12} /> {selectedGameDateTime.toLocaleDateString()}
                     </span>
                   )}
-                  {selected.game_time && (
+                  {selectedGameDateTime && (
+                    <span className="flex items-center gap-1 text-xs" style={{ color: "hsl(var(--cream-dark))" }}>
+                      <Clock size={12} /> {selectedGameDateTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: true })}
+                    </span>
+                  )}
+                  {!selectedGameDateTime && selected.game_time && (
                     <span className="flex items-center gap-1 text-xs" style={{ color: "hsl(var(--cream-dark))" }}>
                       <Clock size={12} /> {formatGameTime(selected.game_time)}
                     </span>
