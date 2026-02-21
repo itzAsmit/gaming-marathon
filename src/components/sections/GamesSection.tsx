@@ -172,7 +172,7 @@ export default function GamesSection() {
                 <div className="absolute inset-0" style={{ background: "linear-gradient(to top, hsla(var(--brown-deep) / 0.95), transparent)" }} />
                 <div className="absolute bottom-4 left-6">
                   <p className="text-xs font-cinzel tracking-widest" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>{selected.game_id}</p>
-                  <h3 className="text-2xl font-cinzel font-bold" style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}>{selected.name}</h3>
+                  <h3 className="text-2xl font-cinzel font-bold" style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}>{selected.name.toUpperCase()}</h3>
                 </div>
                 <button onClick={() => setSelected(null)} className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "hsla(var(--brown-deep) / 0.6)", color: "hsl(var(--cream))" }}>
                   <X size={16} />

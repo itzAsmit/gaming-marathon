@@ -360,6 +360,7 @@ export default function AdminGames() {
 
       const payload = {
         ...form,
+        name: form.name.trim().toUpperCase(),
         game_time: form.game_time ? form.game_time.trim().toUpperCase().replace(/\s+/g, " ") : null,
         image_url: imageUrl,
         video_url: videoUrl
@@ -573,7 +574,7 @@ export default function AdminGames() {
                   {g.image_url ? <img src={g.image_url} alt={g.name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center">🎮</div>}
                 </div>
                 <div className="flex-1">
-                  <p className="font-semibold text-sm" style={{ color: "hsl(var(--brown-deep))" }}>{g.name}</p>
+                  <p className="font-semibold text-sm" style={{ color: "hsl(var(--brown-deep))" }}>{g.name.toUpperCase()}</p>
                   <div className="flex items-center gap-2 mt-0.5">
                     <span className="text-xs" style={{ color: "hsl(var(--brown-light))" }}>{g.game_id}</span>
                     <span className="px-2 py-0.5 rounded-full text-xs" style={{
@@ -616,7 +617,7 @@ export default function AdminGames() {
                 </div>
                 <div>
                   <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>NAME *</label>
-                  <input value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none" style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} placeholder="Game name" />
+                  <input value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value.toUpperCase() }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none uppercase" style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} placeholder="Game name" />
                 </div>
               </div>
 
