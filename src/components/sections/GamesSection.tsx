@@ -113,7 +113,7 @@ export default function GamesSection() {
                           color: "#f7f6f2",
                           fontFamily: "Cinzel, serif",
                           letterSpacing: "0.12em",
-                          WebkitTextStroke: "1px rgba(58, 24, 10, 0.9)",
+                          WebkitTextStroke: "1px rgba(214, 211, 254, 0.9)",
                           textShadow: "0 0 12px rgba(255,255,255,0.3)",
                         }}
                       >
@@ -195,8 +195,8 @@ export default function GamesSection() {
                       color: "#f2f5fb",
                       fontFamily: "'ROWAN'",
                       letterSpacing: "0.14em",
-                      WebkitTextStroke: "2px rgba(75, 34, 16, 0.9)",
-                      textShadow: "0 0 12px rgba(255,255,255,0.42), 0 0 28px rgba(211,218,232,0.52)",
+                      WebkitTextStroke: "2px rgba(247, 176, 148, 0.9)",
+                      textShadow: "0 0 12px rgba(248, 148, 115, 0.6), 0 0 28px rgba(247, 213, 149, 0.73)",
                     }}
                   >
                     {selected.name}
