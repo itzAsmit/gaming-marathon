@@ -350,7 +350,7 @@ export default function AdminGames() {
 
   const uploadFile = async (file: File, bucket: string, path: string): Promise<string> => {
     const { error } = await supabase.storage.from(bucket).upload(path, file, {
-      upsert: true,
+      upsert: false,
       contentType: file.type || undefined,
     });
     if (error) throw error;
