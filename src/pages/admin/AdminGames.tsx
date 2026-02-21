@@ -76,6 +76,14 @@ const getFileExtension = (fileName: string) => {
   return idx >= 0 ? clean.slice(idx + 1).toLowerCase() : "";
 };
 
+const buildUploadPath = (folder: string, gameId: string, ext: string) => {
+  const safeId = (gameId || "game").replace(/[^a-zA-Z0-9_-]/g, "").toLowerCase() || "game";
+  const unique = typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+    ? crypto.randomUUID()
+    : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+  return `${folder}/${safeId}-${Date.now()}-${unique}.${ext}`;
+};
+
 const toDateString = (date: Date) => {
   const y = date.getFullYear();
   const m = String(date.getMonth() + 1).padStart(2, "0");
@@ -366,11 +374,11 @@ export default function AdminGames() {
       let videoUrl = form.video_url;
       if (imageFile) {
         const imageExt = getFileExtension(imageFile.name) || "jpg";
-        imageUrl = await uploadFile(imageFile, "games", `images/${form.game_id}-${Date.now()}.${imageExt}`);
+        imageUrl = await uploadFile(imageFile, "games", buildUploadPath("images", form.game_id, imageExt));
       }
       if (videoFile) {
         const videoExt = getFileExtension(videoFile.name) || (videoFile.type.includes("mp4") ? "mp4" : "webm");
-        videoUrl = await uploadFile(videoFile, "videos", `clips/${form.game_id}-${Date.now()}.${videoExt}`);
+        videoUrl = await uploadFile(videoFile, "videos", buildUploadPath("clips", form.game_id, videoExt));
       }
 
       const payload = {
