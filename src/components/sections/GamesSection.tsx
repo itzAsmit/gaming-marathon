@@ -111,7 +111,7 @@ export default function GamesSection() {
                         className="text-lg md:text-xl font-semibold leading-none"
                         style={{
                           color: "#f7f6f2",
-                          fontFamily: "'ROWAN'",
+                          fontFamily: "Cinzel, serif",
                           letterSpacing: "0.12em",
                           WebkitTextStroke: "1px rgba(58, 24, 10, 0.9)",
                           textShadow: "0 0 12px rgba(255,255,255,0.3)",
