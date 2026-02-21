@@ -13,7 +13,7 @@ export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
   const { scrollY } = useScroll();
 
   // Fade opacity: 0.9 at top, transition to 0.4 around leaderboard
-  const opacity = useTransform(scrollY, [0, 300, window.innerHeight * 1.5], [0.75, 0.75, 0.25]);
+  const opacity = useTransform(scrollY, [0, 300, window.innerHeight * 1.5], [0.75, 0.75, 0.40]);
 
   const toggleMute = () => {
     setMuted((m) => {
