@@ -43,7 +43,7 @@ export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(to bottom, hsla(var(--brown-deep) / 0.5) 0%, hsla(var(--brown-deep) / 0.3) 40%, hsla(var(--brown-deep) / 0.6) 100%)",
+              "linear-gradient(to bottom, hsla(var(--brown-deep) / 0.28) 0%, hsla(var(--brown-deep) / 0.16) 40%, hsla(var(--brown-deep) / 0.32) 100%)",
           }}
         />
       </motion.div>

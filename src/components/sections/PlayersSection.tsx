@@ -126,7 +126,7 @@ export default function PlayersSection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            style={{ background: "hsla(var(--brown-deep) / 0.85)", backdropFilter: "blur(12px)" }}
+            style={{ background: "hsla(var(--brown-deep) / 0.5)", backdropFilter: "blur(12px)" }}
             onClick={() => setSelected(null)}
           >
             <motion.div
