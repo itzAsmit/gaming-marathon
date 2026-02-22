@@ -198,11 +198,11 @@ export default function GamesSection() {
                 </div>
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                   <h3
-                    className="text-6xl md:text-8xl font-semibold uppercase px-12 md:px-16 leading-none"
+                    className="font-semibold uppercase px-6 md:px-10 leading-none whitespace-nowrap text-center text-[clamp(2.25rem,8vw,5.5rem)]"
                     style={{
                       color: "#f2f5fb",
                       fontFamily: "'ROWAN'",
-                      letterSpacing: "0.14em",
+                      letterSpacing: "0.08em",
                       WebkitTextStroke: "2px rgba(255, 184, 43, 0.9)",
                       textShadow: "0 0 12px rgba(248, 148, 115, 0.6), 0 0 28px rgba(247, 213, 149, 0.73)",
                     }}
