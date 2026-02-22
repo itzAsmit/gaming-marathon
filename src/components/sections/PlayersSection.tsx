@@ -44,21 +44,6 @@ export default function PlayersSection() {
         items: p.player_items,
       }));
 
-      const getGameOrder = (player: any): number => {
-        const gameIds = (player.player_game_stats ?? [])
-          .map((s: any) => s?.games?.game_id)
-          .filter((gid: unknown): gid is string => typeof gid === "string" && gid.length > 0);
-
-        if (gameIds.length === 0) return Number.MAX_SAFE_INTEGER;
-
-        return Math.min(
-          ...gameIds.map((gid) => {
-            const match = gid.match(/\d+/);
-            return match ? parseInt(match[0], 10) : Number.MAX_SAFE_INTEGER;
-          })
-        );
-      };
-
       const getPlayerOrder = (player: any): number => {
         const rawId = player?.player_id;
         if (typeof rawId !== "string") return Number.MAX_SAFE_INTEGER;
@@ -68,8 +53,6 @@ export default function PlayersSection() {
       };
 
       mappedPlayers.sort((a: any, b: any) => {
-        const gameOrderDiff = getGameOrder(a) - getGameOrder(b);
-        if (gameOrderDiff !== 0) return gameOrderDiff;
         const aPlayerOrder = getPlayerOrder(a);
         const bPlayerOrder = getPlayerOrder(b);
         if (aPlayerOrder !== bPlayerOrder) return aPlayerOrder - bPlayerOrder;
