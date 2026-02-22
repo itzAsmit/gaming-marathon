@@ -100,7 +100,7 @@ export default function PlayersSection() {
   }, []);
 
   return (
-    <section id="players" className="relative min-h-screen py-24 px-4">
+    <section id="players" className="relative min-h-screen py-24 px-4 scroll-mt-24 md:scroll-mt-28">
       <div className="max-w-6xl mx-auto">
         <ScrollReveal>
           <SectionHeader title="MEET THE PLAYERS" accent="COMPETITORS" subtitle="The warriors who battle for the crown" />
