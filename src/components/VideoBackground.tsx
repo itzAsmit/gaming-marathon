@@ -46,6 +46,33 @@ export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
               "linear-gradient(to bottom, hsla(var(--brown-deep) / 0.28) 0%, hsla(var(--brown-deep) / 0.16) 40%, hsla(var(--brown-deep) / 0.32) 100%)",
           }}
         />
+        {/* Global fog radial reveals */}
+        <div className="absolute inset-0 pointer-events-none">
+          <motion.div
+            className="absolute -top-20 left-[4%] h-[24rem] w-[24rem] rounded-full blur-3xl"
+            animate={{ x: [0, 42, 0], y: [0, -24, 0], scale: [1, 1.08, 1] }}
+            transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+            style={{ background: "radial-gradient(circle, hsla(34 86% 74% / 0.2), transparent 68%)" }}
+          />
+          <motion.div
+            className="absolute top-[12%] right-[8%] h-[28rem] w-[28rem] rounded-full blur-3xl"
+            animate={{ x: [0, -54, 0], y: [0, 26, 0], scale: [1, 1.1, 1] }}
+            transition={{ duration: 24, repeat: Infinity, ease: "easeInOut" }}
+            style={{ background: "radial-gradient(circle, hsla(205 78% 78% / 0.16), transparent 70%)" }}
+          />
+          <motion.div
+            className="absolute top-[44%] left-[24%] h-[22rem] w-[22rem] rounded-full blur-3xl"
+            animate={{ x: [0, 34, 0], y: [0, -28, 0], scale: [1, 1.12, 1] }}
+            transition={{ duration: 26, repeat: Infinity, ease: "easeInOut" }}
+            style={{ background: "radial-gradient(circle, hsla(45 88% 80% / 0.14), transparent 66%)" }}
+          />
+          <motion.div
+            className="absolute bottom-[10%] right-[16%] h-[26rem] w-[26rem] rounded-full blur-3xl"
+            animate={{ x: [0, -30, 0], y: [0, -20, 0], scale: [1, 1.09, 1] }}
+            transition={{ duration: 28, repeat: Infinity, ease: "easeInOut" }}
+            style={{ background: "radial-gradient(circle, hsla(20 80% 70% / 0.16), transparent 72%)" }}
+          />
+        </div>
       </motion.div>
 
       {/* UI Controls */}

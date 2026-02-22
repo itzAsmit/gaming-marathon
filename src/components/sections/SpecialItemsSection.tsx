@@ -81,8 +81,6 @@ function AnimatedListItem({ item, index, selected, onHover, onClick }: AnimatedL
           boxShadow: selected
             ? `0 0 0 1px hsla(${item.color} / 0.45), 0 12px 30px hsla(${item.color} / 0.25)`
             : "0 8px 22px hsla(var(--brown-deep) / 0.18)",
-          backdropFilter: "blur(7px)",
-          WebkitBackdropFilter: "blur(7px)",
         }}
       >
         <div
@@ -156,15 +154,6 @@ export default function SpecialItemsSection() {
         </ScrollReveal>
 
         <div className="relative mt-10 max-w-5xl mx-auto px-2 md:px-6">
-          <div
-            className="absolute inset-0 -z-10 rounded-[2.5rem]"
-            style={{
-              backdropFilter: "blur(8px)",
-              WebkitBackdropFilter: "blur(8px)",
-              background:
-                "radial-gradient(circle at 18% 24%, hsla(38 84% 84% / 0.2), transparent 38%), radial-gradient(circle at 75% 30%, hsla(205 80% 82% / 0.17), transparent 36%), radial-gradient(circle at 50% 82%, hsla(28 80% 74% / 0.16), transparent 40%)",
-            }}
-          />
           <div className="py-5 md:py-7">
             {ITEMS.map((item, i) => (
               <AnimatedListItem
