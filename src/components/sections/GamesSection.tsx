@@ -215,41 +215,41 @@ export default function GamesSection() {
                 </button>
               </div>
 
-              <div className="p-6 space-y-5">
-                <div>
-                  <p className="text-xs font-cinzel tracking-widest mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>STATS</p>
-                  <div className="flex items-center gap-3 flex-wrap">
-                    <span
-                      className="px-3 py-1 rounded-full text-xs font-cinzel tracking-widest"
-                      style={{
-                        background: selected.status === "completed" ? "hsla(120 60% 35% / 0.3)" : "hsla(var(--gold) / 0.15)",
-                        color: selected.status === "completed" ? "hsl(120 80% 70%)" : "hsl(var(--gold))",
-                        border: `1px solid ${selected.status === "completed" ? "hsla(120 60% 50% / 0.4)" : "hsla(var(--gold) / 0.3)"}`,
-                        fontFamily: "Cinzel, serif",
-                      }}
-                    >
-                      {selected.status.toUpperCase()}
-                    </span>
-                    {selectedGameDateTime && (
-                      <span className="flex items-center gap-1 text-xs px-3 py-1 rounded-full" style={{ color: "hsl(var(--cream-dark))", border: "1px solid hsla(var(--gold) / 0.2)", background: "hsla(var(--gold) / 0.06)" }}>
-                        <Calendar size={12} /> {selectedGameDateTime.toLocaleDateString("en-GB")}
-                      </span>
-                    )}
-                    {selectedGameDateTime && (
-                      <span className="flex items-center gap-1 text-xs px-3 py-1 rounded-full" style={{ color: "hsl(var(--cream-dark))", border: "1px solid hsla(var(--gold) / 0.2)", background: "hsla(var(--gold) / 0.06)" }}>
-                        <Clock size={12} /> {selectedGameDateTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: true })}
-                      </span>
-                    )}
-                    {!selectedGameDateTime && selected.game_time && (
-                      <span className="flex items-center gap-1 text-xs px-3 py-1 rounded-full" style={{ color: "hsl(var(--cream-dark))", border: "1px solid hsla(var(--gold) / 0.2)", background: "hsla(var(--gold) / 0.06)" }}>
-                        <Clock size={12} /> {formatGameTime(selected.game_time)}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
+              <div className="p-6">
                 <div className="grid md:grid-cols-2 gap-6 items-start">
                   <div className="space-y-5">
+                    <div>
+                      <p className="text-xs font-cinzel tracking-widest mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>STATS</p>
+                      <div className="flex items-center gap-3 flex-wrap">
+                        <span
+                          className="px-3 py-1 rounded-full text-xs font-cinzel tracking-widest"
+                          style={{
+                            background: selected.status === "completed" ? "hsla(120 60% 35% / 0.3)" : "hsla(var(--gold) / 0.15)",
+                            color: selected.status === "completed" ? "hsl(120 80% 70%)" : "hsl(var(--gold))",
+                            border: `1px solid ${selected.status === "completed" ? "hsla(120 60% 50% / 0.4)" : "hsla(var(--gold) / 0.3)"}`,
+                            fontFamily: "Cinzel, serif",
+                          }}
+                        >
+                          {selected.status.toUpperCase()}
+                        </span>
+                        {selectedGameDateTime && (
+                          <span className="flex items-center gap-1 text-xs px-3 py-1 rounded-full" style={{ color: "hsl(var(--cream-dark))", border: "1px solid hsla(var(--gold) / 0.2)", background: "hsla(var(--gold) / 0.06)" }}>
+                            <Calendar size={12} /> {selectedGameDateTime.toLocaleDateString("en-GB")}
+                          </span>
+                        )}
+                        {selectedGameDateTime && (
+                          <span className="flex items-center gap-1 text-xs px-3 py-1 rounded-full" style={{ color: "hsl(var(--cream-dark))", border: "1px solid hsla(var(--gold) / 0.2)", background: "hsla(var(--gold) / 0.06)" }}>
+                            <Clock size={12} /> {selectedGameDateTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: true })}
+                          </span>
+                        )}
+                        {!selectedGameDateTime && selected.game_time && (
+                          <span className="flex items-center gap-1 text-xs px-3 py-1 rounded-full" style={{ color: "hsl(var(--cream-dark))", border: "1px solid hsla(var(--gold) / 0.2)", background: "hsla(var(--gold) / 0.06)" }}>
+                            <Clock size={12} /> {formatGameTime(selected.game_time)}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
                     {selected.bio && (
                       <div>
                         <p className="text-xs font-cinzel tracking-widest mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>ABOUT</p>
@@ -277,7 +277,7 @@ export default function GamesSection() {
                     )}
                   </div>
 
-                  <div>
+                  <div className="md:pt-0">
                     {selected.rules && (
                       <div>
                         <p className="text-xs font-cinzel tracking-widest mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>RULES</p>
