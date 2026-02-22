@@ -6,37 +6,37 @@ const ITEMS = [
   {
     name: "Dagger",
     emoji: "🗡️",
-    description: "A sharp blade that eliminates one player from an event — swift and lethal.",
+    description: "Deducts 20 points from any player at any point in the marathon. Ownership stays secret (except to the holder) and is announced only when assigned and used.",
     color: "0 70% 50%",
   },
   {
     name: "Shield",
     emoji: "🛡️",
-    description: "Protects the holder from being eliminated or penalized in one round.",
+    description: "Protects you from any deduction threat.",
     color: "220 70% 55%",
   },
   {
     name: "Mirror",
     emoji: "🪞",
-    description: "Reflects any negative item or action back to the sender.",
+    description: "Use before a game starts and choose one player. After the game, you receive exactly the same points as that player, regardless of your own performance.",
     color: "180 60% 50%",
   },
   {
     name: "Red Flag",
     emoji: "🚩",
-    description: "Marks a player for suspicion — others may vote them out.",
+    description: "Either deduct 5 points from any player or stop a player from participating in one specific game. Can also be exchanged for 7 points. (Not usable in Skribbl and Among Us.)",
     color: "0 80% 55%",
   },
   {
     name: "VISA",
     emoji: "🎫",
-    description: "Grants free entry to any event without using a slot.",
+    description: "Skip any game and secure the points of 3rd place for that game.",
     color: "45 90% 50%",
   },
   {
     name: "Immunity Seal",
     emoji: "🔰",
-    description: "Absolute immunity from elimination for one full event.",
+    description: "Locks your leaderboard position for that game. Your points do not increase, but players below you cannot overtake your rank even if they earn more.",
     color: "130 60% 45%",
   },
 ];
