@@ -126,28 +126,7 @@ export default function SpecialItemsSection() {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   return (
-    <section id="items" className="relative min-h-screen py-24 px-4 overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none">
-        <motion.div
-          className="absolute -top-16 left-[8%] h-56 w-56 rounded-full blur-3xl"
-          animate={{ x: [0, 30, 0], y: [0, -16, 0], scale: [1, 1.08, 1] }}
-          transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
-          style={{ background: "radial-gradient(circle, hsla(48 85% 78% / 0.35), transparent 70%)" }}
-        />
-        <motion.div
-          className="absolute top-[20%] right-[8%] h-80 w-80 rounded-full blur-3xl"
-          animate={{ x: [0, -36, 0], y: [0, 18, 0], scale: [1, 1.06, 1] }}
-          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-          style={{ background: "radial-gradient(circle, hsla(210 75% 78% / 0.27), transparent 72%)" }}
-        />
-        <motion.div
-          className="absolute bottom-[6%] left-[16%] h-72 w-72 rounded-full blur-3xl"
-          animate={{ x: [0, 28, 0], y: [0, -24, 0], scale: [1, 1.12, 1] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-          style={{ background: "radial-gradient(circle, hsla(32 85% 70% / 0.25), transparent 70%)" }}
-        />
-      </div>
-
+    <section id="items" className="relative min-h-screen py-24 px-4">
       <div className="max-w-6xl mx-auto">
         <ScrollReveal>
           <SectionHeader title="SPECIAL ITEMS" accent="POWER UPS" subtitle="Rare artifacts that can change the course of the game" />
