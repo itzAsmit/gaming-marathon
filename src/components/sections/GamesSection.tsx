@@ -158,7 +158,7 @@ export default function GamesSection() {
       <AnimatePresence>
         {selected && (
           <motion.div
-            className="fixed inset-0 z-[100] flex items-start justify-center px-4 pb-4 pt-20 md:pt-24"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 pt-14 md:pt-16"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
