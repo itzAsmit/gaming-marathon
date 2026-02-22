@@ -49,30 +49,28 @@ export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
       </motion.div>
 
       {/* UI Controls */}
-      <div className="fixed top-3 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-1.5rem)] max-w-3xl">
-        <div className="glass-card rounded-full px-3 py-2 md:px-5 md:py-2.5 flex items-center justify-center gap-2 md:gap-5 flex-wrap">
+      <div className="fixed top-4 right-4 z-50 flex items-center gap-5">
         <button
           onClick={() => document.getElementById("leaderboard")?.scrollIntoView({ behavior: "smooth" })}
-          className="text-[10px] md:text-xs font-cinzel tracking-[0.22em] md:tracking-widest transition-all duration-300 hover:opacity-100 opacity-80 px-2 py-1"
+          className="text-xs font-cinzel tracking-widest transition-all duration-300 hover:opacity-100 opacity-70"
           style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif", background: "none", border: "none" }}
         >
           LEADERBOARD
         </button>
         <button
           onClick={() => document.getElementById("players")?.scrollIntoView({ behavior: "smooth" })}
-          className="text-[10px] md:text-xs font-cinzel tracking-[0.22em] md:tracking-widest transition-all duration-300 hover:opacity-100 opacity-80 px-2 py-1"
+          className="text-xs font-cinzel tracking-widest transition-all duration-300 hover:opacity-100 opacity-70"
           style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif", background: "none", border: "none" }}
         >
           MEET PLAYERS
         </button>
         <Link
           to="/admin/login"
-          className="px-4 md:px-5 py-1.5 md:py-2 rounded-full text-cream text-xs md:text-sm font-cinzel tracking-[0.22em] md:tracking-widest hover:glow-gold transition-all duration-300 border"
+          className="glass-card px-4 py-2 rounded-full text-cream text-sm font-cinzel tracking-widest hover:glow-gold transition-all duration-300"
           style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}
         >
           ADMIN
         </Link>
-      </div>
       </div>
 
       {/* Sound toggle */}
