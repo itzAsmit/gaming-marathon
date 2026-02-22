@@ -21,6 +21,7 @@ interface Game {
 
 interface GameRanking {
   rank: number;
+  points: number | null;
   players: { name: string; player_id: string } | null;
 }
 
@@ -37,7 +38,7 @@ export default function GamesSection() {
   const fetchRankings = async (gameId: string) => {
     const { data } = await supabase
       .from("player_game_stats")
-      .select("rank, players(name, player_id)")
+      .select("rank, points, players(name, player_id)")
       .eq("game_id", gameId)
       .order("rank");
     if (data) setRankings(data as any);
@@ -72,6 +73,12 @@ export default function GamesSection() {
     if (game.status === "completed") fetchRankings(game.id);
   };
   const selectedGameDateTime = selected ? getGameDateTime(selected) : null;
+  const getRankBadge = (rank: number) => {
+    if (rank === 1) return "👑 #1";
+    if (rank === 2) return "🥈 #2";
+    if (rank === 3) return "🥉 #3";
+    return `🎯 #${rank}`;
+  };
 
   return (
     <section id="games" className="relative min-h-screen py-24 px-4">
@@ -155,7 +162,7 @@ export default function GamesSection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            style={{ background: "hsla(var(--brown-deep) / 0.52)", backdropFilter: "blur(12px)" }}
+            style={{ background: "hsla(var(--brown-deep) / 0.4)", backdropFilter: "blur(12px)" }}
             onClick={() => setSelected(null)}
           >
             <motion.div
@@ -163,6 +170,7 @@ export default function GamesSection() {
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
+              style={{ background: "hsla(var(--brown-deep) / 0.8)" }}
               onClick={(e) => e.stopPropagation()}
             >
               <div className="relative h-[52vh] min-h-[320px] max-h-[520px] overflow-hidden">
@@ -240,34 +248,44 @@ export default function GamesSection() {
                   </div>
                 </div>
 
-                {selected.bio && (
-                  <div>
-                    <p className="text-xs font-cinzel tracking-widest mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>ABOUT</p>
-                    <p className="text-sm leading-relaxed" style={{ color: "hsl(var(--cream-dark))" }}>{selected.bio}</p>
-                  </div>
-                )}
+                <div className="grid md:grid-cols-2 gap-6 items-start">
+                  <div className="space-y-5">
+                    {selected.bio && (
+                      <div>
+                        <p className="text-xs font-cinzel tracking-widest mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>ABOUT</p>
+                        <p className="text-sm leading-relaxed" style={{ color: "hsl(var(--cream-dark))" }}>{selected.bio}</p>
+                      </div>
+                    )}
 
-                {selected.rules && (
-                  <div>
-                    <p className="text-xs font-cinzel tracking-widest mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>RULES</p>
-                    <p className="text-sm leading-relaxed whitespace-pre-line" style={{ color: "hsl(var(--cream-dark))" }}>{selected.rules}</p>
-                  </div>
-                )}
-
-                {selected.status === "completed" && rankings.length > 0 && (
-                  <div>
-                    <p className="text-xs font-cinzel tracking-widest mb-3" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>RANKINGS</p>
-                    <div className="space-y-2">
-                      {rankings.map((r) => (
-                        <div key={r.rank} className="flex items-center gap-3 px-4 py-2 rounded-xl" style={{ background: "hsla(var(--gold) / 0.05)", border: "1px solid hsla(var(--gold) / 0.15)" }}>
-                          <span className="text-lg">{r.rank === 1 ? "1" : r.rank === 2 ? "2" : r.rank === 3 ? "3" : `#${r.rank}`}</span>
-                          <span className="font-cinzel text-sm" style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}>{r.players?.name ?? "-"}</span>
-                          <span className="text-xs ml-auto" style={{ color: "hsl(var(--cream-dark) / 0.6)" }}>{r.players?.player_id}</span>
+                    {selected.status === "completed" && rankings.length > 0 && (
+                      <div>
+                        <p className="text-xs font-cinzel tracking-widest mb-3" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>RANKINGS</p>
+                        <div className="space-y-2">
+                          {rankings.map((r) => (
+                            <div key={`${r.rank}-${r.players?.player_id ?? "na"}`} className="flex items-center gap-3 px-4 py-2 rounded-xl" style={{ background: "hsla(var(--gold) / 0.05)", border: "1px solid hsla(var(--gold) / 0.15)" }}>
+                              <span className="text-xs px-2.5 py-1 rounded-full font-cinzel tracking-wide" style={{ color: "hsl(var(--gold))", border: "1px solid hsla(var(--gold) / 0.35)", background: "hsla(var(--gold) / 0.08)", fontFamily: "Cinzel, serif" }}>
+                                {getRankBadge(r.rank)}
+                              </span>
+                              <span className="font-cinzel text-sm" style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}>{r.players?.name ?? "-"}</span>
+                              <span className="text-xs ml-auto" style={{ color: "hsl(var(--cream-dark) / 0.8)" }}>
+                                {(r.points ?? 0)} pts
+                              </span>
+                            </div>
+                          ))}
                         </div>
-                      ))}
-                    </div>
+                      </div>
+                    )}
                   </div>
-                )}
+
+                  <div>
+                    {selected.rules && (
+                      <div>
+                        <p className="text-xs font-cinzel tracking-widest mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>RULES</p>
+                        <p className="text-sm leading-relaxed whitespace-pre-line" style={{ color: "hsl(var(--cream-dark))" }}>{selected.rules}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             </motion.div>
           </motion.div>

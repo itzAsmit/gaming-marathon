@@ -1,0 +1,3 @@
+ALTER TABLE public.player_game_stats
+ADD COLUMN IF NOT EXISTS points INTEGER NOT NULL DEFAULT 0;
+

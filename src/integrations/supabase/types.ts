@@ -192,6 +192,7 @@ export type Database = {
           game_id: string
           id: string
           player_id: string
+          points: number
           rank: number | null
         }
         Insert: {
@@ -199,6 +200,7 @@ export type Database = {
           game_id: string
           id?: string
           player_id: string
+          points?: number
           rank?: number | null
         }
         Update: {
@@ -206,6 +208,7 @@ export type Database = {
           game_id?: string
           id?: string
           player_id?: string
+          points?: number
           rank?: number | null
         }
         Relationships: [

@@ -21,7 +21,7 @@ interface Game {
   status: string;
 }
 
-interface GameRanking { rank: number; player_id: string; player_name?: string; }
+interface GameRanking { rank: number; player_id: string; points: number; player_name?: string; }
 
 interface ImageCropDraft {
   open: boolean;
@@ -346,8 +346,8 @@ export default function AdminGames() {
     setForm({ ...g });
     setDateTimeParts(parseGameDateTime(g));
     if (g.status === "completed") {
-      const { data } = await supabase.from("player_game_stats").select("rank, player_id, players(name, player_id)").eq("game_id", g.id).order("rank");
-      if (data) setRankings((data as any).map((d: any) => ({ rank: d.rank, player_id: d.player_id, player_name: d.players?.name })));
+      const { data } = await supabase.from("player_game_stats").select("rank, points, player_id, players(name, player_id)").eq("game_id", g.id).order("rank");
+      if (data) setRankings((data as any).map((d: any) => ({ rank: d.rank, points: d.points ?? 0, player_id: d.player_id, player_name: d.players?.name })));
     } else {
       setRankings([]);
     }
@@ -394,9 +394,11 @@ export default function AdminGames() {
 
         if (form.status === "completed") {
           await supabase.from("player_game_stats").delete().eq("game_id", editing.id);
-          const validRanks = rankings.filter((r) => r.player_id);
+          const validRanks = rankings
+            .filter((r) => r.player_id)
+            .map((r, index) => ({ ...r, rank: index + 1, points: Number.isFinite(r.points) ? r.points : 0 }));
           if (validRanks.length > 0) {
-            await supabase.from("player_game_stats").insert(validRanks.map((r) => ({ game_id: editing.id, player_id: r.player_id, rank: r.rank })));
+            await supabase.from("player_game_stats").insert(validRanks.map((r) => ({ game_id: editing.id, player_id: r.player_id, rank: r.rank, points: Math.max(0, r.points) })));
           }
         }
 
@@ -404,6 +406,14 @@ export default function AdminGames() {
         toast.success("Game updated!");
       } else {
         const { data } = await supabase.from("games").insert(payload).select().single();
+        if (data && form.status === "completed") {
+          const validRanks = rankings
+            .filter((r) => r.player_id)
+            .map((r, index) => ({ ...r, rank: index + 1, points: Number.isFinite(r.points) ? r.points : 0 }));
+          if (validRanks.length > 0) {
+            await supabase.from("player_game_stats").insert(validRanks.map((r) => ({ game_id: data.id, player_id: r.player_id, rank: r.rank, points: Math.max(0, r.points) })));
+          }
+        }
         await logActivity("CREATE_GAME", form.name);
         toast.success("Game created!");
       }
@@ -793,7 +803,7 @@ export default function AdminGames() {
                   <div className="flex items-center justify-between mb-2">
                     <label className="text-xs font-cinzel tracking-widest" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>GAME RANKINGS</label>
                     {rankings.length < 10 && (
-                      <button onClick={() => setRankings((r) => [...r, { rank: r.length + 1, player_id: "" }])} className="text-xs font-cinzel" style={{ color: "hsl(var(--brown-light))", fontFamily: "Cinzel, serif" }}>+ Add</button>
+                      <button onClick={() => setRankings((r) => [...r, { rank: r.length + 1, player_id: "", points: 0 }])} className="text-xs font-cinzel" style={{ color: "hsl(var(--brown-light))", fontFamily: "Cinzel, serif" }}>+ Add</button>
                     )}
                   </div>
                   <div className="space-y-2">
@@ -809,6 +819,18 @@ export default function AdminGames() {
                           <option value="">Select player...</option>
                           {players.map((p) => <option key={p.id} value={p.id}>{p.name} ({p.player_id})</option>)}
                         </select>
+                        <input
+                          type="number"
+                          min={0}
+                          value={r.points}
+                          onChange={(e) => {
+                            const nextValue = parseInt(e.target.value, 10);
+                            setRankings((ranks) => ranks.map((x, j) => j === i ? { ...x, points: Number.isNaN(nextValue) ? 0 : Math.max(0, nextValue) } : x));
+                          }}
+                          className="w-24 px-3 py-2 rounded-xl text-xs outline-none text-center"
+                          style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
+                          placeholder="Points"
+                        />
                         <button onClick={() => setRankings((ranks) => ranks.filter((_, j) => j !== i))} style={{ color: "hsl(var(--destructive))" }}><X size={14} /></button>
                       </div>
                     ))}
