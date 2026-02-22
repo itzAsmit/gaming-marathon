@@ -25,6 +25,7 @@ interface Player {
   };
   proficiencies?: { game_name: string; proficiency_percent: number }[];
   items?: { items: { name: string; description: string } }[];
+  player_game_stats?: { games: { game_id: string } | null }[];
 }
 
 export default function PlayersSection() {
@@ -34,16 +35,41 @@ export default function PlayersSection() {
   const fetchPlayers = async () => {
     const { data } = await supabase
       .from("players")
-      .select("*, leaderboard(*), player_proficiencies(*), player_items(*, items(name, description))");
+      .select("*, leaderboard(*), player_proficiencies(*), player_items(*, items(name, description)), player_game_stats(games(game_id))");
     if (data) {
-      setPlayers(
-        data.map((p: any) => ({
-          ...p,
-          leaderboard: p.leaderboard?.[0] ?? p.leaderboard,
-          proficiencies: p.player_proficiencies,
-          items: p.player_items,
-        }))
-      );
+      const mappedPlayers = data.map((p: any) => ({
+        ...p,
+        leaderboard: p.leaderboard?.[0] ?? p.leaderboard,
+        proficiencies: p.player_proficiencies,
+        items: p.player_items,
+      }));
+
+      const getGameOrder = (player: any): number => {
+        const gameIds = (player.player_game_stats ?? [])
+          .map((s: any) => s?.games?.game_id)
+          .filter((gid: unknown): gid is string => typeof gid === "string" && gid.length > 0);
+
+        if (gameIds.length === 0) return Number.MAX_SAFE_INTEGER;
+
+        const minNumeric = Math.min(
+          ...gameIds.map((gid) => {
+            const match = gid.match(/\d+/);
+            return match ? parseInt(match[0], 10) : Number.MAX_SAFE_INTEGER;
+          })
+        );
+
+        if (Number.isFinite(minNumeric)) return minNumeric;
+
+        return Number.MAX_SAFE_INTEGER;
+      };
+
+      mappedPlayers.sort((a: any, b: any) => {
+        const gameOrderDiff = getGameOrder(a) - getGameOrder(b);
+        if (gameOrderDiff !== 0) return gameOrderDiff;
+        return (a.player_id ?? "").localeCompare(b.player_id ?? "");
+      });
+
+      setPlayers(mappedPlayers);
     }
   };
 
