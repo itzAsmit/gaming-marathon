@@ -45,24 +45,24 @@
 
 @layer base {
   :root {
-    /* Cream & Brown Esports Theme */
-    --background: 35 25% 96%;
-    --foreground: 25 40% 12%;
+    /* Dark Cream & Brown Theme */
+    --background: 20 30% 8%;
+    --foreground: 35 55% 90%;
 
-    --card: 35 30% 92%;
-    --card-foreground: 25 40% 12%;
+    --card: 22 25% 12%;
+    --card-foreground: 35 45% 90%;
 
-    --popover: 35 30% 92%;
-    --popover-foreground: 25 40% 12%;
+    --popover: 22 25% 12%;
+    --popover-foreground: 35 45% 90%;
 
     --primary: 28 55% 32%;
     --primary-foreground: 35 50% 95%;
 
-    --secondary: 35 40% 85%;
-    --secondary-foreground: 25 40% 20%;
+    --secondary: 24 25% 20%;
+    --secondary-foreground: 35 40% 88%;
 
-    --muted: 35 20% 88%;
-    --muted-foreground: 25 25% 45%;
+    --muted: 24 20% 16%;
+    --muted-foreground: 35 22% 68%;
 
     --accent: 28 70% 40%;
     --accent-foreground: 35 50% 95%;
@@ -70,32 +70,32 @@
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 35 20% 80%;
-    --input: 35 20% 85%;
+    --border: 30 20% 28%;
+    --input: 30 20% 22%;
     --ring: 28 55% 32%;
 
     --radius: 0.75rem;
 
     /* Custom tokens */
-    --cream: 35 60% 94%;
-    --cream-dark: 35 40% 85%;
-    --brown: 25 55% 28%;
-    --brown-light: 28 45% 42%;
-    --brown-deep: 20 60% 16%;
+    --cream: 35 40% 88%;
+    --cream-dark: 35 24% 68%;
+    --brown: 24 50% 24%;
+    --brown-light: 28 35% 36%;
+    --brown-deep: 20 45% 9%;
     --gold: 43 74% 49%;
     --gold-light: 43 80% 65%;
     --silver: 220 10% 65%;
     --bronze: 25 60% 42%;
-    --glass-bg: 35 40% 92%;
-    --glass-border: 35 30% 80%;
+    --glass-bg: 24 20% 14%;
+    --glass-border: 35 20% 40%;
 
-    --sidebar-background: 35 25% 93%;
-    --sidebar-foreground: 25 40% 15%;
+    --sidebar-background: 20 28% 10%;
+    --sidebar-foreground: 35 40% 88%;
     --sidebar-primary: 28 55% 32%;
     --sidebar-primary-foreground: 35 50% 95%;
-    --sidebar-accent: 35 30% 87%;
-    --sidebar-accent-foreground: 25 40% 20%;
-    --sidebar-border: 35 20% 78%;
+    --sidebar-accent: 24 24% 17%;
+    --sidebar-accent-foreground: 35 42% 88%;
+    --sidebar-border: 30 20% 24%;
     --sidebar-ring: 28 55% 32%;
   }
 }
@@ -124,25 +124,25 @@
 @layer utilities {
   /* Glass morphism */
   .glass {
-    background: hsla(var(--glass-bg) / 0.4);
+    background: hsla(var(--glass-bg) / 0.65);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid hsla(var(--glass-border) / 0.5);
+    border: 1px solid hsla(var(--glass-border) / 0.45);
   }
 
   .glass-dark {
-    background: hsla(var(--brown-deep) / 0.6);
+    background: hsla(var(--brown-deep) / 0.78);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid hsla(var(--gold) / 0.2);
+    border: 1px solid hsla(var(--gold) / 0.25);
   }
 
   .glass-card {
-    background: hsla(var(--cream) / 0.15);
+    background: hsla(var(--brown-deep) / 0.62);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid hsla(var(--cream) / 0.3);
-    box-shadow: 0 8px 32px hsla(var(--brown-deep) / 0.3);
+    border: 1px solid hsla(var(--cream) / 0.18);
+    box-shadow: 0 12px 34px hsla(var(--brown-deep) / 0.5);
   }
 
   .electric-card {
