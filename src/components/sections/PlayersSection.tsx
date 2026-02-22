@@ -165,7 +165,7 @@ export default function PlayersSection() {
       <AnimatePresence>
         {selected && (
           <motion.div
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+            className="fixed inset-0 z-[100] flex items-start justify-center px-4 pb-4 pt-20 md:pt-24"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -179,7 +179,7 @@ export default function PlayersSection() {
               exit={{ scale: 0.9, y: 40 }}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="max-h-[90vh] overflow-y-auto overflow-x-hidden [scrollbar-gutter:stable]">
+              <div className="max-h-[calc(100vh-6rem)] md:max-h-[calc(100vh-7rem)] overflow-y-auto overflow-x-hidden [scrollbar-gutter:stable]">
                 <div className="grid md:grid-cols-2">
                 {/* Left */}
                 <div className="relative">

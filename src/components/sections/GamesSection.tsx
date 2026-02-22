@@ -158,7 +158,7 @@ export default function GamesSection() {
       <AnimatePresence>
         {selected && (
           <motion.div
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+            className="fixed inset-0 z-[100] flex items-start justify-center px-4 pb-4 pt-20 md:pt-24"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -166,7 +166,7 @@ export default function GamesSection() {
             onClick={() => setSelected(null)}
           >
             <motion.div
-              className="glass-card no-scrollbar rounded-3xl overflow-hidden max-w-4xl w-full max-h-[92vh] overflow-y-auto relative"
+              className="glass-card no-scrollbar rounded-3xl overflow-hidden max-w-4xl w-full max-h-[calc(100vh-6rem)] md:max-h-[calc(100vh-7rem)] overflow-y-auto relative"
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
