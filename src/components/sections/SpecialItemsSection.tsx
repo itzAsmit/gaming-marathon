@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import { motion, useInView } from "framer-motion";
@@ -73,17 +73,26 @@ function AnimatedListItem({ item, index, selected, onHover, onClick }: AnimatedL
       className="mb-4 cursor-pointer"
     >
       <div
-        className="rounded-2xl p-4 md:p-5 border transition-all duration-300"
+        className="relative overflow-hidden rounded-2xl p-4 md:p-5 transition-all duration-300"
         style={{
           background: selected
-            ? "linear-gradient(145deg, hsla(var(--cream) / 0.22), hsla(var(--brown) / 0.42))"
-            : "linear-gradient(145deg, hsla(var(--cream) / 0.12), hsla(var(--brown) / 0.32))",
-          borderColor: selected ? `hsla(${item.color} / 0.65)` : "hsla(var(--cream) / 0.25)",
+            ? "linear-gradient(145deg, hsla(var(--cream) / 0.18), hsla(var(--brown) / 0.18))"
+            : "linear-gradient(145deg, hsla(var(--cream) / 0.1), hsla(var(--brown) / 0.1))",
           boxShadow: selected
-            ? `0 0 0 1px hsla(${item.color} / 0.35), 0 14px 34px hsla(${item.color} / 0.25)`
-            : "0 10px 24px hsla(var(--brown-deep) / 0.22)",
+            ? `0 0 0 1px hsla(${item.color} / 0.45), 0 12px 30px hsla(${item.color} / 0.25)`
+            : "0 8px 22px hsla(var(--brown-deep) / 0.18)",
+          backdropFilter: "blur(7px)",
+          WebkitBackdropFilter: "blur(7px)",
         }}
       >
+        <div
+          className="absolute -top-6 -left-8 h-24 w-24 rounded-full blur-2xl pointer-events-none"
+          style={{ background: `radial-gradient(circle, hsla(${item.color} / 0.4), transparent 70%)` }}
+        />
+        <div
+          className="absolute -bottom-8 right-8 h-20 w-20 rounded-full blur-2xl pointer-events-none"
+          style={{ background: `radial-gradient(circle, hsla(${item.color} / 0.28), transparent 75%)` }}
+        />
         <div className="flex items-start gap-4">
           <motion.div
             className="w-12 h-12 shrink-0 rounded-xl flex items-center justify-center text-2xl"
@@ -117,25 +126,6 @@ function AnimatedListItem({ item, index, selected, onHover, onClick }: AnimatedL
 
 export default function SpecialItemsSection() {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [topGradientOpacity, setTopGradientOpacity] = useState(0);
-  const [bottomGradientOpacity, setBottomGradientOpacity] = useState(1);
-  const listRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const node = listRef.current;
-    if (!node) return;
-    const bottomDistance = node.scrollHeight - (node.scrollTop + node.clientHeight);
-    setBottomGradientOpacity(node.scrollHeight <= node.clientHeight ? 0 : Math.min(bottomDistance / 60, 1));
-  }, []);
-
-  const handleScroll = () => {
-    const node = listRef.current;
-    if (!node) return;
-    const { scrollTop, scrollHeight, clientHeight } = node;
-    setTopGradientOpacity(Math.min(scrollTop / 60, 1));
-    const bottomDistance = scrollHeight - (scrollTop + clientHeight);
-    setBottomGradientOpacity(scrollHeight <= clientHeight ? 0 : Math.min(bottomDistance / 60, 1));
-  };
 
   return (
     <section id="items" className="relative min-h-screen py-24 px-4 overflow-hidden">
@@ -147,36 +137,35 @@ export default function SpecialItemsSection() {
           style={{ background: "radial-gradient(circle, hsla(48 85% 78% / 0.35), transparent 70%)" }}
         />
         <motion.div
-          className="absolute top-[22%] right-[10%] h-72 w-72 rounded-full blur-3xl"
+          className="absolute top-[20%] right-[8%] h-80 w-80 rounded-full blur-3xl"
           animate={{ x: [0, -36, 0], y: [0, 18, 0], scale: [1, 1.06, 1] }}
           transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
           style={{ background: "radial-gradient(circle, hsla(210 75% 78% / 0.27), transparent 72%)" }}
         />
         <motion.div
-          className="absolute bottom-[8%] left-[22%] h-64 w-64 rounded-full blur-3xl"
+          className="absolute bottom-[6%] left-[16%] h-72 w-72 rounded-full blur-3xl"
           animate={{ x: [0, 28, 0], y: [0, -24, 0], scale: [1, 1.12, 1] }}
           transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
           style={{ background: "radial-gradient(circle, hsla(32 85% 70% / 0.25), transparent 70%)" }}
         />
       </div>
 
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <ScrollReveal>
           <SectionHeader title="SPECIAL ITEMS" accent="POWER UPS" subtitle="Rare artifacts that can change the course of the game" />
         </ScrollReveal>
 
-        <div className="relative mt-10 max-w-4xl mx-auto">
+        <div className="relative mt-10 max-w-5xl mx-auto px-2 md:px-6">
           <div
-            ref={listRef}
-            onScroll={handleScroll}
-            className="max-h-[520px] overflow-y-auto pr-1 rounded-3xl p-4 md:p-5"
+            className="absolute inset-0 -z-10 rounded-[2.5rem]"
             style={{
-              background: "linear-gradient(180deg, hsla(var(--brown-deep) / 0.45), hsla(var(--brown-deep) / 0.58))",
-              border: "1px solid hsla(var(--cream) / 0.2)",
-              scrollbarWidth: "thin",
-              scrollbarColor: "hsla(var(--gold) / 0.45) hsla(var(--brown-deep) / 0.5)",
+              backdropFilter: "blur(8px)",
+              WebkitBackdropFilter: "blur(8px)",
+              background:
+                "radial-gradient(circle at 18% 24%, hsla(38 84% 84% / 0.2), transparent 38%), radial-gradient(circle at 75% 30%, hsla(205 80% 82% / 0.17), transparent 36%), radial-gradient(circle at 50% 82%, hsla(28 80% 74% / 0.16), transparent 40%)",
             }}
-          >
+          />
+          <div className="py-5 md:py-7">
             {ITEMS.map((item, i) => (
               <AnimatedListItem
                 key={item.name}
@@ -188,21 +177,6 @@ export default function SpecialItemsSection() {
               />
             ))}
           </div>
-
-          <div
-            className="absolute top-0 left-0 right-0 h-16 rounded-t-3xl pointer-events-none transition-opacity duration-300"
-            style={{
-              opacity: topGradientOpacity,
-              background: "linear-gradient(to bottom, hsla(var(--brown-deep) / 0.8), transparent)",
-            }}
-          />
-          <div
-            className="absolute bottom-0 left-0 right-0 h-24 rounded-b-3xl pointer-events-none transition-opacity duration-300"
-            style={{
-              opacity: bottomGradientOpacity,
-              background: "linear-gradient(to top, hsla(var(--brown-deep) / 0.86), transparent)",
-            }}
-          />
         </div>
       </div>
     </section>
