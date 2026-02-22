@@ -63,9 +63,26 @@ export default function PlayersSection() {
         return Number.MAX_SAFE_INTEGER;
       };
 
+      const getPlayerOrder = (player: any): number => {
+        const rawId = player?.player_id;
+        if (typeof rawId !== "string") return Number.MAX_SAFE_INTEGER;
+        const match = rawId.match(/\d+/);
+        if (!match) return Number.MAX_SAFE_INTEGER;
+        return parseInt(match[0], 10);
+      };
+
       mappedPlayers.sort((a: any, b: any) => {
+        const aPlayerOrder = getPlayerOrder(a);
+        const bPlayerOrder = getPlayerOrder(b);
+
+        // Keep special player P00 first.
+        const aIsP00 = aPlayerOrder === 0;
+        const bIsP00 = bPlayerOrder === 0;
+        if (aIsP00 !== bIsP00) return aIsP00 ? -1 : 1;
+
         const gameOrderDiff = getGameOrder(a) - getGameOrder(b);
         if (gameOrderDiff !== 0) return gameOrderDiff;
+        if (aPlayerOrder !== bPlayerOrder) return aPlayerOrder - bPlayerOrder;
         return (a.player_id ?? "").localeCompare(b.player_id ?? "");
       });
 
