@@ -45,58 +45,58 @@
 
 @layer base {
   :root {
-    /* Dark Cream & Brown Theme */
-    --background: 20 30% 8%;
-    --foreground: 35 55% 90%;
+    /* Dark Silver & Charcoal Theme */
+    --background: 220 24% 7%;
+    --foreground: 220 22% 90%;
 
-    --card: 22 25% 12%;
-    --card-foreground: 35 45% 90%;
+    --card: 220 14% 90%;
+    --card-foreground: 220 20% 14%;
 
-    --popover: 22 25% 12%;
-    --popover-foreground: 35 45% 90%;
+    --popover: 220 14% 90%;
+    --popover-foreground: 220 20% 14%;
 
-    --primary: 28 55% 32%;
-    --primary-foreground: 35 50% 95%;
+    --primary: 220 18% 34%;
+    --primary-foreground: 220 20% 94%;
 
-    --secondary: 24 25% 20%;
-    --secondary-foreground: 35 40% 88%;
+    --secondary: 220 14% 80%;
+    --secondary-foreground: 220 20% 18%;
 
-    --muted: 24 20% 16%;
-    --muted-foreground: 35 22% 68%;
+    --muted: 220 10% 78%;
+    --muted-foreground: 220 12% 34%;
 
-    --accent: 28 70% 40%;
-    --accent-foreground: 35 50% 95%;
+    --accent: 220 16% 38%;
+    --accent-foreground: 220 20% 94%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 30 20% 28%;
-    --input: 30 20% 22%;
-    --ring: 28 55% 32%;
+    --border: 220 10% 62%;
+    --input: 220 12% 84%;
+    --ring: 220 16% 42%;
 
     --radius: 0.75rem;
 
     /* Custom tokens */
-    --cream: 35 40% 88%;
-    --cream-dark: 35 24% 68%;
-    --brown: 24 50% 24%;
-    --brown-light: 28 35% 36%;
-    --brown-deep: 20 45% 9%;
-    --gold: 43 74% 49%;
-    --gold-light: 43 80% 65%;
-    --silver: 220 10% 65%;
-    --bronze: 25 60% 42%;
-    --glass-bg: 24 20% 14%;
-    --glass-border: 35 20% 40%;
+    --cream: 220 14% 82%;
+    --cream-dark: 220 10% 60%;
+    --brown: 220 10% 27%;
+    --brown-light: 220 10% 42%;
+    --brown-deep: 220 22% 8%;
+    --gold: 220 16% 72%;
+    --gold-light: 220 18% 86%;
+    --silver: 220 16% 72%;
+    --bronze: 220 10% 52%;
+    --glass-bg: 220 12% 14%;
+    --glass-border: 220 10% 42%;
 
-    --sidebar-background: 20 28% 10%;
-    --sidebar-foreground: 35 40% 88%;
-    --sidebar-primary: 28 55% 32%;
-    --sidebar-primary-foreground: 35 50% 95%;
-    --sidebar-accent: 24 24% 17%;
-    --sidebar-accent-foreground: 35 42% 88%;
-    --sidebar-border: 30 20% 24%;
-    --sidebar-ring: 28 55% 32%;
+    --sidebar-background: 220 20% 9%;
+    --sidebar-foreground: 220 16% 88%;
+    --sidebar-primary: 220 16% 34%;
+    --sidebar-primary-foreground: 220 20% 94%;
+    --sidebar-accent: 220 14% 16%;
+    --sidebar-accent-foreground: 220 16% 88%;
+    --sidebar-border: 220 10% 24%;
+    --sidebar-ring: 220 16% 42%;
   }
 }
 

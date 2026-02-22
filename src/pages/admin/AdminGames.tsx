@@ -609,8 +609,8 @@ export default function AdminGames() {
         ) : (
           <div className="space-y-3">
             {games.map((g) => (
-              <div key={g.id} className="flex items-center gap-4 p-4 rounded-xl" style={{ background: "white", border: "1px solid hsl(var(--cream-dark))" }}>
-                <div className="w-16 h-10 rounded-lg overflow-hidden flex-shrink-0" style={{ background: "hsl(var(--cream))" }}>
+              <div key={g.id} className="flex items-center gap-4 p-4 rounded-xl" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
+                <div className="w-16 h-10 rounded-lg overflow-hidden flex-shrink-0" style={{ background: "hsl(var(--input))" }}>
                   {g.image_url ? <img src={g.image_url} alt={g.name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center">🎮</div>}
                 </div>
                 <div className="flex-1">
@@ -624,7 +624,7 @@ export default function AdminGames() {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <button onClick={() => openEdit(g)} className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "hsl(var(--cream))", color: "hsl(var(--brown))" }}>
+                  <button onClick={() => openEdit(g)} className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "hsl(var(--input))", color: "hsl(var(--brown))" }}>
                     <Pencil size={14} />
                   </button>
                   <button onClick={() => setConfirmDelete(g)} className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "hsl(0 80% 96%)", color: "hsl(var(--destructive))" }}>
@@ -641,9 +641,9 @@ export default function AdminGames() {
       {/* Game Form Modal */}
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "hsla(var(--brown-deep) / 0.5)", backdropFilter: "blur(8px)" }}>
-          <div className="w-full max-w-2xl rounded-2xl overflow-hidden" style={{ background: "white", border: "1px solid hsl(var(--cream-dark))" }}>
+          <div className="w-full max-w-2xl rounded-2xl overflow-hidden" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
             <div className="max-h-[90vh] overflow-y-auto overflow-x-hidden [scrollbar-gutter:stable]">
-              <div className="sticky top-0 z-20 flex items-center justify-between p-6 border-b" style={{ background: "white", borderColor: "hsl(var(--cream-dark))" }}>
+              <div className="sticky top-0 z-20 flex items-center justify-between p-6 border-b" style={{ background: "hsl(var(--card))", borderColor: "hsl(var(--cream-dark))" }}>
                 <h2 className="text-lg font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>
                   {editing ? "Edit Game" : "Create Game"}
                 </h2>
@@ -653,11 +653,11 @@ export default function AdminGames() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>GAME ID</label>
-                  <input value={form.game_id} readOnly className="w-full px-4 py-2.5 rounded-xl text-sm outline-none opacity-60" style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} />
+                  <input value={form.game_id} readOnly className="w-full px-4 py-2.5 rounded-xl text-sm outline-none opacity-60" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} />
                 </div>
                 <div>
                   <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>NAME *</label>
-                  <input value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value.toUpperCase() }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none uppercase" style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} placeholder="Game name" />
+                  <input value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value.toUpperCase() }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none uppercase" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} placeholder="Game name" />
                 </div>
               </div>
 
@@ -669,7 +669,7 @@ export default function AdminGames() {
                       <button
                         type="button"
                         className="w-full px-4 py-2.5 rounded-xl text-sm outline-none flex items-center justify-between"
-                        style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
+                        style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
                       >
                         <span>{formatDateTimeLabel(form.game_datetime)}</span>
                         <CalendarDays size={16} />
@@ -729,12 +729,12 @@ export default function AdminGames() {
 
               <div>
                 <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>BIO</label>
-                <textarea rows={2} value={form.bio ?? ""} onChange={(e) => setForm((f) => ({ ...f, bio: e.target.value }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none resize-none" style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} />
+                <textarea rows={2} value={form.bio ?? ""} onChange={(e) => setForm((f) => ({ ...f, bio: e.target.value }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none resize-none" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} />
               </div>
 
               <div>
                 <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>RULES</label>
-                <textarea rows={3} value={form.rules ?? ""} onChange={(e) => setForm((f) => ({ ...f, rules: e.target.value }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none resize-none" style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} />
+                <textarea rows={3} value={form.rules ?? ""} onChange={(e) => setForm((f) => ({ ...f, rules: e.target.value }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none resize-none" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -790,7 +790,7 @@ export default function AdminGames() {
                 <button
                   onClick={() => setForm((f) => ({ ...f, status: f.status === "upcoming" ? "completed" : "upcoming" }))}
                   className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm transition-all"
-                  style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
+                  style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
                 >
                   {form.status === "completed" ? <ToggleRight size={20} style={{ color: "hsl(120 50% 40%)" }} /> : <ToggleLeft size={20} style={{ color: "hsl(var(--brown-light))" }} />}
                   {form.status === "upcoming" ? "Upcoming" : "Completed"}
@@ -814,7 +814,7 @@ export default function AdminGames() {
                           value={r.player_id}
                           onChange={(e) => setRankings((ranks) => ranks.map((x, j) => j === i ? { ...x, player_id: e.target.value } : x))}
                           className="flex-1 px-3 py-2 rounded-xl text-xs outline-none"
-                          style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
+                          style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
                         >
                           <option value="">Select player...</option>
                           {players.map((p) => <option key={p.id} value={p.id}>{p.name} ({p.player_id})</option>)}
@@ -828,7 +828,7 @@ export default function AdminGames() {
                             setRankings((ranks) => ranks.map((x, j) => j === i ? { ...x, points: Number.isNaN(nextValue) ? 0 : Math.max(0, nextValue) } : x));
                           }}
                           className="w-24 px-3 py-2 rounded-xl text-xs outline-none text-center"
-                          style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
+                          style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
                           placeholder="Points"
                         />
                         <button onClick={() => setRankings((ranks) => ranks.filter((_, j) => j !== i))} style={{ color: "hsl(var(--destructive))" }}><X size={14} /></button>
@@ -850,12 +850,12 @@ export default function AdminGames() {
 
       {confirmDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "hsla(var(--brown-deep) / 0.5)", backdropFilter: "blur(8px)" }}>
-          <div className="rounded-2xl p-8 max-w-sm w-full text-center" style={{ background: "white" }}>
+          <div className="rounded-2xl p-8 max-w-sm w-full text-center" style={{ background: "hsl(var(--card))" }}>
             <Trash2 size={32} className="mx-auto mb-4" style={{ color: "hsl(var(--destructive))" }} />
             <h3 className="font-cinzel font-bold text-lg mb-2" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>Delete Game?</h3>
             <p className="text-sm mb-6" style={{ color: "hsl(var(--brown-light))" }}>Delete <strong>{confirmDelete.name}</strong>?</p>
             <div className="flex gap-3">
-              <button onClick={() => setConfirmDelete(null)} className="flex-1 py-2.5 rounded-xl text-sm" style={{ background: "hsl(var(--cream))", color: "hsl(var(--brown))", border: "1px solid hsl(var(--cream-dark))" }}>Cancel</button>
+              <button onClick={() => setConfirmDelete(null)} className="flex-1 py-2.5 rounded-xl text-sm" style={{ background: "hsl(var(--input))", color: "hsl(var(--brown))", border: "1px solid hsl(var(--cream-dark))" }}>Cancel</button>
               <button onClick={() => deleteGame(confirmDelete)} className="flex-1 py-2.5 rounded-xl text-sm font-semibold" style={{ background: "hsl(var(--destructive))", color: "white" }}>Delete</button>
             </div>
           </div>
@@ -1021,3 +1021,4 @@ export default function AdminGames() {
     </AdminLayout>
   );
 }
+

@@ -308,8 +308,8 @@ export default function AdminPlayers() {
         ) : (
           <div className="space-y-3">
             {players.map((p) => (
-              <div key={p.id} className="flex items-center gap-4 p-4 rounded-xl" style={{ background: "white", border: "1px solid hsl(var(--cream-dark))" }}>
-                <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0" style={{ background: "hsl(var(--cream))" }}>
+              <div key={p.id} className="flex items-center gap-4 p-4 rounded-xl" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
+                <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0" style={{ background: "hsl(var(--input))" }}>
                   {p.image_url ? <img src={p.image_url} alt={p.name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center font-bold" style={{ color: "hsl(var(--brown))" }}>{p.name[0]}</div>}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -317,7 +317,7 @@ export default function AdminPlayers() {
                   <p className="text-xs mt-0.5" style={{ color: "hsl(var(--brown-light))" }}>{p.player_id}</p>
                 </div>
                 <div className="flex gap-2">
-                  <button onClick={() => openEdit(p)} className="w-8 h-8 rounded-lg flex items-center justify-center hover:scale-110 transition-transform" style={{ background: "hsl(var(--cream))", color: "hsl(var(--brown))" }}>
+                  <button onClick={() => openEdit(p)} className="w-8 h-8 rounded-lg flex items-center justify-center hover:scale-110 transition-transform" style={{ background: "hsl(var(--input))", color: "hsl(var(--brown))" }}>
                     <Pencil size={14} />
                   </button>
                   <button onClick={() => setConfirmDelete(p)} className="w-8 h-8 rounded-lg flex items-center justify-center hover:scale-110 transition-transform" style={{ background: "hsl(0 80% 96%)", color: "hsl(var(--destructive))" }}>
@@ -336,9 +336,9 @@ export default function AdminPlayers() {
       {/* Player Form Modal */}
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "hsla(var(--brown-deep) / 0.5)", backdropFilter: "blur(8px)" }}>
-          <div className="w-full max-w-2xl rounded-2xl overflow-hidden" style={{ background: "white", border: "1px solid hsl(var(--cream-dark))" }}>
+          <div className="w-full max-w-2xl rounded-2xl overflow-hidden" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
             <div className="max-h-[90vh] overflow-y-auto [scrollbar-gutter:stable]">
-              <div className="sticky top-0 z-20 flex items-center justify-between p-6 border-b" style={{ background: "white", borderColor: "hsl(var(--cream-dark))" }}>
+              <div className="sticky top-0 z-20 flex items-center justify-between p-6 border-b" style={{ background: "hsl(var(--card))", borderColor: "hsl(var(--cream-dark))" }}>
                 <h2 className="text-lg font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>
                   {editing ? "Edit Player" : "Create Player"}
                 </h2>
@@ -348,19 +348,19 @@ export default function AdminPlayers() {
               {/* ID (read-only) */}
               <div>
                 <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>PLAYER ID</label>
-                <input value={form.player_id} readOnly className="w-full px-4 py-2.5 rounded-xl text-sm outline-none opacity-60" style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} />
+                <input value={form.player_id} readOnly className="w-full px-4 py-2.5 rounded-xl text-sm outline-none opacity-60" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} />
               </div>
 
               {/* Name */}
               <div>
                 <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>NAME *</label>
-                <input value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none" style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} placeholder="Player name" />
+                <input value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} placeholder="Player name" />
               </div>
 
               {/* Bio */}
               <div>
                 <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>BIO</label>
-                <textarea rows={3} value={form.bio ?? ""} onChange={(e) => setForm((f) => ({ ...f, bio: e.target.value }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none resize-none" style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} placeholder="Short bio..." />
+                <textarea rows={3} value={form.bio ?? ""} onChange={(e) => setForm((f) => ({ ...f, bio: e.target.value }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none resize-none" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} placeholder="Short bio..." />
               </div>
 
               {/* Image uploads */}
@@ -430,7 +430,7 @@ export default function AdminPlayers() {
                 {(["instagram", "twitter", "linkedin"] as const).map((s) => (
                   <div key={s}>
                     <label className="block text-xs font-cinzel tracking-widest mb-1.5 capitalize" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>{s.toUpperCase()}</label>
-                    <input value={(form as any)[s] ?? ""} onChange={(e) => setForm((f) => ({ ...f, [s]: e.target.value }))} className="w-full px-3 py-2 rounded-xl text-xs outline-none" style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} placeholder={`https://www.example.com`} />
+                    <input value={(form as any)[s] ?? ""} onChange={(e) => setForm((f) => ({ ...f, [s]: e.target.value }))} className="w-full px-3 py-2 rounded-xl text-xs outline-none" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} placeholder={`https://www.example.com`} />
                   </div>
                 ))}
               </div>
@@ -450,7 +450,7 @@ export default function AdminPlayers() {
                         value={prof.game_name}
                         onChange={(e) => setProficiencies((p) => p.map((x, j) => j === i ? { ...x, game_name: e.target.value } : x))}
                         className="flex-1 px-3 py-2 rounded-xl text-xs outline-none"
-                        style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
+                        style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
                       >
                         <option value="">Select game...</option>
                         {gameOptions.map((game) => game.name.toUpperCase()).filter((g) => !usedGames.includes(g) || g === prof.game_name).map((g) => (
@@ -464,7 +464,7 @@ export default function AdminPlayers() {
                         value={prof.proficiency_percent}
                         onChange={(e) => setProficiencies((p) => p.map((x, j) => j === i ? { ...x, proficiency_percent: parseInt(e.target.value) || 0 } : x))}
                         className="w-16 px-2 py-2 rounded-xl text-xs outline-none text-center"
-                        style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
+                        style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
                       />
                       <span className="text-xs" style={{ color: "hsl(var(--brown-light))" }}>%</span>
                       {proficiencies.length > 1 && (
@@ -571,12 +571,12 @@ export default function AdminPlayers() {
       {/* Delete confirm */}
       {confirmDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "hsla(var(--brown-deep) / 0.5)", backdropFilter: "blur(8px)" }}>
-          <div className="rounded-2xl p-8 max-w-sm w-full text-center" style={{ background: "white" }}>
+          <div className="rounded-2xl p-8 max-w-sm w-full text-center" style={{ background: "hsl(var(--card))" }}>
             <Trash2 size={32} className="mx-auto mb-4" style={{ color: "hsl(var(--destructive))" }} />
             <h3 className="font-cinzel font-bold text-lg mb-2" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>Delete Player?</h3>
             <p className="text-sm mb-6" style={{ color: "hsl(var(--brown-light))" }}>This will permanently delete <strong>{confirmDelete.name}</strong> and all their data.</p>
             <div className="flex gap-3">
-              <button onClick={() => setConfirmDelete(null)} className="flex-1 py-2.5 rounded-xl text-sm" style={{ background: "hsl(var(--cream))", color: "hsl(var(--brown))", border: "1px solid hsl(var(--cream-dark))" }}>Cancel</button>
+              <button onClick={() => setConfirmDelete(null)} className="flex-1 py-2.5 rounded-xl text-sm" style={{ background: "hsl(var(--input))", color: "hsl(var(--brown))", border: "1px solid hsl(var(--cream-dark))" }}>Cancel</button>
               <button onClick={() => deletePlayer(confirmDelete)} className="flex-1 py-2.5 rounded-xl text-sm font-semibold" style={{ background: "hsl(var(--destructive))", color: "white" }}>Delete</button>
             </div>
           </div>
@@ -585,3 +585,4 @@ export default function AdminPlayers() {
     </AdminLayout>
   );
 }
+

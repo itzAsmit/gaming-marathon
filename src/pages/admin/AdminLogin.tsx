@@ -98,7 +98,7 @@ export default function AdminLogin() {
         </div>
 
         {/* Card */}
-        <div className="rounded-2xl p-8 shadow-xl" style={{ background: "white", border: "1px solid hsl(var(--cream-dark))" }}>
+        <div className="rounded-2xl p-8 shadow-xl" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
           <form onSubmit={handleLogin} className="space-y-5">
             {/* Email */}
             <div>
@@ -112,7 +112,7 @@ export default function AdminLogin() {
                 required
                 className="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all"
                 style={{
-                  background: "hsl(var(--cream))",
+                  background: "hsl(var(--input))",
                   border: "1px solid hsl(var(--cream-dark))",
                   color: "hsl(var(--brown-deep))",
                 }}
@@ -133,7 +133,7 @@ export default function AdminLogin() {
                   required
                   className="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all pr-12"
                   style={{
-                    background: "hsl(var(--cream))",
+                    background: "hsl(var(--input))",
                     border: "1px solid hsl(var(--cream-dark))",
                     color: "hsl(var(--brown-deep))",
                   }}
@@ -181,3 +181,4 @@ export default function AdminLogin() {
     </div>
   );
 }
+

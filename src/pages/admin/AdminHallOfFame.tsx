@@ -49,7 +49,7 @@ export default function AdminHallOfFame() {
 
         <div className="space-y-8">
           {SEASONS.map((season) => (
-            <div key={season} className="rounded-2xl p-6" style={{ background: "white", border: "1px solid hsl(var(--cream-dark))" }}>
+            <div key={season} className="rounded-2xl p-6" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
               <h2 className="font-cinzel font-bold text-lg mb-4" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>Season {season}</h2>
               <div className="grid grid-cols-3 gap-4">
                 {[1, 2, 3].map((rank) => {
@@ -62,7 +62,7 @@ export default function AdminHallOfFame() {
                         onChange={(e) => setEntry(season, rank, e.target.value)}
                         disabled={saving}
                         className="w-full px-3 py-2.5 rounded-xl text-sm outline-none"
-                        style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
+                        style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
                       >
                         <option value="">— None —</option>
                         {players.map((p) => <option key={p.id} value={p.id}>{p.name} ({p.player_id})</option>)}
@@ -78,3 +78,4 @@ export default function AdminHallOfFame() {
     </AdminLayout>
   );
 }
+

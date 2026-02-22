@@ -55,12 +55,12 @@ export default function AdminItems() {
 
         <div className="relative mb-4">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "hsl(var(--brown-light))" }} />
-          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search player..." className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm outline-none" style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search player..." className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm outline-none" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} />
         </div>
 
         <div className="space-y-2">
           {filtered.map((p) => (
-            <div key={p.id} className="flex items-center gap-4 p-4 rounded-xl" style={{ background: "white", border: "1px solid hsl(var(--cream-dark))" }}>
+            <div key={p.id} className="flex items-center gap-4 p-4 rounded-xl" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
               <div className="flex-1">
                 <p className="font-semibold text-sm" style={{ color: "hsl(var(--brown-deep))" }}>{p.name}</p>
                 <p className="text-xs" style={{ color: "hsl(var(--brown-light))" }}>{p.player_id}</p>
@@ -77,3 +77,4 @@ export default function AdminItems() {
     </AdminLayout>
   );
 }
+

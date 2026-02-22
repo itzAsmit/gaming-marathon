@@ -102,7 +102,7 @@ export default function AdminDashboard() {
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search player..."
                 className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm outline-none"
-                style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
+                style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
               />
             </div>
             <div className="space-y-2 max-h-96 overflow-y-auto">
@@ -130,7 +130,7 @@ export default function AdminDashboard() {
           {/* Stats editor */}
           <div>
             {selected ? (
-              <div className="rounded-2xl p-6" style={{ background: "white", border: "1px solid hsl(var(--cream-dark))" }}>
+              <div className="rounded-2xl p-6" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
                 <div className="flex items-center justify-between mb-6">
                   <div>
                     <p className="text-xs font-cinzel tracking-widest" style={{ color: "hsl(var(--brown-light))", fontFamily: "Cinzel, serif" }}>{selected.player_id}</p>
@@ -150,7 +150,7 @@ export default function AdminDashboard() {
                         value={stats[f.key] as number}
                         onChange={(e) => setStats((s) => ({ ...s, [f.key]: parseInt(e.target.value) || 0 }))}
                         className="w-full px-3 py-2 rounded-lg text-sm outline-none"
-                        style={{ background: "hsl(var(--cream))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
+                        style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
                       />
                     </div>
                   ))}
@@ -171,7 +171,7 @@ export default function AdminDashboard() {
                 </button>
               </div>
             ) : (
-              <div className="rounded-2xl p-12 text-center" style={{ background: "white", border: "1px dashed hsl(var(--cream-dark))" }}>
+              <div className="rounded-2xl p-12 text-center" style={{ background: "hsl(var(--card))", border: "1px dashed hsl(var(--cream-dark))" }}>
                 <p className="text-sm" style={{ color: "hsl(var(--brown-light) / 0.5)" }}>Select a player to edit their stats</p>
               </div>
             )}
@@ -181,3 +181,4 @@ export default function AdminDashboard() {
     </AdminLayout>
   );
 }
+

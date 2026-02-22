@@ -30,15 +30,15 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   };
 
   if (checking) return (
-    <div className="min-h-screen flex items-center justify-center" style={{ background: "hsl(var(--cream))" }}>
+    <div className="min-h-screen flex items-center justify-center" style={{ background: "hsl(var(--input))" }}>
       <div className="w-8 h-8 border-2 rounded-full animate-spin" style={{ borderColor: "hsl(var(--brown))", borderTopColor: "transparent" }} />
     </div>
   );
 
   return (
-    <div className="min-h-screen flex" style={{ background: "hsl(var(--cream))" }}>
+    <div className="min-h-screen flex" style={{ background: "hsl(var(--input))" }}>
       {/* Sidebar */}
-      <aside className="w-60 flex flex-col" style={{ background: "white", borderRight: "1px solid hsl(var(--cream-dark))" }}>
+      <aside className="w-60 flex flex-col" style={{ background: "hsl(var(--card))", borderRight: "1px solid hsl(var(--cream-dark))" }}>
         {/* Logo */}
         <div className="p-6 border-b" style={{ borderColor: "hsl(var(--cream-dark))" }}>
           <Link to="/" className="flex items-center gap-2">
@@ -95,3 +95,4 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     </div>
   );
 }
+
