@@ -147,9 +147,9 @@
 
   .electric-card {
     position: relative;
-    background: linear-gradient(120deg, #f5f6fa, #d9deea, #ff6a7d, #e8ecf6);
+    background: linear-gradient(120deg, #d7dce7, #9aa4b8, #4e5a72, #c7cfde);
     background-size: 200% 200%;
-    box-shadow: 0 0 14px rgba(255, 122, 141, 0.3), 0 0 10px rgba(230, 236, 248, 0.45);
+    box-shadow: 0 0 16px rgba(110, 126, 154, 0.42), 0 0 10px rgba(206, 214, 232, 0.34);
     animation: electric-drift 5.8s ease-in-out infinite;
   }
 
@@ -162,8 +162,8 @@
     opacity: 0.75;
     box-shadow:
       0 0 1.2px rgba(255, 255, 255, 0.95),
-      0 0 4px rgba(255, 122, 141, 0.55),
-      0 0 12px rgba(232, 238, 249, 0.42);
+      0 0 5px rgba(120, 138, 170, 0.6),
+      0 0 12px rgba(212, 220, 238, 0.36);
     animation: electric-pulse 1.7s ease-in-out infinite;
   }
 
