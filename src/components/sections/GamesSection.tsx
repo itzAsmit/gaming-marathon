@@ -32,7 +32,21 @@ export default function GamesSection() {
 
   const fetchGames = async () => {
     const { data } = await supabase.from("games").select("*").order("game_id");
-    if (data) setGames(data);
+    if (data) {
+      const getGameOrder = (game: Game): number => {
+        const match = game.game_id?.match(/\d+/);
+        return match ? parseInt(match[0], 10) : Number.MAX_SAFE_INTEGER;
+      };
+
+      const sorted = [...data].sort((a, b) => {
+        const aCompleted = a.status === "completed";
+        const bCompleted = b.status === "completed";
+        if (aCompleted !== bCompleted) return aCompleted ? -1 : 1;
+        return getGameOrder(a) - getGameOrder(b);
+      });
+
+      setGames(sorted);
+    }
   };
 
   const fetchRankings = async (gameId: string) => {
