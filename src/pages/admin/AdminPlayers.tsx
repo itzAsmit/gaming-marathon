@@ -81,7 +81,7 @@ export default function AdminPlayers() {
 
   const fetchPlayers = async () => {
     const { data } = await supabase.from("players").select("*").order("player_id");
-    if (data) setPlayers(data);
+    if (data) setPlayers(data.map((p: any) => ({ ...p, is_active: p.is_active ?? true })) as Player[]);
     setLoading(false);
   };
 
@@ -318,6 +318,15 @@ export default function AdminPlayers() {
                   <p className="text-xs mt-0.5" style={{ color: "hsl(var(--brown-light))" }}>{p.player_id}</p>
                 </div>
                 <div className="flex items-center gap-3">
+                  <div
+                    className="w-3 h-3 rounded-full"
+                    style={{
+                      background: p.is_active ? "rgb(34, 197, 94)" : "rgb(60, 60, 60)",
+                      boxShadow: p.is_active 
+                        ? "0 0 8px rgba(34, 197, 94, 0.8), 0 0 16px rgba(34, 197, 94, 0.4)" 
+                        : "0 0 8px rgba(60, 60, 60, 0.8), 0 0 16px rgba(60, 60, 60, 0.4)",
+                    }}
+                  />
                   <button onClick={() => openEdit(p)} className="w-8 h-8 rounded-lg flex items-center justify-center hover:scale-110 transition-transform" style={{ background: "hsl(var(--input))", color: "hsl(var(--brown))" }}>
                     <Pencil size={14} />
                   </button>
@@ -359,25 +368,40 @@ export default function AdminPlayers() {
                   <button
                     type="button"
                     onClick={() => setForm((f) => ({ ...f, is_active: true }))}
-                    className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all"
+                    className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2"
                     style={{
-                      background: form.is_active ? "hsl(120 60% 50% / 0.15)" : "hsl(var(--input))",
-                      color: form.is_active ? "hsl(120 60% 40%)" : "hsl(var(--brown-light))",
-                      border: form.is_active ? "2px solid hsl(120 60% 50%)" : "1px solid hsl(var(--cream-dark))",
+                      background: "transparent",
+                      color: form.is_active ? "rgb(34, 197, 94)" : "hsl(var(--brown-light))",
+                      border: form.is_active ? "2px solid rgb(34, 197, 94)" : "1px solid hsl(var(--cream-dark))",
                     }}
                   >
+                    <span
+                      className="w-2 h-2 rounded-full"
+                      style={{
+                        background: form.is_active ? "white" : "transparent",
+                        boxShadow: form.is_active ? "0 0 4px rgba(255, 255, 255, 0.8)" : "none",
+                        border: form.is_active ? "none" : "1px solid hsl(var(--brown-light))",
+                      }}
+                    />
                     ACTIVE
                   </button>
                   <button
                     type="button"
                     onClick={() => setForm((f) => ({ ...f, is_active: false }))}
-                    className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all"
+                    className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2"
                     style={{
-                      background: !form.is_active ? "hsla(0 0% 50% / 0.15)" : "hsl(var(--input))",
-                      color: !form.is_active ? "hsl(0 0% 40%)" : "hsl(var(--brown-light))",
-                      border: !form.is_active ? "2px solid hsl(0 0% 50%)" : "1px solid hsl(var(--cream-dark))",
+                      background: "transparent",
+                      color: !form.is_active ? "rgb(100, 100, 100)" : "hsl(var(--brown-light))",
+                      border: !form.is_active ? "2px solid rgb(100, 100, 100)" : "1px solid hsl(var(--cream-dark))",
                     }}
                   >
+                    <span
+                      className="w-2 h-2 rounded-full"
+                      style={{
+                        background: !form.is_active ? "rgb(150, 150, 150)" : "transparent",
+                        border: !form.is_active ? "none" : "1px solid hsl(var(--brown-light))",
+                      }}
+                    />
                     INACTIVE
                   </button>
                 </div>
