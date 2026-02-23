@@ -56,7 +56,7 @@ export default function LeaderboardSection() {
           <div className="glass-card rounded-2xl overflow-x-auto md:overflow-hidden">
             {/* Header */}
             <div
-              className="grid gap-1 md:gap-2 px-3 md:px-6 py-3 md:py-4 text-xs md:text-sm font-cinzel tracking-widest"
+              className="grid gap-1 md:gap-2 px-3 md:px-6 py-3 md:py-4 text-[10px] md:text-sm font-cinzel tracking-widest"
               style={{
                 background: "hsla(var(--gold) / 0.15)",
                 borderBottom: "1px solid hsla(var(--gold) / 0.3)",
@@ -69,7 +69,7 @@ export default function LeaderboardSection() {
               {cols.map((c) => (
                 <div key={c} className="text-center whitespace-nowrap">
                   <span className="hidden sm:inline">{c}</span>
-                  <span className="sm:hidden text-[10px] leading-none">
+                  <span className="sm:hidden text-[9px] leading-none">
                     {c === "RANK" && "RANK"}
                     {c === "PLAYER" && "PLAYER"}
                     {c === "PLAYED" && "PL"}
@@ -90,14 +90,14 @@ export default function LeaderboardSection() {
                 Loading...
               </div>
             ) : entries.length === 0 ? (
-              <div className="py-20 text-center font-cinzel text-xs md:text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark) / 0.5)", fontFamily: "Cinzel, serif" }}>
+              <div className="py-20 text-center font-cinzel text-[10px] md:text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark) / 0.5)", fontFamily: "Cinzel, serif" }}>
                 NO ENTRIES YET — ARENA AWAITS
               </div>
             ) : (
               entries.map((entry, i) => (
                 <motion.div
                   key={entry.id}
-                  className="grid gap-1 md:gap-2 px-3 md:px-6 py-3 md:py-4 text-xs md:text-sm text-center items-center transition-all duration-300"
+                  className="grid gap-1 md:gap-2 px-3 md:px-6 py-3 md:py-4 text-[10px] md:text-sm text-center items-center transition-all duration-300"
                   style={{
                     borderBottom: "1px solid hsla(var(--cream) / 0.1)",
                     background: i < 3 ? `hsla(var(--gold) / ${0.08 - i * 0.02})` : "transparent",
