@@ -378,8 +378,8 @@ export default function AdminPlayers() {
                     <span
                       className="w-2 h-2 rounded-full"
                       style={{
-                        background: form.is_active ? "white" : "transparent",
-                        boxShadow: form.is_active ? "0 0 4px rgba(255, 255, 255, 0.8)" : "none",
+                        background: form.is_active ? "rgb(34, 197, 94)" : "transparent",
+                        boxShadow: form.is_active ? "0 0 6px rgba(34, 197, 94, 0.8)" : "none",
                         border: form.is_active ? "none" : "1px solid hsl(var(--brown-light))",
                       }}
                     />
