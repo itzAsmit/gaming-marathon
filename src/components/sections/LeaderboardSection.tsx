@@ -70,13 +70,13 @@ export default function LeaderboardSection() {
                 <div key={c} className="text-center whitespace-nowrap">
                   <span className="hidden sm:inline">{c}</span>
                   <span className="sm:hidden text-xs">
-                    {c === "RANK" && "R"}
+                    {c === "RANK" && "Rank"}
                     {c === "PLAYER" && "Player"}
                     {c === "PLAYED" && "Pl"}
                     {c === "EVENTS" && "E"}
                     {c === "WINS" && "W"}
-                    {c === "2NDS" && "2"}
-                    {c === "3RDS" && "3"}
+                    {c === "2NDS" && "2nds"}
+                    {c === "3RDS" && "3rds"}
                     {c === "POINTS" && "Pts"}
                   </span>
                 </div>
