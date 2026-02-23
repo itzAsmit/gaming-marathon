@@ -100,8 +100,8 @@ export default function PlayersSection() {
                   onClick={() => setSelected(player)}
                   style={{
                     boxShadow: player.is_active
-                      ? "4px 4px 0px 0px rgba(34, 197, 94, 0.3)"
-                      : "4px 4px 0px 0px rgba(100, 100, 100, 0.3)",
+                      ? "0 0 16px rgba(34, 197, 94, 0.25), 0 4px 12px rgba(0, 0, 0, 0.1)"
+                      : "0 0 12px rgba(100, 100, 100, 0.2), 0 4px 12px rgba(0, 0, 0, 0.1)",
                   }}
                 >
                   <div className="aspect-[3/4] overflow-hidden relative">
@@ -131,12 +131,20 @@ export default function PlayersSection() {
                     {/* Status Badge */}
                     <div className="absolute top-2 right-2">
                       <span
-                        className="px-2 py-1 rounded-full text-[10px] font-semibold tracking-wide"
+                        className="px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wide flex items-center gap-1.5"
                         style={{
-                          background: player.is_active ? "rgba(34, 197, 94, 0.9)" : "rgba(100, 100, 100, 0.9)",
+                          background: player.is_active ? "rgba(34, 197, 94, 0.95)" : "rgba(107, 114, 128, 0.95)",
                           color: "white",
+                          backdropFilter: "blur(8px)",
                         }}
                       >
+                        <span 
+                          className="w-1.5 h-1.5 rounded-full"
+                          style={{
+                            background: "white",
+                            boxShadow: player.is_active ? "0 0 4px rgba(255, 255, 255, 0.8)" : "none",
+                          }}
+                        />
                         {player.is_active ? "ACTIVE" : "INACTIVE"}
                       </span>
                     </div>
@@ -215,12 +223,20 @@ export default function PlayersSection() {
                         {selected.player_id}
                       </p>
                       <span
-                        className="px-2 py-0.5 rounded-full text-[9px] font-semibold tracking-wide"
+                        className="px-2.5 py-0.5 rounded-full text-[9px] font-semibold tracking-wide flex items-center gap-1.5"
                         style={{
-                          background: selected.is_active ? "rgba(34, 197, 94, 0.9)" : "rgba(100, 100, 100, 0.9)",
+                          background: selected.is_active ? "rgba(34, 197, 94, 0.95)" : "rgba(107, 114, 128, 0.95)",
                           color: "white",
+                          backdropFilter: "blur(8px)",
                         }}
                       >
+                        <span 
+                          className="w-1.5 h-1.5 rounded-full"
+                          style={{
+                            background: "white",
+                            boxShadow: selected.is_active ? "0 0 4px rgba(255, 255, 255, 0.8)" : "none",
+                          }}
+                        />
                         {selected.is_active ? "ACTIVE" : "INACTIVE"}
                       </span>
                     </div>

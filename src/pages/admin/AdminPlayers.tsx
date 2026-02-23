@@ -318,22 +318,6 @@ export default function AdminPlayers() {
                   <p className="text-xs mt-0.5" style={{ color: "hsl(var(--brown-light))" }}>{p.player_id}</p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <button
-                    onClick={async () => {
-                      await supabase.from("players").update({ is_active: !p.is_active }).eq("id", p.id);
-                      await logActivity(p.is_active ? "DEACTIVATE_PLAYER" : "ACTIVATE_PLAYER", p.name);
-                      toast.success(p.is_active ? `${p.name} deactivated` : `${p.name} activated`);
-                      fetchPlayers();
-                    }}
-                    className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:scale-105"
-                    style={{
-                      background: p.is_active ? "hsla(var(--brown) / 0.1)" : "hsla(120 60% 50% / 0.1)",
-                      color: p.is_active ? "hsl(var(--brown-light))" : "hsl(120 60% 40%)",
-                      border: `1px solid ${p.is_active ? "hsl(var(--cream-dark))" : "hsl(120 60% 50% / 0.3)"}`,
-                    }}
-                  >
-                    {p.is_active ? "ACTIVE" : "INACTIVE"}
-                  </button>
                   <button onClick={() => openEdit(p)} className="w-8 h-8 rounded-lg flex items-center justify-center hover:scale-110 transition-transform" style={{ background: "hsl(var(--input))", color: "hsl(var(--brown))" }}>
                     <Pencil size={14} />
                   </button>
