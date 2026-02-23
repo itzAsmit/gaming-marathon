@@ -111,7 +111,8 @@ export default function LeaderboardSection() {
                     {i < 3 ? CROWN[i] : `#${i + 1}`}
                   </div>
                   <div className="font-cinzel font-semibold truncate" style={{ fontFamily: "Cinzel, serif", color: "hsl(var(--cream))" }}>
-                    {entry.players?.name?.split(" ")[0] ?? "—"}
+                    <span className="sm:hidden">{entry.players?.name?.split(" ")[0] ?? "—"}</span>
+                    <span className="hidden sm:inline">{entry.players?.name ?? "—"}</span>
                   </div>
                   <div className="whitespace-nowrap">{entry.games_played}</div>
                   <div className="whitespace-nowrap">{entry.events_completed}</div>
