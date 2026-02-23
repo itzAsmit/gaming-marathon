@@ -69,7 +69,7 @@ export default function LeaderboardSection() {
               {cols.map((c) => (
                 <div key={c} className="text-center whitespace-nowrap">
                   <span className="hidden sm:inline">{c}</span>
-                  <span className="sm:hidden text-xs">
+                  <span className="sm:hidden text-[10px] leading-none">
                     {c === "RANK" && "RANK"}
                     {c === "PLAYER" && "PLAYER"}
                     {c === "PLAYED" && "PL"}
