@@ -133,15 +133,16 @@ export default function PlayersSection() {
                       <span
                         className="px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wide flex items-center gap-1.5"
                         style={{
-                          background: player.is_active ? "rgba(34, 197, 94, 0.95)" : "rgba(107, 114, 128, 0.95)",
-                          color: "white",
+                          background: "transparent",
+                          color: player.is_active ? "rgb(34, 197, 94)" : "rgb(150, 150, 150)",
                           backdropFilter: "blur(8px)",
+                          border: player.is_active ? "1.5px solid rgb(34, 197, 94)" : "1.5px solid rgb(150, 150, 150)",
                         }}
                       >
                         <span 
                           className="w-1.5 h-1.5 rounded-full"
                           style={{
-                            background: "white",
+                            background: player.is_active ? "white" : "rgb(150, 150, 150)",
                             boxShadow: player.is_active ? "0 0 4px rgba(255, 255, 255, 0.8)" : "none",
                           }}
                         />
@@ -225,15 +226,16 @@ export default function PlayersSection() {
                       <span
                         className="px-2.5 py-0.5 rounded-full text-[9px] font-semibold tracking-wide flex items-center gap-1.5"
                         style={{
-                          background: selected.is_active ? "rgba(34, 197, 94, 0.95)" : "rgba(107, 114, 128, 0.95)",
-                          color: "white",
+                          background: "transparent",
+                          color: selected.is_active ? "rgb(34, 197, 94)" : "rgb(150, 150, 150)",
                           backdropFilter: "blur(8px)",
+                          border: selected.is_active ? "1.5px solid rgb(34, 197, 94)" : "1.5px solid rgb(150, 150, 150)",
                         }}
                       >
                         <span 
                           className="w-1.5 h-1.5 rounded-full"
                           style={{
-                            background: "white",
+                            background: selected.is_active ? "white" : "rgb(150, 150, 150)",
                             boxShadow: selected.is_active ? "0 0 4px rgba(255, 255, 255, 0.8)" : "none",
                           }}
                         />
