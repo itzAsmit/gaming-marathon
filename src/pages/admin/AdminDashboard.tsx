@@ -86,7 +86,7 @@ export default function AdminDashboard() {
 
   return (
     <AdminLayout>
-      <div className="p-8">
+      <div className="p-8 pb-12 min-h-full">
         <h1 className="text-2xl font-cinzel font-bold mb-1" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>
           Update Leaderboard
         </h1>
@@ -105,7 +105,7 @@ export default function AdminDashboard() {
                 style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
               />
             </div>
-            <div className="space-y-2 max-h-96 overflow-y-auto no-scrollbar">
+            <div className="space-y-2 max-h-[calc(100vh-14rem)] overflow-y-auto no-scrollbar pr-1">
               {filtered.map((p) => (
                 <button
                   key={p.id}
