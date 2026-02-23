@@ -59,8 +59,12 @@ function SidebarContent({ onClose, logout }: { onClose?: () => void; logout: () 
       <div className="p-4 border-t" style={{ borderColor: "hsl(var(--cream-dark))" }}>
         <button
           onClick={logout}
-          className="flex items-center gap-3 px-3 py-2.5 w-full rounded-xl text-sm transition-all duration-200"
-          style={{ color: "hsl(var(--destructive))" }}
+          className="flex items-center gap-3 px-3 py-2.5 w-full rounded-xl text-sm transition-all duration-200 hover:opacity-90"
+          style={{
+            color: "hsl(var(--destructive))",
+            background: "hsla(var(--destructive) / 0.08)",
+            border: "1px solid hsla(var(--destructive) / 0.25)",
+          }}
         >
           <LogOut size={16} />
           Logout
@@ -71,7 +75,6 @@ function SidebarContent({ onClose, logout }: { onClose?: () => void; logout: () 
 }
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
-  const location = useLocation();
   const navigate = useNavigate();
   const [checking, setChecking] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -95,7 +98,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   );
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: "hsl(var(--input))" }}>
+    <div className="h-screen flex flex-col overflow-hidden" style={{ background: "hsl(var(--input))" }}>
       {/* Mobile Navbar */}
       <nav className="md:hidden sticky top-0 z-50 flex items-center justify-between p-4" style={{ background: "hsl(var(--card))", borderBottom: "1px solid hsl(var(--cream-dark))" }}>
         <Link to="/" className="flex items-center gap-2">
@@ -121,14 +124,14 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       </nav>
 
       {/* Desktop Layout */}
-      <div className="flex flex-1">
+      <div className="flex flex-1 min-h-0">
         {/* Desktop Sidebar */}
-        <aside className="hidden md:flex md:w-60 flex-col" style={{ background: "hsl(var(--card))", borderRight: "1px solid hsl(var(--cream-dark))" }}>
+        <aside className="hidden md:flex md:w-60 md:shrink-0 flex-col h-full" style={{ background: "hsl(var(--card))", borderRight: "1px solid hsl(var(--cream-dark))" }}>
           <SidebarContent logout={logout} />
         </aside>
 
         {/* Content */}
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 min-h-0 overflow-y-auto no-scrollbar">
           {children}
         </main>
       </div>
