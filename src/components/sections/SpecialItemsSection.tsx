@@ -76,8 +76,8 @@ function AnimatedListItem({ item, index, selected, onHover, onClick }: AnimatedL
         className="relative overflow-hidden rounded-2xl p-4 md:p-5 transition-all duration-300"
         style={{
           background: selected
-            ? "linear-gradient(145deg, hsla(var(--cream) / 0.18), hsla(var(--brown) / 0.18))"
-            : "linear-gradient(145deg, hsla(var(--cream) / 0.1), hsla(var(--brown) / 0.1))",
+            ? "linear-gradient(145deg, hsla(var(--cream) / 0.34), hsla(var(--brown) / 0.34))"
+            : "linear-gradient(145deg, hsla(var(--cream) / 0.24), hsla(var(--brown) / 0.24))",
           boxShadow: selected
             ? `0 0 0 1px hsla(${item.color} / 0.45), 0 12px 30px hsla(${item.color} / 0.25)`
             : "0 8px 22px hsla(var(--brown-deep) / 0.18)",
