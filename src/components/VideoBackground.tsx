@@ -14,6 +14,8 @@ export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
 
   // Fade opacity: 0.9 at top, transition to 0.4 around leaderboard
   const opacity = useTransform(scrollY, [0, 300, window.innerHeight * 1.5], [0.85, 0.85, 0.50]);
+  const topRevealOpacity = useTransform(scrollY, [0, 240, 900], [0.3, 0.55, 0.72]);
+  const bottomRevealOpacity = useTransform(scrollY, [0, 240, 900], [0.22, 0.48, 0.68]);
 
   const toggleMute = () => {
     setMuted((m) => {
@@ -43,7 +45,28 @@ export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(to bottom, hsla(var(--brown-deep) / 0.28) 0%, hsla(var(--brown-deep) / 0.16) 40%, hsla(var(--brown-deep) / 0.32) 100%)",
+              "linear-gradient(to bottom, hsla(220 18% 78% / 0.14) 0%, hsla(220 14% 70% / 0.08) 40%, hsla(220 18% 74% / 0.18) 100%)",
+          }}
+        />
+        {/* Scroll blur reveal masks */}
+        <motion.div
+          className="absolute top-0 left-0 right-0 h-[22vh] pointer-events-none"
+          style={{
+            opacity: topRevealOpacity,
+            backdropFilter: "blur(9px)",
+            WebkitBackdropFilter: "blur(9px)",
+            background:
+              "radial-gradient(120% 85% at 50% -8%, hsla(220 28% 88% / 0.26), hsla(220 16% 80% / 0.12) 42%, transparent 78%)",
+          }}
+        />
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 h-[26vh] pointer-events-none"
+          style={{
+            opacity: bottomRevealOpacity,
+            backdropFilter: "blur(10px)",
+            WebkitBackdropFilter: "blur(10px)",
+            background:
+              "radial-gradient(125% 95% at 50% 115%, hsla(220 26% 84% / 0.24), hsla(220 16% 78% / 0.11) 45%, transparent 78%)",
           }}
         />
         {/* Global fog radial reveals */}
