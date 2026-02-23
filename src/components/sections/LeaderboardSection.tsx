@@ -71,7 +71,7 @@ export default function LeaderboardSection() {
                   <span className="hidden sm:inline">{c}</span>
                   <span className="sm:hidden text-xs">
                     {c === "RANK" && "R"}
-                    {c === "PLAYER" && "P"}
+                    {c === "PLAYER" && "Player"}
                     {c === "PLAYED" && "Pl"}
                     {c === "EVENTS" && "E"}
                     {c === "WINS" && "W"}
@@ -111,7 +111,7 @@ export default function LeaderboardSection() {
                     {i < 3 ? CROWN[i] : `#${i + 1}`}
                   </div>
                   <div className="font-cinzel font-semibold truncate" style={{ fontFamily: "Cinzel, serif", color: "hsl(var(--cream))" }}>
-                    {entry.players?.name ?? "—"}
+                    {entry.players?.name?.split(" ")[0] ?? "—"}
                   </div>
                   <div className="whitespace-nowrap">{entry.games_played}</div>
                   <div className="whitespace-nowrap">{entry.events_completed}</div>
