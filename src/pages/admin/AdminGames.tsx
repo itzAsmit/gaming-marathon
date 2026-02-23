@@ -264,7 +264,7 @@ export default function AdminGames() {
   };
 
   const fetchPlayers = async () => {
-    const { data } = await supabase.from("players").select("id, name, player_id");
+    const { data } = await supabase.from("players").select("id, name, player_id").eq("is_active", true);
     if (data) setPlayers(data);
   };
 

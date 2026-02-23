@@ -14,7 +14,7 @@ export default function AdminItems() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    supabase.from("players").select("id, name, player_id").then(({ data }) => data && setPlayers(data));
+    supabase.from("players").select("id, name, player_id").eq("is_active", true).then(({ data }) => data && setPlayers(data));
     supabase.from("items").select("*").then(({ data }) => data && setItems(data));
   }, []);
 

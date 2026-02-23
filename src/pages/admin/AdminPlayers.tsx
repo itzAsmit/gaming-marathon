@@ -14,12 +14,13 @@ interface Player {
   instagram: string | null;
   twitter: string | null;
   linkedin: string | null;
+  is_active: boolean;
 }
 
 interface Proficiency { game_name: string; proficiency_percent: number; }
 interface GameOption { id: string; name: string; }
 
-const BLANK: Omit<Player, "id"> = { player_id: "", name: "", bio: null, image_url: null, portrait_url: null, instagram: null, twitter: null, linkedin: null };
+const BLANK: Omit<Player, "id"> = { player_id: "", name: "", bio: null, image_url: null, portrait_url: null, instagram: null, twitter: null, linkedin: null, is_active: true };
 const AVATAR_OUTPUT_SIZE = 600;
 const PORTRAIT_WIDTH = 900;
 const PORTRAIT_HEIGHT = 1200;
@@ -308,7 +309,7 @@ export default function AdminPlayers() {
         ) : (
           <div className="space-y-3">
             {players.map((p) => (
-              <div key={p.id} className="flex items-center gap-4 p-4 rounded-xl" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
+              <div key={p.id} className="flex items-center gap-4 p-4 rounded-xl transition-all" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
                 <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0" style={{ background: "hsl(var(--input))" }}>
                   {p.image_url ? <img src={p.image_url} alt={p.name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center font-bold" style={{ color: "hsl(var(--brown))" }}>{p.name[0]}</div>}
                 </div>
@@ -316,7 +317,23 @@ export default function AdminPlayers() {
                   <p className="font-semibold text-sm truncate" style={{ color: "hsl(var(--brown-deep))" }}>{p.name}</p>
                   <p className="text-xs mt-0.5" style={{ color: "hsl(var(--brown-light))" }}>{p.player_id}</p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={async () => {
+                      await supabase.from("players").update({ is_active: !p.is_active }).eq("id", p.id);
+                      await logActivity(p.is_active ? "DEACTIVATE_PLAYER" : "ACTIVATE_PLAYER", p.name);
+                      toast.success(p.is_active ? `${p.name} deactivated` : `${p.name} activated`);
+                      fetchPlayers();
+                    }}
+                    className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:scale-105"
+                    style={{
+                      background: p.is_active ? "hsla(var(--brown) / 0.1)" : "hsla(120 60% 50% / 0.1)",
+                      color: p.is_active ? "hsl(var(--brown-light))" : "hsl(120 60% 40%)",
+                      border: `1px solid ${p.is_active ? "hsl(var(--cream-dark))" : "hsl(120 60% 50% / 0.3)"}`,
+                    }}
+                  >
+                    {p.is_active ? "ACTIVE" : "INACTIVE"}
+                  </button>
                   <button onClick={() => openEdit(p)} className="w-8 h-8 rounded-lg flex items-center justify-center hover:scale-110 transition-transform" style={{ background: "hsl(var(--input))", color: "hsl(var(--brown))" }}>
                     <Pencil size={14} />
                   </button>
@@ -349,6 +366,37 @@ export default function AdminPlayers() {
               <div>
                 <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>PLAYER ID</label>
                 <input value={form.player_id} readOnly className="w-full px-4 py-2.5 rounded-xl text-sm outline-none opacity-60" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} />
+              </div>
+
+              {/* Active Status */}
+              <div>
+                <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>STATUS</label>
+                <div className="flex gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setForm((f) => ({ ...f, is_active: true }))}
+                    className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all"
+                    style={{
+                      background: form.is_active ? "hsl(120 60% 50% / 0.15)" : "hsl(var(--input))",
+                      color: form.is_active ? "hsl(120 60% 40%)" : "hsl(var(--brown-light))",
+                      border: form.is_active ? "2px solid hsl(120 60% 50%)" : "1px solid hsl(var(--cream-dark))",
+                    }}
+                  >
+                    ACTIVE
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setForm((f) => ({ ...f, is_active: false }))}
+                    className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all"
+                    style={{
+                      background: !form.is_active ? "hsla(0 0% 50% / 0.15)" : "hsl(var(--input))",
+                      color: !form.is_active ? "hsl(0 0% 40%)" : "hsl(var(--brown-light))",
+                      border: !form.is_active ? "2px solid hsl(0 0% 50%)" : "1px solid hsl(var(--cream-dark))",
+                    }}
+                  >
+                    INACTIVE
+                  </button>
+                </div>
               </div>
 
               {/* Name */}

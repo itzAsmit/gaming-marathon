@@ -15,6 +15,7 @@ interface Player {
   instagram: string | null;
   twitter: string | null;
   linkedin: string | null;
+  is_active: boolean;
   leaderboard?: {
     wins: number;
     seconds: number;
@@ -53,6 +54,11 @@ export default function PlayersSection() {
       };
 
       mappedPlayers.sort((a: any, b: any) => {
+        // Sort by active status first (active before inactive)
+        if (a.is_active !== b.is_active) {
+          return a.is_active ? -1 : 1;
+        }
+        // Then by player order
         const aPlayerOrder = getPlayerOrder(a);
         const bPlayerOrder = getPlayerOrder(b);
         if (aPlayerOrder !== bPlayerOrder) return aPlayerOrder - bPlayerOrder;
@@ -88,10 +94,15 @@ export default function PlayersSection() {
             {players.map((player, i) => (
               <ScrollReveal key={player.id} delay={i * 0.05}>
                 <motion.div
-                  className="glass-card rounded-2xl overflow-hidden cursor-pointer group"
+                  className="glass-card rounded-2xl overflow-hidden cursor-pointer group relative"
                   whileHover={{ scale: 1.04, y: -8 }}
                   transition={{ duration: 0.3 }}
                   onClick={() => setSelected(player)}
+                  style={{
+                    boxShadow: player.is_active
+                      ? "4px 4px 0px 0px rgba(34, 197, 94, 0.3)"
+                      : "4px 4px 0px 0px rgba(100, 100, 100, 0.3)",
+                  }}
                 >
                   <div className="aspect-[3/4] overflow-hidden relative">
                     {player.portrait_url ? (
@@ -99,17 +110,36 @@ export default function PlayersSection() {
                         src={player.portrait_url}
                         alt={player.name}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        style={{
+                          filter: player.is_active ? "grayscale(0%)" : "grayscale(100%)",
+                        }}
                       />
                     ) : (
                       <div
                         className="w-full h-full flex items-center justify-center"
-                        style={{ background: "linear-gradient(135deg, hsl(var(--brown-deep)), hsl(var(--brown)))" }}
+                        style={{
+                          background: player.is_active
+                            ? "linear-gradient(135deg, hsl(var(--brown-deep)), hsl(var(--brown)))"
+                            : "linear-gradient(135deg, #2a2a2a, #4a4a4a)",
+                        }}
                       >
-                        <span className="text-4xl font-cinzel font-bold" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>
+                        <span className="text-4xl font-cinzel font-bold" style={{ color: player.is_active ? "hsl(var(--gold))" : "#888", fontFamily: "Cinzel, serif" }}>
                           {player.name.charAt(0)}
                         </span>
                       </div>
                     )}
+                    {/* Status Badge */}
+                    <div className="absolute top-2 right-2">
+                      <span
+                        className="px-2 py-1 rounded-full text-[10px] font-semibold tracking-wide"
+                        style={{
+                          background: player.is_active ? "rgba(34, 197, 94, 0.9)" : "rgba(100, 100, 100, 0.9)",
+                          color: "white",
+                        }}
+                      >
+                        {player.is_active ? "ACTIVE" : "INACTIVE"}
+                      </span>
+                    </div>
                     <div
                       className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3"
                       style={{ background: "linear-gradient(to top, hsla(var(--brown-deep) / 0.9), transparent)" }}
@@ -120,10 +150,10 @@ export default function PlayersSection() {
                     </div>
                   </div>
                   <div className="p-3 text-center">
-                    <p className="text-sm font-cinzel font-semibold truncate" style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}>
+                    <p className="text-sm font-cinzel font-semibold truncate" style={{ color: player.is_active ? "hsl(var(--cream))" : "#888", fontFamily: "Cinzel, serif" }}>
                       {player.name}
                     </p>
-                    <p className="text-xs tracking-wider mt-0.5" style={{ color: "hsl(var(--gold) / 0.8)" }}>
+                    <p className="text-xs tracking-wider mt-0.5" style={{ color: player.is_active ? "hsl(var(--gold) / 0.8)" : "#666" }}>
                       {player.player_id}
                     </p>
                   </div>
@@ -157,21 +187,43 @@ export default function PlayersSection() {
                 {/* Left */}
                 <div className="relative">
                   {selected.portrait_url ? (
-                    <img src={selected.portrait_url} alt={selected.name} className="w-full h-full object-cover min-h-64" />
+                    <img
+                      src={selected.portrait_url}
+                      alt={selected.name}
+                      className="w-full h-full object-cover min-h-64"
+                      style={{
+                        filter: selected.is_active ? "grayscale(0%)" : "grayscale(100%)",
+                      }}
+                    />
                   ) : (
                     <div
                       className="w-full min-h-64 flex items-center justify-center"
-                      style={{ background: "linear-gradient(135deg, hsl(var(--brown-deep)), hsl(var(--brown)))" }}
+                      style={{
+                        background: selected.is_active
+                          ? "linear-gradient(135deg, hsl(var(--brown-deep)), hsl(var(--brown)))"
+                          : "linear-gradient(135deg, #2a2a2a, #4a4a4a)",
+                      }}
                     >
-                      <span className="text-7xl font-cinzel font-bold" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>
+                      <span className="text-7xl font-cinzel font-bold" style={{ color: selected.is_active ? "hsl(var(--gold))" : "#888", fontFamily: "Cinzel, serif" }}>
                         {selected.name.charAt(0)}
                       </span>
                     </div>
                   )}
                   <div className="absolute bottom-0 left-0 right-0 p-4" style={{ background: "linear-gradient(to top, hsla(var(--brown-deep) / 0.95), transparent)" }}>
-                    <p className="text-xs tracking-widest font-cinzel mb-1" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>
-                      {selected.player_id}
-                    </p>
+                    <div className="flex items-center gap-2 mb-1">
+                      <p className="text-xs tracking-widest font-cinzel" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>
+                        {selected.player_id}
+                      </p>
+                      <span
+                        className="px-2 py-0.5 rounded-full text-[9px] font-semibold tracking-wide"
+                        style={{
+                          background: selected.is_active ? "rgba(34, 197, 94, 0.9)" : "rgba(100, 100, 100, 0.9)",
+                          color: "white",
+                        }}
+                      >
+                        {selected.is_active ? "ACTIVE" : "INACTIVE"}
+                      </span>
+                    </div>
                     <h3 className="text-xl font-cinzel font-bold" style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}>
                       {selected.name}
                     </h3>
