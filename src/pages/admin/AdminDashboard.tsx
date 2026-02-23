@@ -105,7 +105,7 @@ export default function AdminDashboard() {
                 style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
               />
             </div>
-            <div className="space-y-2 max-h-96 overflow-y-auto">
+            <div className="space-y-2 max-h-96 overflow-y-auto no-scrollbar">
               {filtered.map((p) => (
                 <button
                   key={p.id}
