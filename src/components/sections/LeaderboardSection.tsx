@@ -73,11 +73,11 @@ export default function LeaderboardSection() {
                     {c === "RANK" && "RANK"}
                     {c === "PLAYER" && "PLAYER"}
                     {c === "PLAYED" && "PL"}
-                    {c === "EVENTS" && "E"}
+                    {c === "EVENTS" && "EC"}
                     {c === "WINS" && "W"}
                     {c === "2NDS" && "2NDS"}
                     {c === "3RDS" && "3RDS"}
-                    {c === "POINTS" && "POINTS"}
+                    {c === "POINTS" && "PTS"}
                   </span>
                 </div>
               ))}
