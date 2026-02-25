@@ -289,56 +289,64 @@ export default function AdminPlayers() {
   return (
     <AdminLayout>
       <div className="p-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-2xl font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>Players</h1>
-            <p className="text-sm mt-1" style={{ color: "hsl(var(--brown-light))" }}>{players.length} registered</p>
+        <div className="sticky top-0 z-20 -mx-8 px-8 py-4 mb-6" style={{ background: "hsla(var(--card) / 0.94)", backdropFilter: "blur(4px)", borderBottom: "1px solid hsl(var(--cream-dark))" }}>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>Players</h1>
+              <p className="text-sm mt-1" style={{ color: "hsl(var(--brown-light))" }}>{players.length} registered</p>
+            </div>
+            <button
+              onClick={openCreate}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-cinzel text-sm tracking-wider"
+              style={{ background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))", color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}
+            >
+              <Plus size={16} /> ADD PLAYER
+            </button>
           </div>
-          <button
-            onClick={openCreate}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-cinzel text-sm tracking-wider"
-            style={{ background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))", color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}
-          >
-            <Plus size={16} /> ADD PLAYER
-          </button>
         </div>
 
         {/* Player list */}
         {loading ? (
           <div className="flex justify-center py-20"><RefreshCw size={24} className="animate-spin" style={{ color: "hsl(var(--brown-light))" }} /></div>
         ) : (
-          <div className="space-y-3">
-            {players.map((p) => (
-              <div key={p.id} className="flex items-center gap-4 p-4 rounded-xl transition-all" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
-                <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0" style={{ background: "hsl(var(--input))" }}>
-                  {p.image_url ? <img src={p.image_url} alt={p.name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center font-bold" style={{ color: "hsl(var(--brown))" }}>{p.name[0]}</div>}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-sm truncate" style={{ color: "hsl(var(--brown-deep))" }}>{p.name}</p>
-                  <p className="text-xs mt-0.5" style={{ color: "hsl(var(--brown-light))" }}>{p.player_id}</p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div
-                    className="w-3 h-3 rounded-full"
-                    style={{
-                      background: p.is_active ? "rgb(34, 197, 94)" : "rgb(60, 60, 60)",
-                      boxShadow: p.is_active 
-                        ? "0 0 8px rgba(34, 197, 94, 0.8), 0 0 16px rgba(34, 197, 94, 0.4)" 
-                        : "0 0 8px rgba(60, 60, 60, 0.8), 0 0 16px rgba(60, 60, 60, 0.4)",
-                    }}
-                  />
-                  <button onClick={() => openEdit(p)} className="w-8 h-8 rounded-lg flex items-center justify-center hover:scale-110 transition-transform" style={{ background: "hsl(var(--input))", color: "hsl(var(--brown))" }}>
-                    <Pencil size={14} />
-                  </button>
-                  <button onClick={() => setConfirmDelete(p)} className="w-8 h-8 rounded-lg flex items-center justify-center hover:scale-110 transition-transform" style={{ background: "hsl(0 80% 96%)", color: "hsl(var(--destructive))" }}>
-                    <Trash2 size={14} />
-                  </button>
-                </div>
+          <div className="rounded-2xl p-4" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
+            <div className="relative max-h-[calc(100vh-13.5rem)]">
+              <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-7 scroll-fade-edge" style={{ background: "linear-gradient(180deg, hsl(var(--card)), transparent)" }} />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-7 scroll-fade-edge" style={{ background: "linear-gradient(0deg, hsl(var(--card)), transparent)" }} />
+              <div className="space-y-3 h-full overflow-y-auto animated-scroll-area py-1 pr-1">
+                {players.map((p) => (
+                  <div key={p.id} className="flex items-center gap-4 p-4 rounded-xl transition-all animated-scroll-item" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
+                    <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0" style={{ background: "hsl(var(--input))" }}>
+                      {p.image_url ? <img src={p.image_url} alt={p.name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center font-bold" style={{ color: "hsl(var(--brown))" }}>{p.name[0]}</div>}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-sm truncate" style={{ color: "hsl(var(--brown-deep))" }}>{p.name}</p>
+                      <p className="text-xs mt-0.5" style={{ color: "hsl(var(--brown-light))" }}>{p.player_id}</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="w-3 h-3 rounded-full"
+                        style={{
+                          background: p.is_active ? "rgb(34, 197, 94)" : "rgb(60, 60, 60)",
+                          boxShadow: p.is_active 
+                            ? "0 0 8px rgba(34, 197, 94, 0.8), 0 0 16px rgba(34, 197, 94, 0.4)" 
+                            : "0 0 8px rgba(60, 60, 60, 0.8), 0 0 16px rgba(60, 60, 60, 0.4)",
+                        }}
+                      />
+                      <button onClick={() => openEdit(p)} className="w-8 h-8 rounded-lg flex items-center justify-center hover:scale-110 transition-transform" style={{ background: "hsl(var(--input))", color: "hsl(var(--brown))" }}>
+                        <Pencil size={14} />
+                      </button>
+                      <button onClick={() => setConfirmDelete(p)} className="w-8 h-8 rounded-lg flex items-center justify-center hover:scale-110 transition-transform" style={{ background: "hsl(0 80% 96%)", color: "hsl(var(--destructive))" }}>
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+                {players.length === 0 && (
+                  <div className="text-center py-20 text-sm" style={{ color: "hsl(var(--brown-light) / 0.5)" }}>No players yet. Add your first player!</div>
+                )}
               </div>
-            ))}
-            {players.length === 0 && (
-              <div className="text-center py-20 text-sm" style={{ color: "hsl(var(--brown-light) / 0.5)" }}>No players yet. Add your first player!</div>
-            )}
+            </div>
           </div>
         )}
       </div>

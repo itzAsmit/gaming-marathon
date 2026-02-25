@@ -594,46 +594,54 @@ export default function AdminGames() {
   return (
     <AdminLayout>
       <div className="p-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-2xl font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>Games</h1>
-            <p className="text-sm mt-1" style={{ color: "hsl(var(--brown-light))" }}>{games.length} configured</p>
+        <div className="sticky top-0 z-20 -mx-8 px-8 py-4 mb-6" style={{ background: "hsla(var(--card) / 0.94)", backdropFilter: "blur(4px)", borderBottom: "1px solid hsl(var(--cream-dark))" }}>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>Games</h1>
+              <p className="text-sm mt-1" style={{ color: "hsl(var(--brown-light))" }}>{games.length} configured</p>
+            </div>
+            <button onClick={openCreate} className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-cinzel text-sm tracking-wider" style={{ background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))", color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}>
+              <Plus size={16} /> ADD GAME
+            </button>
           </div>
-          <button onClick={openCreate} className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-cinzel text-sm tracking-wider" style={{ background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))", color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}>
-            <Plus size={16} /> ADD GAME
-          </button>
         </div>
 
         {loading ? (
           <div className="flex justify-center py-20"><RefreshCw size={24} className="animate-spin" style={{ color: "hsl(var(--brown-light))" }} /></div>
         ) : (
-          <div className="space-y-3">
-            {games.map((g) => (
-              <div key={g.id} className="flex items-center gap-4 p-4 rounded-xl" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
-                <div className="w-16 h-10 rounded-lg overflow-hidden flex-shrink-0" style={{ background: "hsl(var(--input))" }}>
-                  {g.image_url ? <img src={g.image_url} alt={g.name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center">🎮</div>}
-                </div>
-                <div className="flex-1">
-                  <p className="font-semibold text-sm" style={{ color: "hsl(var(--brown-deep))" }}>{g.name.toUpperCase()}</p>
-                  <div className="flex items-center gap-2 mt-0.5">
-                    <span className="text-xs" style={{ color: "hsl(var(--brown-light))" }}>{g.game_id}</span>
-                    <span className="px-2 py-0.5 rounded-full text-xs" style={{
-                      background: g.status === "completed" ? "hsl(120 60% 92%)" : "hsl(45 80% 92%)",
-                      color: g.status === "completed" ? "hsl(120 50% 35%)" : "hsl(35 80% 35%)",
-                    }}>{g.status}</span>
+          <div className="rounded-2xl p-4" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
+            <div className="relative max-h-[calc(100vh-13.5rem)]">
+              <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-7 scroll-fade-edge" style={{ background: "linear-gradient(180deg, hsl(var(--card)), transparent)" }} />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-7 scroll-fade-edge" style={{ background: "linear-gradient(0deg, hsl(var(--card)), transparent)" }} />
+              <div className="space-y-3 h-full overflow-y-auto animated-scroll-area py-1 pr-1">
+                {games.map((g) => (
+                  <div key={g.id} className="flex items-center gap-4 p-4 rounded-xl animated-scroll-item" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
+                    <div className="w-16 h-10 rounded-lg overflow-hidden flex-shrink-0" style={{ background: "hsl(var(--input))" }}>
+                      {g.image_url ? <img src={g.image_url} alt={g.name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center">🎮</div>}
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-semibold text-sm" style={{ color: "hsl(var(--brown-deep))" }}>{g.name.toUpperCase()}</p>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className="text-xs" style={{ color: "hsl(var(--brown-light))" }}>{g.game_id}</span>
+                        <span className="px-2 py-0.5 rounded-full text-xs" style={{
+                          background: g.status === "completed" ? "hsl(120 60% 92%)" : "hsl(45 80% 92%)",
+                          color: g.status === "completed" ? "hsl(120 50% 35%)" : "hsl(35 80% 35%)",
+                        }}>{g.status}</span>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <button onClick={() => openEdit(g)} className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "hsl(var(--input))", color: "hsl(var(--brown))" }}>
+                        <Pencil size={14} />
+                      </button>
+                      <button onClick={() => setConfirmDelete(g)} className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "hsl(0 80% 96%)", color: "hsl(var(--destructive))" }}>
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <div className="flex gap-2">
-                  <button onClick={() => openEdit(g)} className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "hsl(var(--input))", color: "hsl(var(--brown))" }}>
-                    <Pencil size={14} />
-                  </button>
-                  <button onClick={() => setConfirmDelete(g)} className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "hsl(0 80% 96%)", color: "hsl(var(--destructive))" }}>
-                    <Trash2 size={14} />
-                  </button>
-                </div>
+                ))}
+                {games.length === 0 && <div className="text-center py-20 text-sm" style={{ color: "hsl(var(--brown-light) / 0.5)" }}>No games yet</div>}
               </div>
-            ))}
-            {games.length === 0 && <div className="text-center py-20 text-sm" style={{ color: "hsl(var(--brown-light) / 0.5)" }}>No games yet</div>}
+            </div>
           </div>
         )}
       </div>

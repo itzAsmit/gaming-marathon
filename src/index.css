@@ -274,11 +274,7 @@
 
   .animated-scroll-item {
     scroll-snap-align: start;
-    transition: transform 220ms ease, opacity 220ms ease;
-  }
-
-  .animated-scroll-item:hover {
-    transform: translateY(-1px);
+    transition: opacity 220ms ease;
   }
 
   .scroll-fade-edge {

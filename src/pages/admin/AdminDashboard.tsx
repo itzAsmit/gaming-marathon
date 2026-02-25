@@ -113,7 +113,7 @@ export default function AdminDashboard() {
             <div className="relative max-h-[calc(100vh-14rem)]">
               <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-7 scroll-fade-edge" style={{ background: "linear-gradient(180deg, hsl(var(--card)), transparent)" }} />
               <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-7 scroll-fade-edge" style={{ background: "linear-gradient(0deg, hsl(var(--card)), transparent)" }} />
-              <div className="space-y-2 h-full overflow-y-auto animated-scroll-area pr-1">
+              <div className="space-y-2 h-full overflow-y-auto animated-scroll-area py-1 pr-1">
                 {filtered.map((p) => (
                   <button
                     key={p.id}
