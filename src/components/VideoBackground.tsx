@@ -33,7 +33,7 @@ export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
   return (
     <>
       {/* Fixed video layer */}
-      <motion.div className={`${isMobile ? "absolute" : "fixed"} inset-0 z-0 overflow-hidden`} style={{ opacity: isMobile ? 0.7 : opacity }}>
+      <motion.div className="fixed inset-0 z-0 overflow-hidden" style={{ opacity: isMobile ? 0.78 : opacity }}>
         <video
           ref={videoRef}
           className="w-full h-full object-cover"
@@ -116,24 +116,24 @@ export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
       </motion.div>
 
       {/* UI Controls */}
-      <div className="fixed top-4 right-4 z-50 hidden md:flex items-center gap-5">
+      <div className="fixed top-4 right-3 md:right-4 z-50 flex items-center gap-3 md:gap-5">
         <button
           onClick={() => document.getElementById("leaderboard")?.scrollIntoView({ behavior: "smooth" })}
-          className="text-xs font-cinzel tracking-widest transition-all duration-300 hover:opacity-100 opacity-70"
+          className="hidden md:inline text-xs font-cinzel tracking-widest transition-all duration-300 hover:opacity-100 opacity-70"
           style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif", background: "none", border: "none" }}
         >
           LEADERBOARD
         </button>
         <button
           onClick={() => document.getElementById("players")?.scrollIntoView({ behavior: "smooth" })}
-          className="text-xs font-cinzel tracking-widest transition-all duration-300 hover:opacity-100 opacity-70"
+          className="hidden md:inline text-xs font-cinzel tracking-widest transition-all duration-300 hover:opacity-100 opacity-70"
           style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif", background: "none", border: "none" }}
         >
           MEET PLAYERS
         </button>
         <Link
           to="/admin/login"
-          className="glass-card px-4 py-2 rounded-full text-cream text-sm font-cinzel tracking-widest hover:glow-gold transition-all duration-300"
+          className="glass-card px-3 md:px-4 py-2 rounded-full text-cream text-xs md:text-sm font-cinzel tracking-widest hover:glow-gold transition-all duration-300"
           style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}
         >
           ADMIN

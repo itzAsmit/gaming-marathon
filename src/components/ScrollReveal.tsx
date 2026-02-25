@@ -37,16 +37,33 @@ export default function ScrollReveal({
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
-  if (isMobile || prefersReducedMotion) {
+  if (prefersReducedMotion) {
     return <div className={className}>{children}</div>;
   }
+
+  const mobileVariants: Variants = {
+    hidden: (dir: string) => ({
+      opacity: 0,
+      y: dir === "up" ? 24 : 0,
+      x: dir === "left" ? -24 : dir === "right" ? 24 : 0,
+    }),
+    visible: {
+      opacity: 1,
+      y: 0,
+      x: 0,
+      transition: {
+        duration: 0.55,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    },
+  };
 
   return (
     <motion.div
       ref={ref}
       className={className}
       custom={direction}
-      variants={variants}
+      variants={isMobile ? mobileVariants : variants}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
       transition={{ delay }}
