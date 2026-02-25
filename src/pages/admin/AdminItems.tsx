@@ -38,7 +38,7 @@ export default function AdminItems() {
     setRefreshing(true);
 
     const [{ data: playersData, error: playersError }, { data: itemsData, error: itemsError }] = await Promise.all([
-      supabase
+      (supabase as any)
         .from("players")
         .select("id, name, player_id, is_active, player_items(id, item_id, items(id, name))")
         .eq("is_active", true)
@@ -111,7 +111,7 @@ export default function AdminItems() {
     <AdminLayout>
       <div className="p-8">
         <div className="flex items-center justify-between mb-1">
-          <h1 className="text-2xl font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>Admin Items</h1>
+          <h1 className="text-2xl font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>Assign Items</h1>
           <button
             onClick={loadData}
             disabled={refreshing || saving}
@@ -142,14 +142,14 @@ export default function AdminItems() {
                     onClick={() => setSelectedPlayerId(p.id)}
                     className="w-full text-left rounded-xl p-4 transition-all"
                     style={{
-                      background: isSelected ? "hsla(var(--brown) / 0.1)" : "hsl(var(--background))",
+                      background: isSelected ? "hsl(var(--input))" : "hsl(var(--card))",
                       border: isSelected ? "1px solid hsl(var(--brown))" : "1px solid hsl(var(--cream-dark))",
                     }}
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <p className="font-semibold text-sm" style={{ color: "hsl(var(--brown-deep))" }}>{p.name}</p>
-                        <p className="text-xs" style={{ color: "hsl(var(--brown-light))" }}>{p.player_id}</p>
+                        <p className="text-xs" style={{ color: "hsl(var(--brown))" }}>{p.player_id}</p>
                       </div>
                     </div>
 
@@ -170,7 +170,7 @@ export default function AdminItems() {
                           </span>
                         ))
                       ) : (
-                        <span className="px-2.5 py-1 rounded-full text-xs" style={{ background: "hsl(var(--input))", color: "hsl(var(--brown-light))", border: "1px solid hsl(var(--cream-dark))" }}>
+                        <span className="text-xs" style={{ color: "hsl(var(--brown))" }}>
                           NONE
                         </span>
                       )}
@@ -234,7 +234,7 @@ export default function AdminItems() {
                   </button>
                 ))
               ) : (
-                <span className="px-2.5 py-1 rounded-full text-xs" style={{ background: "hsl(var(--input))", color: "hsl(var(--brown-light))", border: "1px solid hsl(var(--cream-dark))" }}>
+                <span className="text-xs" style={{ color: "hsl(var(--brown-light))" }}>
                   NONE
                 </span>
               )}

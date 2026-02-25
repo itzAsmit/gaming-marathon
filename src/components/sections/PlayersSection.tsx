@@ -311,7 +311,7 @@ export default function PlayersSection() {
                           </span>
                         ))
                       ) : (
-                        <span className="px-3 py-1 rounded-full text-xs font-cinzel" style={{ background: "hsla(var(--cream) / 0.08)", color: "hsl(var(--cream-dark) / 0.75)", border: "1px solid hsla(var(--cream) / 0.2)", fontFamily: "Cinzel, serif" }}>
+                        <span className="text-xs font-cinzel" style={{ color: "hsl(var(--cream-dark) / 0.75)", fontFamily: "Cinzel, serif" }}>
                           NONE
                         </span>
                       )}

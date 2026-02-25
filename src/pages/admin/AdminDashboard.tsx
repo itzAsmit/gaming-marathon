@@ -4,7 +4,7 @@ import AdminLayout from "@/components/admin/AdminLayout";
 import { Search, Save, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 
-interface Player { id: string; player_id: string; name: string; is_active: boolean; }
+interface Player { id: string; player_id: string; name: string; }
 interface LeaderboardEntry {
   id?: string;
   player_id: string;
@@ -30,9 +30,14 @@ export default function AdminDashboard() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    supabase.from("players").select("id, player_id, name, is_active").eq("is_active", true).order("player_id").then(({ data }) => {
-      if (data) setPlayers(data);
-    });
+    const fetchPlayers = async () => {
+      const { data } = await supabase
+        .from("players")
+        .select("id, player_id, name")
+        .order("player_id");
+      if (data) setPlayers(data as Player[]);
+    };
+    fetchPlayers();
   }, []);
 
   const selectPlayer = async (player: Player) => {
