@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Volume2, VolumeX } from "lucide-react";
 import { Link } from "react-router-dom";
 import GradualBlur from "@/components/GradualBlur";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface VideoBackgroundProps {
   videoUrl?: string;
@@ -10,11 +11,12 @@ interface VideoBackgroundProps {
 
 export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const isMobile = useIsMobile();
   const [muted, setMuted] = useState(true);
   const { scrollY } = useScroll();
 
   // Fade opacity: 0.9 at top, transition to 0.4 around leaderboard
-  const opacity = useTransform(scrollY, [0, 300, window.innerHeight * 1.5], [0.85, 0.85, 0.50]);
+  const opacity = useTransform(scrollY, [0, 300, 1400], [0.85, 0.85, 0.50]);
   const topRevealOpacity = useTransform(scrollY, [0, 240, 900], [0.5, 0.75, 0.9]);
   const bottomRevealOpacity = useTransform(scrollY, [0, 240, 900], [0.45, 0.72, 0.88]);
 
@@ -31,7 +33,7 @@ export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
   return (
     <>
       {/* Fixed video layer */}
-      <motion.div className="fixed inset-0 z-0 overflow-hidden" style={{ opacity }}>
+      <motion.div className={`${isMobile ? "absolute" : "fixed"} inset-0 z-0 overflow-hidden`} style={{ opacity: isMobile ? 0.7 : opacity }}>
         <video
           ref={videoRef}
           className="w-full h-full object-cover"
@@ -50,34 +52,40 @@ export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
           }}
         />
         {/* Scroll black blur reveal masks */}
-        <motion.div style={{ opacity: topRevealOpacity }}>
-          <GradualBlur
-            target="parent"
-            position="top"
-            height="22vh"
-            strength={2.2}
-            divCount={6}
-            curve="bezier"
-            exponential
-            opacity={1}
-            zIndex={6}
-          />
-        </motion.div>
-        <motion.div style={{ opacity: bottomRevealOpacity }}>
-          <GradualBlur
-            target="parent"
-            position="bottom"
-            height="26vh"
-            strength={2.4}
-            divCount={7}
-            curve="bezier"
-            exponential
-            opacity={1}
-            zIndex={6}
-          />
-        </motion.div>
+        {!isMobile && (
+          <>
+            <motion.div style={{ opacity: topRevealOpacity }}>
+              <GradualBlur
+                target="parent"
+                position="top"
+                height="22vh"
+                strength={2.2}
+                divCount={6}
+                curve="bezier"
+                exponential
+                opacity={1}
+                zIndex={6}
+              />
+            </motion.div>
+            <motion.div style={{ opacity: bottomRevealOpacity }}>
+              <GradualBlur
+                target="parent"
+                position="bottom"
+                height="26vh"
+                strength={2.4}
+                divCount={7}
+                curve="bezier"
+                exponential
+                opacity={1}
+                zIndex={6}
+              />
+            </motion.div>
+          </>
+        )}
         {/* Global fog radial reveals */}
         <div className="absolute inset-0 pointer-events-none">
+          {!isMobile && (
+            <>
           <motion.div
             className="absolute -top-20 left-[4%] h-[24rem] w-[24rem] rounded-full blur-3xl"
             animate={{ x: [0, 42, 0], y: [0, -24, 0], scale: [1, 1.08, 1] }}
@@ -102,11 +110,13 @@ export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
             transition={{ duration: 28, repeat: Infinity, ease: "easeInOut" }}
             style={{ background: "radial-gradient(circle, hsla(220 14% 72% / 0.13), transparent 72%)" }}
           />
+            </>
+          )}
         </div>
       </motion.div>
 
       {/* UI Controls */}
-      <div className="fixed top-4 right-4 z-50 flex items-center gap-5">
+      <div className="fixed top-4 right-4 z-50 hidden md:flex items-center gap-5">
         <button
           onClick={() => document.getElementById("leaderboard")?.scrollIntoView({ behavior: "smooth" })}
           className="text-xs font-cinzel tracking-widest transition-all duration-300 hover:opacity-100 opacity-70"
@@ -133,7 +143,7 @@ export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
       {/* Sound toggle */}
       <button
         onClick={toggleMute}
-        className="fixed bottom-6 right-6 z-50 glass-card w-12 h-12 rounded-full flex items-center justify-center hover:glow-gold transition-all duration-300"
+        className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50 glass-card w-11 h-11 md:w-12 md:h-12 rounded-full flex items-center justify-center hover:glow-gold transition-all duration-300"
         style={{ color: "hsl(var(--cream))" }}
         title={muted ? "Unmute" : "Mute"}
       >

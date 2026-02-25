@@ -92,13 +92,13 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   };
 
   if (checking) return (
-    <div className="min-h-screen flex items-center justify-center" style={{ background: "hsl(var(--input))" }}>
+    <div className="min-h-[100dvh] flex items-center justify-center" style={{ background: "hsl(var(--input))" }}>
       <div className="w-8 h-8 border-2 rounded-full animate-spin" style={{ borderColor: "hsl(var(--brown))", borderTopColor: "transparent" }} />
     </div>
   );
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden" style={{ background: "hsl(var(--input))" }}>
+    <div className="min-h-[100dvh] h-[100dvh] flex flex-col overflow-hidden" style={{ background: "hsl(var(--input))" }}>
       {/* Mobile Navbar */}
       <nav className="md:hidden sticky top-0 z-50 flex items-center justify-between p-4" style={{ background: "hsl(var(--card))", borderBottom: "1px solid hsl(var(--cream-dark))" }}>
         <Link to="/" className="flex items-center gap-2">
@@ -131,7 +131,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         </aside>
 
         {/* Content */}
-        <main className="flex-1 min-h-0 overflow-y-auto no-scrollbar">
+        <main className="flex-1 min-h-0 overflow-y-auto no-scrollbar overscroll-y-contain">
           {children}
         </main>
       </div>

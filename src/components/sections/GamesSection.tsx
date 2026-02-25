@@ -111,7 +111,7 @@ export default function GamesSection() {
   };
 
   return (
-    <section id="games" className="relative min-h-screen py-24 px-4">
+    <section id="games" className="relative min-h-[100svh] md:min-h-screen py-24 px-4">
       <div className="max-w-6xl mx-auto">
         <ScrollReveal>
           <SectionHeader title="GAMES" accent="THE ARENA" subtitle="Battlegrounds where every match tests a different skill" />
@@ -223,7 +223,7 @@ export default function GamesSection() {
             onClick={() => setSelected(null)}
           >
             <motion.div
-              className="glass-card no-scrollbar rounded-3xl overflow-hidden max-w-4xl w-full max-h-[calc(100vh-6rem)] md:max-h-[calc(100vh-7rem)] overflow-y-auto relative"
+              className="glass-card no-scrollbar rounded-3xl overflow-hidden max-w-4xl w-full max-h-[calc(100dvh-6rem)] md:max-h-[calc(100dvh-7rem)] overflow-y-auto relative"
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}

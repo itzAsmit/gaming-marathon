@@ -43,15 +43,15 @@ export default function AdminHallOfFame() {
 
   return (
     <AdminLayout>
-      <div className="p-8">
+      <div className="p-4 md:p-8">
         <h1 className="text-2xl font-cinzel font-bold mb-1" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>Hall of Fame</h1>
         <p className="text-sm mb-8" style={{ color: "hsl(var(--brown-light))" }}>Set top 3 players for each season</p>
 
         <div className="space-y-8">
           {SEASONS.map((season) => (
-            <div key={season} className="rounded-2xl p-6" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
+            <div key={season} className="rounded-2xl p-4 md:p-6" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
               <h2 className="font-cinzel font-bold text-lg mb-4" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>Season {season}</h2>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {[1, 2, 3].map((rank) => {
                   const entry = getEntry(season, rank);
                   return (

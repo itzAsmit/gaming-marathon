@@ -107,7 +107,7 @@ export default function HallOfFameSection() {
   };
 
   return (
-    <section id="hall-of-fame" className="relative min-h-screen py-24 px-4">
+    <section id="hall-of-fame" className="relative min-h-[100svh] md:min-h-screen py-24 px-4">
       <div className="max-w-4xl mx-auto">
         <ScrollReveal>
           <SectionHeader title="HALL OF FAME" accent="LEGACY" subtitle="The champions who stood atop the Gaming Marathon podium" />

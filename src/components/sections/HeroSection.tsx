@@ -3,7 +3,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[100svh] md:min-h-screen flex items-center justify-center overflow-hidden">
       <div className="relative z-10 text-center px-4 max-w-5xl mx-auto">
         <ScrollReveal delay={0.1}>
           <p

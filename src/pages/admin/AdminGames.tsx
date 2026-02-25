@@ -593,14 +593,14 @@ export default function AdminGames() {
 
   return (
     <AdminLayout>
-      <div className="p-8">
-        <div className="sticky top-0 z-20 mb-6">
-          <div className="flex items-center justify-between">
+      <div className="p-4 md:p-8">
+        <div className="md:sticky md:top-0 z-20 mb-6">
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <h1 className="text-2xl font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>Games</h1>
               <p className="text-sm mt-1" style={{ color: "hsl(var(--brown-light))" }}>{games.length} configured</p>
             </div>
-            <button onClick={openCreate} className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-cinzel text-sm tracking-wider" style={{ background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))", color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}>
+            <button onClick={openCreate} className="flex items-center gap-2 px-3 md:px-4 py-2.5 rounded-xl font-cinzel text-xs md:text-sm tracking-wider" style={{ background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))", color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}>
               <Plus size={16} /> ADD GAME
             </button>
           </div>
@@ -609,11 +609,11 @@ export default function AdminGames() {
         {loading ? (
           <div className="flex justify-center py-20"><RefreshCw size={24} className="animate-spin" style={{ color: "hsl(var(--brown-light))" }} /></div>
         ) : (
-          <div className="rounded-2xl p-4 overflow-hidden" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
-            <div className="relative max-h-[calc(100vh-11.5rem)] overflow-hidden">
+          <div className="rounded-2xl p-3 md:p-4 overflow-hidden" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
+            <div className="relative md:max-h-[calc(100dvh-11.5rem)] overflow-hidden">
               <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-7 scroll-fade-edge" style={{ background: "linear-gradient(180deg, hsl(var(--card)), transparent)" }} />
               <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-7 scroll-fade-edge" style={{ background: "linear-gradient(0deg, hsl(var(--card)), transparent)" }} />
-              <div className="space-y-3 max-h-[calc(100vh-11.5rem)] overflow-y-auto animated-scroll-area py-1 pr-1">
+              <div className="space-y-3 max-h-none md:max-h-[calc(100dvh-11.5rem)] overflow-y-visible md:overflow-y-auto animated-scroll-area py-1 pr-1">
                 {games.map((g) => (
                   <div key={g.id} className="flex items-center gap-4 p-4 rounded-xl animated-scroll-item" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
                     <div className="w-16 h-10 rounded-lg overflow-hidden flex-shrink-0" style={{ background: "hsl(var(--input))" }}>
@@ -650,7 +650,7 @@ export default function AdminGames() {
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "hsla(var(--brown-deep) / 0.5)", backdropFilter: "blur(8px)" }}>
           <div className="w-full max-w-2xl rounded-2xl overflow-hidden" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
-            <div className="max-h-[90vh] overflow-y-auto overflow-x-hidden animated-scroll-area no-scrollbar">
+            <div className="max-h-[90dvh] overflow-y-auto overflow-x-hidden animated-scroll-area no-scrollbar">
               <div className="sticky top-0 z-20 flex items-center justify-between p-6 border-b" style={{ background: "hsl(var(--card))", borderColor: "hsl(var(--cream-dark))" }}>
                 <h2 className="text-lg font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>
                   {editing ? "Edit Game" : "Create Game"}

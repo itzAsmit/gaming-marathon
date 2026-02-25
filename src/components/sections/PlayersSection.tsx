@@ -94,7 +94,7 @@ export default function PlayersSection() {
   }, []);
 
   return (
-    <section id="players" className="relative min-h-screen py-24 px-4 scroll-mt-24 md:scroll-mt-28">
+    <section id="players" className="relative min-h-[100svh] md:min-h-screen py-24 px-4 scroll-mt-24 md:scroll-mt-28">
       <div className="max-w-6xl mx-auto">
         <ScrollReveal>
           <SectionHeader title="MEET THE PLAYERS" accent="COMPETITORS" subtitle="The warriors who battle for the crown" />
@@ -230,7 +230,7 @@ export default function PlayersSection() {
               exit={{ scale: 0.9, y: 40 }}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="max-h-[calc(100vh-6rem)] overflow-y-auto overflow-x-hidden md:max-h-none md:h-full md:overflow-hidden">
+              <div className="max-h-[calc(100dvh-6rem)] overflow-y-auto overflow-x-hidden md:max-h-none md:h-full md:overflow-hidden">
                 <div className="grid md:grid-cols-[40%_60%] md:h-full">
                 {/* Left */}
                 <div className="relative md:h-full">

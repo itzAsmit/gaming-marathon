@@ -91,13 +91,13 @@ export default function AdminDashboard() {
 
   return (
     <AdminLayout>
-      <div className="p-8 pb-12 min-h-full">
+      <div className="p-4 md:p-8 pb-12 min-h-full">
         <h1 className="text-2xl font-cinzel font-bold mb-1" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>
           Update Leaderboard
         </h1>
         <p className="text-sm mb-8" style={{ color: "hsl(var(--brown-light))" }}>Search a player and edit their stats</p>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-2 gap-5 md:gap-8">
           {/* Player search */}
           <div>
             <div className="relative mb-4">
@@ -111,10 +111,10 @@ export default function AdminDashboard() {
               />
             </div>
             <div className="rounded-2xl p-3 overflow-hidden" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
-            <div className="relative max-h-[calc(100vh-14rem)] overflow-hidden">
+            <div className="relative md:max-h-[calc(100dvh-14rem)] overflow-hidden">
               <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-7 scroll-fade-edge" style={{ background: "linear-gradient(180deg, hsl(var(--card)), transparent)" }} />
               <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-7 scroll-fade-edge" style={{ background: "linear-gradient(0deg, hsl(var(--card)), transparent)" }} />
-              <div className="space-y-2 max-h-[calc(100vh-14rem)] overflow-y-auto animated-scroll-area py-1 pr-1">
+              <div className="space-y-2 max-h-none md:max-h-[calc(100dvh-14rem)] overflow-y-visible md:overflow-y-auto animated-scroll-area py-1 pr-1">
                 {filtered.map((p) => (
                   <button
                     key={p.id}

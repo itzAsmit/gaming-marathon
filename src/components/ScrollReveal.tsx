@@ -1,5 +1,6 @@
 import { useRef, ReactNode } from "react";
-import { motion, useInView, Variants } from "framer-motion";
+import { motion, useInView, Variants, useReducedMotion } from "framer-motion";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ScrollRevealProps {
   children: ReactNode;
@@ -31,8 +32,14 @@ export default function ScrollReveal({
   delay = 0,
   direction = "up",
 }: ScrollRevealProps) {
+  const isMobile = useIsMobile();
+  const prefersReducedMotion = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  if (isMobile || prefersReducedMotion) {
+    return <div className={className}>{children}</div>;
+  }
 
   return (
     <motion.div

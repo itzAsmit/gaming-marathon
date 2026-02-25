@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600&family=Bebas+Neue&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600&family=Bebas+Neue&display=swap');
 
 @font-face {
   font-family: 'PAQUITO';
@@ -101,6 +101,13 @@
 }
 
 @layer base {
+  html,
+  body,
+  #root {
+    width: 100%;
+    min-height: 100%;
+  }
+
   * {
     @apply border-border;
   }
@@ -109,6 +116,8 @@
     @apply bg-background text-foreground;
     font-family: 'Inter', sans-serif;
     overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   h1, h2, h3 {
@@ -279,6 +288,51 @@
 
   .scroll-fade-edge {
     animation: scroll-edge-pulse 2.2s ease-in-out infinite;
+  }
+}
+
+@media (max-width: 767px) {
+  .animated-scroll-area {
+    scroll-behavior: auto;
+    scroll-snap-type: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .animated-scroll-item {
+    scroll-snap-align: none;
+    transition: none;
+  }
+
+  .scroll-fade-edge,
+  .float,
+  .float-delayed,
+  .electric-card,
+  .electric-card::before {
+    animation: none !important;
+  }
+
+  .glass,
+  .glass-dark,
+  .glass-card {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-scroll-area {
+    scroll-behavior: auto;
+    scroll-snap-type: none;
+  }
+
+  .animated-scroll-item,
+  .scroll-fade-edge,
+  .float,
+  .float-delayed,
+  .electric-card,
+  .electric-card::before {
+    animation: none !important;
+    transition: none !important;
   }
 }
 

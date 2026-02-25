@@ -109,8 +109,8 @@ export default function AdminItems() {
 
   return (
     <AdminLayout>
-      <div className="p-8">
-        <div className="flex items-center justify-between mb-1">
+      <div className="p-4 md:p-8">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-1">
           <h1 className="text-2xl font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>Assign Items</h1>
           <button
             onClick={loadData}
@@ -133,10 +133,10 @@ export default function AdminItems() {
               <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search player..." className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm outline-none" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} />
             </div>
 
-            <div className="relative max-h-[60vh] overflow-hidden rounded-xl">
+            <div className="relative md:max-h-[60dvh] overflow-hidden rounded-xl">
               <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-7 scroll-fade-edge" style={{ background: "linear-gradient(180deg, hsl(var(--card)), transparent)" }} />
               <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-7 scroll-fade-edge" style={{ background: "linear-gradient(0deg, hsl(var(--card)), transparent)" }} />
-              <div className="space-y-2 max-h-[60vh] overflow-y-auto animated-scroll-area py-1 pr-1">
+              <div className="space-y-2 max-h-none md:max-h-[60dvh] overflow-y-visible md:overflow-y-auto animated-scroll-area py-1 pr-1">
                 {filteredPlayers.map((p) => {
                   const isSelected = selectedPlayerId === p.id;
                   return (

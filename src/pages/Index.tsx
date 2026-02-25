@@ -9,7 +9,7 @@ import CreditsSection from "@/components/sections/CreditsSection";
 
 const Index = () => {
   return (
-    <div className="relative min-h-screen" style={{ background: "hsl(var(--brown-deep))" }}>
+    <div className="relative min-h-[100svh] md:min-h-screen" style={{ background: "hsl(var(--brown-deep))" }}>
       <VideoBackground />
 
       {/* Scrollable content layer */}
