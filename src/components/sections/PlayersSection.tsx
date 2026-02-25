@@ -178,7 +178,7 @@ export default function PlayersSection() {
       <AnimatePresence>
         {selected && (
           <motion.div
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 pt-14 md:pt-16"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 pt-12 md:pt-10"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -186,21 +186,21 @@ export default function PlayersSection() {
             onClick={() => setSelected(null)}
           >
             <motion.div
-              className="glass-card rounded-3xl overflow-hidden max-w-3xl w-full"
+              className="glass-card rounded-3xl overflow-hidden max-w-4xl w-full md:h-[min(86vh,620px)] lg:h-[min(82vh,680px)]"
               initial={{ scale: 0.9, y: 40 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 40 }}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="max-h-[calc(100vh-6rem)] md:max-h-[calc(100vh-7rem)] overflow-y-auto overflow-x-hidden [scrollbar-gutter:stable]">
-                <div className="grid md:grid-cols-2">
+              <div className="max-h-[calc(100vh-6rem)] overflow-y-auto overflow-x-hidden md:max-h-none md:h-full md:overflow-hidden">
+                <div className="grid md:grid-cols-[40%_60%] md:h-full">
                 {/* Left */}
-                <div className="relative">
+                <div className="relative md:h-full">
                   {selected.portrait_url ? (
                     <img
                       src={selected.portrait_url}
                       alt={selected.name}
-                      className="w-full h-full object-cover min-h-64"
+                      className="w-full h-full object-cover min-h-64 md:min-h-0"
                       style={{
                         filter: selected.is_active ? "grayscale(0%)" : "grayscale(100%)",
                       }}
@@ -268,7 +268,7 @@ export default function PlayersSection() {
                 </div>
 
                 {/* Right */}
-                <div className="relative p-6 space-y-5">
+                <div className="relative p-5 md:p-3 lg:p-5 space-y-4 md:space-y-2 lg:space-y-4 md:h-full md:flex md:flex-col md:justify-center">
                   <button onClick={() => setSelected(null)} className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "hsla(var(--cream) / 0.1)", color: "hsl(var(--cream))" }}>
                     <X size={16} />
                   </button>
@@ -276,14 +276,14 @@ export default function PlayersSection() {
                   {selected.bio && (
                     <div>
                       <p className="text-xs font-cinzel tracking-widest mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>BIO</p>
-                      <p className="text-sm leading-relaxed" style={{ color: "hsl(var(--cream-dark))" }}>{selected.bio}</p>
+                      <p className="text-sm leading-relaxed md:text-xs lg:text-sm md:line-clamp-3 lg:line-clamp-5" style={{ color: "hsl(var(--cream-dark))" }}>{selected.bio}</p>
                     </div>
                   )}
 
                   {/* Stats */}
                   <div>
                     <p className="text-xs font-cinzel tracking-widest mb-3" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>STATS</p>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-2 gap-2 md:gap-1 lg:gap-2">
                       {[
                         { label: "POINTS", value: selected.leaderboard?.points ?? 0 },
                         { label: "RANK", value: selected.leaderboard?.rank ? `#${selected.leaderboard.rank}` : "—" },
@@ -292,9 +292,9 @@ export default function PlayersSection() {
                         { label: "3RDS", value: selected.leaderboard?.thirds ?? 0 },
                         { label: "PLAYED", value: selected.leaderboard?.games_played ?? 0 },
                       ].map((s) => (
-                        <div key={s.label} className="rounded-xl p-3 text-center" style={{ background: "hsla(var(--gold) / 0.08)", border: "1px solid hsla(var(--gold) / 0.2)" }}>
-                          <p className="text-lg font-cinzel font-bold" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>{s.value}</p>
-                          <p className="text-xs font-cinzel tracking-wider" style={{ color: "hsl(var(--cream-dark) / 0.7)", fontFamily: "Cinzel, serif" }}>{s.label}</p>
+                        <div key={s.label} className="rounded-xl p-2 md:p-1.5 lg:p-2.5 text-center" style={{ background: "hsla(var(--gold) / 0.08)", border: "1px solid hsla(var(--gold) / 0.2)" }}>
+                          <p className="text-lg md:text-sm lg:text-lg font-cinzel font-bold" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>{s.value}</p>
+                          <p className="text-xs md:text-[10px] font-cinzel tracking-wider" style={{ color: "hsl(var(--cream-dark) / 0.7)", fontFamily: "Cinzel, serif" }}>{s.label}</p>
                         </div>
                       ))}
                     </div>
@@ -306,7 +306,7 @@ export default function PlayersSection() {
                       <p className="text-xs font-cinzel tracking-widest mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>ITEMS HOLDING</p>
                       <div className="flex flex-wrap gap-2">
                         {selected.items.map((pi: any) => (
-                          <span key={pi.items.name} className="px-3 py-1 rounded-full text-xs font-cinzel" style={{ background: "hsla(var(--gold) / 0.15)", color: "hsl(var(--gold))", border: "1px solid hsla(var(--gold) / 0.3)", fontFamily: "Cinzel, serif" }}>
+                          <span key={pi.items.name} className="px-3 py-1 md:px-2 md:py-0.5 rounded-full text-xs md:text-[10px] font-cinzel" style={{ background: "hsla(var(--gold) / 0.15)", color: "hsl(var(--gold))", border: "1px solid hsla(var(--gold) / 0.3)", fontFamily: "Cinzel, serif" }}>
                             {pi.items.name}
                           </span>
                         ))}
@@ -317,8 +317,8 @@ export default function PlayersSection() {
                   {/* Game Proficiency */}
                   {selected.proficiencies && selected.proficiencies.length > 0 && (
                     <div>
-                      <p className="text-xs font-cinzel tracking-widest mb-3" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>GAME PROFICIENCY</p>
-                      <div className="space-y-3">
+                      <p className="text-xs font-cinzel tracking-widest mb-3 md:mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>GAME PROFICIENCY</p>
+                      <div className="space-y-3 md:space-y-2">
                         {selected.proficiencies.slice(0, 3).map((prof) => (
                           <div key={prof.game_name}>
                             <div className="flex justify-between text-xs mb-1">
