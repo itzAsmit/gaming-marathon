@@ -610,10 +610,10 @@ export default function AdminGames() {
           <div className="flex justify-center py-20"><RefreshCw size={24} className="animate-spin" style={{ color: "hsl(var(--brown-light))" }} /></div>
         ) : (
           <div className="rounded-2xl p-4 overflow-hidden" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
-            <div className="relative max-h-[calc(100vh-13.5rem)] overflow-hidden">
+            <div className="relative max-h-[calc(100vh-11.5rem)] overflow-hidden">
               <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-7 scroll-fade-edge" style={{ background: "linear-gradient(180deg, hsl(var(--card)), transparent)" }} />
               <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-7 scroll-fade-edge" style={{ background: "linear-gradient(0deg, hsl(var(--card)), transparent)" }} />
-              <div className="space-y-3 max-h-[calc(100vh-13.5rem)] overflow-y-auto animated-scroll-area py-1 pr-1">
+              <div className="space-y-3 max-h-[calc(100vh-11.5rem)] overflow-y-auto animated-scroll-area py-1 pr-1">
                 {games.map((g) => (
                   <div key={g.id} className="flex items-center gap-4 p-4 rounded-xl animated-scroll-item" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
                     <div className="w-16 h-10 rounded-lg overflow-hidden flex-shrink-0" style={{ background: "hsl(var(--input))" }}>
