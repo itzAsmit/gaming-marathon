@@ -594,7 +594,7 @@ export default function AdminGames() {
   return (
     <AdminLayout>
       <div className="p-8">
-        <div className="sticky top-0 z-20 -mx-8 px-8 py-4 mb-6" style={{ background: "hsla(var(--card) / 0.94)", backdropFilter: "blur(4px)", borderBottom: "1px solid hsl(var(--cream-dark))" }}>
+        <div className="sticky top-0 z-20 mb-6">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>Games</h1>
@@ -609,11 +609,11 @@ export default function AdminGames() {
         {loading ? (
           <div className="flex justify-center py-20"><RefreshCw size={24} className="animate-spin" style={{ color: "hsl(var(--brown-light))" }} /></div>
         ) : (
-          <div className="rounded-2xl p-4" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
-            <div className="relative max-h-[calc(100vh-13.5rem)]">
+          <div className="rounded-2xl p-4 overflow-hidden" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
+            <div className="relative max-h-[calc(100vh-13.5rem)] overflow-hidden">
               <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-7 scroll-fade-edge" style={{ background: "linear-gradient(180deg, hsl(var(--card)), transparent)" }} />
               <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-7 scroll-fade-edge" style={{ background: "linear-gradient(0deg, hsl(var(--card)), transparent)" }} />
-              <div className="space-y-3 h-full overflow-y-auto animated-scroll-area py-1 pr-1">
+              <div className="space-y-3 max-h-[calc(100vh-13.5rem)] overflow-y-auto animated-scroll-area py-1 pr-1">
                 {games.map((g) => (
                   <div key={g.id} className="flex items-center gap-4 p-4 rounded-xl animated-scroll-item" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
                     <div className="w-16 h-10 rounded-lg overflow-hidden flex-shrink-0" style={{ background: "hsl(var(--input))" }}>
