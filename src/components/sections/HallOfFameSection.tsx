@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { withRetry } from "@/lib/withRetry";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import { motion } from "framer-motion";
@@ -23,11 +24,28 @@ const RANK_CONFIG = {
 export default function HallOfFameSection() {
   const [entries, setEntries] = useState<HofEntry[]>([]);
   const [activeSeason, setActiveSeason] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchHallOfFame = async () => {
+    try {
+      setError(null);
+      const { data, error } = await withRetry(
+        async () => supabase.from("hall_of_fame").select("*, players(name, player_id, portrait_url)"),
+        1,
+        900,
+      );
+      if (error) throw error;
+      if (data) setEntries(data as any);
+    } catch {
+      setError("Connection issue. Please tap retry.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    supabase.from("hall_of_fame").select("*, players(name, player_id, portrait_url)").then(({ data }) => {
-      if (data) setEntries(data as any);
-    });
+    fetchHallOfFame();
   }, []);
 
   const seasonEntries = entries.filter((e) => e.season === activeSeason);
@@ -118,7 +136,30 @@ export default function HallOfFameSection() {
         </ScrollReveal>
 
         <ScrollReveal delay={0.3}>
-          {seasonEntries.length === 0 ? (
+          {loading ? (
+            <div className="text-center py-20 font-cinzel text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark) / 0.5)", fontFamily: "Cinzel, serif" }}>
+              LOADING HALL OF FAME...
+            </div>
+          ) : error ? (
+            <div className="text-center py-20" style={{ color: "hsl(var(--cream-dark) / 0.85)", fontFamily: "Cinzel, serif" }}>
+              <p className="mb-4 text-sm tracking-widest">{error}</p>
+              <button
+                className="px-4 py-2 rounded-full text-xs font-cinzel tracking-widest"
+                style={{
+                  color: "hsl(var(--gold))",
+                  border: "1px solid hsla(var(--gold) / 0.45)",
+                  background: "hsla(var(--gold) / 0.12)",
+                  fontFamily: "Cinzel, serif",
+                }}
+                onClick={() => {
+                  setLoading(true);
+                  fetchHallOfFame();
+                }}
+              >
+                RETRY
+              </button>
+            </div>
+          ) : seasonEntries.length === 0 ? (
             <div className="text-center py-20 font-cinzel text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark) / 0.4)", fontFamily: "Cinzel, serif" }}>
               SEASON RECORDS NOT YET WRITTEN
             </div>

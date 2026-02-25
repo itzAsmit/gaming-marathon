@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { withRetry } from "@/lib/withRetry";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import { motion } from "framer-motion";
@@ -22,14 +23,27 @@ const CROWN = ["🥇", "🥈", "🥉"];
 export default function LeaderboardSection() {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchLeaderboard = async () => {
-    const { data } = await supabase
-      .from("leaderboard")
-      .select("*, players(name, player_id)")
-      .order("points", { ascending: false });
-    if (data) setEntries(data as any);
-    setLoading(false);
+    try {
+      setError(null);
+      const { data, error } = await withRetry(
+        async () =>
+          supabase
+            .from("leaderboard")
+            .select("*, players(name, player_id)")
+            .order("points", { ascending: false }),
+        1,
+        900,
+      );
+      if (error) throw error;
+      if (data) setEntries(data as any);
+    } catch {
+      setError("Connection issue. Please tap retry.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -88,6 +102,25 @@ export default function LeaderboardSection() {
               <div className="py-20 text-center" style={{ color: "hsl(var(--cream-dark))" }}>
                 <div className="w-8 h-8 border-2 rounded-full mx-auto animate-spin mb-4" style={{ borderColor: "hsl(var(--gold))", borderTopColor: "transparent" }} />
                 Loading...
+              </div>
+            ) : error ? (
+              <div className="py-12 text-center" style={{ color: "hsl(var(--cream-dark))" }}>
+                <p className="mb-4">{error}</p>
+                <button
+                  className="px-4 py-2 rounded-full text-xs font-cinzel tracking-widest"
+                  style={{
+                    fontFamily: "Cinzel, serif",
+                    color: "hsl(var(--gold))",
+                    border: "1px solid hsla(var(--gold) / 0.45)",
+                    background: "hsla(var(--gold) / 0.12)",
+                  }}
+                  onClick={() => {
+                    setLoading(true);
+                    fetchLeaderboard();
+                  }}
+                >
+                  RETRY
+                </button>
               </div>
             ) : entries.length === 0 ? (
               <div className="py-20 text-center font-cinzel text-[10px] md:text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark) / 0.5)", fontFamily: "Cinzel, serif" }}>

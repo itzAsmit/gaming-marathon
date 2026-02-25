@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { withRetry } from "@/lib/withRetry";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import { motion, AnimatePresence } from "framer-motion";
@@ -29,23 +30,38 @@ export default function GamesSection() {
   const [games, setGames] = useState<Game[]>([]);
   const [selected, setSelected] = useState<Game | null>(null);
   const [rankings, setRankings] = useState<GameRanking[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchGames = async () => {
-    const { data } = await supabase.from("games").select("*").order("game_id");
-    if (data) {
-      const getGameOrder = (game: Game): number => {
-        const match = game.game_id?.match(/\d+/);
-        return match ? parseInt(match[0], 10) : Number.MAX_SAFE_INTEGER;
-      };
+    try {
+      setError(null);
+      const { data, error } = await withRetry(
+        async () => supabase.from("games").select("*").order("game_id"),
+        1,
+        900,
+      );
+      if (error) throw error;
 
-      const sorted = [...data].sort((a, b) => {
-        const aCompleted = a.status === "completed";
-        const bCompleted = b.status === "completed";
-        if (aCompleted !== bCompleted) return aCompleted ? -1 : 1;
-        return getGameOrder(a) - getGameOrder(b);
-      });
+      if (data) {
+        const getGameOrder = (game: Game): number => {
+          const match = game.game_id?.match(/\d+/);
+          return match ? parseInt(match[0], 10) : Number.MAX_SAFE_INTEGER;
+        };
 
-      setGames(sorted);
+        const sorted = [...data].sort((a, b) => {
+          const aCompleted = a.status === "completed";
+          const bCompleted = b.status === "completed";
+          if (aCompleted !== bCompleted) return aCompleted ? -1 : 1;
+          return getGameOrder(a) - getGameOrder(b);
+        });
+
+        setGames(sorted);
+      }
+    } catch {
+      setError("Connection issue. Please tap retry.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -101,71 +117,98 @@ export default function GamesSection() {
           <SectionHeader title="GAMES" accent="THE ARENA" subtitle="Battlegrounds where every match tests a different skill" />
         </ScrollReveal>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          {games.map((game, i) => (
-            <ScrollReveal key={game.id} delay={i * 0.04}>
-              <motion.div
-                className="electric-card rounded-2xl p-[1.5px] overflow-hidden cursor-pointer group w-full max-w-[220px] mx-auto"
-                whileHover={{ scale: 1.05, y: -6 }}
-                transition={{ duration: 0.3 }}
-                onClick={() => openGame(game)}
-              >
-                <div className="glass-card rounded-2xl overflow-hidden relative">
-                  <div className="aspect-[3/4] overflow-hidden relative">
-                    {game.image_url ? (
-                      <img src={game.image_url} alt={game.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                    ) : game.video_url ? (
-                      <video src={game.video_url} autoPlay loop muted playsInline className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                    ) : (
-                      <div
-                        className="w-full h-full flex items-center justify-center"
-                        style={{ background: `linear-gradient(135deg, hsl(var(--brown-deep)), hsl(${(i * 30) % 360} 30% 20%))` }}
-                      >
-                        <span className="text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark))" }}>NO MEDIA</span>
-                      </div>
-                    )}
-                    <div className="absolute inset-x-0 bottom-0 p-3" style={{ background: "linear-gradient(to top, rgba(10, 8, 20, 0.85), rgba(10, 8, 20, 0))" }}>
-                      <p className="text-xs tracking-widest mb-1" style={{ color: "#d8dce8", fontFamily: "Cinzel, serif" }}>
-                        {game.game_id}
-                      </p>
-                      <p
-                        className="text-lg md:text-xl font-semibold leading-none"
-                        style={{
-                          color: "#f7f6f2",
-                          fontFamily: "Cinzel, serif",
-                          letterSpacing: "0.12em",
-                          WebkitTextStroke: "1px rgba(214, 211, 254, 0.9)",
-                          textShadow: "0 0 12px rgba(255,255,255,0.3)",
-                        }}
-                      >
-                        {game.name.toUpperCase()}
-                      </p>
-                    </div>
-                    <div className="absolute top-2 right-2">
-                      <span
-                        className="px-2 py-0.5 rounded-full text-xs font-cinzel tracking-wider flex items-center gap-1"
-                        style={{
-                          background: game.status === "completed" ? "hsla(120 60% 35% / 0.8)" : "hsla(var(--gold) / 0.2)",
-                          color: game.status === "completed" ? "hsl(120 80% 75%)" : "hsl(var(--gold))",
-                          border: `1px solid ${game.status === "completed" ? "hsla(120 60% 50% / 0.5)" : "hsla(var(--gold) / 0.4)"}`,
-                          fontFamily: "Cinzel, serif",
-                          fontSize: "0.6rem",
-                        }}
-                      >
-                        {game.status === "completed" ? <CheckCircle size={8} /> : <Clock size={8} />}
-                        {game.status === "completed" ? "DONE" : "SOON"}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            </ScrollReveal>
-          ))}
-        </div>
-        {games.length === 0 && (
-          <p className="text-center mt-10 text-sm" style={{ color: "hsl(var(--cream-dark) / 0.7)" }}>
-            No games yet.
+        {loading ? (
+          <p className="text-center mt-10 text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark) / 0.7)", fontFamily: "Cinzel, serif" }}>
+            LOADING GAMES...
           </p>
+        ) : error ? (
+          <div className="text-center mt-10" style={{ color: "hsl(var(--cream-dark) / 0.85)" }}>
+            <p className="text-sm mb-4 tracking-widest" style={{ fontFamily: "Cinzel, serif" }}>{error}</p>
+            <button
+              className="px-4 py-2 rounded-full text-xs font-cinzel tracking-widest"
+              style={{
+                color: "hsl(var(--gold))",
+                border: "1px solid hsla(var(--gold) / 0.45)",
+                background: "hsla(var(--gold) / 0.12)",
+                fontFamily: "Cinzel, serif",
+              }}
+              onClick={() => {
+                setLoading(true);
+                fetchGames();
+              }}
+            >
+              RETRY
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              {games.map((game, i) => (
+                <ScrollReveal key={game.id} delay={i * 0.04}>
+                  <motion.div
+                    className="electric-card rounded-2xl p-[1.5px] overflow-hidden cursor-pointer group w-full max-w-[220px] mx-auto"
+                    whileHover={{ scale: 1.05, y: -6 }}
+                    transition={{ duration: 0.3 }}
+                    onClick={() => openGame(game)}
+                  >
+                    <div className="glass-card rounded-2xl overflow-hidden relative">
+                      <div className="aspect-[3/4] overflow-hidden relative">
+                        {game.image_url ? (
+                          <img src={game.image_url} alt={game.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                        ) : game.video_url ? (
+                          <video src={game.video_url} autoPlay loop muted playsInline className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                        ) : (
+                          <div
+                            className="w-full h-full flex items-center justify-center"
+                            style={{ background: `linear-gradient(135deg, hsl(var(--brown-deep)), hsl(${(i * 30) % 360} 30% 20%))` }}
+                          >
+                            <span className="text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark))" }}>NO MEDIA</span>
+                          </div>
+                        )}
+                        <div className="absolute inset-x-0 bottom-0 p-3" style={{ background: "linear-gradient(to top, rgba(10, 8, 20, 0.85), rgba(10, 8, 20, 0))" }}>
+                          <p className="text-xs tracking-widest mb-1" style={{ color: "#d8dce8", fontFamily: "Cinzel, serif" }}>
+                            {game.game_id}
+                          </p>
+                          <p
+                            className="text-lg md:text-xl font-semibold leading-none"
+                            style={{
+                              color: "#f7f6f2",
+                              fontFamily: "Cinzel, serif",
+                              letterSpacing: "0.12em",
+                              WebkitTextStroke: "1px rgba(214, 211, 254, 0.9)",
+                              textShadow: "0 0 12px rgba(255,255,255,0.3)",
+                            }}
+                          >
+                            {game.name.toUpperCase()}
+                          </p>
+                        </div>
+                        <div className="absolute top-2 right-2">
+                          <span
+                            className="px-2 py-0.5 rounded-full text-xs font-cinzel tracking-wider flex items-center gap-1"
+                            style={{
+                              background: game.status === "completed" ? "hsla(120 60% 35% / 0.8)" : "hsla(var(--gold) / 0.2)",
+                              color: game.status === "completed" ? "hsl(120 80% 75%)" : "hsl(var(--gold))",
+                              border: `1px solid ${game.status === "completed" ? "hsla(120 60% 50% / 0.5)" : "hsla(var(--gold) / 0.4)"}`,
+                              fontFamily: "Cinzel, serif",
+                              fontSize: "0.6rem",
+                            }}
+                          >
+                            {game.status === "completed" ? <CheckCircle size={8} /> : <Clock size={8} />}
+                            {game.status === "completed" ? "DONE" : "SOON"}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                </ScrollReveal>
+              ))}
+            </div>
+            {games.length === 0 && (
+              <p className="text-center mt-10 text-sm" style={{ color: "hsl(var(--cream-dark) / 0.7)" }}>
+                No games yet.
+              </p>
+            )}
+          </>
         )}
       </div>
 

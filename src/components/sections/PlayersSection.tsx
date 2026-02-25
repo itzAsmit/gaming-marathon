@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { withRetry } from "@/lib/withRetry";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import { motion, AnimatePresence } from "framer-motion";
@@ -32,40 +33,54 @@ interface Player {
 export default function PlayersSection() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [selected, setSelected] = useState<Player | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchPlayers = async () => {
-    const { data } = await supabase
-      .from("players")
-      .select("*, leaderboard(*), player_proficiencies(*), player_items(*, items(name, description)), player_game_stats(games(game_id))");
-    if (data) {
-      const mappedPlayers = data.map((p: any) => ({
-        ...p,
-        leaderboard: p.leaderboard?.[0] ?? p.leaderboard,
-        proficiencies: p.player_proficiencies,
-        items: p.player_items,
-      }));
+    try {
+      setError(null);
+      const { data, error } = await withRetry(
+        async () =>
+          supabase
+            .from("players")
+            .select("*, leaderboard(*), player_proficiencies(*), player_items(*, items(name, description)), player_game_stats(games(game_id))"),
+        1,
+        900,
+      );
+      if (error) throw error;
 
-      const getPlayerOrder = (player: any): number => {
-        const rawId = player?.player_id;
-        if (typeof rawId !== "string") return Number.MAX_SAFE_INTEGER;
-        const match = rawId.match(/\d+/);
-        if (!match) return Number.MAX_SAFE_INTEGER;
-        return parseInt(match[0], 10);
-      };
+      if (data) {
+        const mappedPlayers = data.map((p: any) => ({
+          ...p,
+          leaderboard: p.leaderboard?.[0] ?? p.leaderboard,
+          proficiencies: p.player_proficiencies,
+          items: p.player_items,
+        }));
 
-      mappedPlayers.sort((a: any, b: any) => {
-        // Sort by active status first (active before inactive)
-        if (a.is_active !== b.is_active) {
-          return a.is_active ? -1 : 1;
-        }
-        // Then by player order
-        const aPlayerOrder = getPlayerOrder(a);
-        const bPlayerOrder = getPlayerOrder(b);
-        if (aPlayerOrder !== bPlayerOrder) return aPlayerOrder - bPlayerOrder;
-        return (a.player_id ?? "").localeCompare(b.player_id ?? "");
-      });
+        const getPlayerOrder = (player: any): number => {
+          const rawId = player?.player_id;
+          if (typeof rawId !== "string") return Number.MAX_SAFE_INTEGER;
+          const match = rawId.match(/\d+/);
+          if (!match) return Number.MAX_SAFE_INTEGER;
+          return parseInt(match[0], 10);
+        };
 
-      setPlayers(mappedPlayers);
+        mappedPlayers.sort((a: any, b: any) => {
+          if (a.is_active !== b.is_active) {
+            return a.is_active ? -1 : 1;
+          }
+          const aPlayerOrder = getPlayerOrder(a);
+          const bPlayerOrder = getPlayerOrder(b);
+          if (aPlayerOrder !== bPlayerOrder) return aPlayerOrder - bPlayerOrder;
+          return (a.player_id ?? "").localeCompare(b.player_id ?? "");
+        });
+
+        setPlayers(mappedPlayers);
+      }
+    } catch {
+      setError("Connection issue. Please tap retry.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -85,7 +100,30 @@ export default function PlayersSection() {
           <SectionHeader title="MEET THE PLAYERS" accent="COMPETITORS" subtitle="The warriors who battle for the crown" />
         </ScrollReveal>
 
-        {players.length === 0 ? (
+        {loading ? (
+          <div className="text-center py-20 font-cinzel text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark) / 0.6)", fontFamily: "Cinzel, serif" }}>
+            LOADING PLAYERS...
+          </div>
+        ) : error ? (
+          <div className="text-center py-20" style={{ color: "hsl(var(--cream-dark) / 0.8)", fontFamily: "Cinzel, serif" }}>
+            <p className="mb-4 text-sm tracking-widest">{error}</p>
+            <button
+              className="px-4 py-2 rounded-full text-xs font-cinzel tracking-widest"
+              style={{
+                color: "hsl(var(--gold))",
+                border: "1px solid hsla(var(--gold) / 0.45)",
+                background: "hsla(var(--gold) / 0.12)",
+                fontFamily: "Cinzel, serif",
+              }}
+              onClick={() => {
+                setLoading(true);
+                fetchPlayers();
+              }}
+            >
+              RETRY
+            </button>
+          </div>
+        ) : players.length === 0 ? (
           <div className="text-center py-20 font-cinzel text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark) / 0.5)", fontFamily: "Cinzel, serif" }}>
             NO PLAYERS REGISTERED YET
           </div>
