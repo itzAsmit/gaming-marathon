@@ -16,7 +16,7 @@ export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
   const { scrollY } = useScroll();
 
   // Fade opacity: 0.9 at top, transition to 0.4 around leaderboard
-  const opacity = useTransform(scrollY, [0, 300, 1400], [0.85, 0.85, 0.50]);
+  const opacity = useTransform(scrollY, [0, 300, window.innerHeight * 1.5], [0.85, 0.85, 0.50]);
   const topRevealOpacity = useTransform(scrollY, [0, 240, 900], [0.5, 0.75, 0.9]);
   const bottomRevealOpacity = useTransform(scrollY, [0, 240, 900], [0.45, 0.72, 0.88]);
 

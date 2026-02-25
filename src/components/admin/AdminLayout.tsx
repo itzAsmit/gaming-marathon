@@ -98,7 +98,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   );
 
   return (
-    <div className="min-h-[100dvh] h-[100dvh] flex flex-col overflow-hidden" style={{ background: "hsl(var(--input))" }}>
+    <div className="min-h-[100dvh] h-[100dvh] md:min-h-screen md:h-screen flex flex-col overflow-hidden" style={{ background: "hsl(var(--input))" }}>
       {/* Mobile Navbar */}
       <nav className="md:hidden sticky top-0 z-50 flex items-center justify-between p-4" style={{ background: "hsl(var(--card))", borderBottom: "1px solid hsl(var(--cream-dark))" }}>
         <Link to="/" className="flex items-center gap-2">
