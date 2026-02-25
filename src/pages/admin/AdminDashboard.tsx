@@ -159,6 +159,7 @@ export default function AdminDashboard() {
                         type="number"
                         min={0}
                         value={stats[f.key] as number}
+                        onFocus={(e) => e.currentTarget.select()}
                         onChange={(e) => setStats((s) => ({ ...s, [f.key]: parseInt(e.target.value) || 0 }))}
                         className="w-full px-3 py-2 rounded-lg text-sm outline-none"
                         style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}

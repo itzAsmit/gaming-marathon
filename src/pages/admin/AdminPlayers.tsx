@@ -526,6 +526,7 @@ export default function AdminPlayers() {
                         min={0}
                         max={100}
                         value={prof.proficiency_percent}
+                        onFocus={(e) => e.currentTarget.select()}
                         onChange={(e) => setProficiencies((p) => p.map((x, j) => j === i ? { ...x, proficiency_percent: parseInt(e.target.value) || 0 } : x))}
                         className="w-16 px-2 py-2 rounded-xl text-xs outline-none text-center"
                         style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}

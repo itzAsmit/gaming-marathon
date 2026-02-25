@@ -831,6 +831,7 @@ export default function AdminGames() {
                           type="number"
                           min={0}
                           value={r.points}
+                          onFocus={(e) => e.currentTarget.select()}
                           onChange={(e) => {
                             const nextValue = parseInt(e.target.value, 10);
                             setRankings((ranks) => ranks.map((x, j) => j === i ? { ...x, points: Number.isNaN(nextValue) ? 0 : Math.max(0, nextValue) } : x));
