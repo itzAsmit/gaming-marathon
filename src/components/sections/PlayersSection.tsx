@@ -186,7 +186,7 @@ export default function PlayersSection() {
             onClick={() => setSelected(null)}
           >
             <motion.div
-              className="glass-card rounded-3xl overflow-hidden max-w-4xl w-full md:h-[min(86vh,620px)] lg:h-[min(82vh,680px)]"
+              className="glass-card rounded-3xl overflow-hidden max-w-3xl w-full md:h-[min(86vh,620px)] lg:h-[min(82vh,680px)]"
               initial={{ scale: 0.9, y: 40 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 40 }}
