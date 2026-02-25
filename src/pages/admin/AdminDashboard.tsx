@@ -110,25 +110,29 @@ export default function AdminDashboard() {
                 style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
               />
             </div>
-            <div className="space-y-2 max-h-[calc(100vh-14rem)] overflow-y-auto no-scrollbar pr-1">
-              {filtered.map((p) => (
-                <button
-                  key={p.id}
-                  onClick={() => selectPlayer(p)}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-left transition-all"
-                  style={{
-                    background: selected?.id === p.id ? "hsl(var(--cream-dark))" : "white",
-                    border: "1px solid hsl(var(--cream-dark))",
-                    color: "hsl(var(--brown-deep))",
-                  }}
-                >
-                  <span className="font-semibold">{p.name}</span>
-                  <span className="text-xs ml-auto" style={{ color: "hsl(var(--brown-light))" }}>{p.player_id}</span>
-                </button>
-              ))}
-              {filtered.length === 0 && (
-                <p className="text-center py-8 text-sm" style={{ color: "hsl(var(--brown-light) / 0.5)" }}>No players found</p>
-              )}
+            <div className="relative max-h-[calc(100vh-14rem)]">
+              <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-7 scroll-fade-edge" style={{ background: "linear-gradient(180deg, hsl(var(--card)), transparent)" }} />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-7 scroll-fade-edge" style={{ background: "linear-gradient(0deg, hsl(var(--card)), transparent)" }} />
+              <div className="space-y-2 h-full overflow-y-auto animated-scroll-area pr-1">
+                {filtered.map((p) => (
+                  <button
+                    key={p.id}
+                    onClick={() => selectPlayer(p)}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-left transition-all animated-scroll-item"
+                    style={{
+                      background: selected?.id === p.id ? "hsl(var(--cream-dark))" : "white",
+                      border: "1px solid hsl(var(--cream-dark))",
+                      color: "hsl(var(--brown-deep))",
+                    }}
+                  >
+                    <span className="font-semibold">{p.name}</span>
+                    <span className="text-xs ml-auto" style={{ color: "hsl(var(--brown-light))" }}>{p.player_id}</span>
+                  </button>
+                ))}
+                {filtered.length === 0 && (
+                  <p className="text-center py-8 text-sm" style={{ color: "hsl(var(--brown-light) / 0.5)" }}>No players found</p>
+                )}
+              </div>
             </div>
           </div>
 

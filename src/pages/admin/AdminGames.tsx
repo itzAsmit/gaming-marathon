@@ -642,7 +642,7 @@ export default function AdminGames() {
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "hsla(var(--brown-deep) / 0.5)", backdropFilter: "blur(8px)" }}>
           <div className="w-full max-w-2xl rounded-2xl overflow-hidden" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
-            <div className="max-h-[90vh] overflow-y-auto overflow-x-hidden [scrollbar-gutter:stable]">
+            <div className="max-h-[90vh] overflow-y-auto overflow-x-hidden animated-scroll-area no-scrollbar">
               <div className="sticky top-0 z-20 flex items-center justify-between p-6 border-b" style={{ background: "hsl(var(--card))", borderColor: "hsl(var(--cream-dark))" }}>
                 <h2 className="text-lg font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>
                   {editing ? "Edit Game" : "Create Game"}

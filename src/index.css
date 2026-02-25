@@ -259,6 +259,31 @@
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
+
+  .animated-scroll-area {
+    scroll-behavior: smooth;
+    overscroll-behavior: contain;
+    scroll-snap-type: y proximity;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .animated-scroll-area::-webkit-scrollbar {
+    display: none;
+  }
+
+  .animated-scroll-item {
+    scroll-snap-align: start;
+    transition: transform 220ms ease, opacity 220ms ease;
+  }
+
+  .animated-scroll-item:hover {
+    transform: translateY(-1px);
+  }
+
+  .scroll-fade-edge {
+    animation: scroll-edge-pulse 2.2s ease-in-out infinite;
+  }
 }
 
 @keyframes float {
@@ -285,4 +310,9 @@
 @keyframes electric-pulse {
   0%, 100% { opacity: 0.45; }
   50% { opacity: 0.72; }
+}
+
+@keyframes scroll-edge-pulse {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.75; }
 }

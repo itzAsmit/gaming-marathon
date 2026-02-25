@@ -133,51 +133,55 @@ export default function AdminItems() {
               <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search player..." className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm outline-none" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} />
             </div>
 
-            <div className="space-y-2 max-h-[60vh] overflow-y-auto pr-1">
-              {filteredPlayers.map((p) => {
-                const isSelected = selectedPlayerId === p.id;
-                return (
-                  <button
-                    key={p.id}
-                    onClick={() => setSelectedPlayerId(p.id)}
-                    className="w-full text-left rounded-xl p-4 transition-all"
-                    style={{
-                      background: isSelected ? "hsl(var(--input))" : "hsl(var(--card))",
-                      border: isSelected ? "1px solid hsl(var(--brown))" : "1px solid hsl(var(--cream-dark))",
-                    }}
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <p className="font-semibold text-sm" style={{ color: "hsl(var(--brown-deep))" }}>{p.name}</p>
-                        <p className="text-xs" style={{ color: "hsl(var(--brown))" }}>{p.player_id}</p>
+            <div className="relative max-h-[60vh]">
+              <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-7 scroll-fade-edge" style={{ background: "linear-gradient(180deg, hsl(var(--card)), transparent)" }} />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-7 scroll-fade-edge" style={{ background: "linear-gradient(0deg, hsl(var(--card)), transparent)" }} />
+              <div className="space-y-2 h-full overflow-y-auto animated-scroll-area pr-1">
+                {filteredPlayers.map((p) => {
+                  const isSelected = selectedPlayerId === p.id;
+                  return (
+                    <button
+                      key={p.id}
+                      onClick={() => setSelectedPlayerId(p.id)}
+                      className="w-full text-left rounded-xl p-4 transition-all animated-scroll-item"
+                      style={{
+                        background: isSelected ? "hsl(var(--input))" : "hsl(var(--card))",
+                        border: isSelected ? "1px solid hsl(var(--brown))" : "1px solid hsl(var(--cream-dark))",
+                      }}
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="font-semibold text-sm" style={{ color: "hsl(var(--brown-deep))" }}>{p.name}</p>
+                          <p className="text-xs" style={{ color: "hsl(var(--brown))" }}>{p.player_id}</p>
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {p.player_items && p.player_items.length > 0 ? (
-                        p.player_items.map((assignment) => (
-                          <span
-                            key={assignment.id}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              unassignFromPlayer(p, assignment);
-                            }}
-                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs cursor-pointer"
-                            style={{ background: "hsla(var(--brown) / 0.12)", color: "hsl(var(--brown-deep))", border: "1px solid hsla(var(--brown) / 0.35)" }}
-                          >
-                            {assignment.items?.name ?? "Unknown"}
-                            <X size={12} />
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {p.player_items && p.player_items.length > 0 ? (
+                          p.player_items.map((assignment) => (
+                            <span
+                              key={assignment.id}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                unassignFromPlayer(p, assignment);
+                              }}
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs cursor-pointer"
+                              style={{ background: "hsla(var(--brown) / 0.12)", color: "hsl(var(--brown-deep))", border: "1px solid hsla(var(--brown) / 0.35)" }}
+                            >
+                              {assignment.items?.name ?? "Unknown"}
+                              <X size={12} />
+                            </span>
+                          ))
+                        ) : (
+                          <span className="text-xs" style={{ color: "hsl(var(--brown))" }}>
+                            NONE
                           </span>
-                        ))
-                      ) : (
-                        <span className="text-xs" style={{ color: "hsl(var(--brown))" }}>
-                          NONE
-                        </span>
-                      )}
-                    </div>
-                  </button>
-                );
-              })}
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             {filteredPlayers.length === 0 && (
