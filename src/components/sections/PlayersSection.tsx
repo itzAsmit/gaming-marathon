@@ -268,7 +268,7 @@ export default function PlayersSection() {
                 </div>
 
                 {/* Right */}
-                <div className="relative p-5 md:p-3 lg:p-5 space-y-4 md:space-y-2 lg:space-y-4 md:h-full md:flex md:flex-col md:justify-center">
+                <div className="relative p-5 md:p-3 lg:p-5 space-y-4 md:space-y-2 lg:space-y-4 md:h-full md:flex md:flex-col md:justify-start">
                   <button onClick={() => setSelected(null)} className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "hsla(var(--cream) / 0.1)", color: "hsl(var(--cream))" }}>
                     <X size={16} />
                   </button>
@@ -301,18 +301,22 @@ export default function PlayersSection() {
                   </div>
 
                   {/* Items */}
-                  {selected.items && selected.items.length > 0 && (
-                    <div>
-                      <p className="text-xs font-cinzel tracking-widest mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>ITEMS HOLDING</p>
-                      <div className="flex flex-wrap gap-2">
-                        {selected.items.map((pi: any) => (
+                  <div>
+                    <p className="text-xs font-cinzel tracking-widest mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>ITEMS HOLDING</p>
+                    <div className="flex flex-wrap gap-2">
+                      {selected.items && selected.items.length > 0 ? (
+                        selected.items.map((pi: any) => (
                           <span key={pi.items.name} className="px-3 py-1 md:px-2 md:py-0.5 rounded-full text-xs md:text-[10px] font-cinzel" style={{ background: "hsla(var(--gold) / 0.15)", color: "hsl(var(--gold))", border: "1px solid hsla(var(--gold) / 0.3)", fontFamily: "Cinzel, serif" }}>
                             {pi.items.name}
                           </span>
-                        ))}
-                      </div>
+                        ))
+                      ) : (
+                        <span className="px-3 py-1 rounded-full text-xs font-cinzel" style={{ background: "hsla(var(--cream) / 0.08)", color: "hsl(var(--cream-dark) / 0.75)", border: "1px solid hsla(var(--cream) / 0.2)", fontFamily: "Cinzel, serif" }}>
+                          NONE
+                        </span>
+                      )}
                     </div>
-                  )}
+                  </div>
 
                   {/* Game Proficiency */}
                   {selected.proficiencies && selected.proficiencies.length > 0 && (
