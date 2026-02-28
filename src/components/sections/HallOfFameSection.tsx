@@ -89,7 +89,7 @@ export default function HallOfFameSection() {
           <p className="text-lg font-cinzel font-bold mb-1" style={{ color: cfg.color, fontFamily: "Cinzel, serif" }}>
             {cfg.emoji} {cfg.label}
           </p>
-          <p className="text-sm font-cinzel font-semibold" style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}>
+          <p className="text-sm font-semibold" style={{ color: "hsl(var(--cream))", fontFamily: "'ROWAN', serif" }}>
             {entry?.players?.name ?? "—"}
           </p>
           {entry?.players?.player_id && (

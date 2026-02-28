@@ -205,7 +205,7 @@ export default function PlayersSection() {
                     </div>
                   </div>
                   <div className="p-3 text-center">
-                    <p className="text-sm font-cinzel font-semibold truncate" style={{ color: player.is_active ? "hsl(var(--cream))" : "#888", fontFamily: "Cinzel, serif" }}>
+                    <p className="text-sm font-semibold truncate" style={{ color: player.is_active ? "hsl(var(--cream))" : "#888", fontFamily: "'ROWAN', serif" }}>
                       {player.name}
                     </p>
                     <p className="text-xs tracking-wider mt-0.5" style={{ color: player.is_active ? "hsl(var(--gold) / 0.8)" : "#666" }}>
@@ -292,7 +292,7 @@ export default function PlayersSection() {
                         {selected.is_active ? "ACTIVE" : "INACTIVE"}
                       </span>
                     </div>
-                    <h3 className="text-xl font-cinzel font-bold" style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}>
+                    <h3 className="text-xl font-bold" style={{ color: "hsl(var(--cream))", fontFamily: "'ROWAN', serif" }}>
                       {selected.name}
                     </h3>
                     <div className="flex gap-3 mt-2">

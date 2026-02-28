@@ -231,7 +231,7 @@ export default function GamesSection() {
                             className="text-lg md:text-xl font-semibold leading-none"
                             style={{
                               color: "#f7f6f2",
-                              fontFamily: "Cinzel, serif",
+                              fontFamily: "'ROWAN', serif",
                               letterSpacing: "0.12em",
                               WebkitTextStroke: "1px rgba(214, 211, 254, 0.9)",
                               textShadow: "0 0 12px rgba(255,255,255,0.3)",
@@ -366,7 +366,7 @@ export default function GamesSection() {
                     className="font-semibold uppercase px-6 md:px-10 leading-none whitespace-nowrap text-center text-[clamp(2.25rem,8vw,5.5rem)]"
                     style={{
                       color: "#f2f5fb",
-                      fontFamily: "Cinzel, serif",
+                      fontFamily: "'ROWAN', serif",
                       letterSpacing: "0.08em",
                       WebkitTextStroke: "2px rgba(255, 184, 43, 0.9)",
                       textShadow: "0 0 12px rgba(248, 148, 115, 0.6), 0 0 28px rgba(247, 213, 149, 0.73)",
@@ -431,7 +431,7 @@ export default function GamesSection() {
                               <span className="text-xs px-2.5 py-1 rounded-full font-cinzel tracking-wide" style={{ color: "hsl(var(--gold))", border: "1px solid hsla(var(--gold) / 0.35)", background: "hsla(var(--gold) / 0.08)", fontFamily: "Cinzel, serif" }}>
                                 {getRankBadge(r.rank)}
                               </span>
-                              <span className="font-cinzel text-sm" style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}>{r.players?.name ?? "-"}</span>
+                              <span className="text-sm" style={{ color: "hsl(var(--cream))", fontFamily: "'ROWAN', serif" }}>{r.players?.name ?? "-"}</span>
                               <span className="text-xs ml-auto" style={{ color: "hsl(var(--cream-dark) / 0.8)" }}>
                                 {(r.points ?? 0)} pts
                               </span>
