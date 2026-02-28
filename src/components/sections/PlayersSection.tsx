@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { withRetry } from "@/lib/withRetry";
+import { withTimeout } from "@/lib/withTimeout";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import { motion, AnimatePresence } from "framer-motion";
@@ -39,13 +40,17 @@ export default function PlayersSection() {
   const fetchPlayers = async () => {
     try {
       setError(null);
-      const { data, error } = await withRetry(
-        async () =>
-          supabase
-            .from("players")
-            .select("*, leaderboard(*), player_proficiencies(*), player_items(*, items(name, description)), player_game_stats(games(game_id))"),
-        1,
-        900,
+      const { data, error } = await withTimeout(
+        withRetry(
+          async () =>
+            supabase
+              .from("players")
+              .select("*, leaderboard(*), player_proficiencies(*), player_items(*, items(name, description)), player_game_stats(games(game_id))"),
+          1,
+          900,
+        ),
+        12000,
+        "Players request timed out",
       );
       if (error) throw error;
 

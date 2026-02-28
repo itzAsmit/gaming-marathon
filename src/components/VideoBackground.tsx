@@ -13,10 +13,21 @@ export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const isMobile = useIsMobile();
   const [muted, setMuted] = useState(true);
+  const [viewportHeight, setViewportHeight] = useState(() =>
+    typeof window !== "undefined" ? window.innerHeight : 1000,
+  );
+  const [videoFailed, setVideoFailed] = useState(false);
   const { scrollY } = useScroll();
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const onResize = () => setViewportHeight(window.innerHeight);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
   // Fade opacity: 0.9 at top, transition to 0.4 around leaderboard
-  const opacity = useTransform(scrollY, [0, 300, window.innerHeight * 1.5], [0.85, 0.85, 0.50]);
+  const opacity = useTransform(scrollY, [0, 300, viewportHeight * 1.5], [0.85, 0.85, 0.50]);
   const topRevealOpacity = useTransform(scrollY, [0, 240, 900], [0.5, 0.75, 0.9]);
   const bottomRevealOpacity = useTransform(scrollY, [0, 240, 900], [0.45, 0.72, 0.88]);
 
@@ -34,15 +45,21 @@ export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
     <>
       {/* Fixed video layer */}
       <motion.div className="fixed inset-0 z-0 overflow-hidden" style={{ opacity: isMobile ? 0.78 : opacity }}>
-        <video
-          ref={videoRef}
-          className="w-full h-full object-cover"
-          src={src}
-          autoPlay
-          loop
-          muted
-          playsInline
-        />
+        {videoFailed ? (
+          <div className="w-full h-full" style={{ background: "linear-gradient(160deg, hsl(var(--brown-deep)), hsl(var(--brown)))" }} />
+        ) : (
+          <video
+            ref={videoRef}
+            className="w-full h-full object-cover"
+            src={src}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            onError={() => setVideoFailed(true)}
+          />
+        )}
         {/* Cinematic overlay */}
         <div
           className="absolute inset-0"

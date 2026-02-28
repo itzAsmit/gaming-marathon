@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { withRetry } from "@/lib/withRetry";
+import { withTimeout } from "@/lib/withTimeout";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import { motion, AnimatePresence } from "framer-motion";
@@ -36,10 +37,14 @@ export default function GamesSection() {
   const fetchGames = async () => {
     try {
       setError(null);
-      const { data, error } = await withRetry(
-        async () => supabase.from("games").select("*").order("game_id"),
-        1,
-        900,
+      const { data, error } = await withTimeout(
+        withRetry(
+          async () => supabase.from("games").select("*").order("game_id"),
+          1,
+          900,
+        ),
+        12000,
+        "Games request timed out",
       );
       if (error) throw error;
 
@@ -66,11 +71,15 @@ export default function GamesSection() {
   };
 
   const fetchRankings = async (gameId: string) => {
-    const { data } = await supabase
-      .from("player_game_stats")
-      .select("rank, points, players(name, player_id)")
-      .eq("game_id", gameId)
-      .order("rank");
+    const { data } = await withTimeout(
+      supabase
+        .from("player_game_stats")
+        .select("rank, points, players(name, player_id)")
+        .eq("game_id", gameId)
+        .order("rank"),
+      12000,
+      "Rankings request timed out",
+    );
     if (data) setRankings(data as any);
   };
 
