@@ -1,6 +1,7 @@
 import VideoBackground from "@/components/VideoBackground";
 import HeroSection from "@/components/sections/HeroSection";
 import LeaderboardSection from "@/components/sections/LeaderboardSection";
+import LazyMount from "@/components/LazyMount";
 import PlayersSection from "@/components/sections/PlayersSection";
 import GamesSection from "@/components/sections/GamesSection";
 import SpecialItemsSection from "@/components/sections/SpecialItemsSection";
@@ -16,11 +17,23 @@ const Index = () => {
       <div className="relative z-10">
         <HeroSection />
         <LeaderboardSection />
-        <PlayersSection />
-        <GamesSection />
-        <SpecialItemsSection />
-        <HallOfFameSection />
-        <CreditsSection />
+
+        {/* Sections below the fold: mount only when user scrolls near them */}
+        <LazyMount>
+          <PlayersSection />
+        </LazyMount>
+        <LazyMount>
+          <GamesSection />
+        </LazyMount>
+        <LazyMount>
+          <SpecialItemsSection />
+        </LazyMount>
+        <LazyMount>
+          <HallOfFameSection />
+        </LazyMount>
+        <LazyMount>
+          <CreditsSection />
+        </LazyMount>
       </div>
     </div>
   );

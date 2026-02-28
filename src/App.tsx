@@ -5,18 +5,30 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { lazy, Suspense } from "react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import AdminLogin from "./pages/admin/AdminLogin";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import AdminPlayers from "./pages/admin/AdminPlayers";
-import AdminGames from "./pages/admin/AdminGames";
-import AdminItems from "./pages/admin/AdminItems";
-import AdminLogs from "./pages/admin/AdminLogs";
-import AdminHallOfFame from "./pages/admin/AdminHallOfFame";
 import AnimatedCursor from "./components/AnimatedCursor";
 
+// Lazy-load admin pages so they don't inflate the homepage bundle
+const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
+const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
+const AdminPlayers = lazy(() => import("./pages/admin/AdminPlayers"));
+const AdminGames = lazy(() => import("./pages/admin/AdminGames"));
+const AdminItems = lazy(() => import("./pages/admin/AdminItems"));
+const AdminLogs = lazy(() => import("./pages/admin/AdminLogs"));
+const AdminHallOfFame = lazy(() => import("./pages/admin/AdminHallOfFame"));
+
 const queryClient = new QueryClient();
+
+const AdminFallback = () => (
+  <div className="flex items-center justify-center min-h-screen" style={{ background: "linear-gradient(135deg, hsl(var(--cream)), hsl(var(--cream-dark)))" }}>
+    <div className="text-center">
+      <div className="w-10 h-10 border-3 border-t-transparent rounded-full animate-spin mx-auto mb-3" style={{ borderColor: "hsl(var(--brown))", borderTopColor: "transparent" }} />
+      <p className="text-sm font-cinzel tracking-widest" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>LOADING...</p>
+    </div>
+  </div>
+);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -27,13 +39,13 @@ const App = () => (
         <AnimatedCursor />
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/players" element={<AdminPlayers />} />
-          <Route path="/admin/games" element={<AdminGames />} />
-          <Route path="/admin/items" element={<AdminItems />} />
-          <Route path="/admin/logs" element={<AdminLogs />} />
-          <Route path="/admin/hall-of-fame" element={<AdminHallOfFame />} />
+          <Route path="/admin/login" element={<Suspense fallback={<AdminFallback />}><AdminLogin /></Suspense>} />
+          <Route path="/admin/dashboard" element={<Suspense fallback={<AdminFallback />}><AdminDashboard /></Suspense>} />
+          <Route path="/admin/players" element={<Suspense fallback={<AdminFallback />}><AdminPlayers /></Suspense>} />
+          <Route path="/admin/games" element={<Suspense fallback={<AdminFallback />}><AdminGames /></Suspense>} />
+          <Route path="/admin/items" element={<Suspense fallback={<AdminFallback />}><AdminItems /></Suspense>} />
+          <Route path="/admin/logs" element={<Suspense fallback={<AdminFallback />}><AdminLogs /></Suspense>} />
+          <Route path="/admin/hall-of-fame" element={<Suspense fallback={<AdminFallback />}><AdminHallOfFame /></Suspense>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

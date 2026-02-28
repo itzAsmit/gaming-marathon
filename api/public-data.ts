@@ -2,8 +2,13 @@ import { createClient } from "@supabase/supabase-js";
 
 type Resource = "leaderboard" | "players" | "games" | "hall_of_fame" | "rankings";
 
-const supabaseUrl = process.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY;
+const supabaseUrl =
+  process.env.SUPABASE_URL ||
+  process.env.VITE_SUPABASE_URL;
+const supabaseAnonKey =
+  process.env.SUPABASE_ANON_KEY ||
+  process.env.VITE_SUPABASE_ANON_KEY ||
+  process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
 const isAllowedResource = (value: string): value is Resource => {
   return ["leaderboard", "players", "games", "hall_of_fame", "rankings"].includes(value);
@@ -12,8 +17,11 @@ const isAllowedResource = (value: string): value is Resource => {
 export default async function handler(req: any, res: any) {
   try {
     if (!supabaseUrl || !supabaseAnonKey) {
-      return res.status(500).json({ error: "Supabase env vars missing" });
+      return res.status(500).json({ error: "Supabase env vars missing on server" });
     }
+
+    // Cache responses for 30s on CDN, serve stale while revalidating
+    res.setHeader("Cache-Control", "public, s-maxage=30, stale-while-revalidate=60");
 
     const resourceRaw = String(req.query.resource ?? "").trim();
 
