@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { withTimeout } from "@/lib/withTimeout";
 import { ArrowLeft, Eye, EyeOff, Gamepad2 } from "lucide-react";
 
 export default function AdminLogin() {
@@ -35,19 +36,28 @@ export default function AdminLogin() {
     const normalizedEmail = email.trim().toLowerCase();
     const normalizedPassword = password;
 
-    const { error: authErr } = await supabase.auth.signInWithPassword({
-      email: normalizedEmail,
-      password: normalizedPassword,
-    });
+    try {
+      const { error: authErr } = await withTimeout(
+        supabase.auth.signInWithPassword({
+          email: normalizedEmail,
+          password: normalizedPassword,
+        }),
+        12000,
+        "Login request timed out. Please check your internet and try again.",
+      );
 
-    if (authErr) {
-      setError(authErr.message || "Invalid credentials. Access denied.");
+      if (authErr) {
+        setError(authErr.message || "Invalid credentials. Access denied.");
+        return;
+      }
+
+      navigate("/admin/dashboard");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Login failed. Please try again.";
+      setError(message);
+    } finally {
       setLoading(false);
-      return;
     }
-
-    navigate("/admin/dashboard");
-    setLoading(false);
   };
 
   return (

@@ -35,6 +35,9 @@ export default function GamesSection() {
   const [rankings, setRankings] = useState<GameRanking[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [useProxyForSelectedVideo, setUseProxyForSelectedVideo] = useState(false);
+  const [selectedVideoFailed, setSelectedVideoFailed] = useState(false);
+  const [selectedVideoLoaded, setSelectedVideoLoaded] = useState(false);
 
   const fetchGames = async () => {
     try {
@@ -132,9 +135,27 @@ export default function GamesSection() {
   };
 
   const openGame = (game: Game) => {
+    setUseProxyForSelectedVideo(false);
+    setSelectedVideoFailed(false);
+    setSelectedVideoLoaded(false);
     setSelected(game);
     if (game.status === "completed") fetchRankings(game.id);
   };
+
+  useEffect(() => {
+    if (!selected?.video_url) return;
+    if (selectedVideoLoaded || selectedVideoFailed) return;
+
+    const timeout = setTimeout(() => {
+      if (!useProxyForSelectedVideo && toProxiedMediaSrc(selected.video_url)) {
+        setUseProxyForSelectedVideo(true);
+        return;
+      }
+      setSelectedVideoFailed(true);
+    }, 5500);
+
+    return () => clearTimeout(timeout);
+  }, [selected?.id, selected?.video_url, selectedVideoLoaded, selectedVideoFailed, useProxyForSelectedVideo]);
   const selectedGameDateTime = selected ? getGameDateTime(selected) : null;
   const getRankBadge = (rank: number) => {
     if (rank === 1) return "👑 #1";
@@ -286,27 +307,47 @@ export default function GamesSection() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="relative h-[52vh] min-h-[320px] max-h-[520px] overflow-hidden">
-                {toMediaSrc(selected.video_url) ? (
+                {(() => {
+                  const selectedVideoSrc = useProxyForSelectedVideo
+                    ? toProxiedMediaSrc(selected.video_url)
+                    : toMediaSrc(selected.video_url);
+                  const selectedImageSrc = toMediaSrc(selected.image_url);
+
+                  if (selectedVideoSrc && !selectedVideoFailed) {
+                    return (
                   <video
-                    src={toMediaSrc(selected.video_url) ?? undefined}
+                    src={selectedVideoSrc ?? undefined}
                     autoPlay
                     loop
                     muted
                     preload="metadata"
                     className="w-full h-full object-cover"
+                    onLoadStart={() => setSelectedVideoLoaded(false)}
+                    onLoadedData={() => setSelectedVideoLoaded(true)}
                     onError={(event) => {
+                      setSelectedVideoLoaded(false);
                       const proxySrc = toProxiedMediaSrc(selected.video_url);
-                      if (!proxySrc) return;
+                      if (!proxySrc) {
+                        setSelectedVideoFailed(true);
+                        return;
+                      }
                       const video = event.currentTarget;
-                      if (video.src !== proxySrc) {
+                      if (!useProxyForSelectedVideo && video.src !== proxySrc) {
+                        setUseProxyForSelectedVideo(true);
                         video.src = proxySrc;
                         video.load();
+                        return;
                       }
+                      setSelectedVideoFailed(true);
                     }}
                   />
-                ) : toMediaSrc(selected.image_url) ? (
+                    );
+                  }
+
+                  if (selectedImageSrc) {
+                    return (
                   <img
-                    src={toMediaSrc(selected.image_url) ?? undefined}
+                    src={selectedImageSrc ?? undefined}
                     alt={selected.name}
                     loading="lazy"
                     decoding="async"
@@ -320,11 +361,15 @@ export default function GamesSection() {
                       }
                     }}
                   />
-                ) : (
+                    );
+                  }
+
+                  return (
                   <div className="w-full h-full flex items-center justify-center" style={{ background: "linear-gradient(135deg, hsl(var(--brown-deep)), hsl(var(--brown)))" }}>
                     <span className="text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark))" }}>NO MEDIA</span>
                   </div>
-                )}
+                  );
+                })()}
                 <div className="absolute inset-0" style={{ background: "linear-gradient(to top, hsla(var(--brown-deep) / 0.95), hsla(var(--brown-deep) / 0.25))" }} />
                 <div className="absolute bottom-4 left-6">
                   <p

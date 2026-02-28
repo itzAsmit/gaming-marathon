@@ -12,6 +12,7 @@ interface VideoBackgroundProps {
 
 export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const loadTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isMobile = useIsMobile();
   const [muted, setMuted] = useState(true);
   const [viewportHeight, setViewportHeight] = useState(() =>
@@ -57,6 +58,24 @@ export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
   const src = useProxySrc ? proxySrc : directSrc;
   const showVideo = !preferLiteMedia && !!src;
 
+  const clearLoadTimeout = () => {
+    if (loadTimeoutRef.current) {
+      clearTimeout(loadTimeoutRef.current);
+      loadTimeoutRef.current = null;
+    }
+  };
+
+  const armLoadTimeout = () => {
+    clearLoadTimeout();
+    loadTimeoutRef.current = setTimeout(() => {
+      if (!useProxySrc && proxySrc) {
+        setUseProxySrc(true);
+        return;
+      }
+      setVideoFailed(true);
+    }, 5500);
+  };
+
   return (
     <>
       {/* Fixed video layer */}
@@ -73,7 +92,10 @@ export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
             muted
             playsInline
             preload="metadata"
+            onLoadStart={armLoadTimeout}
+            onLoadedData={clearLoadTimeout}
             onError={(event) => {
+              clearLoadTimeout();
               if (!useProxySrc && proxySrc) {
                 setUseProxySrc(true);
                 const video = event.currentTarget;
