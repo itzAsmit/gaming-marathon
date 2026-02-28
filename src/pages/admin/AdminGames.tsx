@@ -46,6 +46,7 @@ interface VideoTrimDraft {
 }
 
 const logActivity = async (action: string, target: string) => {
+  if (!supabase) return;
   await supabase.from("activity_logs").insert({ action, target });
 };
 
@@ -258,12 +259,14 @@ export default function AdminGames() {
   const videoRef = useRef<HTMLInputElement>(null);
 
   const fetchGames = async () => {
+    if (!supabase) { setLoading(false); return; }
     const { data } = await supabase.from("games").select("*").order("game_id");
     if (data) setGames(data);
     setLoading(false);
   };
 
   const fetchPlayers = async () => {
+    if (!supabase) return;
     const { data } = await supabase.from("players").select("id, name, player_id").eq("is_active", true);
     if (data) setPlayers(data);
   };
@@ -342,6 +345,7 @@ export default function AdminGames() {
   };
 
   const openEdit = async (g: Game) => {
+    if (!supabase) return;
     setEditing(g);
     setForm({ ...g });
     setDateTimeParts(parseGameDateTime(g));
@@ -357,6 +361,7 @@ export default function AdminGames() {
   };
 
   const uploadFile = async (file: File, bucket: string, path: string): Promise<string> => {
+    if (!supabase) throw new Error("Supabase is not configured");
     const { error } = await supabase.storage.from(bucket).upload(path, file, {
       upsert: false,
       contentType: file.type || undefined,
@@ -368,6 +373,7 @@ export default function AdminGames() {
 
   const saveGame = async () => {
     if (!form.name.trim()) return toast.error("Name is required");
+    if (!supabase) return toast.error("Supabase is not configured");
     setSaving(true);
     try {
       let imageUrl = form.image_url;
@@ -584,6 +590,7 @@ export default function AdminGames() {
   };
 
   const deleteGame = async (g: Game) => {
+    if (!supabase) return;
     await supabase.from("games").delete().eq("id", g.id);
     await logActivity("DELETE_GAME", g.name);
     toast.success("Game deleted");

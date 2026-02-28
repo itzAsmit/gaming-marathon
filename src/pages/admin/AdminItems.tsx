@@ -35,6 +35,7 @@ export default function AdminItems() {
   const [refreshing, setRefreshing] = useState(false);
 
   const loadData = async () => {
+    if (!supabase) return;
     setRefreshing(true);
 
     const [{ data: playersData, error: playersError }, { data: itemsData, error: itemsError }] = await Promise.all([
@@ -79,6 +80,7 @@ export default function AdminItems() {
 
   const assignToSelectedPlayer = async (item: Item) => {
     if (!selectedPlayer) return toast.error("Select a player first");
+    if (!supabase) return toast.error("Supabase is not configured");
     const alreadyAssigned = selectedPlayer.player_items?.some((pi) => pi.item_id === item.id);
     if (alreadyAssigned) return;
 
@@ -94,6 +96,7 @@ export default function AdminItems() {
   };
 
   const unassignFromPlayer = async (player: AdminPlayer, assignment: AssignedItem) => {
+    if (!supabase) return;
     setSaving(true);
     const { error } = await supabase.from("player_items").delete().eq("id", assignment.id);
     if (error) toast.error("Failed to unassign item");

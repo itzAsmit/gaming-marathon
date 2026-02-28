@@ -29,6 +29,10 @@ export default function AdminLogin() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!supabase) {
+      setError("Supabase is not configured. Please contact the administrator.");
+      return;
+    }
     setError("");
     setLoading(true);
 

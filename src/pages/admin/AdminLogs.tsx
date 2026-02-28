@@ -8,6 +8,7 @@ export default function AdminLogs() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!supabase) { setLoading(false); return; }
     supabase.from("activity_logs").select("*").order("created_at", { ascending: false }).limit(200).then(({ data }) => {
       if (data) setLogs(data);
       setLoading(false);

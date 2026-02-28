@@ -26,11 +26,17 @@ export default function LeaderboardSection() {
   const [error, setError] = useState<string | null>(null);
 
   const fetchLeaderboard = async () => {
+    if (!supabase) {
+      setError("Connection unavailable.");
+      setLoading(false);
+      return;
+    }
+    const client = supabase;
     try {
       setError(null);
       const { data, error } = await withRetry(
         async () =>
-          supabase
+          client
             .from("leaderboard")
             .select("*, players(name, player_id)")
             .order("points", { ascending: false }),
@@ -49,12 +55,14 @@ export default function LeaderboardSection() {
   useEffect(() => {
     fetchLeaderboard();
 
-    const channel = supabase
+    if (!supabase) return;
+    const client = supabase;
+    const channel = client
       .channel("leaderboard-realtime")
       .on("postgres_changes", { event: "*", schema: "public", table: "leaderboard" }, fetchLeaderboard)
       .subscribe();
 
-    return () => { supabase.removeChannel(channel); };
+    return () => { client.removeChannel(channel); };
   }, []);
 
   const cols = ["RANK", "PLAYER", "PLAYED", "EVENTS", "WINS", "2NDS", "3RDS", "POINTS"];

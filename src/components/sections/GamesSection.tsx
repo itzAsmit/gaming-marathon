@@ -34,10 +34,16 @@ export default function GamesSection() {
   const [error, setError] = useState<string | null>(null);
 
   const fetchGames = async () => {
+    if (!supabase) {
+      setError("Connection unavailable.");
+      setLoading(false);
+      return;
+    }
+    const client = supabase;
     try {
       setError(null);
       const { data, error } = await withRetry(
-        async () => supabase.from("games").select("*").order("game_id"),
+        async () => client.from("games").select("*").order("game_id"),
         1,
         900,
       );
@@ -66,6 +72,7 @@ export default function GamesSection() {
   };
 
   const fetchRankings = async (gameId: string) => {
+    if (!supabase) return;
     const { data } = await supabase
       .from("player_game_stats")
       .select("rank, points, players(name, player_id)")

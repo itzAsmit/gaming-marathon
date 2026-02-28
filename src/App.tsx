@@ -13,30 +13,33 @@ import AdminItems from "./pages/admin/AdminItems";
 import AdminLogs from "./pages/admin/AdminLogs";
 import AdminHallOfFame from "./pages/admin/AdminHallOfFame";
 import AnimatedCursor from "./components/AnimatedCursor";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <AnimatedCursor />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/players" element={<AdminPlayers />} />
-          <Route path="/admin/games" element={<AdminGames />} />
-          <Route path="/admin/items" element={<AdminItems />} />
-          <Route path="/admin/logs" element={<AdminLogs />} />
-          <Route path="/admin/hall-of-fame" element={<AdminHallOfFame />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <AnimatedCursor />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/players" element={<AdminPlayers />} />
+            <Route path="/admin/games" element={<AdminGames />} />
+            <Route path="/admin/items" element={<AdminItems />} />
+            <Route path="/admin/logs" element={<AdminLogs />} />
+            <Route path="/admin/hall-of-fame" element={<AdminHallOfFame />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;

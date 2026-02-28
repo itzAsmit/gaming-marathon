@@ -17,6 +17,7 @@ interface LeaderboardEntry {
 }
 
 const logActivity = async (action: string, target: string) => {
+  if (!supabase) return;
   await supabase.from("activity_logs").insert({ action, target });
 };
 
@@ -30,8 +31,10 @@ export default function AdminDashboard() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
+    if (!supabase) return;
+    const client = supabase;
     const fetchPlayers = async () => {
-      const { data } = await supabase
+      const { data } = await client
         .from("players")
         .select("id, player_id, name")
         .order("player_id");
@@ -41,6 +44,7 @@ export default function AdminDashboard() {
   }, []);
 
   const selectPlayer = async (player: Player) => {
+    if (!supabase) return;
     setSelected(player);
     const { data } = await supabase.from("leaderboard").select("*").eq("player_id", player.id).single();
     if (data) {
@@ -51,7 +55,7 @@ export default function AdminDashboard() {
   };
 
   const saveStats = async () => {
-    if (!selected) return;
+    if (!selected || !supabase) return;
     setSaving(true);
     const payload = { ...stats, player_id: selected.id, updated_at: new Date().toISOString() };
 

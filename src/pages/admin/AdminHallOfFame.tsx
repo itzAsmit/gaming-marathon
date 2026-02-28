@@ -11,6 +11,7 @@ export default function AdminHallOfFame() {
   const [saving, setSaving] = useState(false);
 
   const fetch = async () => {
+    if (!supabase) return;
     const [{ data: p }, { data: h }] = await Promise.all([
       supabase.from("players").select("id, name, player_id"),
       supabase.from("hall_of_fame").select("*"),
@@ -25,6 +26,7 @@ export default function AdminHallOfFame() {
     entries.find((e) => e.season === season && e.rank === rank);
 
   const setEntry = async (season: number, rank: number, playerId: string) => {
+    if (!supabase) return;
     setSaving(true);
     const existing = getEntry(season, rank);
     if (existing) {

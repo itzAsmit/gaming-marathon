@@ -80,6 +80,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
+    if (!supabase) { navigate("/admin/login"); return; }
     supabase.auth.getSession().then(({ data }) => {
       if (!data.session) navigate("/admin/login");
       setChecking(false);
@@ -87,7 +88,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   }, [navigate]);
 
   const logout = async () => {
-    await supabase.auth.signOut();
+    if (supabase) await supabase.auth.signOut();
     navigate("/");
   };
 

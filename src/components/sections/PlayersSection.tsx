@@ -37,11 +37,17 @@ export default function PlayersSection() {
   const [error, setError] = useState<string | null>(null);
 
   const fetchPlayers = async () => {
+    if (!supabase) {
+      setError("Connection unavailable.");
+      setLoading(false);
+      return;
+    }
+    const client = supabase;
     try {
       setError(null);
       const { data, error } = await withRetry(
         async () =>
-          supabase
+          client
             .from("players")
             .select("*, leaderboard(*), player_proficiencies(*), player_items(*, items(name, description)), player_game_stats(games(game_id))"),
         1,
@@ -86,11 +92,13 @@ export default function PlayersSection() {
 
   useEffect(() => {
     fetchPlayers();
-    const channel = supabase
+    if (!supabase) return;
+    const client = supabase;
+    const channel = client
       .channel("players-realtime")
       .on("postgres_changes", { event: "*", schema: "public", table: "players" }, fetchPlayers)
       .subscribe();
-    return () => { supabase.removeChannel(channel); };
+    return () => { client.removeChannel(channel); };
   }, []);
 
   return (

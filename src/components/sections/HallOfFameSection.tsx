@@ -28,10 +28,16 @@ export default function HallOfFameSection() {
   const [error, setError] = useState<string | null>(null);
 
   const fetchHallOfFame = async () => {
+    if (!supabase) {
+      setError("Connection unavailable.");
+      setLoading(false);
+      return;
+    }
+    const client = supabase;
     try {
       setError(null);
       const { data, error } = await withRetry(
-        async () => supabase.from("hall_of_fame").select("*, players(name, player_id, portrait_url)"),
+        async () => client.from("hall_of_fame").select("*, players(name, player_id, portrait_url)"),
         1,
         900,
       );

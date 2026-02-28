@@ -40,6 +40,7 @@ interface CropDraft {
 }
 
 const logActivity = async (action: string, target: string) => {
+  if (!supabase) return;
   await supabase.from("activity_logs").insert({ action, target });
 };
 
@@ -80,12 +81,14 @@ export default function AdminPlayers() {
   const portraitRef = useRef<HTMLInputElement>(null);
 
   const fetchPlayers = async () => {
+    if (!supabase) { setLoading(false); return; }
     const { data } = await supabase.from("players").select("*").order("player_id");
     if (data) setPlayers(data.map((p: any) => ({ ...p, is_active: p.is_active ?? true })) as Player[]);
     setLoading(false);
   };
 
   const fetchGames = async () => {
+    if (!supabase) return;
     const { data } = await supabase.from("games").select("id, name").order("game_id");
     if (data) setGameOptions(data as GameOption[]);
   };
@@ -109,6 +112,7 @@ export default function AdminPlayers() {
   };
 
   const openEdit = async (p: Player) => {
+    if (!supabase) return;
     setEditing(p);
     setForm({ ...p });
     const { data: profs } = await supabase.from("player_proficiencies").select("*").eq("player_id", p.id);
@@ -119,6 +123,7 @@ export default function AdminPlayers() {
   };
 
   const uploadFile = async (file: File, bucket: string, path: string): Promise<string | null> => {
+    if (!supabase) return null;
     const { error } = await supabase.storage.from(bucket).upload(path, file, { upsert: true });
     if (error) return null;
     const { data } = supabase.storage.from(bucket).getPublicUrl(path);
@@ -234,6 +239,7 @@ export default function AdminPlayers() {
     if (!form.name.trim()) return toast.error("Name is required");
     const validProfs = proficiencies.filter((p) => p.game_name);
     if (validProfs.length === 0) return toast.error("Add at least 1 game proficiency");
+    if (!supabase) return toast.error("Supabase is not configured");
     setSaving(true);
 
     try {
@@ -277,6 +283,7 @@ export default function AdminPlayers() {
   };
 
   const deletePlayer = async (p: Player) => {
+    if (!supabase) return;
     await supabase.from("players").delete().eq("id", p.id);
     await logActivity("DELETE_PLAYER", p.name);
     toast.success("Player deleted");
