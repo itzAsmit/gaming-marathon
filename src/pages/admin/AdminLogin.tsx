@@ -36,25 +36,73 @@ export default function AdminLogin() {
     const normalizedEmail = email.trim().toLowerCase();
     const normalizedPassword = password;
 
+    const tryProxyLogin = async () => {
+      const response = await withTimeout(
+        fetch("/api/admin-login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({ email: normalizedEmail, password: normalizedPassword }),
+        }),
+        9000,
+        "Login request timed out. Please check your internet and try again.",
+      );
+
+      const json = (await response.json().catch(() => ({}))) as {
+        access_token?: string;
+        refresh_token?: string;
+        error?: string;
+      };
+
+      if (!response.ok || !json.access_token || !json.refresh_token) {
+        throw new Error(json.error || "Login failed. Please try again.");
+      }
+
+      const { error: sessionErr } = await supabase.auth.setSession({
+        access_token: json.access_token,
+        refresh_token: json.refresh_token,
+      });
+
+      if (sessionErr) throw sessionErr;
+      navigate("/admin/dashboard");
+    };
+
     try {
       const { error: authErr } = await withTimeout(
         supabase.auth.signInWithPassword({
           email: normalizedEmail,
           password: normalizedPassword,
         }),
-        12000,
-        "Login request timed out. Please check your internet and try again.",
+        4000,
+        "Direct login timed out",
       );
 
       if (authErr) {
-        setError(authErr.message || "Invalid credentials. Access denied.");
+        const msg = authErr.message || "Invalid credentials. Access denied.";
+        const isCredentialIssue = /invalid|credential|password|email/i.test(msg);
+        if (isCredentialIssue) {
+          setError(msg);
+          return;
+        }
+
+        await tryProxyLogin();
         return;
       }
 
       navigate("/admin/dashboard");
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Login failed. Please try again.";
-      setError(message);
+      try {
+        await tryProxyLogin();
+      } catch (proxyError) {
+        const message = proxyError instanceof Error
+          ? proxyError.message
+          : error instanceof Error
+            ? error.message
+            : "Login failed. Please try again.";
+        setError(message);
+      }
     } finally {
       setLoading(false);
     }
