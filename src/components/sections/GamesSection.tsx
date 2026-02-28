@@ -7,7 +7,7 @@ import { toMediaSrc, toProxiedMediaSrc } from "@/lib/mediaUrl";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Calendar, CheckCircle, Clock } from "lucide-react";
+import { X, Calendar, CheckCircle, Clock, Play } from "lucide-react";
 
 interface Game {
   id: string;
@@ -203,24 +203,15 @@ export default function GamesSection() {
                             }}
                           />
                         ) : toMediaSrc(game.video_url) ? (
-                          <video
-                            src={toMediaSrc(game.video_url) ?? undefined}
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
-                            preload="metadata"
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                            onError={(event) => {
-                              const proxySrc = toProxiedMediaSrc(game.video_url);
-                              if (!proxySrc) return;
-                              const video = event.currentTarget;
-                              if (video.src !== proxySrc) {
-                                video.src = proxySrc;
-                                video.load();
-                              }
-                            }}
-                          />
+                          <div
+                            className="w-full h-full flex items-center justify-center"
+                            style={{ background: "linear-gradient(135deg, hsl(var(--brown-deep)), hsl(var(--brown)))" }}
+                          >
+                            <div className="flex flex-col items-center gap-2" style={{ color: "hsl(var(--cream-dark))" }}>
+                              <Play size={24} />
+                              <span className="text-xs tracking-widest">VIDEO</span>
+                            </div>
+                          </div>
                         ) : (
                           <div
                             className="w-full h-full flex items-center justify-center"
