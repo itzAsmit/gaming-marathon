@@ -36,7 +36,7 @@ export default function AdminLogin() {
     const normalizedEmail = email.trim().toLowerCase();
     const normalizedPassword = password;
 
-    const tryProxyLogin = async (): Promise<string> => {
+    const tryProxyLogin = async (): Promise<void> => {
       const response = await withTimeout(
         fetch("/api/admin-login", {
           method: "POST",
@@ -46,7 +46,7 @@ export default function AdminLogin() {
           },
           body: JSON.stringify({ email: normalizedEmail, password: normalizedPassword }),
         }),
-        9000,
+        10000,
         "Login request timed out. Please check your internet and try again.",
       );
 
@@ -66,57 +66,37 @@ export default function AdminLogin() {
       });
 
       if (sessionErr) throw sessionErr;
-
-      const { data: sessionData } = await supabase.auth.getSession();
-      if (!sessionData.session) throw new Error("Could not establish login session");
-      return "proxy";
     };
 
-    const tryDirectLogin = async (): Promise<string> => {
+    const tryDirectLogin = async (): Promise<void> => {
       const { error: authErr } = await withTimeout(
         supabase.auth.signInWithPassword({
           email: normalizedEmail,
           password: normalizedPassword,
         }),
-        6000,
+        8000,
         "Direct login timed out",
       );
 
       if (authErr) throw authErr;
-      return "direct";
     };
 
-    // Race both login paths — whichever succeeds first wins
-    // Manual Promise.any for ES2020 compat
-    const raceLogin = (): Promise<string> =>
-      new Promise<string>((resolve, reject) => {
-        let pending = 2;
-        const errors: Error[] = [];
-        const attempt = (p: Promise<string>, idx: number) => {
-          p.then(resolve).catch((err) => {
-            errors[idx] = err instanceof Error ? err : new Error(String(err));
-            pending -= 1;
-            if (pending === 0) reject(errors);
-          });
-        };
-        attempt(tryDirectLogin(), 0);
-        attempt(tryProxyLogin(), 1);
-      });
-
+    // Always try proxy first (goes through Vercel edge, works on all networks).
+    // Fall back to direct Supabase only if proxy fails.
     try {
-      await raceLogin();
+      try {
+        await tryProxyLogin();
+      } catch (proxyErr) {
+        // If credential error, don't retry via direct
+        const msg = proxyErr instanceof Error ? proxyErr.message : "";
+        if (/invalid|credential|password|email/i.test(msg)) throw proxyErr;
+        // Proxy failed for network reason — try direct
+        await tryDirectLogin();
+      }
       navigate("/admin/dashboard");
-    } catch (allErrors) {
-      const errors = Array.isArray(allErrors) ? (allErrors as Error[]) : [new Error("Login failed")];
-
-      const credentialError = errors.find((e) =>
-        /invalid|credential|password|email/i.test(e.message),
-      );
-
+    } catch (err) {
       setError(
-        credentialError
-          ? credentialError.message
-          : errors[0]?.message ?? "Login failed. Please try again.",
+        err instanceof Error ? err.message : "Login failed. Please try again.",
       );
     } finally {
       setLoading(false);

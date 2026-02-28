@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { raceDataFetch } from "@/lib/raceDataFetch";
 import { toMediaSrc, toProxiedMediaSrc } from "@/lib/mediaUrl";
+import SmartImage from "@/components/SmartImage";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import { motion, AnimatePresence } from "framer-motion";
@@ -181,20 +182,12 @@ export default function GamesSection() {
                     <div className="glass-card rounded-2xl overflow-hidden relative">
                       <div className="aspect-[3/4] overflow-hidden relative">
                         {toMediaSrc(game.image_url) ? (
-                          <img
-                            src={toMediaSrc(game.image_url) ?? undefined}
+                          <SmartImage
+                            url={game.image_url}
                             alt={game.name}
                             loading="lazy"
                             decoding="async"
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                            onError={(event) => {
-                              const proxySrc = toProxiedMediaSrc(game.image_url);
-                              if (!proxySrc) return;
-                              const image = event.currentTarget;
-                              if (image.src !== proxySrc) {
-                                image.src = proxySrc;
-                              }
-                            }}
                           />
                         ) : toMediaSrc(game.video_url) ? (
                           <div
@@ -319,20 +312,12 @@ export default function GamesSection() {
 
                   if (selectedImageSrc) {
                     return (
-                  <img
-                    src={selectedImageSrc ?? undefined}
+                  <SmartImage
+                    url={selected.image_url}
                     alt={selected.name}
                     loading="lazy"
                     decoding="async"
                     className="w-full h-full object-cover"
-                    onError={(event) => {
-                      const proxySrc = toProxiedMediaSrc(selected.image_url);
-                      if (!proxySrc) return;
-                      const image = event.currentTarget;
-                      if (image.src !== proxySrc) {
-                        image.src = proxySrc;
-                      }
-                    }}
                   />
                     );
                   }

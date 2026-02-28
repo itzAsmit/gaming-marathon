@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { raceDataFetch } from "@/lib/raceDataFetch";
 import { toMediaSrc, toProxiedMediaSrc } from "@/lib/mediaUrl";
+import SmartImage from "@/components/SmartImage";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import { motion, AnimatePresence } from "framer-motion";
@@ -141,20 +142,12 @@ export default function PlayersSection() {
                 >
                   <div className="aspect-[3/4] overflow-hidden relative">
                     {toMediaSrc(player.portrait_url) ? (
-                      <img
-                        src={toMediaSrc(player.portrait_url) ?? undefined}
+                      <SmartImage
+                        url={player.portrait_url}
                         alt={player.name}
                         loading="lazy"
                         decoding="async"
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                        onError={(event) => {
-                          const proxySrc = toProxiedMediaSrc(player.portrait_url);
-                          if (!proxySrc) return;
-                          const image = event.currentTarget;
-                          if (image.src !== proxySrc) {
-                            image.src = proxySrc;
-                          }
-                        }}
                         style={{
                           filter: player.is_active ? "grayscale(0%)" : "grayscale(100%)",
                         }}
@@ -242,20 +235,12 @@ export default function PlayersSection() {
                 {/* Left */}
                 <div className="relative md:h-full">
                   {toMediaSrc(selected.portrait_url) ? (
-                    <img
-                      src={toMediaSrc(selected.portrait_url) ?? undefined}
+                    <SmartImage
+                      url={selected.portrait_url}
                       alt={selected.name}
                       loading="lazy"
                       decoding="async"
                       className="w-full h-full object-cover min-h-64 md:min-h-0"
-                      onError={(event) => {
-                        const proxySrc = toProxiedMediaSrc(selected.portrait_url);
-                        if (!proxySrc) return;
-                        const image = event.currentTarget;
-                        if (image.src !== proxySrc) {
-                          image.src = proxySrc;
-                        }
-                      }}
                       style={{
                         filter: selected.is_active ? "grayscale(0%)" : "grayscale(100%)",
                       }}

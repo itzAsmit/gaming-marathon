@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { raceDataFetch } from "@/lib/raceDataFetch";
 import { toMediaSrc, toProxiedMediaSrc } from "@/lib/mediaUrl";
+import SmartImage from "@/components/SmartImage";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import { motion } from "framer-motion";
@@ -66,20 +67,12 @@ export default function HallOfFameSection() {
           style={{ border: `2px solid ${cfg.color}` }}
         >
           {toMediaSrc(entry?.players?.portrait_url) ? (
-            <img
-              src={toMediaSrc(entry?.players?.portrait_url) ?? undefined}
+            <SmartImage
+              url={entry?.players?.portrait_url}
               alt={entry.players.name}
               loading="lazy"
               decoding="async"
               className="w-full h-full object-cover"
-              onError={(event) => {
-                const proxySrc = toProxiedMediaSrc(entry?.players?.portrait_url);
-                if (!proxySrc) return;
-                const image = event.currentTarget;
-                if (image.src !== proxySrc) {
-                  image.src = proxySrc;
-                }
-              }}
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center" style={{ background: "linear-gradient(135deg, hsl(var(--brown-deep)), hsl(var(--brown)))" }}>
