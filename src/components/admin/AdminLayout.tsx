@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { hasStoredAccessToken } from "@/lib/authToken";
 import { LayoutDashboard, Users, Gamepad2, Sword, History, LogOut, ChevronRight, Trophy, Menu, X } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
@@ -91,10 +92,15 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         return;
       }
 
+      if (hasStoredAccessToken()) {
+        setChecking(false);
+        return;
+      }
+
       const waitForSession = window.setTimeout(async () => {
         const { data: retryData } = await supabase.auth.getSession();
         if (!active) return;
-        if (!retryData.session) {
+        if (!retryData.session && !hasStoredAccessToken()) {
           navigate("/admin/login");
         }
         setChecking(false);

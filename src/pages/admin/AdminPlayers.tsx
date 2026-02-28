@@ -3,6 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { raceDataFetch } from "@/lib/raceDataFetch";
 import { adminMutation } from "@/lib/adminMutation";
 import { raceUpload } from "@/lib/adminUpload";
+import { withTimeout } from "@/lib/withTimeout";
+import SmartImage from "@/components/SmartImage";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { Plus, Pencil, Trash2, Eye, X, RefreshCw, Upload } from "lucide-react";
 import { toast } from "sonner";
@@ -133,8 +135,17 @@ export default function AdminPlayers() {
   const openEdit = async (p: Player) => {
     setEditing(p);
     setForm({ ...p });
-    const { data: profs } = await supabase.from("player_proficiencies").select("*").eq("player_id", p.id);
-    setProficiencies(profs && profs.length > 0 ? profs : [{ game_name: "", proficiency_percent: 50 }]);
+    try {
+      const { data: profs, error } = await withTimeout(
+        supabase.from("player_proficiencies").select("game_name, proficiency_percent").eq("player_id", p.id),
+        8000,
+        "Proficiencies fetch timed out",
+      );
+      if (error) throw error;
+      setProficiencies(profs && profs.length > 0 ? (profs as Proficiency[]) : [{ game_name: "", proficiency_percent: 50 }]);
+    } catch {
+      setProficiencies([{ game_name: "", proficiency_percent: 50 }]);
+    }
     setAvatarFile(null);
     setPortraitFile(null);
     setShowForm(true);
@@ -340,7 +351,7 @@ export default function AdminPlayers() {
                 {players.map((p) => (
                   <div key={p.id} className="flex items-center gap-4 p-4 rounded-xl transition-all animated-scroll-item" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
                     <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0" style={{ background: "hsl(var(--input))" }}>
-                      {p.image_url ? <img src={p.image_url} alt={p.name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center font-bold" style={{ color: "hsl(var(--brown))" }}>{p.name[0]}</div>}
+                      {p.image_url ? <SmartImage url={p.image_url} alt={p.name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center font-bold" style={{ color: "hsl(var(--brown))" }}>{p.name[0]}</div>}
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold text-sm truncate" style={{ color: "hsl(var(--brown-deep))" }}>{p.name}</p>
@@ -462,7 +473,7 @@ export default function AdminPlayers() {
                     {avatarFile ? (
                       <img src={URL.createObjectURL(avatarFile)} alt="" className="w-16 h-16 rounded-full object-cover mx-auto" />
                     ) : form.image_url ? (
-                      <img src={form.image_url} alt="" className="w-16 h-16 rounded-full object-cover mx-auto" />
+                      <SmartImage url={form.image_url} alt="" className="w-16 h-16 rounded-full object-cover mx-auto" />
                     ) : (
                       <Upload size={20} className="mx-auto mb-1" style={{ color: "hsl(var(--brown-light))" }} />
                     )}
@@ -491,7 +502,7 @@ export default function AdminPlayers() {
                     {portraitFile ? (
                       <img src={URL.createObjectURL(portraitFile)} alt="" className="w-12 h-16 object-cover mx-auto rounded" />
                     ) : form.portrait_url ? (
-                      <img src={form.portrait_url} alt="" className="w-12 h-16 object-cover mx-auto rounded" />
+                      <SmartImage url={form.portrait_url} alt="" className="w-12 h-16 object-cover mx-auto rounded" />
                     ) : (
                       <Upload size={20} className="mx-auto mb-1" style={{ color: "hsl(var(--brown-light))" }} />
                     )}

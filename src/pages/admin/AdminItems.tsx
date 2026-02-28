@@ -90,24 +90,26 @@ export default function AdminItems() {
     if (alreadyAssigned) return;
 
     setSaving(true);
-    const { error } = await adminMutation.insert("player_items", { player_id: selectedPlayer.id, item_id: item.id });
-    if (error) toast.error("Already assigned or failed to assign");
-    else {
+    try {
+      await adminMutation.insert("player_items", { player_id: selectedPlayer.id, item_id: item.id });
       await adminMutation.insert("activity_logs", { action: "ASSIGN_ITEM", target: `${item.name} → ${selectedPlayer.name}` });
       toast.success(`${item.name} assigned to ${selectedPlayer.name}`);
       await loadData();
+    } catch {
+      toast.error("Already assigned or failed to assign");
     }
     setSaving(false);
   };
 
   const unassignFromPlayer = async (player: AdminPlayer, assignment: AssignedItem) => {
     setSaving(true);
-    const { error } = await adminMutation.delete("player_items", { id: assignment.id });
-    if (error) toast.error("Failed to unassign item");
-    else {
+    try {
+      await adminMutation.delete("player_items", { id: assignment.id });
       await adminMutation.insert("activity_logs", { action: "UNASSIGN_ITEM", target: `${assignment.items?.name ?? "Item"} ✕ ${player.name}` });
       toast.success(`${assignment.items?.name ?? "Item"} removed from ${player.name}`);
       await loadData();
+    } catch {
+      toast.error("Failed to unassign item");
     }
     setSaving(false);
   };

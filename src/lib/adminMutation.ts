@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { getAccessToken } from "@/lib/authToken";
 
 type AllowedTable = "players" | "games" | "items" | "hall_of_fame" | "leaderboard" | "player_proficiencies" | "player_items" | "player_game_stats" | "activity_logs";
 type Operation = "insert" | "update" | "delete" | "upsert";
@@ -15,9 +16,7 @@ export async function raceMutation<T = any>(
     filters?: Record<string, any>;
   },
 ): Promise<T[]> {
-  // Get current session for auth token
-  const { data: sessionData } = await supabase.auth.getSession();
-  const accessToken = sessionData?.session?.access_token;
+  const accessToken = await getAccessToken();
 
   if (!accessToken) {
     throw new Error("Not authenticated");

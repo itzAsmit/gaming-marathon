@@ -52,12 +52,21 @@ export default function AdminDashboard() {
 
   const selectPlayer = async (player: Player) => {
     setSelected(player);
-    const { data } = await supabase.from("leaderboard").select("*").eq("player_id", player.id).single();
-    if (data) {
-      setStats({ ...data });
-    } else {
-      setStats({ player_id: player.id, games_played: 0, events_completed: 0, wins: 0, seconds: 0, thirds: 0, points: 0 });
+    try {
+      const allEntries = await raceDataFetch<LeaderboardEntry[]>(
+        () => supabase.from("leaderboard").select("*"),
+        "leaderboard",
+      );
+      const data = allEntries.find((entry: any) => entry.player_id === player.id);
+      if (data) {
+        setStats({ ...data });
+        return;
+      }
+    } catch {
+      // fallback to zero state
     }
+
+    setStats({ player_id: player.id, games_played: 0, events_completed: 0, wins: 0, seconds: 0, thirds: 0, points: 0 });
   };
 
   const saveStats = async () => {
@@ -66,7 +75,11 @@ export default function AdminDashboard() {
     try {
       const payload = { ...stats, player_id: selected.id, updated_at: new Date().toISOString() };
 
-      const { data: existing } = await supabase.from("leaderboard").select("id").eq("player_id", selected.id).single();
+      const existingEntries = await raceDataFetch<{ id: string; player_id: string }[]>(
+        () => supabase.from("leaderboard").select("id, player_id"),
+        "leaderboard",
+      );
+      const existing = existingEntries.find((entry) => entry.player_id === selected.id);
 
       if (existing) {
         await adminMutation.update("leaderboard", payload, { player_id: selected.id });

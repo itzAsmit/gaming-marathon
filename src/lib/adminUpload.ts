@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { getAccessToken } from "@/lib/authToken";
 
 type AllowedBucket = "avatars" | "portraits" | "game-images" | "game-videos" | "games-videos" | "players" | "games" | "videos";
 
@@ -11,9 +12,7 @@ export async function raceUpload(
   path: string,
   file: File,
 ): Promise<string> {
-  // Get current session for auth token
-  const { data: sessionData } = await supabase.auth.getSession();
-  const accessToken = sessionData?.session?.access_token;
+  const accessToken = await getAccessToken();
 
   if (!accessToken) {
     throw new Error("Not authenticated");

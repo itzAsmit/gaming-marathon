@@ -3,6 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { raceDataFetch } from "@/lib/raceDataFetch";
 import { adminMutation } from "@/lib/adminMutation";
 import { raceUpload } from "@/lib/adminUpload";
+import { withTimeout } from "@/lib/withTimeout";
+import SmartImage from "@/components/SmartImage";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { Plus, Pencil, Trash2, RefreshCw, X, Upload, ToggleLeft, ToggleRight, CalendarDays } from "lucide-react";
 import { Calendar as DateCalendar } from "@/components/ui/calendar";
@@ -373,8 +375,17 @@ export default function AdminGames() {
     setForm({ ...g });
     setDateTimeParts(parseGameDateTime(g));
     if (g.status === "completed") {
-      const { data } = await supabase.from("player_game_stats").select("rank, points, player_id, players(name, player_id)").eq("game_id", g.id).order("rank");
-      if (data) setRankings((data as any).map((d: any) => ({ rank: d.rank, points: d.points ?? 0, player_id: d.player_id, player_name: d.players?.name })));
+      try {
+        const { data, error } = await withTimeout(
+          supabase.from("player_game_stats").select("rank, points, player_id, players(name, player_id)").eq("game_id", g.id).order("rank"),
+          8000,
+          "Rankings fetch timed out",
+        );
+        if (error) throw error;
+        if (data) setRankings((data as any).map((d: any) => ({ rank: d.rank, points: d.points ?? 0, player_id: d.player_id, player_name: d.players?.name })));
+      } catch {
+        setRankings([]);
+      }
     } else {
       setRankings([]);
     }
@@ -632,7 +643,7 @@ export default function AdminGames() {
                 {games.map((g) => (
                   <div key={g.id} className="flex items-center gap-4 p-4 rounded-xl animated-scroll-item" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
                     <div className="w-16 h-10 rounded-lg overflow-hidden flex-shrink-0" style={{ background: "hsl(var(--input))" }}>
-                      {g.image_url ? <img src={g.image_url} alt={g.name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center">🎮</div>}
+                      {g.image_url ? <SmartImage url={g.image_url} alt={g.name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center">🎮</div>}
                     </div>
                     <div className="flex-1">
                       <p className="font-semibold text-sm" style={{ color: "hsl(var(--brown-deep))" }}>{g.name.toUpperCase()}</p>
@@ -764,7 +775,7 @@ export default function AdminGames() {
                 <div>
                   <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>GAME IMAGE</label>
                   <div className="border-2 border-dashed rounded-xl p-3 text-center cursor-pointer" style={{ borderColor: "hsl(var(--cream-dark))" }} onClick={() => imageRef.current?.click()}>
-                    {imageFile ? <img src={URL.createObjectURL(imageFile)} alt="" className="h-16 object-cover mx-auto rounded" /> : form.image_url ? <img src={form.image_url} alt="" className="h-16 object-cover mx-auto rounded" /> : <Upload size={20} className="mx-auto" style={{ color: "hsl(var(--brown-light))" }} />}
+                    {imageFile ? <img src={URL.createObjectURL(imageFile)} alt="" className="h-16 object-cover mx-auto rounded" /> : form.image_url ? <SmartImage url={form.image_url} alt="" className="h-16 object-cover mx-auto rounded" /> : <Upload size={20} className="mx-auto" style={{ color: "hsl(var(--brown-light))" }} />}
                     <p className="text-xs mt-1" style={{ color: "hsl(var(--brown-light))" }}>Click to upload</p>
                   </div>
                   <input
