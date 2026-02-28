@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { withRetry } from "@/lib/withRetry";
-import { withTimeout } from "@/lib/withTimeout";
-import { fetchPublicData } from "@/lib/fetchPublicData";
+import { raceDataFetch } from "@/lib/raceDataFetch";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import { motion } from "framer-motion";
@@ -30,28 +28,17 @@ export default function LeaderboardSection() {
   const fetchLeaderboard = async () => {
     try {
       setError(null);
-      const { data, error } = await withTimeout(
-        withRetry(
-          async () =>
-            supabase
-              .from("leaderboard")
-              .select("*, players(name, player_id)")
-              .order("points", { ascending: false }),
-          1,
-          900,
-        ),
-        12000,
-        "Leaderboard request timed out",
+      const data = await raceDataFetch<LeaderboardEntry[]>(
+        () =>
+          supabase
+            .from("leaderboard")
+            .select("*, players(name, player_id)")
+            .order("points", { ascending: false }),
+        "leaderboard",
       );
-      if (error) throw error;
-      if (data) setEntries(data as any);
+      setEntries(data);
     } catch {
-      try {
-        const fallback = await fetchPublicData<LeaderboardEntry[]>("leaderboard");
-        setEntries(fallback ?? []);
-      } catch {
-        setError("Connection issue. Please tap retry.");
-      }
+      setError("Connection issue. Please tap retry.");
     } finally {
       setLoading(false);
     }

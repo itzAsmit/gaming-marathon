@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { withRetry } from "@/lib/withRetry";
-import { withTimeout } from "@/lib/withTimeout";
-import { fetchPublicData } from "@/lib/fetchPublicData";
+import { raceDataFetch } from "@/lib/raceDataFetch";
 import { toMediaSrc, toProxiedMediaSrc } from "@/lib/mediaUrl";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
@@ -42,80 +40,42 @@ export default function PlayersSection() {
   const fetchPlayers = async () => {
     try {
       setError(null);
-      const { data, error } = await withTimeout(
-        withRetry(
-          async () =>
-            supabase
-              .from("players")
-              .select("*, leaderboard(*), player_proficiencies(*), player_items(*, items(name, description)), player_game_stats(games(game_id))"),
-          1,
-          900,
-        ),
-        12000,
-        "Players request timed out",
+      const rawData = await raceDataFetch<any[]>(
+        () =>
+          supabase
+            .from("players")
+            .select("*, leaderboard(*), player_proficiencies(*), player_items(*, items(name, description)), player_game_stats(games(game_id))"),
+        "players",
       );
-      if (error) throw error;
 
-      if (data) {
-        const mappedPlayers = data.map((p: any) => ({
-          ...p,
-          leaderboard: p.leaderboard?.[0] ?? p.leaderboard,
-          proficiencies: p.player_proficiencies,
-          items: p.player_items,
-        }));
+      const mappedPlayers = rawData.map((p: any) => ({
+        ...p,
+        leaderboard: p.leaderboard?.[0] ?? p.leaderboard,
+        proficiencies: p.player_proficiencies,
+        items: p.player_items,
+      }));
 
-        const getPlayerOrder = (player: any): number => {
-          const rawId = player?.player_id;
-          if (typeof rawId !== "string") return Number.MAX_SAFE_INTEGER;
-          const match = rawId.match(/\d+/);
-          if (!match) return Number.MAX_SAFE_INTEGER;
-          return parseInt(match[0], 10);
-        };
+      const getPlayerOrder = (player: any): number => {
+        const rawId = player?.player_id;
+        if (typeof rawId !== "string") return Number.MAX_SAFE_INTEGER;
+        const match = rawId.match(/\d+/);
+        if (!match) return Number.MAX_SAFE_INTEGER;
+        return parseInt(match[0], 10);
+      };
 
-        mappedPlayers.sort((a: any, b: any) => {
-          if (a.is_active !== b.is_active) {
-            return a.is_active ? -1 : 1;
-          }
-          const aPlayerOrder = getPlayerOrder(a);
-          const bPlayerOrder = getPlayerOrder(b);
-          if (aPlayerOrder !== bPlayerOrder) return aPlayerOrder - bPlayerOrder;
-          return (a.player_id ?? "").localeCompare(b.player_id ?? "");
-        });
+      mappedPlayers.sort((a: any, b: any) => {
+        if (a.is_active !== b.is_active) {
+          return a.is_active ? -1 : 1;
+        }
+        const aPlayerOrder = getPlayerOrder(a);
+        const bPlayerOrder = getPlayerOrder(b);
+        if (aPlayerOrder !== bPlayerOrder) return aPlayerOrder - bPlayerOrder;
+        return (a.player_id ?? "").localeCompare(b.player_id ?? "");
+      });
 
-        setPlayers(mappedPlayers);
-      }
+      setPlayers(mappedPlayers);
     } catch {
-      try {
-        const fallback = await fetchPublicData<any[]>("players");
-        const mappedPlayers = (fallback ?? []).map((p: any) => ({
-          ...p,
-          leaderboard: p.leaderboard?.[0] ?? p.leaderboard,
-          proficiencies: p.player_proficiencies,
-          items: p.player_items,
-        }));
-
-        const getPlayerOrder = (player: any): number => {
-          const rawId = player?.player_id;
-          if (typeof rawId !== "string") return Number.MAX_SAFE_INTEGER;
-          const match = rawId.match(/\d+/);
-          if (!match) return Number.MAX_SAFE_INTEGER;
-          return parseInt(match[0], 10);
-        };
-
-        mappedPlayers.sort((a: any, b: any) => {
-          if (a.is_active !== b.is_active) {
-            return a.is_active ? -1 : 1;
-          }
-          const aPlayerOrder = getPlayerOrder(a);
-          const bPlayerOrder = getPlayerOrder(b);
-          if (aPlayerOrder !== bPlayerOrder) return aPlayerOrder - bPlayerOrder;
-          return (a.player_id ?? "").localeCompare(b.player_id ?? "");
-        });
-
-        setPlayers(mappedPlayers);
-      } catch {
-        setError("Connection issue. Please tap retry.");
-      }
+      setError("Connection issue. Please tap retry.");
     } finally {
       setLoading(false);
     }

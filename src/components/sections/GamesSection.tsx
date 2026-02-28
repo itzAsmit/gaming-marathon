@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { withRetry } from "@/lib/withRetry";
-import { withTimeout } from "@/lib/withTimeout";
-import { fetchPublicData } from "@/lib/fetchPublicData";
+import { raceDataFetch } from "@/lib/raceDataFetch";
 import { toMediaSrc, toProxiedMediaSrc } from "@/lib/mediaUrl";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
@@ -42,51 +40,26 @@ export default function GamesSection() {
   const fetchGames = async () => {
     try {
       setError(null);
-      const { data, error } = await withTimeout(
-        withRetry(
-          async () => supabase.from("games").select("*").order("game_id"),
-          1,
-          900,
-        ),
-        12000,
-        "Games request timed out",
+      const data = await raceDataFetch<Game[]>(
+        () => supabase.from("games").select("*").order("game_id"),
+        "games",
       );
-      if (error) throw error;
 
-      if (data) {
-        const getGameOrder = (game: Game): number => {
-          const match = game.game_id?.match(/\d+/);
-          return match ? parseInt(match[0], 10) : Number.MAX_SAFE_INTEGER;
-        };
+      const getGameOrder = (game: Game): number => {
+        const match = game.game_id?.match(/\d+/);
+        return match ? parseInt(match[0], 10) : Number.MAX_SAFE_INTEGER;
+      };
 
-        const sorted = [...data].sort((a, b) => {
-          const aCompleted = a.status === "completed";
-          const bCompleted = b.status === "completed";
-          if (aCompleted !== bCompleted) return aCompleted ? -1 : 1;
-          return getGameOrder(a) - getGameOrder(b);
-        });
+      const sorted = [...data].sort((a, b) => {
+        const aCompleted = a.status === "completed";
+        const bCompleted = b.status === "completed";
+        if (aCompleted !== bCompleted) return aCompleted ? -1 : 1;
+        return getGameOrder(a) - getGameOrder(b);
+      });
 
-        setGames(sorted);
-      }
+      setGames(sorted);
     } catch {
-      try {
-        const fallback = await fetchPublicData<Game[]>("games");
-        const getGameOrder = (game: Game): number => {
-          const match = game.game_id?.match(/\d+/);
-          return match ? parseInt(match[0], 10) : Number.MAX_SAFE_INTEGER;
-        };
-
-        const sorted = [...(fallback ?? [])].sort((a, b) => {
-          const aCompleted = a.status === "completed";
-          const bCompleted = b.status === "completed";
-          if (aCompleted !== bCompleted) return aCompleted ? -1 : 1;
-          return getGameOrder(a) - getGameOrder(b);
-        });
-
-        setGames(sorted);
-      } catch {
-        setError("Connection issue. Please tap retry.");
-      }
+      setError("Connection issue. Please tap retry.");
     } finally {
       setLoading(false);
     }
@@ -94,19 +67,19 @@ export default function GamesSection() {
 
   const fetchRankings = async (gameId: string) => {
     try {
-      const { data } = await withTimeout(
-        supabase
-          .from("player_game_stats")
-          .select("rank, points, players(name, player_id)")
-          .eq("game_id", gameId)
-          .order("rank"),
-        12000,
-        "Rankings request timed out",
+      const data = await raceDataFetch<GameRanking[]>(
+        () =>
+          supabase
+            .from("player_game_stats")
+            .select("rank, points, players(name, player_id)")
+            .eq("game_id", gameId)
+            .order("rank"),
+        "rankings",
+        { gameId },
       );
-      if (data) setRankings(data as any);
+      setRankings(data);
     } catch {
-      const fallback = await fetchPublicData<GameRanking[]>("rankings", { gameId });
-      setRankings(fallback ?? []);
+      setRankings([]);
     }
   };
 

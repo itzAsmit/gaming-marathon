@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { withRetry } from "@/lib/withRetry";
-import { withTimeout } from "@/lib/withTimeout";
-import { fetchPublicData } from "@/lib/fetchPublicData";
+import { raceDataFetch } from "@/lib/raceDataFetch";
 import { toMediaSrc, toProxiedMediaSrc } from "@/lib/mediaUrl";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
@@ -33,24 +31,13 @@ export default function HallOfFameSection() {
   const fetchHallOfFame = async () => {
     try {
       setError(null);
-      const { data, error } = await withTimeout(
-        withRetry(
-          async () => supabase.from("hall_of_fame").select("*, players(name, player_id, portrait_url)"),
-          1,
-          900,
-        ),
-        12000,
-        "Hall of Fame request timed out",
+      const data = await raceDataFetch<HofEntry[]>(
+        () => supabase.from("hall_of_fame").select("*, players(name, player_id, portrait_url)"),
+        "hall_of_fame",
       );
-      if (error) throw error;
-      if (data) setEntries(data as any);
+      setEntries(data);
     } catch {
-      try {
-        const fallback = await fetchPublicData<HofEntry[]>("hall_of_fame");
-        setEntries(fallback ?? []);
-      } catch {
-        setError("Connection issue. Please tap retry.");
-      }
+      setError("Connection issue. Please tap retry.");
     } finally {
       setLoading(false);
     }

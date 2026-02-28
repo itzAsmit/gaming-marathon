@@ -36,7 +36,7 @@ export default function AdminLogin() {
     const normalizedEmail = email.trim().toLowerCase();
     const normalizedPassword = password;
 
-    const tryProxyLogin = async () => {
+    const tryProxyLogin = async (): Promise<string> => {
       const response = await withTimeout(
         fetch("/api/admin-login", {
           method: "POST",
@@ -69,9 +69,10 @@ export default function AdminLogin() {
 
       const { data: sessionData } = await supabase.auth.getSession();
       if (!sessionData.session) throw new Error("Could not establish login session");
+      return "proxy";
     };
 
-    const tryDirectLogin = async () => {
+    const tryDirectLogin = async (): Promise<string> => {
       const { error: authErr } = await withTimeout(
         supabase.auth.signInWithPassword({
           email: normalizedEmail,
@@ -82,42 +83,41 @@ export default function AdminLogin() {
       );
 
       if (authErr) throw authErr;
+      return "direct";
     };
 
-    const isMobileDevice = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    // Race both login paths — whichever succeeds first wins
+    // Manual Promise.any for ES2020 compat
+    const raceLogin = (): Promise<string> =>
+      new Promise<string>((resolve, reject) => {
+        let pending = 2;
+        const errors: Error[] = [];
+        const attempt = (p: Promise<string>, idx: number) => {
+          p.then(resolve).catch((err) => {
+            errors[idx] = err instanceof Error ? err : new Error(String(err));
+            pending -= 1;
+            if (pending === 0) reject(errors);
+          });
+        };
+        attempt(tryDirectLogin(), 0);
+        attempt(tryProxyLogin(), 1);
+      });
 
     try {
-      if (isMobileDevice) {
-        try {
-          await tryProxyLogin();
-          navigate("/admin/dashboard");
-          return;
-        } catch {
-          await tryDirectLogin();
-          navigate("/admin/dashboard");
-          return;
-        }
-      }
-
-      await tryDirectLogin();
+      await raceLogin();
       navigate("/admin/dashboard");
-    } catch (error) {
-      try {
-        await tryProxyLogin();
-        navigate("/admin/dashboard");
-      } catch (proxyError) {
-        const originalMessage = error instanceof Error ? error.message : "Login failed. Please try again.";
-        const isCredentialIssue = /invalid|credential|password|email/i.test(originalMessage);
-        if (isCredentialIssue) {
-          setError(originalMessage);
-          return;
-        }
+    } catch (allErrors) {
+      const errors = Array.isArray(allErrors) ? (allErrors as Error[]) : [new Error("Login failed")];
 
-        const message = proxyError instanceof Error
-          ? proxyError.message
-          : originalMessage;
-        setError(message);
-      }
+      const credentialError = errors.find((e) =>
+        /invalid|credential|password|email/i.test(e.message),
+      );
+
+      setError(
+        credentialError
+          ? credentialError.message
+          : errors[0]?.message ?? "Login failed. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
