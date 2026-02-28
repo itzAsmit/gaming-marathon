@@ -32,7 +32,7 @@ export async function raceMutation<T = any>(
         result = await supabase.from(table).insert(options.data).select();
         break;
       case "update": {
-        let q = supabase.from(table).update(options.data);
+        let q: any = supabase.from(table).update(options.data);
         for (const [k, v] of Object.entries(options.filters ?? {})) {
           q = q.eq(k, v);
         }
@@ -40,7 +40,7 @@ export async function raceMutation<T = any>(
         break;
       }
       case "delete": {
-        let q = supabase.from(table).delete();
+        let q: any = supabase.from(table).delete();
         for (const [k, v] of Object.entries(options.filters ?? {})) {
           q = q.eq(k, v);
         }
