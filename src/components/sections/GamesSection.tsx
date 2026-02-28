@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { withRetry } from "@/lib/withRetry";
 import { withTimeout } from "@/lib/withTimeout";
+import { fetchPublicData } from "@/lib/fetchPublicData";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import { motion, AnimatePresence } from "framer-motion";
@@ -64,23 +65,45 @@ export default function GamesSection() {
         setGames(sorted);
       }
     } catch {
-      setError("Connection issue. Please tap retry.");
+      try {
+        const fallback = await fetchPublicData<Game[]>("games");
+        const getGameOrder = (game: Game): number => {
+          const match = game.game_id?.match(/\d+/);
+          return match ? parseInt(match[0], 10) : Number.MAX_SAFE_INTEGER;
+        };
+
+        const sorted = [...(fallback ?? [])].sort((a, b) => {
+          const aCompleted = a.status === "completed";
+          const bCompleted = b.status === "completed";
+          if (aCompleted !== bCompleted) return aCompleted ? -1 : 1;
+          return getGameOrder(a) - getGameOrder(b);
+        });
+
+        setGames(sorted);
+      } catch {
+        setError("Connection issue. Please tap retry.");
+      }
     } finally {
       setLoading(false);
     }
   };
 
   const fetchRankings = async (gameId: string) => {
-    const { data } = await withTimeout(
-      supabase
-        .from("player_game_stats")
-        .select("rank, points, players(name, player_id)")
-        .eq("game_id", gameId)
-        .order("rank"),
-      12000,
-      "Rankings request timed out",
-    );
-    if (data) setRankings(data as any);
+    try {
+      const { data } = await withTimeout(
+        supabase
+          .from("player_game_stats")
+          .select("rank, points, players(name, player_id)")
+          .eq("game_id", gameId)
+          .order("rank"),
+        12000,
+        "Rankings request timed out",
+      );
+      if (data) setRankings(data as any);
+    } catch {
+      const fallback = await fetchPublicData<GameRanking[]>("rankings", { gameId });
+      setRankings(fallback ?? []);
+    }
   };
 
   useEffect(() => { fetchGames(); }, []);

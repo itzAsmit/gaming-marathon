@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { withRetry } from "@/lib/withRetry";
 import { withTimeout } from "@/lib/withTimeout";
+import { fetchPublicData } from "@/lib/fetchPublicData";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import { motion } from "framer-motion";
@@ -43,7 +44,12 @@ export default function HallOfFameSection() {
       if (error) throw error;
       if (data) setEntries(data as any);
     } catch {
-      setError("Connection issue. Please tap retry.");
+      try {
+        const fallback = await fetchPublicData<HofEntry[]>("hall_of_fame");
+        setEntries(fallback ?? []);
+      } catch {
+        setError("Connection issue. Please tap retry.");
+      }
     } finally {
       setLoading(false);
     }

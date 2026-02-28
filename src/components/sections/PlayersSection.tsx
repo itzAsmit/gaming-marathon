@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { withRetry } from "@/lib/withRetry";
 import { withTimeout } from "@/lib/withTimeout";
+import { fetchPublicData } from "@/lib/fetchPublicData";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import { motion, AnimatePresence } from "framer-motion";
@@ -83,7 +84,37 @@ export default function PlayersSection() {
         setPlayers(mappedPlayers);
       }
     } catch {
-      setError("Connection issue. Please tap retry.");
+      try {
+        const fallback = await fetchPublicData<any[]>("players");
+        const mappedPlayers = (fallback ?? []).map((p: any) => ({
+          ...p,
+          leaderboard: p.leaderboard?.[0] ?? p.leaderboard,
+          proficiencies: p.player_proficiencies,
+          items: p.player_items,
+        }));
+
+        const getPlayerOrder = (player: any): number => {
+          const rawId = player?.player_id;
+          if (typeof rawId !== "string") return Number.MAX_SAFE_INTEGER;
+          const match = rawId.match(/\d+/);
+          if (!match) return Number.MAX_SAFE_INTEGER;
+          return parseInt(match[0], 10);
+        };
+
+        mappedPlayers.sort((a: any, b: any) => {
+          if (a.is_active !== b.is_active) {
+            return a.is_active ? -1 : 1;
+          }
+          const aPlayerOrder = getPlayerOrder(a);
+          const bPlayerOrder = getPlayerOrder(b);
+          if (aPlayerOrder !== bPlayerOrder) return aPlayerOrder - bPlayerOrder;
+          return (a.player_id ?? "").localeCompare(b.player_id ?? "");
+        });
+
+        setPlayers(mappedPlayers);
+      } catch {
+        setError("Connection issue. Please tap retry.");
+      }
     } finally {
       setLoading(false);
     }
