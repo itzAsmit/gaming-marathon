@@ -4,6 +4,7 @@ import { raceDataFetch } from "@/lib/raceDataFetch";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import { motion } from "framer-motion";
+import { useConstrainedNetwork } from "@/hooks/use-constrained-network";
 
 interface LeaderboardEntry {
   id: string;
@@ -24,6 +25,7 @@ export default function LeaderboardSection() {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const isConstrained = useConstrainedNetwork();
 
   const fetchLeaderboard = async () => {
     try {
@@ -44,8 +46,13 @@ export default function LeaderboardSection() {
     }
   };
 
+  // Fetch data on mount; only subscribe to realtime on non-constrained networks
+  // where direct Supabase WebSocket connections won't be blocked/throttled.
   useEffect(() => {
     fetchLeaderboard();
+
+    // Skip realtime on cellular/slow networks to prevent WebSocket timeouts
+    if (isConstrained) return;
 
     const channel = supabase
       .channel("leaderboard-realtime")
@@ -53,7 +60,7 @@ export default function LeaderboardSection() {
       .subscribe();
 
     return () => { supabase.removeChannel(channel); };
-  }, []);
+  }, [isConstrained]);
 
   const cols = ["RANK", "PLAYER", "PLAYED", "EVENTS", "WINS", "2NDS", "3RDS", "POINTS"];
 

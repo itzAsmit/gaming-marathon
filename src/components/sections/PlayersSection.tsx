@@ -7,6 +7,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Instagram, Twitter, Linkedin } from "lucide-react";
+import { useConstrainedNetwork } from "@/hooks/use-constrained-network";
 
 interface Player {
   id: string;
@@ -37,6 +38,7 @@ export default function PlayersSection() {
   const [selected, setSelected] = useState<Player | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const isConstrained = useConstrainedNetwork();
 
   const fetchPlayers = async () => {
     try {
@@ -82,14 +84,19 @@ export default function PlayersSection() {
     }
   };
 
+  // Fetch data on mount; only subscribe to realtime on non-constrained networks
   useEffect(() => {
     fetchPlayers();
+
+    // Skip realtime on cellular/slow networks to prevent WebSocket timeouts
+    if (isConstrained) return;
+
     const channel = supabase
       .channel("players-realtime")
       .on("postgres_changes", { event: "*", schema: "public", table: "players" }, fetchPlayers)
       .subscribe();
     return () => { supabase.removeChannel(channel); };
-  }, []);
+  }, [isConstrained]);
 
   return (
     <section id="players" className="relative min-h-[100svh] md:min-h-screen py-24 px-4 scroll-mt-24 md:scroll-mt-28">
