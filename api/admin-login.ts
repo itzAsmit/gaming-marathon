@@ -63,9 +63,14 @@ export default async function handler(req: any, res: any) {
         return res.status(502).json({ error: "Invalid auth response" });
       }
 
+      // Return full session data for client-side storage fallback
       return res.status(200).json({
         access_token: accessToken,
         refresh_token: refreshToken,
+        expires_in: json?.expires_in,
+        expires_at: json?.expires_at,
+        token_type: json?.token_type ?? 'bearer',
+        user: json?.user ?? null,
       });
     } finally {
       clearTimeout(timeout);

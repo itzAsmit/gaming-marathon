@@ -65,6 +65,9 @@ export default function AdminLogin() {
             access_token?: string;
             refresh_token?: string;
             error?: string;
+            user?: any;
+            expires_at?: number;
+            expires_in?: number;
           };
 
           if (!response.ok || !json.access_token || !json.refresh_token) {
@@ -72,12 +75,42 @@ export default function AdminLogin() {
           }
 
           console.log('[AdminLogin] Proxy success, setting session');
-          const { error: sessionErr } = await supabase.auth.setSession({
-            access_token: json.access_token,
-            refresh_token: json.refresh_token,
-          });
+          
+          // On constrained networks, setSession may timeout trying to validate.
+          // Wrap with short timeout and fall back to manual storage if needed.
+          const constrained = isConstrainedNetwork();
+          
+          try {
+            const setSessionPromise = supabase.auth.setSession({
+              access_token: json.access_token,
+              refresh_token: json.refresh_token,
+            });
 
-          if (sessionErr) throw sessionErr;
+            const { error: sessionErr } = await (constrained
+              ? withTimeout(setSessionPromise, 3000, "Session set timed out")
+              : setSessionPromise);
+
+            if (sessionErr) throw sessionErr;
+          } catch (setErr) {
+            console.log('[AdminLogin] setSession failed, using manual storage:', setErr);
+            // Manually store tokens so the app can function
+            // Supabase will pick these up on next page load when network is better
+            const storageKey = `sb-${import.meta.env.VITE_SUPABASE_URL?.split('//')[1]?.split('.')[0] ?? 'auth'}-auth-token`;
+            const sessionData = {
+              access_token: json.access_token,
+              refresh_token: json.refresh_token,
+              token_type: 'bearer',
+              expires_in: json.expires_in ?? 3600,
+              expires_at: json.expires_at ?? Math.floor(Date.now() / 1000) + 3600,
+              user: json.user ?? null,
+            };
+            try {
+              localStorage.setItem(storageKey, JSON.stringify(sessionData));
+            } catch {
+              // localStorage might be unavailable
+            }
+          }
+          
           console.log('[AdminLogin] Session set successfully');
           return;
         } catch (error) {
