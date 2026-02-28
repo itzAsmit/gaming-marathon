@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { withRetry } from "@/lib/withRetry";
 import { withTimeout } from "@/lib/withTimeout";
 import { fetchPublicData } from "@/lib/fetchPublicData";
-import { toMediaSrc } from "@/lib/mediaUrl";
+import { toMediaSrc, toProxiedMediaSrc } from "@/lib/mediaUrl";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import { motion } from "framer-motion";
@@ -79,7 +79,21 @@ export default function HallOfFameSection() {
           style={{ border: `2px solid ${cfg.color}` }}
         >
           {toMediaSrc(entry?.players?.portrait_url) ? (
-            <img src={toMediaSrc(entry?.players?.portrait_url) ?? undefined} alt={entry.players.name} className="w-full h-full object-cover" />
+            <img
+              src={toMediaSrc(entry?.players?.portrait_url) ?? undefined}
+              alt={entry.players.name}
+              loading="lazy"
+              decoding="async"
+              className="w-full h-full object-cover"
+              onError={(event) => {
+                const proxySrc = toProxiedMediaSrc(entry?.players?.portrait_url);
+                if (!proxySrc) return;
+                const image = event.currentTarget;
+                if (image.src !== proxySrc) {
+                  image.src = proxySrc;
+                }
+              }}
+            />
           ) : (
             <div className="w-full h-full flex items-center justify-center" style={{ background: "linear-gradient(135deg, hsl(var(--brown-deep)), hsl(var(--brown)))" }}>
               <span className="text-2xl">{cfg.emoji}</span>

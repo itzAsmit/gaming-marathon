@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { withRetry } from "@/lib/withRetry";
 import { withTimeout } from "@/lib/withTimeout";
 import { fetchPublicData } from "@/lib/fetchPublicData";
-import { toMediaSrc } from "@/lib/mediaUrl";
+import { toMediaSrc, toProxiedMediaSrc } from "@/lib/mediaUrl";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import { motion, AnimatePresence } from "framer-motion";
@@ -184,7 +184,17 @@ export default function PlayersSection() {
                       <img
                         src={toMediaSrc(player.portrait_url) ?? undefined}
                         alt={player.name}
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        onError={(event) => {
+                          const proxySrc = toProxiedMediaSrc(player.portrait_url);
+                          if (!proxySrc) return;
+                          const image = event.currentTarget;
+                          if (image.src !== proxySrc) {
+                            image.src = proxySrc;
+                          }
+                        }}
                         style={{
                           filter: player.is_active ? "grayscale(0%)" : "grayscale(100%)",
                         }}
@@ -275,7 +285,17 @@ export default function PlayersSection() {
                     <img
                       src={toMediaSrc(selected.portrait_url) ?? undefined}
                       alt={selected.name}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover min-h-64 md:min-h-0"
+                      onError={(event) => {
+                        const proxySrc = toProxiedMediaSrc(selected.portrait_url);
+                        if (!proxySrc) return;
+                        const image = event.currentTarget;
+                        if (image.src !== proxySrc) {
+                          image.src = proxySrc;
+                        }
+                      }}
                       style={{
                         filter: selected.is_active ? "grayscale(0%)" : "grayscale(100%)",
                       }}

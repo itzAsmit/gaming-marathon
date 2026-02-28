@@ -4,7 +4,7 @@ import { Volume2, VolumeX } from "lucide-react";
 import { Link } from "react-router-dom";
 import GradualBlur from "@/components/GradualBlur";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { toMediaSrc } from "@/lib/mediaUrl";
+import { toMediaSrc, toProxiedMediaSrc } from "@/lib/mediaUrl";
 
 interface VideoBackgroundProps {
   videoUrl?: string;
@@ -18,6 +18,8 @@ export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
     typeof window !== "undefined" ? window.innerHeight : 1000,
   );
   const [videoFailed, setVideoFailed] = useState(false);
+  const [useProxySrc, setUseProxySrc] = useState(false);
+  const [preferLiteMedia, setPreferLiteMedia] = useState(false);
   const { scrollY } = useScroll();
 
   useEffect(() => {
@@ -25,6 +27,15 @@ export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
     const onResize = () => setViewportHeight(window.innerHeight);
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  useEffect(() => {
+    if (typeof navigator === "undefined") return;
+    const connection = (navigator as any).connection;
+    if (!connection) return;
+    const effectiveType = String(connection.effectiveType ?? "").toLowerCase();
+    const shouldUseLite = Boolean(connection.saveData) || effectiveType.includes("2g") || effectiveType.includes("3g");
+    setPreferLiteMedia(shouldUseLite);
   }, []);
 
   // Fade opacity: 0.9 at top, transition to 0.4 around leaderboard
@@ -40,15 +51,19 @@ export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
   };
 
   // Default cinematic fallback video
-  const src = toMediaSrc(videoUrl || "https://res.cloudinary.com/dazvcuqb2/video/upload/v1771615133/173_535__minecraft_music_but_it_hits_hard_1hour_C418_minecraft_ambiance_music_pqddyz.mp4");
+  const rawSrc = videoUrl || "https://res.cloudinary.com/dazvcuqb2/video/upload/v1771615133/173_535__minecraft_music_but_it_hits_hard_1hour_C418_minecraft_ambiance_music_pqddyz.mp4";
+  const directSrc = toMediaSrc(rawSrc);
+  const proxySrc = toProxiedMediaSrc(rawSrc);
+  const src = useProxySrc ? proxySrc : directSrc;
+  const showVideo = !preferLiteMedia && !!src;
 
   return (
     <>
       {/* Fixed video layer */}
       <motion.div className="fixed inset-0 z-0 overflow-hidden" style={{ opacity: isMobile ? 0.78 : opacity }}>
-        {videoFailed ? (
+        {videoFailed || !showVideo ? (
           <div className="w-full h-full" style={{ background: "linear-gradient(160deg, hsl(var(--brown-deep)), hsl(var(--brown)))" }} />
-        ) : src ? (
+        ) : (
           <video
             ref={videoRef}
             className="w-full h-full object-cover"
@@ -58,10 +73,17 @@ export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
             muted
             playsInline
             preload="metadata"
-            onError={() => setVideoFailed(true)}
+            onError={(event) => {
+              if (!useProxySrc && proxySrc) {
+                setUseProxySrc(true);
+                const video = event.currentTarget;
+                video.src = proxySrc;
+                video.load();
+                return;
+              }
+              setVideoFailed(true);
+            }}
           />
-        ) : (
-          <div className="w-full h-full" style={{ background: "linear-gradient(160deg, hsl(var(--brown-deep)), hsl(var(--brown)))" }} />
         )}
         {/* Cinematic overlay */}
         <div

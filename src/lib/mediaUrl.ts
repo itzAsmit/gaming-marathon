@@ -8,6 +8,14 @@ export function toMediaSrc(url?: string | null): string | null {
   if (normalized.startsWith("data:")) return normalized;
   if (normalized.startsWith("/api/media?")) return normalized;
 
-  const httpsUrl = normalized.replace(/^http:\/\//i, "https://");
-  return `/api/media?url=${encodeURIComponent(httpsUrl)}`;
+  return normalized.replace(/^http:\/\//i, "https://");
 }
+
+export function toProxiedMediaSrc(url?: string | null): string | null {
+  const direct = toMediaSrc(url);
+  if (!direct) return null;
+  if (direct.startsWith("/")) return direct;
+  if (direct.startsWith("data:")) return direct;
+  return `/api/media?url=${encodeURIComponent(direct)}`;
+}
+

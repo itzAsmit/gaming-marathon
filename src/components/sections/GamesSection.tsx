@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { withRetry } from "@/lib/withRetry";
 import { withTimeout } from "@/lib/withTimeout";
 import { fetchPublicData } from "@/lib/fetchPublicData";
-import { toMediaSrc } from "@/lib/mediaUrl";
+import { toMediaSrc, toProxiedMediaSrc } from "@/lib/mediaUrl";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import { motion, AnimatePresence } from "framer-motion";
@@ -187,9 +187,40 @@ export default function GamesSection() {
                     <div className="glass-card rounded-2xl overflow-hidden relative">
                       <div className="aspect-[3/4] overflow-hidden relative">
                         {toMediaSrc(game.image_url) ? (
-                          <img src={toMediaSrc(game.image_url) ?? undefined} alt={game.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                          <img
+                            src={toMediaSrc(game.image_url) ?? undefined}
+                            alt={game.name}
+                            loading="lazy"
+                            decoding="async"
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            onError={(event) => {
+                              const proxySrc = toProxiedMediaSrc(game.image_url);
+                              if (!proxySrc) return;
+                              const image = event.currentTarget;
+                              if (image.src !== proxySrc) {
+                                image.src = proxySrc;
+                              }
+                            }}
+                          />
                         ) : toMediaSrc(game.video_url) ? (
-                          <video src={toMediaSrc(game.video_url) ?? undefined} autoPlay loop muted playsInline className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                          <video
+                            src={toMediaSrc(game.video_url) ?? undefined}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            preload="metadata"
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            onError={(event) => {
+                              const proxySrc = toProxiedMediaSrc(game.video_url);
+                              if (!proxySrc) return;
+                              const video = event.currentTarget;
+                              if (video.src !== proxySrc) {
+                                video.src = proxySrc;
+                                video.load();
+                              }
+                            }}
+                          />
                         ) : (
                           <div
                             className="w-full h-full flex items-center justify-center"
@@ -265,9 +296,39 @@ export default function GamesSection() {
             >
               <div className="relative h-[52vh] min-h-[320px] max-h-[520px] overflow-hidden">
                 {toMediaSrc(selected.video_url) ? (
-                  <video src={toMediaSrc(selected.video_url) ?? undefined} autoPlay loop muted className="w-full h-full object-cover" />
+                  <video
+                    src={toMediaSrc(selected.video_url) ?? undefined}
+                    autoPlay
+                    loop
+                    muted
+                    preload="metadata"
+                    className="w-full h-full object-cover"
+                    onError={(event) => {
+                      const proxySrc = toProxiedMediaSrc(selected.video_url);
+                      if (!proxySrc) return;
+                      const video = event.currentTarget;
+                      if (video.src !== proxySrc) {
+                        video.src = proxySrc;
+                        video.load();
+                      }
+                    }}
+                  />
                 ) : toMediaSrc(selected.image_url) ? (
-                  <img src={toMediaSrc(selected.image_url) ?? undefined} alt={selected.name} className="w-full h-full object-cover" />
+                  <img
+                    src={toMediaSrc(selected.image_url) ?? undefined}
+                    alt={selected.name}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover"
+                    onError={(event) => {
+                      const proxySrc = toProxiedMediaSrc(selected.image_url);
+                      if (!proxySrc) return;
+                      const image = event.currentTarget;
+                      if (image.src !== proxySrc) {
+                        image.src = proxySrc;
+                      }
+                    }}
+                  />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center" style={{ background: "linear-gradient(135deg, hsl(var(--brown-deep)), hsl(var(--brown)))" }}>
                     <span className="text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark))" }}>NO MEDIA</span>
