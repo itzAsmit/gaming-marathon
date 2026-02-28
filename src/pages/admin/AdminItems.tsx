@@ -116,12 +116,12 @@ export default function AdminItems() {
     <AdminLayout>
       <div className="p-4 md:p-8">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-1">
-          <h1 className="text-2xl font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "'ROWAN', serif" }}>Assign Items</h1>
+          <h1 className="text-2xl font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>Assign Items</h1>
           <button
             onClick={loadData}
             disabled={refreshing || saving}
             className="px-3 py-2 rounded-xl text-xs font-cinzel tracking-wider flex items-center gap-2 disabled:opacity-60"
-            style={{ background: "hsl(var(--input))", color: "hsl(var(--brown-deep))", border: "1px solid hsl(var(--cream-dark))", fontFamily: "'ROWAN', serif" }}
+            style={{ background: "hsl(var(--input))", color: "hsl(var(--brown-deep))", border: "1px solid hsl(var(--cream-dark))", fontFamily: "Cinzel, serif" }}
           >
             <RefreshCw size={14} className={refreshing ? "animate-spin" : ""} />
             REFRESH
@@ -131,7 +131,7 @@ export default function AdminItems() {
 
         <div className="grid gap-6 lg:grid-cols-[1.15fr_1fr]">
           <div className="rounded-2xl p-4" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
-            <p className="text-xs font-cinzel tracking-widest mb-3" style={{ color: "hsl(var(--brown))", fontFamily: "'ROWAN', serif" }}>PLAYERS & ASSIGNED ITEMS</p>
+            <p className="text-xs font-cinzel tracking-widest mb-3" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>PLAYERS & ASSIGNED ITEMS</p>
 
             <div className="relative mb-4">
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "hsl(var(--brown-light))" }} />
@@ -195,7 +195,7 @@ export default function AdminItems() {
           </div>
 
           <div className="rounded-2xl p-4" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
-            <p className="text-xs font-cinzel tracking-widest mb-3" style={{ color: "hsl(var(--brown))", fontFamily: "'ROWAN', serif" }}>ITEMS</p>
+            <p className="text-xs font-cinzel tracking-widest mb-3" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>ITEMS</p>
 
             <div className="mb-4 rounded-xl p-3" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))" }}>
               <p className="text-xs mb-1" style={{ color: "hsl(var(--brown-light))" }}>Selected player</p>
@@ -219,7 +219,7 @@ export default function AdminItems() {
                         : "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))",
                       color: assigned ? "hsl(var(--brown))" : "hsl(var(--cream))",
                       border: assigned ? "1px solid hsl(var(--brown-light))" : "1px solid transparent",
-                      fontFamily: "'ROWAN', serif",
+                      fontFamily: "Cinzel, serif",
                     }}
                   >
                     {item.name}
@@ -228,7 +228,7 @@ export default function AdminItems() {
               })}
             </div>
 
-            <p className="text-xs font-cinzel tracking-widest mb-2" style={{ color: "hsl(var(--brown))", fontFamily: "'ROWAN', serif" }}>ASSIGNED TO SELECTED PLAYER</p>
+            <p className="text-xs font-cinzel tracking-widest mb-2" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>ASSIGNED TO SELECTED PLAYER</p>
             <div className="flex flex-wrap gap-2">
               {selectedPlayer && selectedPlayer.player_items.length > 0 ? (
                 selectedPlayer.player_items.map((assignment) => (
