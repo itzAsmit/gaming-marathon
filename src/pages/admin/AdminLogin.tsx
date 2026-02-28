@@ -81,25 +81,34 @@ export default function AdminLogin() {
       if (authErr) throw authErr;
     };
 
-    // Always try proxy first (goes through Vercel edge, works on all networks).
-    // Fall back to direct Supabase only if proxy fails.
+    // Try proxy first (best on mobile/carrier networks).
+    // If proxy fails, try direct; if direct also fails, prefer proxy message.
     try {
-      try {
-        await tryProxyLogin();
-      } catch (proxyErr) {
-        // If credential error, don't retry via direct
-        const msg = proxyErr instanceof Error ? proxyErr.message : "";
-        if (/invalid|credential|password|email/i.test(msg)) throw proxyErr;
-        // Proxy failed for network reason — try direct
-        await tryDirectLogin();
-      }
+      await tryProxyLogin();
       navigate("/admin/dashboard");
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Login failed. Please try again.",
-      );
-    } finally {
-      setLoading(false);
+    } catch (proxyErr) {
+      const proxyMessage = proxyErr instanceof Error ? proxyErr.message : "Proxy login failed";
+      const isCredentialIssue = /invalid|credential|password|email/i.test(proxyMessage);
+
+      if (isCredentialIssue) {
+        setError(proxyMessage);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        await tryDirectLogin();
+        navigate("/admin/dashboard");
+      } catch (directErr) {
+        const directMessage = directErr instanceof Error ? directErr.message : "Direct login failed";
+        const useProxyMessage =
+          /timed out/i.test(directMessage) ||
+          /environment|missing|supabase/i.test(proxyMessage);
+
+        setError(useProxyMessage ? proxyMessage : directMessage);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 

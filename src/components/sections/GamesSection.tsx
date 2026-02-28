@@ -109,7 +109,10 @@ export default function GamesSection() {
   };
 
   const openGame = (game: Game) => {
-    setUseProxyForSelectedVideo(false);
+    const isMobileDevice =
+      typeof navigator !== "undefined" &&
+      /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    setUseProxyForSelectedVideo(isMobileDevice);
     setSelectedVideoFailed(false);
     setSelectedVideoLoaded(false);
     setSelected(game);
@@ -286,9 +289,12 @@ export default function GamesSection() {
                     autoPlay
                     loop
                     muted
+                    playsInline
+                    poster={toMediaSrc(selected.image_url) ?? undefined}
                     preload="metadata"
                     className="w-full h-full object-cover"
                     onLoadStart={() => setSelectedVideoLoaded(false)}
+                    onCanPlay={() => setSelectedVideoLoaded(true)}
                     onLoadedData={() => setSelectedVideoLoaded(true)}
                     onError={(event) => {
                       setSelectedVideoLoaded(false);

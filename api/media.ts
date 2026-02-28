@@ -10,10 +10,17 @@ export default async function handler(req: any, res: any) {
       return res.status(400).json({ error: "Only https media URLs are allowed" });
     }
 
+    const upstreamHeaders: Record<string, string> = {
+      "User-Agent": "gaming-marathon-media-proxy",
+    };
+
+    const rangeHeader = req.headers?.range;
+    if (typeof rangeHeader === "string" && rangeHeader.trim()) {
+      upstreamHeaders.Range = rangeHeader;
+    }
+
     const response = await fetch(parsed.toString(), {
-      headers: {
-        "User-Agent": "gaming-marathon-media-proxy",
-      },
+      headers: upstreamHeaders,
     });
 
     if (!response.ok) {
@@ -22,11 +29,17 @@ export default async function handler(req: any, res: any) {
 
     const contentType = response.headers.get("content-type") ?? "application/octet-stream";
     const cacheControl = response.headers.get("cache-control") ?? "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800";
+    const contentRange = response.headers.get("content-range");
+    const acceptRanges = response.headers.get("accept-ranges");
+    const contentLength = response.headers.get("content-length");
     const buffer = Buffer.from(await response.arrayBuffer());
 
     res.setHeader("Content-Type", contentType);
     res.setHeader("Cache-Control", cacheControl);
-    return res.status(200).send(buffer);
+    if (contentRange) res.setHeader("Content-Range", contentRange);
+    if (acceptRanges) res.setHeader("Accept-Ranges", acceptRanges);
+    if (contentLength) res.setHeader("Content-Length", contentLength);
+    return res.status(response.status).send(buffer);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unexpected error";
     return res.status(500).json({ error: message });
