@@ -292,7 +292,7 @@ export default function PlayersSection() {
                         {selected.is_active ? "ACTIVE" : "INACTIVE"}
                       </span>
                     </div>
-                    <h3 className="text-xl font-cinzel font-bold" style={{ color: "hsl(var(--cream))", fontFamily: "'ROWAN', serif" }}>
+                    <h3 className="text-xl font-cinzel font-bold" style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}>
                       {selected.name}
                     </h3>
                     <div className="flex gap-3 mt-2">

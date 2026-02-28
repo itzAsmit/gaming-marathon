@@ -116,7 +116,7 @@ export default function AdminItems() {
     <AdminLayout>
       <div className="p-4 md:p-8">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-1">
-          <h1 className="text-2xl font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "'ROWAN', serif" }}>Assign Items</h1>
+          <h1 className="text-2xl font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>Assign Items</h1>
           <button
             onClick={loadData}
             disabled={refreshing || saving}

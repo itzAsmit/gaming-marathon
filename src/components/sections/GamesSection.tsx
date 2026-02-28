@@ -366,7 +366,7 @@ export default function GamesSection() {
                     className="font-semibold uppercase px-6 md:px-10 leading-none whitespace-nowrap text-center text-[clamp(2.25rem,8vw,5.5rem)]"
                     style={{
                       color: "#f2f5fb",
-                      fontFamily: "'ROWAN', serif",
+                      fontFamily: "Cinzel, serif",
                       letterSpacing: "0.08em",
                       WebkitTextStroke: "2px rgba(255, 184, 43, 0.9)",
                       textShadow: "0 0 12px rgba(248, 148, 115, 0.6), 0 0 28px rgba(247, 213, 149, 0.73)",

@@ -222,7 +222,7 @@ export default function AdminLogin() {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4" style={{ background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))" }}>
             <Gamepad2 size={28} style={{ color: "hsl(var(--cream))" }} />
           </div>
-          <h1 className="text-3xl font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "'ROWAN', serif" }}>
+          <h1 className="text-3xl font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>
             ADMIN ACCESS
           </h1>
           <p className="text-sm mt-1" style={{ color: "hsl(var(--brown-light))" }}>Gaming Marathon Control Panel</p>

@@ -25,7 +25,7 @@ export default function AdminLogs() {
   return (
     <AdminLayout>
       <div className="p-8">
-        <h1 className="text-2xl font-cinzel font-bold mb-1" style={{ color: "hsl(var(--brown-deep))", fontFamily: "'ROWAN', serif" }}>Activity Logs</h1>
+        <h1 className="text-2xl font-cinzel font-bold mb-1" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>Activity Logs</h1>
         <p className="text-sm mb-8" style={{ color: "hsl(var(--brown-light))" }}>Permanent record of all admin actions</p>
 
         {loading ? (

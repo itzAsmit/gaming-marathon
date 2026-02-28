@@ -37,7 +37,7 @@ export default function CreditsSection() {
                 <p className="text-xs font-cinzel tracking-[0.4em] mb-3" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>
                   {credit.role}
                 </p>
-                <h3 className="text-xl font-cinzel font-bold mb-2" style={{ color: "hsl(var(--cream))", fontFamily: "'ROWAN', serif" }}>
+                <h3 className="text-xl font-cinzel font-bold mb-2" style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}>
                   {credit.name}
                 </h3>
                 <p className="text-sm" style={{ color: "hsl(var(--cream-dark) / 0.7)" }}>{credit.caption}</p>
