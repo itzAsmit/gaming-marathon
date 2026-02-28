@@ -321,7 +321,8 @@ export default function GamesSection() {
                   <SmartImage
                     url={selected.image_url}
                     alt={selected.name}
-                    loading="lazy"
+                    loading="eager"
+                    fetchPriority="high"
                     decoding="async"
                     className="w-full h-full object-cover"
                   />

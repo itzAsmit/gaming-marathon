@@ -238,7 +238,8 @@ export default function PlayersSection() {
                     <SmartImage
                       url={selected.portrait_url}
                       alt={selected.name}
-                      loading="lazy"
+                      loading="eager"
+                      fetchPriority="high"
                       decoding="async"
                       className="w-full h-full object-cover min-h-64 md:min-h-0"
                       style={{

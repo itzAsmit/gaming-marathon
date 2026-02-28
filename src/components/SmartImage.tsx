@@ -6,6 +6,8 @@ interface SmartImageProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, "src
   url?: string | null;
   /** Milliseconds before switching from direct → proxy (default 3 000) */
   timeoutMs?: number;
+  /** Start with proxy on constrained mobile networks */
+  proxyFirstOnMobile?: boolean;
 }
 
 /**
@@ -19,6 +21,7 @@ interface SmartImageProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, "src
 export default function SmartImage({
   url,
   timeoutMs = 3000,
+  proxyFirstOnMobile = true,
   onLoad,
   onError,
   ...rest
@@ -27,26 +30,48 @@ export default function SmartImage({
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [useProxy, setUseProxy] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [isConstrainedMobile, setIsConstrainedMobile] = useState(false);
 
   const directSrc = toMediaSrc(url);
   const proxySrc = toProxiedMediaSrc(url);
   const activeSrc = useProxy ? proxySrc : directSrc;
+
+  useEffect(() => {
+    if (typeof navigator === "undefined") return;
+    const isMobileDevice = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const connection = (navigator as any).connection;
+    const effectiveType = String(connection?.effectiveType ?? "").toLowerCase();
+    const constrained =
+      Boolean(connection?.saveData) ||
+      effectiveType.includes("2g") ||
+      effectiveType.includes("3g") ||
+      effectiveType.includes("4g");
+    setIsConstrainedMobile(isMobileDevice && constrained);
+  }, []);
+
+  useEffect(() => {
+    setLoaded(false);
+    const shouldStartProxy = Boolean(proxySrc) && proxyFirstOnMobile && isConstrainedMobile;
+    setUseProxy(shouldStartProxy);
+  }, [directSrc, proxySrc, proxyFirstOnMobile, isConstrainedMobile]);
 
   // Arm / disarm the stall-detection timer
   useEffect(() => {
     // Nothing to do if there's no URL or already loaded/proxy
     if (!directSrc || loaded || useProxy) return;
 
+    const effectiveTimeout = isConstrainedMobile ? Math.min(timeoutMs, 1500) : timeoutMs;
+
     timerRef.current = setTimeout(() => {
       if (proxySrc && !loaded) {
         setUseProxy(true);
       }
-    }, timeoutMs);
+    }, effectiveTimeout);
 
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [directSrc, proxySrc, loaded, useProxy, timeoutMs]);
+  }, [directSrc, proxySrc, loaded, useProxy, timeoutMs, isConstrainedMobile]);
 
   const handleLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
     setLoaded(true);
