@@ -4,15 +4,25 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    const supabaseUrl = process.env.VITE_SUPABASE_URL;
-    const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY;
+    const supabaseUrl =
+      process.env.SUPABASE_URL ||
+      process.env.VITE_SUPABASE_URL;
+    const supabaseAnonKey =
+      process.env.SUPABASE_ANON_KEY ||
+      process.env.VITE_SUPABASE_ANON_KEY ||
+      process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
     if (!supabaseUrl || !supabaseAnonKey) {
       return res.status(500).json({ error: "Supabase environment variables are missing" });
     }
 
-    const email = String(req.body?.email ?? "").trim().toLowerCase();
-    const password = String(req.body?.password ?? "");
+    const body =
+      typeof req.body === "string"
+        ? JSON.parse(req.body || "{}")
+        : (req.body ?? {});
+
+    const email = String(body?.email ?? "").trim().toLowerCase();
+    const password = String(body?.password ?? "");
 
     if (!email || !password) {
       return res.status(400).json({ error: "Email and password are required" });
@@ -26,13 +36,14 @@ export default async function handler(req: any, res: any) {
         method: "POST",
         headers: {
           apikey: supabaseAnonKey,
+          Authorization: `Bearer ${supabaseAnonKey}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
         signal: controller.signal,
       });
 
-      const json = await response.json().catch(() => ({}));
+      const json = await response.json().catch(() => ({} as any));
 
       if (!response.ok) {
         const message = typeof json?.msg === "string"
@@ -60,7 +71,12 @@ export default async function handler(req: any, res: any) {
       clearTimeout(timeout);
     }
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Login request failed";
+    const message =
+      error instanceof Error && error.name === "AbortError"
+        ? "Login request timed out"
+        : error instanceof Error
+          ? error.message
+          : "Login request failed";
     return res.status(500).json({ error: message });
   }
 }

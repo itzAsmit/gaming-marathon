@@ -80,10 +80,43 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      if (!data.session) navigate("/admin/login");
-      setChecking(false);
-    });
+    let active = true;
+
+    const checkAuth = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (!active) return;
+
+      if (data.session) {
+        setChecking(false);
+        return;
+      }
+
+      const waitForSession = window.setTimeout(async () => {
+        const { data: retryData } = await supabase.auth.getSession();
+        if (!active) return;
+        if (!retryData.session) {
+          navigate("/admin/login");
+        }
+        setChecking(false);
+      }, 900);
+
+      const {
+        data: { subscription },
+      } = supabase.auth.onAuthStateChange((_event, session) => {
+        if (!active) return;
+        if (session) {
+          clearTimeout(waitForSession);
+          setChecking(false);
+          subscription.unsubscribe();
+        }
+      });
+    };
+
+    void checkAuth();
+
+    return () => {
+      active = false;
+    };
   }, [navigate]);
 
   const logout = async () => {

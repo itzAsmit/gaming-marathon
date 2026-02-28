@@ -66,41 +66,56 @@ export default function AdminLogin() {
       });
 
       if (sessionErr) throw sessionErr;
-      navigate("/admin/dashboard");
+
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (!sessionData.session) throw new Error("Could not establish login session");
     };
 
-    try {
+    const tryDirectLogin = async () => {
       const { error: authErr } = await withTimeout(
         supabase.auth.signInWithPassword({
           email: normalizedEmail,
           password: normalizedPassword,
         }),
-        4000,
+        6000,
         "Direct login timed out",
       );
 
-      if (authErr) {
-        const msg = authErr.message || "Invalid credentials. Access denied.";
-        const isCredentialIssue = /invalid|credential|password|email/i.test(msg);
-        if (isCredentialIssue) {
-          setError(msg);
+      if (authErr) throw authErr;
+    };
+
+    const isMobileDevice = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    try {
+      if (isMobileDevice) {
+        try {
+          await tryProxyLogin();
+          navigate("/admin/dashboard");
+          return;
+        } catch {
+          await tryDirectLogin();
+          navigate("/admin/dashboard");
           return;
         }
-
-        await tryProxyLogin();
-        return;
       }
 
+      await tryDirectLogin();
       navigate("/admin/dashboard");
     } catch (error) {
       try {
         await tryProxyLogin();
+        navigate("/admin/dashboard");
       } catch (proxyError) {
+        const originalMessage = error instanceof Error ? error.message : "Login failed. Please try again.";
+        const isCredentialIssue = /invalid|credential|password|email/i.test(originalMessage);
+        if (isCredentialIssue) {
+          setError(originalMessage);
+          return;
+        }
+
         const message = proxyError instanceof Error
           ? proxyError.message
-          : error instanceof Error
-            ? error.message
-            : "Login failed. Please try again.";
+          : originalMessage;
         setError(message);
       }
     } finally {
