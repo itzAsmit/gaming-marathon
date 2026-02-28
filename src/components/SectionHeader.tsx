@@ -19,7 +19,7 @@ export default function SectionHeader({ title, subtitle, accent }: SectionHeader
       )}
       <h2
         className="text-4xl md:text-6xl font-cinzel font-bold gradient-text-gold mb-4"
-        style={{ fontFamily: "Cinzel, serif" }}
+        style={{ fontFamily: "'ROWAN', serif" }}
       >
         {title}
       </h2>

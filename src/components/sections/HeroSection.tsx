@@ -17,7 +17,7 @@ export default function HeroSection() {
         <ScrollReveal delay={0.25}>
           <h1
             className="text-6xl md:text-9xl font-cinzel font-black mb-4 leading-none"
-            style={{ fontFamily: "Cinzel, serif" }}
+            style={{ fontFamily: "'ROWAN', serif" }}
           >
             <span className="gradient-text-cream text-glow-cream block">GAMING</span>
             <span className="gradient-text-gold text-glow-gold block">MARATHON</span>

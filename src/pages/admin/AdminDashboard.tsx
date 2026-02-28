@@ -108,7 +108,7 @@ export default function AdminDashboard() {
   return (
     <AdminLayout>
       <div className="p-4 md:p-8 pb-12 min-h-full">
-        <h1 className="text-2xl font-cinzel font-bold mb-1" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>
+        <h1 className="text-2xl font-cinzel font-bold mb-1" style={{ color: "hsl(var(--brown-deep))", fontFamily: "'ROWAN', serif" }}>
           Update Leaderboard
         </h1>
         <p className="text-sm mb-8" style={{ color: "hsl(var(--brown-light))" }}>Search a player and edit their stats</p>
@@ -161,7 +161,7 @@ export default function AdminDashboard() {
                 <div className="flex items-center justify-between mb-6">
                   <div>
                     <p className="text-xs font-cinzel tracking-widest" style={{ color: "hsl(var(--brown-light))", fontFamily: "Cinzel, serif" }}>{selected.player_id}</p>
-                    <h3 className="text-lg font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>{selected.name}</h3>
+                    <h3 className="text-lg font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "'ROWAN', serif" }}>{selected.name}</h3>
                   </div>
                 </div>
 
