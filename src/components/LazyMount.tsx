@@ -3,6 +3,8 @@ import { useRef, useState, useEffect, type ReactNode } from "react";
 interface LazyMountProps {
   /** Extra pixels beyond the viewport to trigger mount early */
   rootMargin?: string;
+  /** Reserved height before mount to avoid layout shifts */
+  minHeight?: string;
   /** Fallback shown before the section mounts */
   fallback?: ReactNode;
   children: ReactNode;
@@ -16,7 +18,8 @@ interface LazyMountProps {
  * when the page first loads, which is critical on slow mobile networks.
  */
 export default function LazyMount({
-  rootMargin = "400px",
+  rootMargin = "700px",
+  minHeight = "100svh",
   fallback,
   children,
 }: LazyMountProps) {
@@ -50,7 +53,7 @@ export default function LazyMount({
   if (visible) return <>{children}</>;
 
   return (
-    <div ref={ref} style={{ minHeight: "50vh" }}>
+    <div ref={ref} style={{ minHeight }}>
       {fallback ?? null}
     </div>
   );
