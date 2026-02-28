@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { raceDataFetch } from "@/lib/raceDataFetch";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { Plus, Pencil, Trash2, Eye, X, RefreshCw, Upload } from "lucide-react";
 import { toast } from "sonner";
@@ -80,14 +81,29 @@ export default function AdminPlayers() {
   const portraitRef = useRef<HTMLInputElement>(null);
 
   const fetchPlayers = async () => {
-    const { data } = await supabase.from("players").select("*").order("player_id");
-    if (data) setPlayers(data.map((p: any) => ({ ...p, is_active: p.is_active ?? true })) as Player[]);
-    setLoading(false);
+    try {
+      const data = await raceDataFetch<Player[]>(
+        () => supabase.from("players").select("*").order("player_id"),
+        "admin_players",
+      );
+      setPlayers(data.map((p: any) => ({ ...p, is_active: p.is_active ?? true })));
+    } catch {
+      toast.error("Failed to load players");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const fetchGames = async () => {
-    const { data } = await supabase.from("games").select("id, name").order("game_id");
-    if (data) setGameOptions(data as GameOption[]);
+    try {
+      const data = await raceDataFetch<GameOption[]>(
+        () => supabase.from("games").select("id, name").order("game_id"),
+        "admin_games",
+      );
+      setGameOptions(data);
+    } catch {
+      // Non-critical, games are for proficiency dropdown
+    }
   };
 
   useEffect(() => { fetchPlayers(); fetchGames(); }, []);

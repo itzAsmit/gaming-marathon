@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { raceDataFetch } from "@/lib/raceDataFetch";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { Search, Save, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
@@ -31,11 +32,15 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     const fetchPlayers = async () => {
-      const { data } = await supabase
-        .from("players")
-        .select("id, player_id, name")
-        .order("player_id");
-      if (data) setPlayers(data as Player[]);
+      try {
+        const data = await raceDataFetch<Player[]>(
+          () => supabase.from("players").select("id, player_id, name").order("player_id"),
+          "admin_players",
+        );
+        setPlayers(data);
+      } catch {
+        toast.error("Failed to load players");
+      }
     };
     fetchPlayers();
   }, []);

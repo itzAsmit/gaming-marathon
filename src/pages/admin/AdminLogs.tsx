@@ -1,15 +1,23 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { raceDataFetch } from "@/lib/raceDataFetch";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { RefreshCw } from "lucide-react";
+import { toast } from "sonner";
 
 export default function AdminLogs() {
   const [logs, setLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.from("activity_logs").select("*").order("created_at", { ascending: false }).limit(200).then(({ data }) => {
-      if (data) setLogs(data);
+    raceDataFetch<any[]>(
+      () => supabase.from("activity_logs").select("*").order("created_at", { ascending: false }).limit(200),
+      "admin_activity_logs",
+    ).then((data) => {
+      setLogs(data);
+    }).catch(() => {
+      toast.error("Failed to load logs");
+    }).finally(() => {
       setLoading(false);
     });
   }, []);

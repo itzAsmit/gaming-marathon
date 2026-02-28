@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { raceDataFetch } from "@/lib/raceDataFetch";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { Search, RefreshCw, X } from "lucide-react";
 import { toast } from "sonner";
@@ -37,19 +38,22 @@ export default function AdminItems() {
   const loadData = async () => {
     setRefreshing(true);
 
-    const [{ data: playersData, error: playersError }, { data: itemsData, error: itemsError }] = await Promise.all([
-      (supabase as any)
-        .from("players")
-        .select("id, name, player_id, is_active, player_items(id, item_id, items(id, name))")
-        .eq("is_active", true)
-        .order("player_id", { ascending: true }),
-      supabase.from("items").select("id, name").order("name", { ascending: true }),
-    ]);
+    try {
+      const [playersData, itemsData] = await Promise.all([
+        raceDataFetch<AdminPlayer[]>(
+          () => (supabase as any)
+            .from("players")
+            .select("id, name, player_id, is_active, player_items(id, item_id, items(id, name))")
+            .eq("is_active", true)
+            .order("player_id", { ascending: true }),
+          "admin_players_with_items",
+        ),
+        raceDataFetch<Item[]>(
+          () => supabase.from("items").select("id, name").order("name", { ascending: true }),
+          "admin_items",
+        ),
+      ]);
 
-    if (playersError) toast.error("Failed to load players");
-    if (itemsError) toast.error("Failed to load items");
-
-    if (playersData) {
       const normalizedPlayers = playersData.map((p: any) => ({
         ...p,
         player_items: p.player_items ?? [],
@@ -59,11 +63,13 @@ export default function AdminItems() {
         if (prev && normalizedPlayers.some((p: AdminPlayer) => p.id === prev)) return prev;
         return normalizedPlayers[0]?.id ?? "";
       });
+
+      setItems(itemsData);
+    } catch {
+      toast.error("Failed to load data");
+    } finally {
+      setRefreshing(false);
     }
-
-    if (itemsData) setItems(itemsData as Item[]);
-
-    setRefreshing(false);
   };
 
   useEffect(() => {

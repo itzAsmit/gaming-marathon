@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
-type Resource = "leaderboard" | "players" | "games" | "hall_of_fame" | "rankings";
+type Resource = "leaderboard" | "players" | "games" | "hall_of_fame" | "rankings" | "admin_players" | "admin_games" | "admin_items" | "admin_hall_of_fame" | "admin_activity_logs" | "admin_players_with_items";
 
 const supabaseUrl =
   process.env.SUPABASE_URL ||
@@ -11,7 +11,7 @@ const supabaseAnonKey =
   process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
 const isAllowedResource = (value: string): value is Resource => {
-  return ["leaderboard", "players", "games", "hall_of_fame", "rankings"].includes(value);
+  return ["leaderboard", "players", "games", "hall_of_fame", "rankings", "admin_players", "admin_games", "admin_items", "admin_hall_of_fame", "admin_activity_logs", "admin_players_with_items"].includes(value);
 };
 
 export default async function handler(req: any, res: any) {
@@ -58,6 +58,47 @@ export default async function handler(req: any, res: any) {
       const { data, error } = await supabase
         .from("hall_of_fame")
         .select("*, players(name, player_id, portrait_url)");
+      if (error) return res.status(500).json({ error: error.message });
+      return res.status(200).json({ data });
+    }
+
+    // Admin-specific queries (simpler selects for admin CRUD pages)
+    if (resourceRaw === "admin_players") {
+      const { data, error } = await supabase.from("players").select("*").order("player_id");
+      if (error) return res.status(500).json({ error: error.message });
+      return res.status(200).json({ data });
+    }
+
+    if (resourceRaw === "admin_games") {
+      const { data, error } = await supabase.from("games").select("*").order("game_id");
+      if (error) return res.status(500).json({ error: error.message });
+      return res.status(200).json({ data });
+    }
+
+    if (resourceRaw === "admin_items") {
+      const { data, error } = await supabase.from("items").select("*").order("name");
+      if (error) return res.status(500).json({ error: error.message });
+      return res.status(200).json({ data });
+    }
+
+    if (resourceRaw === "admin_hall_of_fame") {
+      const { data, error } = await supabase.from("hall_of_fame").select("*").order("created_at", { ascending: false });
+      if (error) return res.status(500).json({ error: error.message });
+      return res.status(200).json({ data });
+    }
+
+    if (resourceRaw === "admin_activity_logs") {
+      const { data, error } = await supabase.from("activity_logs").select("*").order("created_at", { ascending: false }).limit(100);
+      if (error) return res.status(500).json({ error: error.message });
+      return res.status(200).json({ data });
+    }
+
+    if (resourceRaw === "admin_players_with_items") {
+      const { data, error } = await supabase
+        .from("players")
+        .select("id, name, player_id, is_active, player_items(id, item_id, items(id, name))")
+        .eq("is_active", true)
+        .order("player_id");
       if (error) return res.status(500).json({ error: error.message });
       return res.status(200).json({ data });
     }

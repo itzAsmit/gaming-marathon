@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { raceDataFetch } from "@/lib/raceDataFetch";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { toast } from "sonner";
 
@@ -10,16 +11,26 @@ export default function AdminHallOfFame() {
   const [entries, setEntries] = useState<any[]>([]);
   const [saving, setSaving] = useState(false);
 
-  const fetch = async () => {
-    const [{ data: p }, { data: h }] = await Promise.all([
-      supabase.from("players").select("id, name, player_id"),
-      supabase.from("hall_of_fame").select("*"),
-    ]);
-    if (p) setPlayers(p);
-    if (h) setEntries(h);
+  const fetchData = async () => {
+    try {
+      const [p, h] = await Promise.all([
+        raceDataFetch<any[]>(
+          () => supabase.from("players").select("id, name, player_id"),
+          "admin_players",
+        ),
+        raceDataFetch<any[]>(
+          () => supabase.from("hall_of_fame").select("*"),
+          "admin_hall_of_fame",
+        ),
+      ]);
+      setPlayers(p);
+      setEntries(h);
+    } catch {
+      toast.error("Failed to load data");
+    }
   };
 
-  useEffect(() => { fetch(); }, []);
+  useEffect(() => { fetchData(); }, []);
 
   const getEntry = (season: number, rank: number) =>
     entries.find((e) => e.season === season && e.rank === rank);
@@ -35,7 +46,7 @@ export default function AdminHallOfFame() {
     }
     await supabase.from("activity_logs").insert({ action: "UPDATE_HALL_OF_FAME", target: `Season ${season} Rank ${rank}` });
     toast.success("Hall of Fame updated!");
-    await fetch();
+    await fetchData();
     setSaving(false);
   };
 

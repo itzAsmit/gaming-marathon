@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { raceDataFetch } from "@/lib/raceDataFetch";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { Plus, Pencil, Trash2, RefreshCw, X, Upload, ToggleLeft, ToggleRight, CalendarDays } from "lucide-react";
 import { Calendar as DateCalendar } from "@/components/ui/calendar";
@@ -262,14 +263,30 @@ export default function AdminGames() {
   const videoRef = useRef<HTMLInputElement>(null);
 
   const fetchGames = async () => {
-    const { data } = await supabase.from("games").select("*").order("game_id");
-    if (data) setGames(data);
-    setLoading(false);
+    try {
+      const data = await raceDataFetch<Game[]>(
+        () => supabase.from("games").select("*").order("game_id"),
+        "admin_games",
+      );
+      setGames(data);
+    } catch {
+      toast.error("Failed to load games");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const fetchPlayers = async () => {
-    const { data } = await supabase.from("players").select("id, name, player_id").eq("is_active", true);
-    if (data) setPlayers(data);
+    try {
+      const data = await raceDataFetch<{ id: string; name: string; player_id: string }[]>(
+        () => supabase.from("players").select("id, name, player_id").eq("is_active", true),
+        "admin_players",
+      );
+      // Filter for active players client-side since the proxy returns all
+      setPlayers(data.filter((p: any) => p.is_active !== false));
+    } catch {
+      // Non-critical
+    }
   };
 
   useEffect(() => { fetchGames(); fetchPlayers(); }, []);
