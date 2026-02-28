@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { withRetry } from "@/lib/withRetry";
 import { withTimeout } from "@/lib/withTimeout";
 import { fetchPublicData } from "@/lib/fetchPublicData";
+import { toMediaSrc } from "@/lib/mediaUrl";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import { motion, AnimatePresence } from "framer-motion";
@@ -185,10 +186,10 @@ export default function GamesSection() {
                   >
                     <div className="glass-card rounded-2xl overflow-hidden relative">
                       <div className="aspect-[3/4] overflow-hidden relative">
-                        {game.image_url ? (
-                          <img src={game.image_url} alt={game.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                        ) : game.video_url ? (
-                          <video src={game.video_url} autoPlay loop muted playsInline className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                        {toMediaSrc(game.image_url) ? (
+                          <img src={toMediaSrc(game.image_url) ?? undefined} alt={game.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                        ) : toMediaSrc(game.video_url) ? (
+                          <video src={toMediaSrc(game.video_url) ?? undefined} autoPlay loop muted playsInline className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                         ) : (
                           <div
                             className="w-full h-full flex items-center justify-center"
@@ -263,10 +264,10 @@ export default function GamesSection() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="relative h-[52vh] min-h-[320px] max-h-[520px] overflow-hidden">
-                {selected.video_url ? (
-                  <video src={selected.video_url} autoPlay loop muted className="w-full h-full object-cover" />
-                ) : selected.image_url ? (
-                  <img src={selected.image_url} alt={selected.name} className="w-full h-full object-cover" />
+                {toMediaSrc(selected.video_url) ? (
+                  <video src={toMediaSrc(selected.video_url) ?? undefined} autoPlay loop muted className="w-full h-full object-cover" />
+                ) : toMediaSrc(selected.image_url) ? (
+                  <img src={toMediaSrc(selected.image_url) ?? undefined} alt={selected.name} className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center" style={{ background: "linear-gradient(135deg, hsl(var(--brown-deep)), hsl(var(--brown)))" }}>
                     <span className="text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark))" }}>NO MEDIA</span>

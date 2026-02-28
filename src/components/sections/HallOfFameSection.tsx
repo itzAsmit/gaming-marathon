@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { withRetry } from "@/lib/withRetry";
 import { withTimeout } from "@/lib/withTimeout";
 import { fetchPublicData } from "@/lib/fetchPublicData";
+import { toMediaSrc } from "@/lib/mediaUrl";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import { motion } from "framer-motion";
@@ -77,8 +78,8 @@ export default function HallOfFameSection() {
           className={`${cfg.size} rounded-full overflow-hidden mb-3 ${cfg.glow}`}
           style={{ border: `2px solid ${cfg.color}` }}
         >
-          {entry?.players?.portrait_url ? (
-            <img src={entry.players.portrait_url} alt={entry.players.name} className="w-full h-full object-cover" />
+          {toMediaSrc(entry?.players?.portrait_url) ? (
+            <img src={toMediaSrc(entry?.players?.portrait_url) ?? undefined} alt={entry.players.name} className="w-full h-full object-cover" />
           ) : (
             <div className="w-full h-full flex items-center justify-center" style={{ background: "linear-gradient(135deg, hsl(var(--brown-deep)), hsl(var(--brown)))" }}>
               <span className="text-2xl">{cfg.emoji}</span>

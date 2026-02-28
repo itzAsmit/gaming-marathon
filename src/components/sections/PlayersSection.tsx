@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { withRetry } from "@/lib/withRetry";
 import { withTimeout } from "@/lib/withTimeout";
 import { fetchPublicData } from "@/lib/fetchPublicData";
+import { toMediaSrc } from "@/lib/mediaUrl";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import { motion, AnimatePresence } from "framer-motion";
@@ -179,9 +180,9 @@ export default function PlayersSection() {
                   }}
                 >
                   <div className="aspect-[3/4] overflow-hidden relative">
-                    {player.portrait_url ? (
+                    {toMediaSrc(player.portrait_url) ? (
                       <img
-                        src={player.portrait_url}
+                        src={toMediaSrc(player.portrait_url) ?? undefined}
                         alt={player.name}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         style={{
@@ -270,9 +271,9 @@ export default function PlayersSection() {
                 <div className="grid md:grid-cols-[40%_60%] md:h-full">
                 {/* Left */}
                 <div className="relative md:h-full">
-                  {selected.portrait_url ? (
+                  {toMediaSrc(selected.portrait_url) ? (
                     <img
-                      src={selected.portrait_url}
+                      src={toMediaSrc(selected.portrait_url) ?? undefined}
                       alt={selected.name}
                       className="w-full h-full object-cover min-h-64 md:min-h-0"
                       style={{
