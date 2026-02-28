@@ -8,7 +8,7 @@ export default function HeroSection() {
         <ScrollReveal delay={0.1}>
           <p
             className="text-xs md:text-sm font-cinzel tracking-[0.6em] mb-6"
-            style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}
+            style={{ color: "hsl(var(--gold))", fontFamily: "'ROWAN', serif" }}
           >
             THE ULTIMATE COMPETITION
           </p>
@@ -17,7 +17,7 @@ export default function HeroSection() {
         <ScrollReveal delay={0.25}>
           <h1
             className="text-6xl md:text-9xl font-cinzel font-black mb-4 leading-none"
-            style={{ fontFamily: "Cinzel, serif" }}
+            style={{ fontFamily: "'ROWAN', serif" }}
           >
             <span className="gradient-text-cream text-glow-cream block">GAMING</span>
             <span className="gradient-text-gold text-glow-gold block">MARATHON</span>
@@ -29,7 +29,7 @@ export default function HeroSection() {
             <div className="h-px flex-1 max-w-32" style={{ background: "linear-gradient(to right, transparent, hsl(var(--gold)))" }} />
             <span
               className="text-xs tracking-[0.5em] font-cinzel"
-              style={{ color: "hsl(var(--cream-dark))", fontFamily: "Cinzel, serif" }}
+              style={{ color: "hsl(var(--cream-dark))", fontFamily: "'ROWAN', serif" }}
             >
               ESPORTS CHAMPIONSHIP
             </span>
@@ -54,7 +54,7 @@ export default function HeroSection() {
               style={{
                 background: "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-light)))",
                 color: "hsl(var(--brown-deep))",
-                fontFamily: "Cinzel, serif",
+                fontFamily: "'ROWAN', serif",
                 boxShadow: "0 0 40px hsla(var(--gold) / 0.5), 0 0 80px hsla(var(--gold) / 0.2)",
                 fontWeight: 700,
               }}
@@ -69,7 +69,7 @@ export default function HeroSection() {
                 className="px-7 py-3 font-cinzel text-xs tracking-[0.3em] rounded-full glass-card transition-all duration-300 hover:scale-105 flex items-center gap-2"
                 style={{
                   color: "hsl(var(--cream))",
-                  fontFamily: "Cinzel, serif",
+                  fontFamily: "'ROWAN', serif",
                   borderLeft: "2px solid #25D366",
                 }}
                 onClick={() => {}}
@@ -85,7 +85,7 @@ export default function HeroSection() {
                 className="px-7 py-3 font-cinzel text-xs tracking-[0.3em] rounded-full glass-card transition-all duration-300 hover:scale-105 flex items-center gap-2"
                 style={{
                   color: "hsl(var(--cream))",
-                  fontFamily: "Cinzel, serif",
+                  fontFamily: "'ROWAN', serif",
                   borderLeft: "2px solid #5865F2",
                 }}
                 onClick={() => window.open("https://discord.gg/VwW8ktwzyb", "_blank")}

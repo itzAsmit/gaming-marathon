@@ -80,7 +80,7 @@ export default function LeaderboardSection() {
                 background: "hsla(var(--gold) / 0.15)",
                 borderBottom: "1px solid hsla(var(--gold) / 0.3)",
                 color: "hsl(var(--gold))",
-                fontFamily: "Cinzel, serif",
+                fontFamily: "'ROWAN', serif",
                 gridTemplateColumns: "repeat(auto-fit, minmax(0, 1fr))",
                 minWidth: "min-content",
               }}
@@ -114,7 +114,7 @@ export default function LeaderboardSection() {
                 <button
                   className="px-4 py-2 rounded-full text-xs font-cinzel tracking-widest"
                   style={{
-                    fontFamily: "Cinzel, serif",
+                    fontFamily: "'ROWAN', serif",
                     color: "hsl(var(--gold))",
                     border: "1px solid hsla(var(--gold) / 0.45)",
                     background: "hsla(var(--gold) / 0.12)",
@@ -128,7 +128,7 @@ export default function LeaderboardSection() {
                 </button>
               </div>
             ) : entries.length === 0 ? (
-              <div className="py-20 text-center font-cinzel text-[10px] md:text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark) / 0.5)", fontFamily: "Cinzel, serif" }}>
+              <div className="py-20 text-center font-cinzel text-[10px] md:text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark) / 0.5)", fontFamily: "'ROWAN', serif" }}>
                 NO ENTRIES YET — ARENA AWAITS
               </div>
             ) : (
@@ -145,10 +145,10 @@ export default function LeaderboardSection() {
                   }}
                   whileHover={{ backgroundColor: "hsla(var(--gold) / 0.1)" }}
                 >
-                  <div className="font-cinzel font-bold whitespace-nowrap" style={{ fontFamily: "Cinzel, serif", color: i < 3 ? "hsl(var(--gold))" : "hsl(var(--cream-dark))" }}>
+                  <div className="font-cinzel font-bold whitespace-nowrap" style={{ fontFamily: "'ROWAN', serif", color: i < 3 ? "hsl(var(--gold))" : "hsl(var(--cream-dark))" }}>
                     {i < 3 ? CROWN[i] : `#${i + 1}`}
                   </div>
-                  <div className="font-cinzel font-semibold truncate" style={{ fontFamily: "Cinzel, serif", color: "hsl(var(--cream))" }}>
+                  <div className="font-cinzel font-semibold truncate" style={{ fontFamily: "'ROWAN', serif", color: "hsl(var(--cream))" }}>
                     <span className="sm:hidden">{entry.players?.name?.split(" ")[0] ?? "—"}</span>
                     <span className="hidden sm:inline">{entry.players?.name ?? "—"}</span>
                   </div>
@@ -157,7 +157,7 @@ export default function LeaderboardSection() {
                   <div className="whitespace-nowrap" style={{ color: "hsl(var(--gold))", fontWeight: 600 }}>{entry.wins}</div>
                   <div className="whitespace-nowrap">{entry.seconds}</div>
                   <div className="whitespace-nowrap">{entry.thirds}</div>
-                  <div className="font-bold whitespace-nowrap" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>
+                  <div className="font-bold whitespace-nowrap" style={{ color: "hsl(var(--gold))", fontFamily: "'ROWAN', serif" }}>
                     {entry.points}
                   </div>
                 </motion.div>

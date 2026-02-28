@@ -12,14 +12,14 @@ export default function SectionHeader({ title, subtitle, accent }: SectionHeader
       {accent && (
         <p
           className="text-sm font-cinzel tracking-[0.4em] mb-3"
-          style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}
+          style={{ color: "hsl(var(--gold))", fontFamily: "'ROWAN', serif" }}
         >
           {accent}
         </p>
       )}
       <h2
         className="text-4xl md:text-6xl font-cinzel font-bold gradient-text-gold mb-4"
-        style={{ fontFamily: "Cinzel, serif" }}
+        style={{ fontFamily: "'ROWAN', serif" }}
       >
         {title}
       </h2>

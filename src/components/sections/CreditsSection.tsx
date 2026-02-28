@@ -34,10 +34,10 @@ export default function CreditsSection() {
                 transition={{ duration: 0.3 }}
               >
                 <div className="text-5xl mb-4">{credit.emoji}</div>
-                <p className="text-xs font-cinzel tracking-[0.4em] mb-3" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>
+                <p className="text-xs font-cinzel tracking-[0.4em] mb-3" style={{ color: "hsl(var(--gold))", fontFamily: "'ROWAN', serif" }}>
                   {credit.role}
                 </p>
-                <h3 className="text-xl font-cinzel font-bold mb-2" style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}>
+                <h3 className="text-xl font-cinzel font-bold mb-2" style={{ color: "hsl(var(--cream))", fontFamily: "'ROWAN', serif" }}>
                   {credit.name}
                 </h3>
                 <p className="text-sm" style={{ color: "hsl(var(--cream-dark) / 0.7)" }}>{credit.caption}</p>
@@ -49,7 +49,7 @@ export default function CreditsSection() {
         {/* Footer */}
         <ScrollReveal delay={0.4}>
           <div className="mt-16 text-center border-t pt-8" style={{ borderColor: "hsla(var(--gold) / 0.2)" }}>
-            <p className="font-cinzel text-xs tracking-[0.5em]" style={{ color: "hsl(var(--gold) / 0.5)", fontFamily: "Cinzel, serif" }}>
+            <p className="font-cinzel text-xs tracking-[0.5em]" style={{ color: "hsl(var(--gold) / 0.5)", fontFamily: "'ROWAN', serif" }}>
               GAMING MARATHON © 2026 — ALL RIGHTS RESERVED
             </p>
           </div>

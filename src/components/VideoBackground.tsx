@@ -184,21 +184,21 @@ export default function VideoBackground({ videoUrl }: VideoBackgroundProps) {
         <button
           onClick={() => document.getElementById("leaderboard")?.scrollIntoView({ behavior: "smooth" })}
           className="hidden md:inline text-xs font-cinzel tracking-widest transition-all duration-300 hover:opacity-100 opacity-70"
-          style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif", background: "none", border: "none" }}
+          style={{ color: "hsl(var(--cream))", fontFamily: "'ROWAN', serif", background: "none", border: "none" }}
         >
           LEADERBOARD
         </button>
         <button
           onClick={() => document.getElementById("players")?.scrollIntoView({ behavior: "smooth" })}
           className="hidden md:inline text-xs font-cinzel tracking-widest transition-all duration-300 hover:opacity-100 opacity-70"
-          style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif", background: "none", border: "none" }}
+          style={{ color: "hsl(var(--cream))", fontFamily: "'ROWAN', serif", background: "none", border: "none" }}
         >
           MEET PLAYERS
         </button>
         <Link
           to="/admin/login"
           className="glass-card px-3 md:px-4 py-2 rounded-full text-cream text-xs md:text-sm font-cinzel tracking-widest hover:glow-gold transition-all duration-300"
-          style={{ color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}
+          style={{ color: "hsl(var(--cream))", fontFamily: "'ROWAN', serif" }}
         >
           ADMIN
         </Link>

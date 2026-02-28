@@ -315,13 +315,13 @@ export default function AdminPlayers() {
         <div className="md:sticky md:top-0 z-20 mb-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h1 className="text-2xl font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>Players</h1>
+              <h1 className="text-2xl font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "'ROWAN', serif" }}>Players</h1>
               <p className="text-sm mt-1" style={{ color: "hsl(var(--brown-light))" }}>{players.length} registered</p>
             </div>
             <button
               onClick={openCreate}
               className="flex items-center gap-2 px-3 md:px-4 py-2.5 rounded-xl font-cinzel text-xs md:text-sm tracking-wider"
-              style={{ background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))", color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}
+              style={{ background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))", color: "hsl(var(--cream))", fontFamily: "'ROWAN', serif" }}
             >
               <Plus size={16} /> ADD PLAYER
             </button>
@@ -380,7 +380,7 @@ export default function AdminPlayers() {
           <div className="w-full max-w-2xl rounded-2xl overflow-hidden" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
             <div className="max-h-[90dvh] overflow-y-auto animated-scroll-area no-scrollbar">
               <div className="sticky top-0 z-20 flex items-center justify-between p-6 border-b" style={{ background: "hsl(var(--card))", borderColor: "hsl(var(--cream-dark))" }}>
-                <h2 className="text-lg font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>
+                <h2 className="text-lg font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "'ROWAN', serif" }}>
                   {editing ? "Edit Player" : "Create Player"}
                 </h2>
                 <button onClick={() => setShowForm(false)} style={{ color: "hsl(var(--brown-light))" }}><X size={20} /></button>
@@ -388,13 +388,13 @@ export default function AdminPlayers() {
               <div className="p-6 space-y-5">
               {/* ID (read-only) */}
               <div>
-                <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>PLAYER ID</label>
+                <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "'ROWAN', serif" }}>PLAYER ID</label>
                 <input value={form.player_id} readOnly className="w-full px-4 py-2.5 rounded-xl text-sm outline-none opacity-60" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} />
               </div>
 
               {/* Active Status */}
               <div>
-                <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>STATUS</label>
+                <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "'ROWAN', serif" }}>STATUS</label>
                 <div className="flex gap-3">
                   <button
                     type="button"
@@ -440,20 +440,20 @@ export default function AdminPlayers() {
 
               {/* Name */}
               <div>
-                <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>NAME *</label>
+                <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "'ROWAN', serif" }}>NAME *</label>
                 <input value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} placeholder="Player name" />
               </div>
 
               {/* Bio */}
               <div>
-                <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>BIO</label>
+                <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "'ROWAN', serif" }}>BIO</label>
                 <textarea rows={3} value={form.bio ?? ""} onChange={(e) => setForm((f) => ({ ...f, bio: e.target.value }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none resize-none" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} placeholder="Short bio..." />
               </div>
 
               {/* Image uploads */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>AVATAR (circle)</label>
+                  <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "'ROWAN', serif" }}>AVATAR (circle)</label>
                   <div
                     className="border-2 border-dashed rounded-xl p-4 text-center cursor-pointer hover:opacity-80 transition-opacity"
                     style={{ borderColor: "hsl(var(--cream-dark))" }}
@@ -482,7 +482,7 @@ export default function AdminPlayers() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>PORTRAIT (3:4)</label>
+                  <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "'ROWAN', serif" }}>PORTRAIT (3:4)</label>
                   <div
                     className="border-2 border-dashed rounded-xl p-4 text-center cursor-pointer hover:opacity-80 transition-opacity"
                     style={{ borderColor: "hsl(var(--cream-dark))" }}
@@ -516,7 +516,7 @@ export default function AdminPlayers() {
               <div className="grid grid-cols-3 gap-3">
                 {(["instagram", "twitter", "linkedin"] as const).map((s) => (
                   <div key={s}>
-                    <label className="block text-xs font-cinzel tracking-widest mb-1.5 capitalize" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>{s.toUpperCase()}</label>
+                    <label className="block text-xs font-cinzel tracking-widest mb-1.5 capitalize" style={{ color: "hsl(var(--brown))", fontFamily: "'ROWAN', serif" }}>{s.toUpperCase()}</label>
                     <input value={(form as any)[s] ?? ""} onChange={(e) => setForm((f) => ({ ...f, [s]: e.target.value }))} className="w-full px-3 py-2 rounded-xl text-xs outline-none" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} placeholder={`https://www.example.com`} />
                   </div>
                 ))}
@@ -525,9 +525,9 @@ export default function AdminPlayers() {
               {/* Proficiencies */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-cinzel tracking-widest" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>GAME PROFICIENCY (1-3)</label>
+                  <label className="text-xs font-cinzel tracking-widest" style={{ color: "hsl(var(--brown))", fontFamily: "'ROWAN', serif" }}>GAME PROFICIENCY (1-3)</label>
                   {proficiencies.length < 3 && (
-                    <button onClick={() => setProficiencies((p) => [...p, { game_name: "", proficiency_percent: 50 }])} className="text-xs font-cinzel" style={{ color: "hsl(var(--brown-light))", fontFamily: "Cinzel, serif" }}>+ Add</button>
+                    <button onClick={() => setProficiencies((p) => [...p, { game_name: "", proficiency_percent: 50 }])} className="text-xs font-cinzel" style={{ color: "hsl(var(--brown-light))", fontFamily: "'ROWAN', serif" }}>+ Add</button>
                   )}
                 </div>
                 <div className="space-y-3">
@@ -568,7 +568,7 @@ export default function AdminPlayers() {
                   onClick={savePlayer}
                   disabled={saving}
                   className="w-full py-3 rounded-xl font-cinzel text-sm tracking-widest flex items-center justify-center gap-2"
-                  style={{ background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))", color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}
+                  style={{ background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))", color: "hsl(var(--cream))", fontFamily: "'ROWAN', serif" }}
                 >
                   {saving ? <RefreshCw size={14} className="animate-spin" /> : null}
                   {saving ? "SAVING..." : editing ? "UPDATE PLAYER" : "CREATE PLAYER"}
@@ -661,7 +661,7 @@ export default function AdminPlayers() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "hsla(var(--brown-deep) / 0.5)", backdropFilter: "blur(8px)" }}>
           <div className="rounded-2xl p-8 max-w-sm w-full text-center" style={{ background: "hsl(var(--card))" }}>
             <Trash2 size={32} className="mx-auto mb-4" style={{ color: "hsl(var(--destructive))" }} />
-            <h3 className="font-cinzel font-bold text-lg mb-2" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>Delete Player?</h3>
+            <h3 className="font-cinzel font-bold text-lg mb-2" style={{ color: "hsl(var(--brown-deep))", fontFamily: "'ROWAN', serif" }}>Delete Player?</h3>
             <p className="text-sm mb-6" style={{ color: "hsl(var(--brown-light))" }}>This will permanently delete <strong>{confirmDelete.name}</strong> and all their data.</p>
             <div className="flex gap-3">
               <button onClick={() => setConfirmDelete(null)} className="flex-1 py-2.5 rounded-xl text-sm" style={{ background: "hsl(var(--input))", color: "hsl(var(--brown))", border: "1px solid hsl(var(--cream-dark))" }}>Cancel</button>

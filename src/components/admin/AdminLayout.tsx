@@ -25,7 +25,7 @@ function SidebarContent({ onClose, logout }: { onClose?: () => void; logout: () 
             <Gamepad2 size={16} style={{ color: "hsl(var(--cream))" }} />
           </div>
           <div>
-            <p className="text-xs font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>MARATHON</p>
+            <p className="text-xs font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "'ROWAN', serif" }}>MARATHON</p>
             <p className="text-xs" style={{ color: "hsl(var(--brown-light))" }}>Admin Panel</p>
           </div>
         </Link>
@@ -138,7 +138,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))" }}>
             <Gamepad2 size={14} style={{ color: "hsl(var(--cream))" }} />
           </div>
-          <p className="text-xs font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>MARATHON</p>
+          <p className="text-xs font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "'ROWAN', serif" }}>MARATHON</p>
         </Link>
 
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
