@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { raceDataFetch } from "@/lib/raceDataFetch";
+import { adminMutation } from "@/lib/adminMutation";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { Search, Save, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
@@ -18,7 +19,11 @@ interface LeaderboardEntry {
 }
 
 const logActivity = async (action: string, target: string) => {
-  await supabase.from("activity_logs").insert({ action, target });
+  try {
+    await adminMutation.insert("activity_logs", { action, target });
+  } catch {
+    // Non-critical
+  }
 };
 
 export default function AdminDashboard() {
@@ -58,27 +63,33 @@ export default function AdminDashboard() {
   const saveStats = async () => {
     if (!selected) return;
     setSaving(true);
-    const payload = { ...stats, player_id: selected.id, updated_at: new Date().toISOString() };
+    try {
+      const payload = { ...stats, player_id: selected.id, updated_at: new Date().toISOString() };
 
-    const { data: existing } = await supabase.from("leaderboard").select("id").eq("player_id", selected.id).single();
+      const { data: existing } = await supabase.from("leaderboard").select("id").eq("player_id", selected.id).single();
 
-    if (existing) {
-      await supabase.from("leaderboard").update(payload).eq("player_id", selected.id);
-    } else {
-      await supabase.from("leaderboard").insert(payload);
-    }
-
-    // Recalculate ranks
-    const { data: allEntries } = await supabase.from("leaderboard").select("id, points").order("points", { ascending: false });
-    if (allEntries) {
-      for (let i = 0; i < allEntries.length; i++) {
-        await supabase.from("leaderboard").update({ rank: i + 1 }).eq("id", allEntries[i].id);
+      if (existing) {
+        await adminMutation.update("leaderboard", payload, { player_id: selected.id });
+      } else {
+        await adminMutation.insert("leaderboard", payload);
       }
-    }
 
-    await logActivity("UPDATE_LEADERBOARD", selected.name);
-    toast.success(`Stats updated for ${selected.name}`);
-    setSaving(false);
+      // Recalculate ranks
+      const allEntries = await raceDataFetch<{ id: string; points: number }[]>(
+        () => supabase.from("leaderboard").select("id, points").order("points", { ascending: false }),
+        "leaderboard",
+      );
+      for (let i = 0; i < allEntries.length; i++) {
+        await adminMutation.update("leaderboard", { rank: i + 1 }, { id: allEntries[i].id });
+      }
+
+      await logActivity("UPDATE_LEADERBOARD", selected.name);
+      toast.success(`Stats updated for ${selected.name}`);
+    } catch {
+      toast.error("Failed to save stats");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const filtered = players.filter((p) =>

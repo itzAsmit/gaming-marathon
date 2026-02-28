@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { raceDataFetch } from "@/lib/raceDataFetch";
+import { adminMutation } from "@/lib/adminMutation";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { Search, RefreshCw, X } from "lucide-react";
 import { toast } from "sonner";
@@ -89,10 +90,10 @@ export default function AdminItems() {
     if (alreadyAssigned) return;
 
     setSaving(true);
-    const { error } = await supabase.from("player_items").insert({ player_id: selectedPlayer.id, item_id: item.id });
+    const { error } = await adminMutation.insert("player_items", { player_id: selectedPlayer.id, item_id: item.id });
     if (error) toast.error("Already assigned or failed to assign");
     else {
-      await supabase.from("activity_logs").insert({ action: "ASSIGN_ITEM", target: `${item.name} → ${selectedPlayer.name}` });
+      await adminMutation.insert("activity_logs", { action: "ASSIGN_ITEM", target: `${item.name} → ${selectedPlayer.name}` });
       toast.success(`${item.name} assigned to ${selectedPlayer.name}`);
       await loadData();
     }
@@ -101,12 +102,10 @@ export default function AdminItems() {
 
   const unassignFromPlayer = async (player: AdminPlayer, assignment: AssignedItem) => {
     setSaving(true);
-    const { error } = await supabase.from("player_items").delete().eq("id", assignment.id);
+    const { error } = await adminMutation.delete("player_items", { id: assignment.id });
     if (error) toast.error("Failed to unassign item");
     else {
-      await supabase
-        .from("activity_logs")
-        .insert({ action: "UNASSIGN_ITEM", target: `${assignment.items?.name ?? "Item"} ✕ ${player.name}` });
+      await adminMutation.insert("activity_logs", { action: "UNASSIGN_ITEM", target: `${assignment.items?.name ?? "Item"} ✕ ${player.name}` });
       toast.success(`${assignment.items?.name ?? "Item"} removed from ${player.name}`);
       await loadData();
     }

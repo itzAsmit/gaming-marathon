@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { raceDataFetch } from "@/lib/raceDataFetch";
+import { adminMutation } from "@/lib/adminMutation";
+import { raceUpload } from "@/lib/adminUpload";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { Plus, Pencil, Trash2, Eye, X, RefreshCw, Upload } from "lucide-react";
 import { toast } from "sonner";
@@ -41,7 +43,11 @@ interface CropDraft {
 }
 
 const logActivity = async (action: string, target: string) => {
-  await supabase.from("activity_logs").insert({ action, target });
+  try {
+    await adminMutation.insert("activity_logs", { action, target });
+  } catch {
+    // Non-critical, don't block on logging failure
+  }
 };
 
 function getNextPlayerId(existing: string[]): string {
@@ -135,10 +141,11 @@ export default function AdminPlayers() {
   };
 
   const uploadFile = async (file: File, bucket: string, path: string): Promise<string | null> => {
-    const { error } = await supabase.storage.from(bucket).upload(path, file, { upsert: true });
-    if (error) return null;
-    const { data } = supabase.storage.from(bucket).getPublicUrl(path);
-    return data.publicUrl;
+    try {
+      return await raceUpload(bucket as any, path, file);
+    } catch {
+      return null;
+    }
   };
 
   const getCropFrame = (kind: CropKind) => {
@@ -267,17 +274,17 @@ export default function AdminPlayers() {
       const payload = { ...form, image_url: avatarUrl, portrait_url: portraitUrl };
 
       if (editing) {
-        await supabase.from("players").update(payload).eq("id", editing.id);
-        await supabase.from("player_proficiencies").delete().eq("player_id", editing.id);
+        await adminMutation.update("players", payload, { id: editing.id });
+        await adminMutation.delete("player_proficiencies", { player_id: editing.id });
         if (validProfs.length > 0) {
-          await supabase.from("player_proficiencies").insert(validProfs.map((p) => ({ ...p, player_id: editing.id })));
+          await adminMutation.insert("player_proficiencies", validProfs.map((p) => ({ ...p, player_id: editing.id })));
         }
         await logActivity("EDIT_PLAYER", form.name);
         toast.success("Player updated!");
       } else {
-        const { data: newPlayer } = await supabase.from("players").insert(payload).select().single();
+        const [newPlayer] = await adminMutation.insert<Player>("players", payload);
         if (newPlayer && validProfs.length > 0) {
-          await supabase.from("player_proficiencies").insert(validProfs.map((p) => ({ ...p, player_id: newPlayer.id })));
+          await adminMutation.insert("player_proficiencies", validProfs.map((p) => ({ ...p, player_id: newPlayer.id })));
         }
         await logActivity("CREATE_PLAYER", form.name);
         toast.success("Player created!");
@@ -293,7 +300,7 @@ export default function AdminPlayers() {
   };
 
   const deletePlayer = async (p: Player) => {
-    await supabase.from("players").delete().eq("id", p.id);
+    await adminMutation.delete("players", { id: p.id });
     await logActivity("DELETE_PLAYER", p.name);
     toast.success("Player deleted");
     setConfirmDelete(null);

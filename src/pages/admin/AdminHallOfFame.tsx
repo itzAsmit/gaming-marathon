@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { raceDataFetch } from "@/lib/raceDataFetch";
+import { adminMutation } from "@/lib/adminMutation";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { toast } from "sonner";
 
@@ -37,17 +38,22 @@ export default function AdminHallOfFame() {
 
   const setEntry = async (season: number, rank: number, playerId: string) => {
     setSaving(true);
-    const existing = getEntry(season, rank);
-    if (existing) {
-      if (playerId) await supabase.from("hall_of_fame").update({ player_id: playerId }).eq("id", existing.id);
-      else await supabase.from("hall_of_fame").delete().eq("id", existing.id);
-    } else if (playerId) {
-      await supabase.from("hall_of_fame").insert({ season, rank, player_id: playerId });
+    try {
+      const existing = getEntry(season, rank);
+      if (existing) {
+        if (playerId) await adminMutation.update("hall_of_fame", { player_id: playerId }, { id: existing.id });
+        else await adminMutation.delete("hall_of_fame", { id: existing.id });
+      } else if (playerId) {
+        await adminMutation.insert("hall_of_fame", { season, rank, player_id: playerId });
+      }
+      await adminMutation.insert("activity_logs", { action: "UPDATE_HALL_OF_FAME", target: `Season ${season} Rank ${rank}` });
+      toast.success("Hall of Fame updated!");
+      await fetchData();
+    } catch {
+      toast.error("Failed to update");
+    } finally {
+      setSaving(false);
     }
-    await supabase.from("activity_logs").insert({ action: "UPDATE_HALL_OF_FAME", target: `Season ${season} Rank ${rank}` });
-    toast.success("Hall of Fame updated!");
-    await fetchData();
-    setSaving(false);
   };
 
   const RANK_LABELS = ["🥇 1st Place", "🥈 2nd Place", "🥉 3rd Place"];

@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { raceDataFetch } from "@/lib/raceDataFetch";
+import { adminMutation } from "@/lib/adminMutation";
+import { raceUpload } from "@/lib/adminUpload";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { Plus, Pencil, Trash2, RefreshCw, X, Upload, ToggleLeft, ToggleRight, CalendarDays } from "lucide-react";
 import { Calendar as DateCalendar } from "@/components/ui/calendar";
@@ -47,7 +49,11 @@ interface VideoTrimDraft {
 }
 
 const logActivity = async (action: string, target: string) => {
-  await supabase.from("activity_logs").insert({ action, target });
+  try {
+    await adminMutation.insert("activity_logs", { action, target });
+  } catch {
+    // Non-critical
+  }
 };
 
 function getNextGameId(existing: string[]): string {
@@ -378,13 +384,7 @@ export default function AdminGames() {
   };
 
   const uploadFile = async (file: File, bucket: string, path: string): Promise<string> => {
-    const { error } = await supabase.storage.from(bucket).upload(path, file, {
-      upsert: false,
-      contentType: file.type || undefined,
-    });
-    if (error) throw error;
-    const { data } = supabase.storage.from(bucket).getPublicUrl(path);
-    return data.publicUrl;
+    return raceUpload(bucket as any, path, file);
   };
 
   const saveGame = async () => {
@@ -411,28 +411,28 @@ export default function AdminGames() {
       };
 
       if (editing) {
-        await supabase.from("games").update(payload).eq("id", editing.id);
+        await adminMutation.update("games", payload, { id: editing.id });
 
         if (form.status === "completed") {
-          await supabase.from("player_game_stats").delete().eq("game_id", editing.id);
+          await adminMutation.delete("player_game_stats", { game_id: editing.id });
           const validRanks = rankings
             .filter((r) => r.player_id)
             .map((r, index) => ({ ...r, rank: index + 1, points: Number.isFinite(r.points) ? r.points : 0 }));
           if (validRanks.length > 0) {
-            await supabase.from("player_game_stats").insert(validRanks.map((r) => ({ game_id: editing.id, player_id: r.player_id, rank: r.rank, points: Math.max(0, r.points) })));
+            await adminMutation.insert("player_game_stats", validRanks.map((r) => ({ game_id: editing.id, player_id: r.player_id, rank: r.rank, points: Math.max(0, r.points) })));
           }
         }
 
         await logActivity("EDIT_GAME", form.name);
         toast.success("Game updated!");
       } else {
-        const { data } = await supabase.from("games").insert(payload).select().single();
-        if (data && form.status === "completed") {
+        const [newGame] = await adminMutation.insert<Game>("games", payload);
+        if (newGame && form.status === "completed") {
           const validRanks = rankings
             .filter((r) => r.player_id)
             .map((r, index) => ({ ...r, rank: index + 1, points: Number.isFinite(r.points) ? r.points : 0 }));
           if (validRanks.length > 0) {
-            await supabase.from("player_game_stats").insert(validRanks.map((r) => ({ game_id: data.id, player_id: r.player_id, rank: r.rank, points: Math.max(0, r.points) })));
+            await adminMutation.insert("player_game_stats", validRanks.map((r) => ({ game_id: newGame.id, player_id: r.player_id, rank: r.rank, points: Math.max(0, r.points) })));
           }
         }
         await logActivity("CREATE_GAME", form.name);
@@ -599,7 +599,7 @@ export default function AdminGames() {
   };
 
   const deleteGame = async (g: Game) => {
-    await supabase.from("games").delete().eq("id", g.id);
+    await adminMutation.delete("games", { id: g.id });
     await logActivity("DELETE_GAME", g.name);
     toast.success("Game deleted");
     setConfirmDelete(null);
