@@ -148,7 +148,7 @@ export default function LeaderboardSection() {
                   <div className="font-cinzel font-bold whitespace-nowrap" style={{ fontFamily: "Cinzel, serif", color: i < 3 ? "hsl(var(--gold))" : "hsl(var(--cream-dark))" }}>
                     {i < 3 ? CROWN[i] : `#${i + 1}`}
                   </div>
-                  <div className="font-cinzel font-semibold truncate" style={{ fontFamily: "Cinzel, serif", color: "hsl(var(--cream))" }}>
+                  <div className="font-semibold truncate" style={{ fontFamily: "'ROWAN', serif", color: "hsl(var(--cream))" }}>
                     <span className="sm:hidden">{entry.players?.name?.split(" ")[0] ?? "—"}</span>
                     <span className="hidden sm:inline">{entry.players?.name ?? "—"}</span>
                   </div>
