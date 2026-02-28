@@ -109,10 +109,23 @@ export default function GamesSection() {
   };
 
   const openGame = (game: Game) => {
-    const isMobileDevice =
-      typeof navigator !== "undefined" &&
-      /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    setUseProxyForSelectedVideo(isMobileDevice);
+    let preferProxy = false;
+    if (typeof navigator !== "undefined") {
+      const connection = (navigator as any).connection;
+      const effectiveType = String(connection?.effectiveType ?? "").toLowerCase();
+      const rtt = Number(connection?.rtt ?? 0);
+      const downlink = Number(connection?.downlink ?? 0);
+      const type = String(connection?.type ?? "").toLowerCase();
+      preferProxy =
+        Boolean(connection?.saveData) ||
+        effectiveType.includes("2g") ||
+        effectiveType.includes("3g") ||
+        type === "cellular" ||
+        (rtt > 0 && rtt >= 300) ||
+        (downlink > 0 && downlink <= 3);
+    }
+
+    setUseProxyForSelectedVideo(preferProxy);
     setSelectedVideoFailed(false);
     setSelectedVideoLoaded(false);
     setSelected(game);

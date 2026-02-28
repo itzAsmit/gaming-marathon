@@ -30,7 +30,7 @@ export default function SmartImage({
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [useProxy, setUseProxy] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  const [isConstrainedMobile, setIsConstrainedMobile] = useState(false);
+  const [preferProxyNetwork, setPreferProxyNetwork] = useState(false);
 
   const directSrc = toMediaSrc(url);
   const proxySrc = toProxiedMediaSrc(url);
@@ -38,29 +38,34 @@ export default function SmartImage({
 
   useEffect(() => {
     if (typeof navigator === "undefined") return;
-    const isMobileDevice = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     const connection = (navigator as any).connection;
     const effectiveType = String(connection?.effectiveType ?? "").toLowerCase();
-    const constrained =
+    const rtt = Number(connection?.rtt ?? 0);
+    const downlink = Number(connection?.downlink ?? 0);
+    const type = String(connection?.type ?? "").toLowerCase();
+    const constrainedNetwork =
       Boolean(connection?.saveData) ||
       effectiveType.includes("2g") ||
       effectiveType.includes("3g") ||
-      effectiveType.includes("4g");
-    setIsConstrainedMobile(isMobileDevice && constrained);
+      type === "cellular" ||
+      (rtt > 0 && rtt >= 300) ||
+      (downlink > 0 && downlink <= 3);
+
+    setPreferProxyNetwork(constrainedNetwork);
   }, []);
 
   useEffect(() => {
     setLoaded(false);
-    const shouldStartProxy = Boolean(proxySrc) && proxyFirstOnMobile && isConstrainedMobile;
+    const shouldStartProxy = Boolean(proxySrc) && proxyFirstOnMobile && preferProxyNetwork;
     setUseProxy(shouldStartProxy);
-  }, [directSrc, proxySrc, proxyFirstOnMobile, isConstrainedMobile]);
+  }, [directSrc, proxySrc, proxyFirstOnMobile, preferProxyNetwork]);
 
   // Arm / disarm the stall-detection timer
   useEffect(() => {
     // Nothing to do if there's no URL or already loaded/proxy
     if (!directSrc || loaded || useProxy) return;
 
-    const effectiveTimeout = isConstrainedMobile ? Math.min(timeoutMs, 1500) : timeoutMs;
+    const effectiveTimeout = preferProxyNetwork ? Math.min(timeoutMs, 900) : timeoutMs;
 
     timerRef.current = setTimeout(() => {
       if (proxySrc && !loaded) {
@@ -71,7 +76,7 @@ export default function SmartImage({
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [directSrc, proxySrc, loaded, useProxy, timeoutMs, isConstrainedMobile]);
+  }, [directSrc, proxySrc, loaded, useProxy, timeoutMs, preferProxyNetwork]);
 
   const handleLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
     setLoaded(true);

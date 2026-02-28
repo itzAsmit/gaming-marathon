@@ -32,14 +32,26 @@ export default async function handler(req: any, res: any) {
     const contentRange = response.headers.get("content-range");
     const acceptRanges = response.headers.get("accept-ranges");
     const contentLength = response.headers.get("content-length");
-    const buffer = Buffer.from(await response.arrayBuffer());
 
     res.setHeader("Content-Type", contentType);
     res.setHeader("Cache-Control", cacheControl);
     if (contentRange) res.setHeader("Content-Range", contentRange);
     if (acceptRanges) res.setHeader("Accept-Ranges", acceptRanges);
     if (contentLength) res.setHeader("Content-Length", contentLength);
-    return res.status(response.status).send(buffer);
+
+    // Stream through immediately instead of buffering whole file in memory.
+    // This significantly reduces time-to-first-frame on slower mobile networks.
+    res.status(response.status);
+
+    if (!response.body) {
+      const buffer = Buffer.from(await response.arrayBuffer());
+      return res.send(buffer);
+    }
+
+    const { Readable } = await import("node:stream");
+    const nodeStream = Readable.fromWeb(response.body as any);
+    nodeStream.pipe(res);
+    return;
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unexpected error";
     return res.status(500).json({ error: message });
