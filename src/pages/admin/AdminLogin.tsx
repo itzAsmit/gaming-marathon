@@ -36,36 +36,68 @@ export default function AdminLogin() {
     const normalizedEmail = email.trim().toLowerCase();
     const normalizedPassword = password;
 
-    const tryProxyLogin = async (): Promise<void> => {
-      const response = await withTimeout(
-        fetch("/api/admin-login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({ email: normalizedEmail, password: normalizedPassword }),
-        }),
-        10000,
-        "Login request timed out. Please check your internet and try again.",
+    const isConstrainedNetwork = (() => {
+      if (typeof navigator === "undefined") return false;
+      const connection = (navigator as any).connection;
+      const effectiveType = String(connection?.effectiveType ?? "").toLowerCase();
+      const rtt = Number(connection?.rtt ?? 0);
+      const downlink = Number(connection?.downlink ?? 0);
+      const type = String(connection?.type ?? "").toLowerCase();
+      return (
+        Boolean(connection?.saveData) ||
+        effectiveType.includes("2g") ||
+        effectiveType.includes("3g") ||
+        type === "cellular" ||
+        (rtt > 0 && rtt >= 300) ||
+        (downlink > 0 && downlink <= 3)
       );
+    })();
 
-      const json = (await response.json().catch(() => ({}))) as {
-        access_token?: string;
-        refresh_token?: string;
-        error?: string;
-      };
+    const tryProxyLogin = async (): Promise<void> => {
+      let lastError: Error | null = null;
 
-      if (!response.ok || !json.access_token || !json.refresh_token) {
-        throw new Error(json.error || "Login failed. Please try again.");
+      for (let attempt = 0; attempt < 2; attempt += 1) {
+        try {
+          const response = await withTimeout(
+            fetch(`/api/admin-login?attempt=${attempt + 1}&ts=${Date.now()}`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+              },
+              cache: "no-store",
+              body: JSON.stringify({ email: normalizedEmail, password: normalizedPassword }),
+            }),
+            12000,
+            "Proxy login timed out. Please check your internet and try again.",
+          );
+
+          const json = (await response.json().catch(() => ({}))) as {
+            access_token?: string;
+            refresh_token?: string;
+            error?: string;
+          };
+
+          if (!response.ok || !json.access_token || !json.refresh_token) {
+            throw new Error(json.error || "Login failed. Please try again.");
+          }
+
+          const { error: sessionErr } = await supabase.auth.setSession({
+            access_token: json.access_token,
+            refresh_token: json.refresh_token,
+          });
+
+          if (sessionErr) throw sessionErr;
+          return;
+        } catch (error) {
+          lastError = error instanceof Error ? error : new Error("Proxy login failed");
+          if (attempt < 1) {
+            await new Promise((resolve) => setTimeout(resolve, 500));
+          }
+        }
       }
 
-      const { error: sessionErr } = await supabase.auth.setSession({
-        access_token: json.access_token,
-        refresh_token: json.refresh_token,
-      });
-
-      if (sessionErr) throw sessionErr;
+      throw lastError ?? new Error("Proxy login failed");
     };
 
     const tryDirectLogin = async (): Promise<void> => {
@@ -81,8 +113,7 @@ export default function AdminLogin() {
       if (authErr) throw authErr;
     };
 
-    // Try proxy first (best on mobile/carrier networks).
-    // If proxy fails, try direct; if direct also fails, prefer proxy message.
+    // Try proxy first. On constrained/cellular links, avoid direct Supabase fallback.
     try {
       await tryProxyLogin();
       navigate("/admin/dashboard");
@@ -96,13 +127,19 @@ export default function AdminLogin() {
         return;
       }
 
+      if (isConstrainedNetwork) {
+        setError(proxyMessage || "Login failed on current network. Try again or switch network.");
+        setLoading(false);
+        return;
+      }
+
       try {
         await tryDirectLogin();
         navigate("/admin/dashboard");
       } catch (directErr) {
         const directMessage = directErr instanceof Error ? directErr.message : "Direct login failed";
         const useProxyMessage =
-          /timed out/i.test(directMessage) ||
+          /timed out|failed to fetch/i.test(directMessage) ||
           /environment|missing|supabase/i.test(proxyMessage);
 
         setError(useProxyMessage ? proxyMessage : directMessage);
