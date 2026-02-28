@@ -39,8 +39,9 @@ export default function AdminLogin() {
     const constrained = isConstrainedNetwork();
     console.log('[AdminLogin] Network constrained:', constrained);
 
-    const tryProxyLogin = async (): Promise<void> => {
+    const tryProxyLogin = async (): Promise<{ usedManualStorage: boolean }> => {
       let lastError: Error | null = null;
+      let usedManualStorage = false;
 
       for (let attempt = 0; attempt < 2; attempt += 1) {
         try {
@@ -106,13 +107,14 @@ export default function AdminLogin() {
             };
             try {
               localStorage.setItem(storageKey, JSON.stringify(sessionData));
+              usedManualStorage = true;
             } catch {
               // localStorage might be unavailable
             }
           }
           
           console.log('[AdminLogin] Session set successfully');
-          return;
+          return { usedManualStorage };
         } catch (error) {
           console.log(`[AdminLogin] Proxy attempt failed:`, error);
           lastError = error instanceof Error ? error : new Error("Proxy login failed");
@@ -141,9 +143,17 @@ export default function AdminLogin() {
 
     // Try proxy first. On constrained/cellular links, avoid direct Supabase fallback.
     try {
-      await tryProxyLogin();
+      const proxyResult = await tryProxyLogin();
       console.log('[AdminLogin] Login successful via proxy');
+
+      if (proxyResult.usedManualStorage) {
+        // Force a full reload so Supabase rehydrates session from localStorage.
+        window.location.assign("/admin/dashboard");
+        return;
+      }
+
       navigate("/admin/dashboard");
+      setLoading(false);
     } catch (proxyErr) {
       console.log('[AdminLogin] Proxy path failed:', proxyErr);
       const proxyMessage = proxyErr instanceof Error ? proxyErr.message : "Proxy login failed";
