@@ -61,7 +61,8 @@ const BLANK_GAME: Omit<Game, "id"> = { game_id: "", name: "", bio: null, image_u
 const HOURS = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, "0"));
 const MINUTES = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, "0"));
 const GAME_IMAGE_FRAME = { width: 300, height: 400, outWidth: 900, outHeight: 1200 };
-const MAX_VIDEO_SECONDS = 60;
+const MAX_VIDEO_SECONDS = 30;
+const COMPRESSED_VIDEO_BITRATE = 900_000;
 
 const formatSeconds = (total: number) => {
   const safe = Math.max(0, total);
@@ -169,7 +170,10 @@ const trimVideoFile = async (file: File, start: number, end: number): Promise<Fi
     if (!stream) throw new Error("Browser does not support video trimming");
 
     const mimeType = pickRecorderMimeType();
-    const recorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
+    const recorderOptions = mimeType
+      ? { mimeType, videoBitsPerSecond: COMPRESSED_VIDEO_BITRATE }
+      : { videoBitsPerSecond: COMPRESSED_VIDEO_BITRATE };
+    const recorder = new MediaRecorder(stream, recorderOptions);
     const chunks: BlobPart[] = [];
     recorder.ondataavailable = (event) => {
       if (event.data.size > 0) chunks.push(event.data);
@@ -557,25 +561,19 @@ export default function AdminGames() {
   const applyVideoTrim = async () => {
     if (!videoTrimDraft.file) return;
     if (videoTrimDraft.end <= videoTrimDraft.start) return toast.error("End time must be after start time");
-    if (videoTrimDraft.end - videoTrimDraft.start > MAX_VIDEO_SECONDS + 0.01) return toast.error("Maximum clip length is 1 minute");
-
-    if (videoTrimDraft.duration <= MAX_VIDEO_SECONDS && videoTrimDraft.start <= 0.01 && videoTrimDraft.end >= videoTrimDraft.duration - 0.01) {
-      setVideoFile(videoTrimDraft.file);
-      closeVideoTrimmer();
-      return;
-    }
+    if (videoTrimDraft.end - videoTrimDraft.start > MAX_VIDEO_SECONDS + 0.01) return toast.error("Maximum clip length is 30 seconds");
 
     setVideoTrimDraft((d) => ({ ...d, processing: true }));
     try {
       const trimmed = await trimVideoFile(videoTrimDraft.file, videoTrimDraft.start, videoTrimDraft.end);
       setVideoFile(trimmed);
       closeVideoTrimmer();
-      toast.success("Video trimmed and ready");
+      toast.success("Video trimmed & compressed");
     } catch {
       if (videoTrimDraft.duration <= MAX_VIDEO_SECONDS) {
         setVideoFile(videoTrimDraft.file);
         closeVideoTrimmer();
-        toast.success("Original video selected");
+        toast.success("Selected video without compression (browser limitation)");
         return;
       }
       toast.error("Could not trim this video in browser. Try a different format (MP4 preferred).");
@@ -954,7 +952,7 @@ export default function AdminGames() {
               <button onClick={closeVideoTrimmer} className="text-sm px-3 py-1.5 rounded-lg" style={{ color: "#f2f2f2", background: "rgba(255,255,255,0.08)" }}>
                 Back
               </button>
-              <h3 className="text-lg font-semibold" style={{ color: "#fff" }}>Trim video (max 1:00)</h3>
+              <h3 className="text-lg font-semibold" style={{ color: "#fff" }}>Trim video (max 0:30)</h3>
               <button
                 onClick={applyVideoTrim}
                 disabled={videoTrimDraft.processing}
@@ -984,7 +982,7 @@ export default function AdminGames() {
               />
 
               <div className="text-sm" style={{ color: "#d2dae3" }}>
-                Total: <strong>{formatSeconds(videoTrimDraft.duration)}</strong> | Selected: <strong>{formatSeconds(videoTrimDraft.end - videoTrimDraft.start)}</strong> (max 01:00)
+                Total: <strong>{formatSeconds(videoTrimDraft.duration)}</strong> | Selected: <strong>{formatSeconds(videoTrimDraft.end - videoTrimDraft.start)}</strong> (max 00:30)
               </div>
 
               <div>
