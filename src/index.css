@@ -1,8 +1,6 @@
 /* Google Fonts loaded via index.html for faster, more resilient loading on slow networks */
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* @tailwind directives removed: ensure Tailwind CSS is set up in your build tool if you want to use them */
 
 @font-face {
   font-family: 'PAQUITO';
