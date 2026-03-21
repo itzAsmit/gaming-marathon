@@ -170,16 +170,16 @@ export default function HeroSection() {
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-30 flex justify-center">
-          <button
-            className="text-white/55 hover:text-white transition-colors"
-            onClick={() => document.getElementById("leaderboard")?.scrollIntoView({ behavior: "smooth" })}
-            aria-label="Scroll to next section"
-          >
-            <ChevronRight className="rotate-90" size={24} />
-          </button>
+          <div className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-30 flex justify-center">
+            <button
+              className="text-white/55 hover:text-white transition-colors"
+              onClick={() => document.getElementById("leaderboard")?.scrollIntoView({ behavior: "smooth" })}
+              aria-label="Scroll to next section"
+            >
+              <ChevronRight className="rotate-90" size={24} />
+            </button>
+          </div>
         </div>
       </motion.div>
     </section>
