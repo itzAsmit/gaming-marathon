@@ -31,13 +31,13 @@ export default function HeroSection() {
       <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.04)_1px,transparent_1px)] bg-[size:64px_64px] opacity-20" />
 
       <motion.div
-        className="relative z-10 w-[95%] max-w-[1500px] mx-auto min-h-[82vh] pt-12 sm:pt-14 pb-8 md:pb-10 flex flex-col justify-between"
+        className="relative z-10 w-[97%] max-w-[1600px] mx-auto min-h-[88vh] pt-10 sm:pt-12 pb-6 md:pb-8 flex flex-col justify-between"
         style={{ y, opacity }}
       >
         <img
           src="/assets/logo.png"
           alt="Gaming Marathon Logo"
-          className="absolute -top-14 sm:-top-16 md:-top-20 left-1/2 -translate-x-1/2 z-30 h-16 sm:h-20 md:h-28 object-contain pointer-events-none scale-110 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+          className="absolute -top-7 sm:-top-8 md:-top-10 left-1/2 -translate-x-1/2 z-30 h-14 sm:h-16 md:h-20 object-contain pointer-events-none drop-shadow-[0_0_12px_rgba(255,255,255,0.08)]"
         />
 
         <div className="relative w-full h-full flex flex-col flex-grow rounded-[2.2rem] shadow-[0_20px_70px_rgba(0,0,0,0.45)]">
