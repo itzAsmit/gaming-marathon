@@ -54,7 +54,7 @@ export default function HeroSection() {
             {/* Center Cutout & Logo Placeholder */}
             {/* Using absolute positioning to break out of flex constraints to stay perfectly centered */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[220px] md:w-[320px] h-16 sm:h-20 bg-black/50 border-b border-white/10 rounded-b-[2rem] flex items-center justify-center backdrop-blur-xl">
-               <img src="/fonts/logo.png" alt="Gaming Marathon Logo" className="mt-2 h-10 sm:h-14 object-contain filter drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]" />
+               <img src="/assets/logo.png" alt="Gaming Marathon Logo" className="mt-2 h-10 sm:h-14 object-contain filter drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]" />
             </div>
 
             {/* Right Nav */}
