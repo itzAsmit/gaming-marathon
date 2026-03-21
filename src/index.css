@@ -319,8 +319,8 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.14);
     border-radius: 0 0 1.35rem 1.35rem;
     background: transparent;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     z-index: 22;
   }
 

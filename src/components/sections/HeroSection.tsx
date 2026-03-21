@@ -24,10 +24,10 @@ export default function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative h-[100svh] md:h-screen flex items-start overflow-visible px-3 sm:px-4 pt-3 sm:pt-4"
+      className="relative h-[100svh] md:h-screen flex items-start overflow-visible px-2 sm:px-3 pt-1 sm:pt-2"
     >
       <motion.div
-        className="relative z-10 w-full max-w-none mx-auto h-full min-h-0 pt-8 sm:pt-9 pb-3 sm:pb-4 flex flex-col"
+        className="relative z-10 w-[95%] sm:w-[96%] max-w-[1540px] mx-auto h-full min-h-0 pt-5 sm:pt-6 pb-3 sm:pb-4 flex flex-col"
         style={{ y }}
       >
         <img
@@ -36,10 +36,10 @@ export default function HeroSection() {
           className="absolute top-7 sm:top-7 md:top-8 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 h-11 sm:h-12 md:h-14 object-contain pointer-events-none drop-shadow-[0_0_10px_rgba(255,255,255,0.08)]"
         />
 
-        <div className="relative w-full h-full min-h-0 flex flex-col flex-grow rounded-[2.2rem] shadow-[0_20px_70px_rgba(0,0,0,0.45)]">
+        <div className="relative w-full h-full min-h-0 flex flex-col flex-grow rounded-[2.8rem] shadow-[0_20px_70px_rgba(0,0,0,0.45)]">
           
           {/* Main Panel Background */}
-          <div className="absolute inset-0 overflow-hidden rounded-[2.2rem] border border-white/10 bg-[#081321]/75 backdrop-blur-sm">
+          <div className="absolute inset-0 overflow-hidden rounded-[2.8rem] border border-white/10 backdrop-blur-sm">
             <div
               className="absolute inset-0 bg-center bg-cover"
               style={{ backgroundImage: "url('/assets/banner.jpg')" }}
