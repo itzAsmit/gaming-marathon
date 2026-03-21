@@ -40,13 +40,18 @@ export default function HeroSection() {
           className="absolute -top-4 sm:-top-5 md:-top-6 left-1/2 -translate-x-1/2 z-30 h-14 sm:h-16 md:h-20 object-contain pointer-events-none"
         />
 
-        <div className="relative w-full h-full flex flex-col flex-grow overflow-hidden rounded-[2.2rem] border border-white/10 bg-[#081321]/75 backdrop-blur-sm shadow-[0_20px_70px_rgba(0,0,0,0.45)]">
-          <div
-            className="absolute inset-0 bg-center bg-cover"
-            style={{ backgroundImage: "url('/assets/banner.jpg')" }}
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(4,11,20,0.84),rgba(5,13,24,0.66)_42%,rgba(3,10,20,0.84)_100%)]" />
+        <div className="relative w-full h-full flex flex-col flex-grow rounded-[2.2rem] shadow-[0_20px_70px_rgba(0,0,0,0.45)]">
+          
+          {/* Main Panel Background */}
+          <div className="absolute inset-0 overflow-hidden rounded-[2.2rem] border border-white/10 bg-[#081321]/75 backdrop-blur-sm">
+            <div
+              className="absolute inset-0 bg-center bg-cover"
+              style={{ backgroundImage: "url('/assets/banner.jpg')" }}
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(4,11,20,0.84),rgba(5,13,24,0.66)_42%,rgba(3,10,20,0.84)_100%)]" />
+          </div>
 
+          {/* Top Notch - Placed outside overflow-hidden to break out of panel bounds */}
           <div className="hero-top-notch" aria-hidden="true" />
 
           {/* Top Navigation Row */}
