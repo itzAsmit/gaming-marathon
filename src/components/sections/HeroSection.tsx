@@ -25,7 +25,7 @@ export default function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-[100svh] md:min-h-screen flex items-center overflow-hidden px-4 sm:px-6"
+      className="relative min-h-[100svh] md:min-h-screen flex items-center overflow-visible px-4 sm:px-6"
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(75,95,130,0.22),transparent_45%),radial-gradient(circle_at_80%_75%,rgba(45,70,100,0.22),transparent_50%),linear-gradient(180deg,rgba(2,8,18,0.9),rgba(3,10,20,0.96))]" />
       <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.04)_1px,transparent_1px)] bg-[size:64px_64px] opacity-20" />
