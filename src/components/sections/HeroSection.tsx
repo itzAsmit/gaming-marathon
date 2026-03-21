@@ -37,7 +37,7 @@ export default function HeroSection() {
         <img
           src="/assets/logo.png"
           alt="Gaming Marathon Logo"
-          className="absolute -top-8 sm:-top-10 md:-top-12 left-1/2 -translate-x-1/2 z-30 h-15 sm:h-17 md:h-22 object-contain pointer-events-none drop-shadow-[0_0_12px_rgba(255,255,255,0.08)]"
+          className="absolute -top-6 sm:-top-7 md:-top-8 left-1/2 -translate-x-1/2 z-30 h-11 sm:h-12 md:h-14 object-contain pointer-events-none drop-shadow-[0_0_10px_rgba(255,255,255,0.08)]"
         />
 
         <div className="relative w-full h-full flex flex-col flex-grow rounded-[2.2rem] shadow-[0_20px_70px_rgba(0,0,0,0.45)]">
