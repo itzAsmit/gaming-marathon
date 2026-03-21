@@ -25,13 +25,13 @@ export default function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-[100svh] md:min-h-screen flex items-start overflow-visible px-3 sm:px-4 pt-3 sm:pt-4"
+      className="relative min-h-[100svh] md:min-h-screen flex items-start overflow-visible px-0 pt-3 sm:pt-4"
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(75,95,130,0.22),transparent_45%),radial-gradient(circle_at_80%_75%,rgba(45,70,100,0.22),transparent_50%),linear-gradient(180deg,rgba(2,8,18,0.9),rgba(3,10,20,0.96))]" />
       <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.04)_1px,transparent_1px)] bg-[size:64px_64px] opacity-20" />
 
       <motion.div
-        className="relative z-10 w-[99%] max-w-[1720px] mx-auto min-h-[92vh] pt-9 sm:pt-10 pb-4 md:pb-6 flex flex-col justify-between"
+        className="relative z-10 w-full max-w-none mx-auto min-h-[92vh] pt-9 sm:pt-10 pb-4 md:pb-6 flex flex-col justify-between"
         style={{ y, opacity }}
       >
         <img
@@ -56,7 +56,7 @@ export default function HeroSection() {
           <div className="hero-top-notch" aria-hidden="true" />
 
           {/* Top Navigation Row */}
-          <div className="relative z-20 w-full px-6 sm:px-12 pt-8 sm:pt-10 pb-6 flex items-start justify-between">
+          <div className="absolute z-20 left-0 right-0 top-0 -translate-y-1/2 px-6 sm:px-12 flex items-center justify-between">
             {/* Left Nav */}
             <div className="hidden lg:flex items-center gap-8 text-[0.55rem] tracking-[0.25em] font-semibold text-white/55">
               {navItems.slice(0, 2).map((item) => (
@@ -69,8 +69,6 @@ export default function HeroSection() {
                 </button>
               ))}
             </div>
-
-            <div className="hidden lg:block w-[210px] sm:w-[260px]" aria-hidden="true" />
 
             {/* Right Nav */}
             <div className="hidden lg:flex items-center gap-8 text-[0.55rem] tracking-[0.25em] font-semibold text-white/55 ml-auto">
@@ -97,7 +95,7 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <div className="relative z-10 flex-grow px-6 sm:px-12 lg:px-20 py-10 lg:py-14 flex flex-col justify-end">
+          <div className="relative z-10 flex-grow px-6 sm:px-12 lg:px-20 py-[120px] lg:py-[140px] flex flex-col justify-end">
             <div className="grid lg:grid-cols-[1.15fr_1fr] gap-12 lg:gap-24 items-end">
               <div>
                 <ScrollReveal delay={0.1}>
