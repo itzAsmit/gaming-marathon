@@ -39,7 +39,7 @@ export default function AdminDashboard() {
     const fetchPlayers = async () => {
       try {
         const data = await raceDataFetch<Player[]>(
-          () => supabase.from("players").select("id, player_id, name").order("player_id"),
+          () => supabase.from("players").select("id, player_id, name").eq("is_active", true).order("player_id"),
           "admin_players",
         );
         setPlayers(data);

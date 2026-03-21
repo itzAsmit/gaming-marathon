@@ -16,7 +16,7 @@ interface LeaderboardEntry {
   thirds: number;
   points: number;
   rank: number | null;
-  players: { name: string; player_id: string } | null;
+  players: { name: string; player_id: string; is_active: boolean } | null;
 }
 
 const CROWN = ["🥇", "🥈", "🥉"];
@@ -34,11 +34,11 @@ export default function LeaderboardSection() {
         () =>
           supabase
             .from("leaderboard")
-            .select("*, players(name, player_id)")
+            .select("*, players(name, player_id, is_active)")
             .order("points", { ascending: false }),
         "leaderboard",
       );
-      setEntries(data);
+      setEntries(data.filter((entry) => entry.players?.is_active));
     } catch {
       setError("Connection issue. Please tap retry.");
     } finally {
