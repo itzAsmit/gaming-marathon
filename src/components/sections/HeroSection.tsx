@@ -19,8 +19,7 @@ export default function HeroSection() {
       ref={containerRef}
       className="relative min-h-[100svh] md:min-h-screen flex items-center overflow-hidden"
     >
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(1,4,8,0.5),rgba(1,4,8,0.75))]" />
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.08)_1px,transparent_1px)] bg-[size:64px_64px] opacity-20" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.06)_1px,transparent_1px)] bg-[size:64px_64px] opacity-20" />
 
       <motion.div
         className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-10 md:py-14"

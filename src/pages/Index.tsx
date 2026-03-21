@@ -1,4 +1,4 @@
-import HeroSection from "@/components/sections/HeroSection";
+import HeroSection from "../components/sections/HeroSection";
 import LeaderboardSection from "@/components/sections/LeaderboardSection";
 import LazyMount from "@/components/LazyMount";
 import PlayersSection from "@/components/sections/PlayersSection";
@@ -18,17 +18,19 @@ const Index = () => {
             backgroundImage: `url(${CLOUDINARY_MEDIA.heroBackgroundImage})`,
             backgroundSize: "cover",
             backgroundPosition: "center center",
-            filter: "blur(4px)",
-            opacity: 0.5,
+            filter: "blur(3px)",
+            opacity: 0.62,
             transform: "scale(1.03)",
           }}
         />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,7,12,0.24),rgba(3,7,12,0.62))]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,7,12,0.16),rgba(3,7,12,0.5))]" />
       </div>
 
       {/* Scrollable content layer */}
       <div className="relative z-10">
-        <HeroSection />
+        <div className="hero-surface">
+          <HeroSection />
+        </div>
         <div className="site-section">
           <LeaderboardSection />
         </div>
