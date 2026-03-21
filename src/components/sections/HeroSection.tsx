@@ -53,9 +53,9 @@ export default function HeroSection() {
           <div className="hero-top-notch" aria-hidden="true" />
 
           {/* Top Navigation Row */}
-          <div className="absolute z-20 left-0 right-0 top-0 -translate-y-1/2 px-6 sm:px-12 flex items-center justify-between">
+          <div className="relative z-20 w-full px-6 sm:px-12 pt-8 sm:pt-9 pb-6 flex items-center justify-between">
             {/* Left Nav */}
-            <div className="hidden lg:flex items-center gap-8 text-[0.55rem] tracking-[0.25em] font-semibold text-white/55">
+            <div className="hidden lg:flex w-[40%] items-center gap-8 text-[0.55rem] tracking-[0.25em] font-semibold text-white/55">
               {navItems.slice(0, 2).map((item) => (
                 <button
                   key={item.id}
@@ -67,8 +67,10 @@ export default function HeroSection() {
               ))}
             </div>
 
+            <div className="hidden lg:block w-[220px] shrink-0" aria-hidden="true" />
+
             {/* Right Nav */}
-            <div className="hidden lg:flex items-center gap-8 text-[0.55rem] tracking-[0.25em] font-semibold text-white/55 ml-auto">
+            <div className="hidden lg:flex w-[40%] items-center justify-end gap-8 text-[0.55rem] tracking-[0.25em] font-semibold text-white/55">
               {navItems.slice(2, 5).map((item) => (
                 <button
                   key={item.id}
