@@ -25,19 +25,19 @@ export default function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-[100svh] md:min-h-screen flex items-start overflow-visible px-4 sm:px-6 pt-5 sm:pt-7"
+      className="relative min-h-[100svh] md:min-h-screen flex items-start overflow-visible px-3 sm:px-4 pt-3 sm:pt-4"
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(75,95,130,0.22),transparent_45%),radial-gradient(circle_at_80%_75%,rgba(45,70,100,0.22),transparent_50%),linear-gradient(180deg,rgba(2,8,18,0.9),rgba(3,10,20,0.96))]" />
       <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.04)_1px,transparent_1px)] bg-[size:64px_64px] opacity-20" />
 
       <motion.div
-        className="relative z-10 w-[97%] max-w-[1600px] mx-auto min-h-[88vh] pt-10 sm:pt-12 pb-6 md:pb-8 flex flex-col justify-between"
+        className="relative z-10 w-[99%] max-w-[1720px] mx-auto min-h-[92vh] pt-9 sm:pt-10 pb-4 md:pb-6 flex flex-col justify-between"
         style={{ y, opacity }}
       >
         <img
           src="/assets/logo.png"
           alt="Gaming Marathon Logo"
-          className="absolute -top-7 sm:-top-8 md:-top-10 left-1/2 -translate-x-1/2 z-30 h-14 sm:h-16 md:h-20 object-contain pointer-events-none drop-shadow-[0_0_12px_rgba(255,255,255,0.08)]"
+          className="absolute -top-8 sm:-top-10 md:-top-12 left-1/2 -translate-x-1/2 z-30 h-15 sm:h-17 md:h-22 object-contain pointer-events-none drop-shadow-[0_0_12px_rgba(255,255,255,0.08)]"
         />
 
         <div className="relative w-full h-full flex flex-col flex-grow rounded-[2.2rem] shadow-[0_20px_70px_rgba(0,0,0,0.45)]">

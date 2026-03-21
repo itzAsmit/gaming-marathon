@@ -345,13 +345,13 @@
   .hero-top-notch {
     position: absolute;
     left: 50%;
-    top: -3.05rem;
+    top: -3.35rem;
     transform: translateX(-50%);
-    width: clamp(13.4rem, 24vw, 16.8rem);
-    height: 3.2rem;
+    width: clamp(14.8rem, 26vw, 18.8rem);
+    height: 3.55rem;
     border: 1px solid rgba(255, 255, 255, 0.14);
     border-bottom: none;
-    border-radius: 1.5rem 1.5rem 0 0;
+    border-radius: 1.7rem 1.7rem 0 0;
     background: #060d17;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -363,21 +363,21 @@
     content: "";
     position: absolute;
     bottom: -1px;
-    width: 2.2rem;
-    height: 1.45rem;
+    width: 2.35rem;
+    height: 1.55rem;
     background: #060d17;
   }
 
   .hero-top-notch::before {
-    left: -2.15rem;
+    left: -2.3rem;
     border-right: 1px solid rgba(255, 255, 255, 0.14);
-    border-top-right-radius: 1.05rem;
+    border-top-right-radius: 1.15rem;
   }
 
   .hero-top-notch::after {
-    right: -2.15rem;
+    right: -2.3rem;
     border-left: 1px solid rgba(255, 255, 255, 0.14);
-    border-top-left-radius: 1.05rem;
+    border-top-left-radius: 1.15rem;
   }
 
   .site-audio-btn {
