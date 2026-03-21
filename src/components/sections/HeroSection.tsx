@@ -25,19 +25,19 @@ export default function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-[100svh] md:min-h-screen flex items-center overflow-visible px-4 sm:px-6"
+      className="relative min-h-[100svh] md:min-h-screen flex items-start overflow-visible px-4 sm:px-6 pt-5 sm:pt-7"
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(75,95,130,0.22),transparent_45%),radial-gradient(circle_at_80%_75%,rgba(45,70,100,0.22),transparent_50%),linear-gradient(180deg,rgba(2,8,18,0.9),rgba(3,10,20,0.96))]" />
       <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.04)_1px,transparent_1px)] bg-[size:64px_64px] opacity-20" />
 
       <motion.div
-        className="relative z-10 w-[95%] max-w-[1500px] mx-auto min-h-[82vh] pt-20 sm:pt-24 pb-8 md:pb-10 flex flex-col justify-between"
+        className="relative z-10 w-[95%] max-w-[1500px] mx-auto min-h-[82vh] pt-12 sm:pt-14 pb-8 md:pb-10 flex flex-col justify-between"
         style={{ y, opacity }}
       >
         <img
           src="/assets/logo.png"
           alt="Gaming Marathon Logo"
-          className="absolute -top-8 sm:-top-10 md:-top-12 left-1/2 -translate-x-1/2 z-30 h-14 sm:h-16 md:h-20 object-contain pointer-events-none"
+          className="absolute -top-4 sm:-top-5 md:-top-6 left-1/2 -translate-x-1/2 z-30 h-14 sm:h-16 md:h-20 object-contain pointer-events-none"
         />
 
         <div className="relative w-full h-full flex flex-col flex-grow overflow-hidden rounded-[2.2rem] border border-white/10 bg-[#081321]/75 backdrop-blur-sm shadow-[0_20px_70px_rgba(0,0,0,0.45)]">
@@ -47,7 +47,7 @@ export default function HeroSection() {
           />
           <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(4,11,20,0.84),rgba(5,13,24,0.66)_42%,rgba(3,10,20,0.84)_100%)]" />
 
-          <div className="absolute -top-9 sm:-top-10 left-1/2 -translate-x-1/2 z-20 w-[210px] sm:w-[260px] h-10 sm:h-11 rounded-t-[1.25rem] border border-white/12 border-b-0 bg-[#060d17]/90 backdrop-blur-md" />
+          <div className="hero-top-notch" aria-hidden="true" />
 
           {/* Top Navigation Row */}
           <div className="relative z-20 w-full px-6 sm:px-12 pt-8 sm:pt-10 pb-6 flex items-start justify-between">

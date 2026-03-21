@@ -342,6 +342,44 @@
     opacity: 1;
   }
 
+  .hero-top-notch {
+    position: absolute;
+    left: 50%;
+    top: -2.95rem;
+    transform: translateX(-50%);
+    width: clamp(13rem, 24vw, 16.25rem);
+    height: 3.1rem;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-bottom: none;
+    border-radius: 1.45rem 1.45rem 0 0;
+    background: rgba(6, 13, 23, 0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 20;
+  }
+
+  .hero-top-notch::before,
+  .hero-top-notch::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    width: 2.2rem;
+    height: 1.4rem;
+    background: rgba(6, 13, 23, 0.9);
+  }
+
+  .hero-top-notch::before {
+    left: -2.15rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.14);
+    border-top-right-radius: 1.05rem;
+  }
+
+  .hero-top-notch::after {
+    right: -2.15rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.14);
+    border-top-left-radius: 1.05rem;
+  }
+
   .site-audio-btn {
     display: inline-flex;
     align-items: center;
