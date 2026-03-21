@@ -332,39 +332,28 @@
   .hero-top-notch {
     position: absolute;
     left: 50%;
-    top: -3.35rem;
+    top: -1px;
     transform: translateX(-50%);
-    width: clamp(14.8rem, 26vw, 18.8rem);
-    height: 3.55rem;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-bottom: none;
-    border-radius: 1.7rem 1.7rem 0 0;
-    background: #060d17;
+    width: clamp(8.2rem, 12vw, 10.5rem);
+    height: 3.1rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.14);
+    border-right: 1px solid rgba(255, 255, 255, 0.14);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 0 0 1.35rem 1.35rem;
+    background: rgba(8, 19, 33, 0.84);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    z-index: 20;
-  }
-
-  .hero-top-notch::before,
-  .hero-top-notch::after {
-    content: "";
-    position: absolute;
-    bottom: -1px;
-    width: 2.35rem;
-    height: 1.55rem;
-    background: #060d17;
+    z-index: 22;
   }
 
   .hero-top-notch::before {
-    left: -2.3rem;
-    border-right: 1px solid rgba(255, 255, 255, 0.14);
-    border-top-right-radius: 1.15rem;
-  }
-
-  .hero-top-notch::after {
-    right: -2.3rem;
-    border-left: 1px solid rgba(255, 255, 255, 0.14);
-    border-top-left-radius: 1.15rem;
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: rgba(8, 19, 33, 0.84);
   }
 
   .site-audio-btn {
