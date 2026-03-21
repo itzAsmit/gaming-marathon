@@ -1,6 +1,7 @@
 import { useRef } from "react";
-import { motion, useScroll, useTransform, useMotionTemplate, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import ScrollReveal from "@/components/ScrollReveal";
+import { Trophy, Gamepad2, Users, ChevronRight } from "lucide-react";
 
 export default function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -9,194 +10,112 @@ export default function HeroSection() {
     offset: ["start start", "end start"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-  
-  // 3D Tilt effect state
-  const mouseX = useSpring(0, { stiffness: 500, damping: 100 });
-  const mouseY = useSpring(0, { stiffness: 500, damping: 100 });
-
-  function handleMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
-    const { left, top, width, height } = currentTarget.getBoundingClientRect();
-    const x = (clientX - left) / width - 0.5;
-    const y = (clientY - top) / height - 0.5;
-    mouseX.set(x * 20); // max rotation
-    mouseY.set(y * -20);
-  }
-
-  function handleMouseLeave() {
-    mouseX.set(0);
-    mouseY.set(0);
-  }
 
   return (
     <section 
       ref={containerRef}
-      className="relative min-h-[100svh] md:min-h-screen flex items-center justify-center overflow-hidden perspective-1000"
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
+      className="relative min-h-[100svh] md:min-h-screen flex items-center overflow-hidden bg-[#0a0a0a]"
     >
-      <motion.div 
-        className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,rgba(var(--gold-rgb),0.15)_0%,transparent_60%)] pointer-events-none"
-        style={{
-          opacity,
-          scale: useTransform(scrollYProgress, [0, 1], [1, 1.5]),
-          transformStyle: "preserve-3d"
-        }}
-      />
+      {/* Optimized Background Elements */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,215,0,0.08)_0%,transparent_50%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none opacity-30" />
       
       <motion.div 
-        className="relative z-10 text-center px-4 max-w-5xl mx-auto w-full"
-        style={{ 
-          y, 
-          opacity,
-          rotateX: mouseY,
-          rotateY: mouseX,
-          transformStyle: "preserve-3d"
-        }}
+        className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-0"
+        style={{ y, opacity }}
       >
-        <motion.div 
-          style={{ transform: "translateZ(60px)", transformStyle: "preserve-3d" }}
-          className="relative"
-        >
-          <ScrollReveal delay={0.1}>
-            <p
-              className="text-xs md:text-sm font-cinzel tracking-[0.8em] mb-6 drop-shadow-[0_0_15px_rgba(255,215,0,0.5)]"
-              style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}
-            >
-              THE ULTIMATE COMPETITION
-            </p>
-          </ScrollReveal>
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          {/* Left Column: Text & CTA */}
+          <div className="text-left space-y-8">
+            <ScrollReveal delay={0.1}>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-yellow-500/30 bg-yellow-500/10 text-yellow-500 text-xs font-cinzel tracking-widest backdrop-blur-sm">
+                <Trophy className="w-4 h-4" />
+                <span>THE ULTIMATE COMPETITION</span>
+              </div>
+            </ScrollReveal>
 
-          <ScrollReveal delay={0.25}>
-            <h1
-              className="text-6xl md:text-9xl font-cinzel font-black mb-4 leading-none relative"
-              style={{ fontFamily: "Cinzel, serif", transformStyle: "preserve-3d" }}
-            >
-              <motion.span 
-                className="gradient-text-cream block"
-                style={{ transform: "translateZ(40px)", textShadow: "0 20px 40px rgba(0,0,0,0.8)" }}
-              >
-                GAMING
-              </motion.span>
-              <motion.span 
-                className="gradient-text-gold block mt-2"
-                style={{ transform: "translateZ(80px)", textShadow: "0 0 60px rgba(255,215,0,0.4)" }}
-              >
-                MARATHON
-              </motion.span>
-            </h1>
-          </ScrollReveal>
+            <ScrollReveal delay={0.25}>
+              <h1 className="text-5xl sm:text-7xl lg:text-8xl font-cinzel font-black leading-[1.1] tracking-tight">
+                <span className="text-white drop-shadow-md">GAMING</span>
+                <br />
+                <span className="bg-gradient-to-r from-yellow-400 via-yellow-200 to-yellow-500 bg-clip-text text-transparent drop-shadow-lg">
+                  MARATHON
+                </span>
+              </h1>
+            </ScrollReveal>
 
-          <ScrollReveal delay={0.4}>
-            <div className="flex items-center justify-center gap-4 my-8" style={{ transform: "translateZ(30px)" }}>
-              <div className="h-px flex-1 max-w-32 bg-gradient-to-r from-transparent via-yellow-500 to-transparent opacity-50" />
-              <span
-                className="text-xs tracking-[0.5em] font-cinzel"
-                style={{ color: "hsl(var(--cream-dark))", fontFamily: "Cinzel, serif" }}
-              >
-                ESPORTS CHAMPIONSHIP
-              </span>
-              <div className="h-px flex-1 max-w-32 bg-gradient-to-r from-transparent via-yellow-500 to-transparent opacity-50" />
-            </div>
-          </ScrollReveal>
+            <ScrollReveal delay={0.4}>
+              <p className="text-lg sm:text-xl font-inter font-light max-w-lg leading-relaxed text-gray-300">
+                11 games. 1 champion. The ultimate test of skill, strategy, and survival. Prepare to prove yourself.
+              </p>
+            </ScrollReveal>
 
-          <ScrollReveal delay={0.55}>
-            <p
-              className="text-base md:text-xl font-inter font-light mb-12 max-w-2xl mx-auto leading-relaxed"
-              style={{ color: "hsl(var(--cream) / 0.9)", transform: "translateZ(50px)", textShadow: "0 4px 10px rgba(0,0,0,0.5)" }}
-            >
-              11 games. 1 champion. The ultimate test of skill, strategy, and survival.
-            </p>
-          </ScrollReveal>
-
-          <ScrollReveal delay={0.7}>
-            <div className="flex flex-col items-center gap-6 justify-center" style={{ transform: "translateZ(70px)" }}>
-              {/* APPLY NOW - 3D Golden CTA */}
-              <motion.button
-                whileHover={{ scale: 1.05, translateZ: 20 }}
-                whileTap={{ scale: 0.95 }}
-                className="relative group px-14 py-5 font-cinzel text-sm tracking-[0.4em] rounded-full overflow-hidden"
-                style={{
-                  background: "linear-gradient(135deg, hsl(var(--gold)), #fff, hsl(var(--gold)))",
-                  backgroundSize: "200% auto",
-                  color: "hsl(var(--brown-deep))",
-                  fontFamily: "Cinzel, serif",
-                  boxShadow: "0 20px 40px -10px hsla(var(--gold) / 0.5), inset 0 2px 4px rgba(255,255,255,0.8)",
-                  fontWeight: 800,
-                  transformStyle: "preserve-3d"
-                }}
-                onClick={() => {}}
-              >
-                <div className="absolute inset-0 bg-white/20 group-hover:bg-white/40 transition-colors duration-300" />
-                <span className="relative z-10 drop-shadow-md">APPLY NOW</span>
-                
-                {/* 3D edge effect */}
-                <div className="absolute inset-0 border-b-4 border-[rgba(0,0,0,0.2)] rounded-full pointer-events-none" />
-              </motion.button>
-              
-              {/* Social buttons row */}
-              <div className="flex flex-row items-center gap-4 mt-4" style={{ transform: "translateZ(20px)" }}>
-                <motion.button
-                  whileHover={{ scale: 1.1, translateY: -5 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-8 py-4 font-cinzel text-xs tracking-[0.3em] rounded-full glass-card relative overflow-hidden group border border-white/10"
-                  style={{
-                    color: "hsl(var(--cream))",
-                    fontFamily: "Cinzel, serif",
-                    boxShadow: "0 10px 30px -10px rgba(37,211,102,0.3)"
-                  }}
+            <ScrollReveal delay={0.55}>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                <button
+                  className="px-8 py-4 font-cinzel text-sm tracking-[0.2em] rounded-lg relative overflow-hidden group bg-gradient-to-r from-yellow-500 to-yellow-600 text-black font-bold transition-all hover:shadow-[0_0_30px_-5px_rgba(234,179,8,0.5)] hover:scale-105"
                   onClick={() => {}}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#25D366]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="flex items-center gap-3 relative z-10">
-                    <span className="w-2 h-2 rounded-full bg-[#25D366] shadow-[0_0_10px_#25D366]" />
-                    JOIN WHATSAPP
-                  </div>
-                </motion.button>
-
-                <motion.button
-                  whileHover={{ scale: 1.1, translateY: -5 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-8 py-4 font-cinzel text-xs tracking-[0.3em] rounded-full glass-card relative overflow-hidden group border border-white/10"
-                  style={{
-                    color: "hsl(var(--cream))",
-                    fontFamily: "Cinzel, serif",
-                    boxShadow: "0 10px 30px -10px rgba(88,101,242,0.3)"
-                  }}
-                  onClick={() => window.open("https://discord.gg/VwW8ktwzyb", "_blank")}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#5865F2]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="flex items-center gap-3 relative z-10">
-                    <span className="w-2 h-2 rounded-full bg-[#5865F2] shadow-[0_0_10px_#5865F2]" />
-                    JOIN DISCORD
-                  </div>
-                </motion.button>
+                  <span className="relative z-10 flex items-center gap-2">
+                    APPLY NOW <ChevronRight className="w-4 h-4" />
+                  </span>
+                </button>
+                
+                <div className="flex items-center gap-4">
+                  <a
+                    href="#"
+                    className="p-3 rounded-full bg-white/5 border border-white/10 text-[#25D366] hover:bg-white/10 hover:border-[#25D366]/50 transition-colors"
+                    title="Join WhatsApp"
+                  >
+                    <Users className="w-5 h-5" />
+                  </a>
+                  <a
+                    href="https://discord.gg/VwW8ktwzyb"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="p-3 rounded-full bg-white/5 border border-white/10 text-[#5865F2] hover:bg-white/10 hover:border-[#5865F2]/50 transition-colors"
+                    title="Join Discord"
+                  >
+                    <Gamepad2 className="w-5 h-5" />
+                  </a>
+                </div>
               </div>
-            </div>
-          </ScrollReveal>
-        </motion.div>
-      </motion.div>
+            </ScrollReveal>
+          </div>
 
-      {/* Decorative 3D corner pieces */}
-      {[
-        { top: "2rem", left: "2rem", rotate: "0deg" },
-        { top: "2rem", right: "2rem", rotate: "90deg" },
-        { bottom: "2rem", left: "2rem", rotate: "-90deg" },
-        { bottom: "2rem", right: "2rem", rotate: "180deg" },
-      ].map((pos, i) => (
-        <motion.div 
-          key={i}
-          className="absolute w-24 h-24 opacity-40 pointer-events-none" 
-          style={{ 
-            ...pos,
-            borderTop: "2px solid hsl(var(--gold))", 
-            borderLeft: "2px solid hsl(var(--gold))",
-            boxShadow: "inset 2px 2px 10px rgba(255,215,0,0.2)",
-            y: useTransform(scrollYProgress, [0, 1], ["0%", i > 1 ? "-100%" : "100%"]),
-          }} 
-        />
-      ))}
+          {/* Right Column: Visual/Stats Elements */}
+          <div className="hidden lg:flex justify-end">
+            <ScrollReveal delay={0.5}>
+              <div className="relative w-full max-w-md">
+                {/* Glowing aesthetic blob behind stats */}
+                <div className="absolute inset-0 bg-yellow-500/20 blur-[100px] rounded-full" />
+                
+                <div className="relative space-y-6">
+                  {/* Stat Card 1 */}
+                  <div className="bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl p-6 transform hover:-translate-y-1 transition-transform">
+                    <div className="text-yellow-500 font-cinzel text-4xl font-bold mb-2">11</div>
+                    <div className="text-gray-400 font-inter text-sm tracking-wider">COMPETITIVE TITLES</div>
+                  </div>
+                  
+                  {/* Stat Card 2 */}
+                  <div className="bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl p-6 transform translate-x-12 hover:-translate-y-1 transition-transform">
+                    <div className="text-white font-cinzel text-4xl font-bold mb-2">1</div>
+                    <div className="text-gray-400 font-inter text-sm tracking-wider">ULTIMATE CHAMPION</div>
+                  </div>
+
+                  {/* Stat Card 3 */}
+                  <div className="bg-yellow-500/10 border border-yellow-500/30 backdrop-blur-md rounded-2xl p-6 transform hover:-translate-y-1 transition-transform">
+                    <div className="text-yellow-400 font-cinzel text-xl font-bold mb-2">REGISTRATIONS OPEN</div>
+                    <div className="text-yellow-500/80 font-inter text-sm tracking-wider">LIMITED SLOTS AVAILABLE</div>
+                  </div>
+                </div>
+              </div>
+            </ScrollReveal>
+          </div>
+        </div>
+      </motion.div>
     </section>
   );
 }
