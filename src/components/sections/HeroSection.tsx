@@ -31,13 +31,13 @@ export default function HeroSection() {
       <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.04)_1px,transparent_1px)] bg-[size:64px_64px] opacity-20" />
 
       <motion.div
-        className="relative z-10 w-[95%] max-w-[1500px] mx-auto min-h-[82vh] pt-16 sm:pt-20 pb-8 md:pb-10 flex flex-col justify-between"
+        className="relative z-10 w-[95%] max-w-[1500px] mx-auto min-h-[82vh] pt-20 sm:pt-24 pb-8 md:pb-10 flex flex-col justify-between"
         style={{ y, opacity }}
       >
         <img
           src="/assets/logo.png"
           alt="Gaming Marathon Logo"
-          className="absolute -top-1 sm:-top-2 left-1/2 -translate-x-1/2 z-30 h-14 sm:h-16 md:h-20 object-contain pointer-events-none"
+          className="absolute -top-8 sm:-top-10 md:-top-12 left-1/2 -translate-x-1/2 z-30 h-14 sm:h-16 md:h-20 object-contain pointer-events-none"
         />
 
         <div className="relative w-full h-full flex flex-col flex-grow overflow-hidden rounded-[2.2rem] border border-white/10 bg-[#081321]/75 backdrop-blur-sm shadow-[0_20px_70px_rgba(0,0,0,0.45)]">
@@ -47,7 +47,7 @@ export default function HeroSection() {
           />
           <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(4,11,20,0.84),rgba(5,13,24,0.66)_42%,rgba(3,10,20,0.84)_100%)]" />
 
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20 w-[210px] sm:w-[260px] h-12 sm:h-14 rounded-b-[1.25rem] border-x border-b border-white/12 bg-[#060d17]/85 backdrop-blur-md" />
+          <div className="absolute -top-9 sm:-top-10 left-1/2 -translate-x-1/2 z-20 w-[210px] sm:w-[260px] h-10 sm:h-11 rounded-t-[1.25rem] border border-white/12 border-b-0 bg-[#060d17]/90 backdrop-blur-md" />
 
           {/* Top Navigation Row */}
           <div className="relative z-20 w-full px-6 sm:px-12 pt-8 sm:pt-10 pb-6 flex items-start justify-between">
