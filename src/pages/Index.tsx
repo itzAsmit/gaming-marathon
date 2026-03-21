@@ -6,7 +6,7 @@ import GamesSection from "@/components/sections/GamesSection";
 import SpecialItemsSection from "@/components/sections/SpecialItemsSection";
 import HallOfFameSection from "@/components/sections/HallOfFameSection";
 import CreditsSection from "@/components/sections/CreditsSection";
-import { CLOUDINARY_MEDIA } from "@/lib/cloudinaryMedia";
+import { SITE_MEDIA } from "@/lib/siteMedia";
 
 const Index = () => {
   return (
@@ -15,7 +15,7 @@ const Index = () => {
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: `url(${CLOUDINARY_MEDIA.heroBackgroundImage})`,
+            backgroundImage: `url(${SITE_MEDIA.heroBackgroundImage})`,
             backgroundSize: "cover",
             backgroundPosition: "center center",
             filter: "blur(3px)",

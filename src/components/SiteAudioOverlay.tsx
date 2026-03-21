@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Volume2, VolumeX } from "lucide-react";
-import { CLOUDINARY_MEDIA } from "@/lib/cloudinaryMedia";
+import { SITE_MEDIA } from "@/lib/siteMedia";
 
 const STORAGE_KEY = "gm-sound-enabled";
 
@@ -8,7 +8,7 @@ export default function SiteAudioOverlay() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [enabled, setEnabled] = useState(false);
 
-  const hasTrack = useMemo(() => CLOUDINARY_MEDIA.soundtrackUrl.trim().length > 0, []);
+  const hasTrack = useMemo(() => SITE_MEDIA.soundtrackUrl.trim().length > 0, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -24,7 +24,7 @@ export default function SiteAudioOverlay() {
   useEffect(() => {
     if (!hasTrack) return;
 
-    const audio = new Audio(CLOUDINARY_MEDIA.soundtrackUrl);
+    const audio = new Audio(SITE_MEDIA.soundtrackUrl);
     audio.loop = true;
     audio.preload = "none";
     audio.volume = 0.4;
@@ -57,7 +57,7 @@ export default function SiteAudioOverlay() {
         type="button"
         onClick={() => setEnabled((prev) => !prev)}
         className="relative w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/30 bg-black/45 backdrop-blur-sm text-white flex items-center justify-center transition-all duration-200 hover:border-white/70"
-        title={hasTrack ? "Toggle soundtrack" : "Add soundtrack URL in src/lib/cloudinaryMedia.ts"}
+        title={hasTrack ? "Toggle soundtrack" : "Add soundtrack path in src/lib/siteMedia.ts"}
         aria-label={enabled ? "Sound on" : "Sound off"}
       >
         {enabled ? <Volume2 size={18} /> : <VolumeX size={18} />}

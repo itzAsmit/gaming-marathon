@@ -31,11 +31,23 @@ export default function HeroSection() {
       <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.04)_1px,transparent_1px)] bg-[size:64px_64px] opacity-20" />
 
       <motion.div
-        className="relative z-10 w-[95%] max-w-[1500px] mx-auto min-h-[82vh] py-8 md:py-10 flex flex-col justify-between"
+        className="relative z-10 w-[95%] max-w-[1500px] mx-auto min-h-[82vh] pt-16 sm:pt-20 pb-8 md:pb-10 flex flex-col justify-between"
         style={{ y, opacity }}
       >
-        <div className="relative w-full h-full flex flex-col flex-grow overflow-hidden rounded-[2.2rem] border border-white/10 bg-[#081321]/75 backdrop-blur-md shadow-[0_20px_70px_rgba(0,0,0,0.45)]">
-          <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(6,16,30,0.92),rgba(7,18,32,0.72)_42%,rgba(8,16,30,0.9)_100%)]" />
+        <img
+          src="/assets/logo.png"
+          alt="Gaming Marathon Logo"
+          className="absolute -top-1 sm:-top-2 left-1/2 -translate-x-1/2 z-30 h-14 sm:h-16 md:h-20 object-contain pointer-events-none"
+        />
+
+        <div className="relative w-full h-full flex flex-col flex-grow overflow-hidden rounded-[2.2rem] border border-white/10 bg-[#081321]/75 backdrop-blur-sm shadow-[0_20px_70px_rgba(0,0,0,0.45)]">
+          <div
+            className="absolute inset-0 bg-center bg-cover"
+            style={{ backgroundImage: "url('/assets/banner.jpg')" }}
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(4,11,20,0.84),rgba(5,13,24,0.66)_42%,rgba(3,10,20,0.84)_100%)]" />
+
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20 w-[210px] sm:w-[260px] h-12 sm:h-14 rounded-b-[1.25rem] border-x border-b border-white/12 bg-[#060d17]/85 backdrop-blur-md" />
 
           {/* Top Navigation Row */}
           <div className="relative z-20 w-full px-6 sm:px-12 pt-8 sm:pt-10 pb-6 flex items-start justify-between">
@@ -52,11 +64,7 @@ export default function HeroSection() {
               ))}
             </div>
 
-            {/* Center Cutout & Logo Placeholder */}
-            {/* Using absolute positioning to break out of flex constraints to stay perfectly centered */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[190px] md:w-[280px] h-14 sm:h-16 bg-black/45 border-b border-white/10 rounded-b-[1.5rem] flex items-center justify-center backdrop-blur-xl">
-               <img src="/assets/logo.png" alt="Gaming Marathon Logo" className="mt-1 h-8 sm:h-10 object-contain opacity-90" />
-            </div>
+            <div className="hidden lg:block w-[210px] sm:w-[260px]" aria-hidden="true" />
 
             {/* Right Nav */}
             <div className="hidden lg:flex items-center gap-8 text-[0.55rem] tracking-[0.25em] font-semibold text-white/55 ml-auto">
