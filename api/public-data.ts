@@ -34,11 +34,10 @@ export default async function handler(req: any, res: any) {
     if (resourceRaw === "leaderboard") {
       const { data, error } = await supabase
         .from("leaderboard")
-        .select("*, players(name, player_id, is_active)")
+        .select("*, players(name, player_id)")
         .order("points", { ascending: false });
       if (error) return res.status(500).json({ error: error.message });
-      const activeLeaderboard = (data ?? []).filter((entry: any) => entry.players?.is_active);
-      return res.status(200).json({ data: activeLeaderboard });
+      return res.status(200).json({ data });
     }
 
     if (resourceRaw === "players") {
@@ -65,7 +64,7 @@ export default async function handler(req: any, res: any) {
 
     // Admin-specific queries (simpler selects for admin CRUD pages)
     if (resourceRaw === "admin_players") {
-      const { data, error } = await supabase.from("players").select("*").eq("is_active", true).order("player_id");
+      const { data, error } = await supabase.from("players").select("*").order("player_id");
       if (error) return res.status(500).json({ error: error.message });
       return res.status(200).json({ data });
     }

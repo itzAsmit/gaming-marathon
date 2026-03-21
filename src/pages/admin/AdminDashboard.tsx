@@ -6,7 +6,7 @@ import AdminLayout from "@/components/admin/AdminLayout";
 import { Search, Save, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 
-interface Player { id: string; player_id: string; name: string; }
+interface Player { id: string; player_id: string; name: string; is_active?: boolean; }
 interface LeaderboardEntry {
   id?: string;
   player_id: string;
@@ -39,10 +39,10 @@ export default function AdminDashboard() {
     const fetchPlayers = async () => {
       try {
         const data = await raceDataFetch<Player[]>(
-          () => supabase.from("players").select("id, player_id, name").eq("is_active", true).order("player_id"),
+          () => supabase.from("players").select("id, player_id, name, is_active").order("player_id"),
           "admin_players",
         );
-        setPlayers(data);
+        setPlayers(data.filter((player) => player.is_active !== false));
       } catch {
         toast.error("Failed to load players");
       }

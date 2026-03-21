@@ -16,7 +16,7 @@ interface LeaderboardEntry {
   thirds: number;
   points: number;
   rank: number | null;
-  players: { name: string; player_id: string; is_active: boolean } | null;
+  players: { name: string; player_id: string } | null;
 }
 
 const CROWN = ["🥇", "🥈", "🥉"];
@@ -30,15 +30,22 @@ export default function LeaderboardSection() {
   const fetchLeaderboard = async () => {
     try {
       setError(null);
-      const data = await raceDataFetch<LeaderboardEntry[]>(
-        () =>
-          supabase
-            .from("leaderboard")
-            .select("*, players(name, player_id, is_active)")
-            .order("points", { ascending: false }),
-        "leaderboard",
-      );
-      setEntries(data.filter((entry) => entry.players?.is_active));
+      const [data, players] = await Promise.all([
+        raceDataFetch<LeaderboardEntry[]>(
+          () =>
+            supabase
+              .from("leaderboard")
+              .select("*, players(name, player_id)")
+              .order("points", { ascending: false }),
+          "leaderboard",
+        ),
+        raceDataFetch<{ id: string; is_active?: boolean }[]>(
+          () => supabase.from("players").select("id, is_active"),
+          "players",
+        ),
+      ]);
+      const activePlayerIds = new Set(players.filter((p) => p.is_active !== false).map((p) => p.id));
+      setEntries(data.filter((entry) => activePlayerIds.has(entry.player_id)));
     } catch {
       setError("Connection issue. Please tap retry.");
     } finally {
