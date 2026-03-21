@@ -299,8 +299,8 @@
 
   .site-section {
     position: relative;
-    border-top: 1px solid hsla(var(--cream) / 0.06);
-    background: linear-gradient(180deg, hsla(var(--brown-deep) / 0.7), hsla(var(--brown-deep) / 0.9));
+    border-top: none;
+    background: linear-gradient(180deg, hsla(var(--brown-deep) / 0.26), hsla(var(--brown-deep) / 0.34));
   }
 
   .site-section::before {
@@ -308,8 +308,8 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background: linear-gradient(120deg, transparent, hsla(var(--gold) / 0.04), transparent);
-    opacity: 0.45;
+    background: linear-gradient(180deg, transparent, hsla(var(--gold) / 0.015), transparent);
+    opacity: 0.18;
   }
 
   .site-audio-btn {

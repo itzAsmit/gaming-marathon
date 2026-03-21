@@ -60,13 +60,6 @@ export default function SiteAudioOverlay() {
         title={hasTrack ? "Toggle soundtrack" : "Add soundtrack URL in src/lib/cloudinaryMedia.ts"}
         aria-label={enabled ? "Sound on" : "Sound off"}
       >
-        <span
-          className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full"
-          style={{
-            background: enabled ? "#22c55e" : "#6b7280",
-            boxShadow: enabled ? "0 0 10px rgba(34,197,94,0.8)" : "none",
-          }}
-        />
         {enabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
       </button>
     </div>
