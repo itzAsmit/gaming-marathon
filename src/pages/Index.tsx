@@ -12,17 +12,18 @@ const Index = () => {
   return (
     <div className="site-shell min-h-[100svh] md:min-h-screen">
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <img
-          src={CLOUDINARY_MEDIA.heroBackgroundImage}
-          alt=""
-          aria-hidden="true"
-          className="w-full h-full object-cover"
-          style={{ filter: "blur(10px)", opacity: 0.22, transform: "scale(1.04)" }}
-          loading="eager"
-          fetchPriority="high"
-          decoding="async"
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `url(${CLOUDINARY_MEDIA.heroBackgroundImage})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center center",
+            filter: "blur(6px)",
+            opacity: 0.38,
+            transform: "scale(1.03)",
+          }}
         />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,7,12,0.45),rgba(3,7,12,0.85))]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,7,12,0.35),rgba(3,7,12,0.74))]" />
       </div>
 
       {/* Scrollable content layer */}

@@ -51,22 +51,23 @@ export default function SiteAudioOverlay() {
     audio.currentTime = 0;
   }, [enabled]);
 
-  const label = hasTrack
-    ? enabled
-      ? "SOUND ON"
-      : "SOUND OFF"
-    : "NO TRACK";
-
   return (
-    <div className="fixed top-4 right-4 z-[120] md:top-6 md:right-6">
+    <div className="fixed bottom-4 right-4 z-[120] md:bottom-6 md:right-6">
       <button
         type="button"
         onClick={() => setEnabled((prev) => !prev)}
-        className="site-audio-btn"
+        className="relative w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/30 bg-black/45 backdrop-blur-sm text-white flex items-center justify-center transition-all duration-200 hover:border-white/70"
         title={hasTrack ? "Toggle soundtrack" : "Add soundtrack URL in src/lib/cloudinaryMedia.ts"}
+        aria-label={enabled ? "Sound on" : "Sound off"}
       >
-        {enabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
-        <span>{label}</span>
+        <span
+          className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full"
+          style={{
+            background: enabled ? "#22c55e" : "#6b7280",
+            boxShadow: enabled ? "0 0 10px rgba(34,197,94,0.8)" : "none",
+          }}
+        />
+        {enabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
       </button>
     </div>
   );

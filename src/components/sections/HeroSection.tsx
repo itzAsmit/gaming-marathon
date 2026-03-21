@@ -19,8 +19,8 @@ export default function HeroSection() {
       ref={containerRef}
       className="relative min-h-[100svh] md:min-h-screen flex items-center overflow-hidden"
     >
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(1,4,8,0.6),rgba(1,4,8,0.85))]" />
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.08)_1px,transparent_1px)] bg-[size:64px_64px] opacity-25" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(1,4,8,0.5),rgba(1,4,8,0.75))]" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.08)_1px,transparent_1px)] bg-[size:64px_64px] opacity-20" />
 
       <motion.div
         className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-10 md:py-14"
@@ -31,11 +31,29 @@ export default function HeroSection() {
             GAMING MARATHON
           </p>
           <div className="hidden md:flex items-center gap-8 text-[0.62rem] text-white/70 tracking-[0.3em] font-semibold">
-            <button onClick={() => document.getElementById("leaderboard")?.scrollIntoView({ behavior: "smooth" })} className="hover:text-white transition-colors">RANKINGS</button>
-            <button onClick={() => document.getElementById("games")?.scrollIntoView({ behavior: "smooth" })} className="hover:text-white transition-colors">GAMES</button>
-            <button onClick={() => document.getElementById("credits")?.scrollIntoView({ behavior: "smooth" })} className="hover:text-white transition-colors">CONTACT</button>
+            <button
+              onClick={() => document.getElementById("leaderboard")?.scrollIntoView({ behavior: "smooth" })}
+              className="hover:text-white transition-colors"
+            >
+              RANKINGS
+            </button>
+            <button
+              onClick={() => document.getElementById("games")?.scrollIntoView({ behavior: "smooth" })}
+              className="hover:text-white transition-colors"
+            >
+              GAMES
+            </button>
+            <button
+              onClick={() => document.getElementById("credits")?.scrollIntoView({ behavior: "smooth" })}
+              className="hover:text-white transition-colors"
+            >
+              CONTACT
+            </button>
           </div>
-          <Link to="/admin/login" className="hidden sm:inline border border-white/30 px-4 py-1.5 text-[0.58rem] tracking-[0.25em] text-white/85 hover:bg-white/10 transition-colors">
+          <Link
+            to="/admin/login"
+            className="hidden sm:inline border border-white/30 px-4 py-1.5 text-[0.58rem] tracking-[0.25em] text-white/85 hover:bg-white/10 transition-colors"
+          >
             ADMIN
           </Link>
         </div>
@@ -64,19 +82,38 @@ export default function HeroSection() {
             </ScrollReveal>
 
             <ScrollReveal delay={0.48}>
-              <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
+              <div className="mt-10 flex flex-col items-center gap-4 justify-center">
                 <button
-                  className="border border-white/55 text-white px-8 py-3 text-[0.62rem] tracking-[0.26em] font-semibold hover:bg-white hover:text-black transition-colors"
+                  className="px-12 py-3.5 font-semibold text-[0.62rem] tracking-[0.28em] rounded-full transition-all duration-300 hover:scale-105"
+                  style={{
+                    background: "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-light)))",
+                    color: "hsl(var(--brown-deep))",
+                    boxShadow: "0 0 24px hsla(var(--gold) / 0.35)",
+                  }}
                   onClick={() => document.getElementById("players")?.scrollIntoView({ behavior: "smooth" })}
                 >
-                  JOIN COMPETITION
+                  APPLY NOW
                 </button>
-                <button
-                  className="border border-white/25 text-white/85 px-8 py-3 text-[0.62rem] tracking-[0.26em] font-semibold hover:border-white/55 transition-colors"
-                  onClick={() => window.open("https://discord.gg/VwW8ktwzyb", "_blank")}
-                >
-                  WATCH COMMUNITY
-                </button>
+
+                <div className="flex flex-col sm:flex-row items-center gap-3">
+                  <button
+                    className="px-7 py-3 text-[0.62rem] tracking-[0.24em] rounded-full glass-card transition-all duration-300 hover:scale-105 flex items-center gap-2 border border-white/10 relative overflow-hidden"
+                    onClick={() => {}}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#25D366]/20 to-transparent opacity-80" />
+                    <span className="relative z-10 w-2 h-2 rounded-full bg-[#25D366] shadow-[0_0_8px_#25D366]" />
+                    <span className="relative z-10 text-white">JOIN WHATSAPP</span>
+                  </button>
+
+                  <button
+                    className="px-7 py-3 text-[0.62rem] tracking-[0.24em] rounded-full glass-card transition-all duration-300 hover:scale-105 flex items-center gap-2 border border-white/10 relative overflow-hidden"
+                    onClick={() => window.open("https://discord.gg/VwW8ktwzyb", "_blank")}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#5865F2]/20 to-transparent opacity-80" />
+                    <span className="relative z-10 w-2 h-2 rounded-full bg-[#5865F2] shadow-[0_0_8px_#5865F2]" />
+                    <span className="relative z-10 text-white">JOIN DISCORD</span>
+                  </button>
+                </div>
               </div>
             </ScrollReveal>
           </div>
@@ -97,7 +134,7 @@ export default function HeroSection() {
               </div>
             </div>
           </ScrollReveal>
-          </div>
+
           <div className="mt-10 flex justify-center">
             <button
               className="text-white/55 hover:text-white transition-colors"
@@ -107,6 +144,7 @@ export default function HeroSection() {
               <ChevronRight className="rotate-90" size={24} />
             </button>
           </div>
+        </div>
       </motion.div>
     </section>
   );
