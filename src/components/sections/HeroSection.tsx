@@ -30,45 +30,60 @@ export default function HeroSection() {
       <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.05)_1px,transparent_1px)] bg-[size:64px_64px] opacity-20" />
 
       <motion.div
-        className="relative z-10 w-full max-w-7xl mx-auto py-8 md:py-10"
+        className="relative z-10 w-[95%] max-w-[1600px] mx-auto min-h-[85vh] py-8 md:py-10 flex flex-col justify-between"
         style={{ y, opacity }}
       >
-        <div className="relative overflow-hidden rounded-[2rem] border border-white/15 bg-black/38 backdrop-blur-md">
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,12,20,0.35),rgba(6,12,20,0.55))]" />
+        <div className="relative w-full h-full flex flex-col flex-grow overflow-hidden rounded-[2.5rem] border border-white/10 bg-black/40 backdrop-blur-md">
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.3),rgba(10,20,30,0.6))]" />
 
-          <div className="relative z-10 px-4 sm:px-8 lg:px-12 py-6 lg:py-8">
-            <div className="relative mb-8 rounded-full border border-white/12 bg-black/30 px-3 sm:px-5 py-4">
-              <div className="flex items-center justify-center gap-3 sm:gap-6 lg:gap-8 flex-wrap text-[0.55rem] sm:text-[0.62rem] tracking-[0.2em] font-semibold text-white/75">
-                {navItems.map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth" })}
-                    className="hover:text-white transition-colors"
-                  >
-                    {item.label}
-                  </button>
-                ))}
-              </div>
+          {/* Top Navigation Row */}
+          <div className="relative z-20 w-full px-6 sm:px-12 pt-8 sm:pt-12 pb-6 flex items-start justify-between">
+            {/* Left Nav */}
+            <div className="hidden lg:flex items-center gap-8 text-[0.62rem] tracking-[0.2em] font-semibold text-white/60">
+              {navItems.slice(0, 2).map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth" })}
+                  className="hover:text-white transition-colors"
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
 
-              <div className="absolute left-1/2 -translate-x-1/2 -top-9 w-16 h-16 rounded-full border border-white/20 bg-black/70 backdrop-blur-sm flex items-center justify-center">
-                <svg viewBox="0 0 64 64" className="w-10 h-10 text-white/85" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 10L32 32L52 10" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
-                  <path d="M12 54L32 32L52 54" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
-                  <path d="M22 20L32 32L42 20" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
-                  <path d="M22 44L32 32L42 44" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
-                  <rect x="27.5" y="50" width="9" height="9" transform="rotate(45 27.5 50)" stroke="currentColor" strokeWidth="2" />
-                </svg>
-              </div>
+            {/* Center Cutout & Logo Placeholder */}
+            {/* Using absolute positioning to break out of flex constraints to stay perfectly centered */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[220px] md:w-[320px] h-16 sm:h-20 bg-black/50 border-b border-white/10 rounded-b-[2rem] flex items-center justify-center backdrop-blur-xl">
+               <img src="/fonts/logo.png" alt="Gaming Marathon Logo" className="mt-2 h-10 sm:h-14 object-contain filter drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]" />
+            </div>
 
+            {/* Right Nav */}
+            <div className="hidden lg:flex items-center gap-8 text-[0.62rem] tracking-[0.2em] font-semibold text-white/60 ml-auto">
+              {navItems.slice(2, 5).map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth" })}
+                  className="hover:text-white transition-colors"
+                >
+                  {item.label}
+                </button>
+              ))}
               <Link
                 to="/admin/login"
-                className="absolute right-2 top-1/2 -translate-y-1/2 border border-white/30 px-3 py-1.5 text-[0.52rem] sm:text-[0.58rem] tracking-[0.2em] text-white/85 hover:bg-white/10 transition-colors"
+                className="hover:text-white transition-colors"
               >
                 ADMIN
               </Link>
             </div>
+            
+            {/* Mobile Nav Toggle Setup (optional fallback) */}
+            <div className="lg:hidden ml-auto">
+               <button className="text-white/60 hover:text-white text-xs tracking-wider font-semibold">MENU</button>
+            </div>
+          </div>
 
-            <div className="grid lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-8 items-end pt-6 lg:pt-8 pb-5">
+          <div className="relative z-10 flex-grow px-6 sm:px-12 lg:px-20 py-10 lg:py-16 flex flex-col justify-end">
+            <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-end">
               <div>
                 <ScrollReveal delay={0.1}>
                   <p className="text-[0.6rem] sm:text-xs tracking-[0.28em] text-white/70 mb-3">
@@ -89,33 +104,24 @@ export default function HeroSection() {
                 <ScrollReveal delay={0.32}>
                   <div className="mt-7 flex flex-col sm:flex-row sm:flex-wrap items-start gap-3">
                     <button
-                      className="px-8 py-3 text-[0.62rem] tracking-[0.24em] rounded-full font-semibold transition-all duration-300 hover:scale-105"
-                      style={{
-                        background: "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-light)))",
-                        color: "hsl(var(--brown-deep))",
-                        boxShadow: "0 0 20px hsla(var(--gold) / 0.34)",
-                      }}
+                      className="px-8 py-3.5 text-[0.65rem] tracking-[0.2em] rounded-full font-bold transition-all duration-300 hover:scale-105 bg-[#d96c2c] text-black"
                       onClick={() => document.getElementById("players")?.scrollIntoView({ behavior: "smooth" })}
                     >
                       APPLY NOW
                     </button>
 
                     <button
-                      className="px-7 py-3 text-[0.58rem] tracking-[0.22em] rounded-full glass-card transition-all duration-300 hover:scale-105 flex items-center gap-2 border border-white/10 relative overflow-hidden"
+                      className="px-8 py-3.5 text-[0.65rem] tracking-[0.2em] rounded-full transition-all duration-300 hover:scale-105 flex items-center gap-2 border border-white/40 text-white hover:bg-white/10"
                       onClick={() => {}}
                     >
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#25D366]/20 to-transparent opacity-80" />
-                      <span className="relative z-10 w-2 h-2 rounded-full bg-[#25D366] shadow-[0_0_8px_#25D366]" />
-                      <span className="relative z-10 text-white">JOIN WHATSAPP</span>
+                      <span className="relative z-10">JOIN WHATSAPP</span>
                     </button>
 
                     <button
-                      className="px-7 py-3 text-[0.58rem] tracking-[0.22em] rounded-full glass-card transition-all duration-300 hover:scale-105 flex items-center gap-2 border border-white/10 relative overflow-hidden"
+                      className="px-8 py-3.5 text-[0.65rem] tracking-[0.2em] rounded-full transition-all duration-300 hover:scale-105 flex items-center gap-2 border border-white/40 text-white hover:bg-white/10"
                       onClick={() => window.open("https://discord.gg/VwW8ktwzyb", "_blank")}
                     >
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#5865F2]/20 to-transparent opacity-80" />
-                      <span className="relative z-10 w-2 h-2 rounded-full bg-[#5865F2] shadow-[0_0_8px_#5865F2]" />
-                      <span className="relative z-10 text-white">JOIN DISCORD</span>
+                      <span className="relative z-10">JOIN DISCORD</span>
                     </button>
                   </div>
                 </ScrollReveal>
