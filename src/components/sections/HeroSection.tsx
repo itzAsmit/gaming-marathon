@@ -39,11 +39,11 @@ export default function HeroSection() {
         <div 
           className="relative w-full h-full min-h-0 flex flex-col flex-grow rounded-[2.8rem] shadow-[0_20px_70px_rgba(0,0,0,0.45)]"
           style={{
-            WebkitMaskImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 82'%3E%3Cpath d='M0 0 L 96 0 C 116 0 128 4 136 18 C 142 30 146 44 156 54 C 166 64 180 69 198 69 L 202 69 C 220 69 234 64 244 54 C 254 44 258 30 264 18 C 272 4 284 0 304 0 L 400 0 L 400 82 L 0 82 Z' fill='black'/%3E%3C/svg%3E"), linear-gradient(black, black), linear-gradient(black, black), linear-gradient(black, black)`,
+            WebkitMaskImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 82'%3E%3Cpath d='M0 0 L 96 0 C 125 0 150 12 170 35 C 185 55 195 72 200 72 C 205 72 215 55 230 35 C 250 12 275 0 304 0 L 400 0 L 400 82 L 0 82 Z' fill='black'/%3E%3C/svg%3E"), linear-gradient(black, black), linear-gradient(black, black), linear-gradient(black, black)`,
             WebkitMaskPosition: "top center, top left, top right, 0 81px",
             WebkitMaskRepeat: "no-repeat, no-repeat, no-repeat, no-repeat",
             WebkitMaskSize: "400px 82px, calc(50% - 199px) 82px, calc(50% - 199px) 82px, 100% calc(100% - 81px)",
-            maskImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 82'%3E%3Cpath d='M0 0 L 96 0 C 116 0 128 4 136 18 C 142 30 146 44 156 54 C 166 64 180 69 198 69 L 202 69 C 220 69 234 64 244 54 C 254 44 258 30 264 18 C 272 4 284 0 304 0 L 400 0 L 400 82 L 0 82 Z' fill='black'/%3E%3C/svg%3E"), linear-gradient(black, black), linear-gradient(black, black), linear-gradient(black, black)`,
+            maskImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 82'%3E%3Cpath d='M0 0 L 96 0 C 125 0 150 12 170 35 C 185 55 195 72 200 72 C 205 72 215 55 230 35 C 250 12 275 0 304 0 L 400 0 L 400 82 L 0 82 Z' fill='black'/%3E%3C/svg%3E"), linear-gradient(black, black), linear-gradient(black, black), linear-gradient(black, black)`,
             maskPosition: "top center, top left, top right, 0 81px",
             maskRepeat: "no-repeat, no-repeat, no-repeat, no-repeat",
             maskSize: "400px 82px, calc(50% - 199px) 82px, calc(50% - 199px) 82px, 100% calc(100% - 81px)"
@@ -69,7 +69,7 @@ export default function HeroSection() {
             aria-hidden="true"
           >
             <path 
-              d="M96 0.5 C 116 0.5 128 4.5 136 18.5 C 142 30.5 146 44.5 156 54.5 C 166 64.5 180 69.5 198 69.5 L 202 69.5 C 220 69.5 234 64.5 244 54.5 C 254 44.5 258 30.5 264 18.5 C 272 4.5 284 0.5 304 0.5" 
+              d="M96 0.5 C 125 0.5 150 12 170 35 C 185 55 195 72 200 72 C 205 72 215 55 230 35 C 250 12 275 0.5 304 0.5"
               stroke="rgba(255, 255, 255, 0.1)" 
               strokeWidth="1"
             />
