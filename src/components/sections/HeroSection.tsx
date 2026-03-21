@@ -36,22 +36,22 @@ export default function HeroSection() {
           className="absolute top-7 sm:top-7 md:top-8 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 h-11 sm:h-12 md:h-14 object-contain pointer-events-none drop-shadow-[0_0_10px_rgba(255,255,255,0.08)]"
         />
 
-        <div className="relative w-full h-full min-h-0 flex flex-col flex-grow rounded-[2.8rem] shadow-[0_20px_70px_rgba(0,0,0,0.45)]">
+        <div 
+          className="relative w-full h-full min-h-0 flex flex-col flex-grow rounded-[2.8rem] shadow-[0_20px_70px_rgba(0,0,0,0.45)]"
+          style={{
+            WebkitMaskImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 82'%3E%3Cpath d='M0 0 L 90 0 C 120 0 130 10 140 40 L 145 55 C 155 75 165 80 180 80 L 220 80 C 235 80 245 75 255 55 L 260 40 C 270 10 280 0 310 0 L 400 0 L 400 82 L 0 82 Z' fill='black'/%3E%3C/svg%3E"), linear-gradient(black, black), linear-gradient(black, black), linear-gradient(black, black)`,
+            WebkitMaskPosition: "top center, top left, top right, 0 81px",
+            WebkitMaskRepeat: "no-repeat, no-repeat, no-repeat, no-repeat",
+            WebkitMaskSize: "400px 82px, calc(50% - 199px) 82px, calc(50% - 199px) 82px, 100% calc(100% - 81px)",
+            maskImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 82'%3E%3Cpath d='M0 0 L 90 0 C 120 0 130 10 140 40 L 145 55 C 155 75 165 80 180 80 L 220 80 C 235 80 245 75 255 55 L 260 40 C 270 10 280 0 310 0 L 400 0 L 400 82 L 0 82 Z' fill='black'/%3E%3C/svg%3E"), linear-gradient(black, black), linear-gradient(black, black), linear-gradient(black, black)`,
+            maskPosition: "top center, top left, top right, 0 81px",
+            maskRepeat: "no-repeat, no-repeat, no-repeat, no-repeat",
+            maskSize: "400px 82px, calc(50% - 199px) 82px, calc(50% - 199px) 82px, 100% calc(100% - 81px)"
+          }}
+        >
           
           {/* Main Panel Background */}
-          <div 
-            className="absolute inset-0 overflow-hidden rounded-[2.8rem] border border-white/10 backdrop-blur-sm"
-            style={{
-              WebkitMaskImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 70'%3E%3Cpath d='M0 0 L120 0 C140 0 150 5 160 15 L180 35 C190 45 200 50 220 50 L260 50 C280 50 290 45 300 35 L320 15 C330 5 340 0 360 0 L480 0 L480 70 L0 70 Z' fill='black'/%3E%3C/svg%3E"), linear-gradient(black, black), linear-gradient(black, black), linear-gradient(black, black)`,
-              WebkitMaskPosition: "top center, top left, top right, 0 69px",
-              WebkitMaskRepeat: "no-repeat, no-repeat, no-repeat, no-repeat",
-              WebkitMaskSize: "480px 70px, calc(50% - 239px) 70px, calc(50% - 239px) 70px, 100% calc(100% - 69px)",
-              maskImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 70'%3E%3Cpath d='M0 0 L120 0 C140 0 150 5 160 15 L180 35 C190 45 200 50 220 50 L260 50 C280 50 290 45 300 35 L320 15 C330 5 340 0 360 0 L480 0 L480 70 L0 70 Z' fill='black'/%3E%3C/svg%3E"), linear-gradient(black, black), linear-gradient(black, black), linear-gradient(black, black)`,
-              maskPosition: "top center, top left, top right, 0 69px",
-              maskRepeat: "no-repeat, no-repeat, no-repeat, no-repeat",
-              maskSize: "480px 70px, calc(50% - 239px) 70px, calc(50% - 239px) 70px, 100% calc(100% - 69px)"
-            }}
-          >
+          <div className="absolute inset-0 overflow-hidden rounded-[2.8rem] border border-white/10 backdrop-blur-sm">
             <div
               className="absolute inset-0 bg-center bg-cover"
               style={{ backgroundImage: "url('/assets/banner.jpg')" }}
@@ -59,18 +59,17 @@ export default function HeroSection() {
             <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(4,11,20,0.84),rgba(5,13,24,0.66)_42%,rgba(3,10,20,0.84)_100%)]" />
           </div>
 
-          {/* Top Notch Outline */}
           <svg 
             className="absolute top-0 left-1/2 -translate-x-1/2 z-20 pointer-events-none"
-            width="480" 
-            height="70" 
-            viewBox="0 0 480 70" 
+            width="400" 
+            height="82" 
+            viewBox="0 0 400 82" 
             fill="none" 
             xmlns="http://www.w3.org/2000/svg"
             aria-hidden="true"
           >
             <path 
-              d="M120 0.5 C140 0.5 150 5.5 160 15.5 L180 35.5 C190 45.5 200 50.5 220 50.5 L260 50.5 C280 50.5 290 45.5 300 35.5 L320 15.5 C330 5.5 340 0.5 360 0.5" 
+              d="M90 0.5 C 120 0.5 130 10.5 140 40.5 L 145 55.5 C 155 75.5 165 80.5 180 80.5 L 220 80.5 C 235 80.5 245 75.5 255 55.5 L 260 40.5 C 270 10.5 280 0.5 310 0.5" 
               stroke="rgba(255, 255, 255, 0.1)" 
               strokeWidth="1"
             />
