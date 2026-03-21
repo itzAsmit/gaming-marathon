@@ -25,7 +25,7 @@ export default function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative h-[100svh] md:h-screen flex items-start overflow-visible px-0 pt-3 sm:pt-4"
+      className="relative h-[100svh] md:h-screen flex items-start overflow-visible px-3 sm:px-4 pt-3 sm:pt-4"
     >
       <motion.div
         className="relative z-10 w-full max-w-none mx-auto h-full min-h-0 pt-8 sm:pt-9 pb-3 sm:pb-4 flex flex-col"
