@@ -301,17 +301,6 @@
     position: relative;
   }
 
-  .hero-surface::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    background: linear-gradient(180deg, hsla(var(--brown-deep) / 0.46), hsla(var(--brown-deep) / 0.62));
-    z-index: 1;
-  }
-
   .site-section {
     position: relative;
     border-top: none;

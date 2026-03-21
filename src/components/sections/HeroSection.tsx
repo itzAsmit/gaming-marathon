@@ -20,7 +20,6 @@ export default function HeroSection() {
   });
 
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   return (
     <section
@@ -29,7 +28,7 @@ export default function HeroSection() {
     >
       <motion.div
         className="relative z-10 w-full max-w-none mx-auto h-full min-h-0 pt-8 sm:pt-9 pb-3 sm:pb-4 flex flex-col"
-        style={{ y, opacity }}
+        style={{ y }}
       >
         <img
           src="/assets/logo.png"
@@ -46,7 +45,6 @@ export default function HeroSection() {
               style={{ backgroundImage: "url('/assets/banner.jpg')" }}
             />
             <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(4,11,20,0.84),rgba(5,13,24,0.66)_42%,rgba(3,10,20,0.84)_100%)]" />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,8,16,0.32),rgba(2,8,16,0.46))] backdrop-blur-[1.5px]" />
           </div>
 
           {/* Top Notch - Placed outside overflow-hidden to break out of panel bounds */}
