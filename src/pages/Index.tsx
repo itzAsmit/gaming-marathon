@@ -1,4 +1,3 @@
-import VideoBackground from "@/components/VideoBackground";
 import HeroSection from "@/components/sections/HeroSection";
 import LeaderboardSection from "@/components/sections/LeaderboardSection";
 import LazyMount from "@/components/LazyMount";
@@ -7,32 +6,57 @@ import GamesSection from "@/components/sections/GamesSection";
 import SpecialItemsSection from "@/components/sections/SpecialItemsSection";
 import HallOfFameSection from "@/components/sections/HallOfFameSection";
 import CreditsSection from "@/components/sections/CreditsSection";
+import { CLOUDINARY_MEDIA } from "@/lib/cloudinaryMedia";
 
 const Index = () => {
   return (
-    <div className="relative min-h-[100svh] md:min-h-screen" style={{ background: "hsl(var(--brown-deep))" }}>
-      <VideoBackground />
+    <div className="site-shell min-h-[100svh] md:min-h-screen">
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <img
+          src={CLOUDINARY_MEDIA.heroBackgroundImage}
+          alt=""
+          aria-hidden="true"
+          className="w-full h-full object-cover"
+          style={{ filter: "blur(10px)", opacity: 0.22, transform: "scale(1.04)" }}
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,7,12,0.45),rgba(3,7,12,0.85))]" />
+      </div>
 
       {/* Scrollable content layer */}
       <div className="relative z-10">
         <HeroSection />
-        <LeaderboardSection />
+        <div className="site-section">
+          <LeaderboardSection />
+        </div>
 
         {/* Sections below the fold: mount only when user scrolls near them */}
         <LazyMount minHeight="100svh">
-          <PlayersSection />
+          <div className="site-section">
+            <PlayersSection />
+          </div>
         </LazyMount>
         <LazyMount minHeight="100svh">
-          <GamesSection />
+          <div className="site-section">
+            <GamesSection />
+          </div>
         </LazyMount>
         <LazyMount minHeight="90svh">
-          <SpecialItemsSection />
+          <div className="site-section">
+            <SpecialItemsSection />
+          </div>
         </LazyMount>
         <LazyMount minHeight="100svh">
-          <HallOfFameSection />
+          <div className="site-section">
+            <HallOfFameSection />
+          </div>
         </LazyMount>
         <LazyMount minHeight="80svh">
-          <CreditsSection />
+          <div className="site-section">
+            <CreditsSection />
+          </div>
         </LazyMount>
       </div>
     </div>

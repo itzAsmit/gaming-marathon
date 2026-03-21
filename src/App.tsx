@@ -9,6 +9,7 @@ import { lazy, Suspense } from "react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AnimatedCursor from "./components/AnimatedCursor";
+import SiteAudioOverlay from "./components/SiteAudioOverlay";
 
 // Lazy-load admin pages so they don't inflate the homepage bundle
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
@@ -37,6 +38,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AnimatedCursor />
+        <SiteAudioOverlay />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/admin/login" element={<Suspense fallback={<AdminFallback />}><AdminLogin /></Suspense>} />

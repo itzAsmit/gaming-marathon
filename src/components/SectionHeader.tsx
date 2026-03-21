@@ -8,30 +8,30 @@ interface SectionHeaderProps {
 
 export default function SectionHeader({ title, subtitle, accent }: SectionHeaderProps) {
   return (
-    <div className="text-center mb-16 relative">
+    <div className="text-center mb-14 relative">
       {accent && (
         <p
-          className="text-sm font-cinzel tracking-[0.4em] mb-3"
-          style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}
+          className="text-[0.62rem] sm:text-xs tracking-[0.5em] mb-4 uppercase"
+          style={{ color: "hsl(var(--cream-dark))", fontFamily: "Orbitron, sans-serif" }}
         >
           {accent}
         </p>
       )}
       <h2
-        className="text-4xl md:text-6xl font-cinzel font-bold gradient-text-gold mb-4"
-        style={{ fontFamily: "Cinzel, serif" }}
+        className="text-3xl sm:text-5xl md:text-6xl font-semibold text-white uppercase tracking-[0.28em] pl-[0.28em] mb-4"
+        style={{ fontFamily: "Orbitron, sans-serif" }}
       >
         {title}
       </h2>
-      <div className="flex items-center justify-center gap-4 mb-4">
-        <div className="h-px flex-1 max-w-24" style={{ background: "linear-gradient(to right, transparent, hsl(var(--gold)))" }} />
-        <div className="w-2 h-2 rounded-full" style={{ background: "hsl(var(--gold))" }} />
-        <div className="h-px flex-1 max-w-24" style={{ background: "linear-gradient(to left, transparent, hsl(var(--gold)))" }} />
+      <div className="flex items-center justify-center gap-3 mb-5">
+        <div className="h-px flex-1 max-w-24 bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+        <div className="w-1.5 h-1.5 rounded-full bg-white/70" />
+        <div className="h-px flex-1 max-w-24 bg-gradient-to-r from-transparent via-white/40 to-transparent" />
       </div>
       {subtitle && (
         <p
-          className="text-base font-inter tracking-wide"
-          style={{ color: "hsl(var(--cream-dark))" }}
+          className="text-sm sm:text-base tracking-wide max-w-2xl mx-auto"
+          style={{ color: "hsl(var(--cream-dark))", fontFamily: "Rajdhani, sans-serif" }}
         >
           {subtitle}
         </p>
