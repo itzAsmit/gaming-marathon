@@ -49,6 +49,7 @@ export default function HeroSection() {
               style={{ backgroundImage: "url('/assets/banner.jpg')" }}
             />
             <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(4,11,20,0.84),rgba(5,13,24,0.66)_42%,rgba(3,10,20,0.84)_100%)]" />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,8,16,0.32),rgba(2,8,16,0.46))] backdrop-blur-[1.5px]" />
           </div>
 
           {/* Top Notch - Placed outside overflow-hidden to break out of panel bounds */}
