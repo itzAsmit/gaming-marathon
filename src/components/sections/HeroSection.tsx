@@ -39,7 +39,19 @@ export default function HeroSection() {
         <div className="relative w-full h-full min-h-0 flex flex-col flex-grow rounded-[2.8rem] shadow-[0_20px_70px_rgba(0,0,0,0.45)]">
           
           {/* Main Panel Background */}
-          <div className="absolute inset-0 overflow-hidden rounded-[2.8rem] border border-white/10 backdrop-blur-sm">
+          <div 
+            className="absolute inset-0 overflow-hidden rounded-[2.8rem] border border-white/10 backdrop-blur-sm"
+            style={{
+              WebkitMaskImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 340 70'%3E%3Cpath d='M0 0 L60 0 C90 0 90 10 105 30 C115 45 120 60 130 60 L210 60 C220 60 225 45 235 30 C250 10 250 0 280 0 L340 0 L340 70 L0 70 Z' fill='black'/%3E%3C/svg%3E"), linear-gradient(black, black), linear-gradient(black, black), linear-gradient(black, black)`,
+              WebkitMaskPosition: "top center, top left, top right, 0 69px",
+              WebkitMaskRepeat: "no-repeat, no-repeat, no-repeat, no-repeat",
+              WebkitMaskSize: "340px 70px, calc(50% - 169px) 70px, calc(50% - 169px) 70px, 100% calc(100% - 69px)",
+              maskImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 340 70'%3E%3Cpath d='M0 0 L60 0 C90 0 90 10 105 30 C115 45 120 60 130 60 L210 60 C220 60 225 45 235 30 C250 10 250 0 280 0 L340 0 L340 70 L0 70 Z' fill='black'/%3E%3C/svg%3E"), linear-gradient(black, black), linear-gradient(black, black), linear-gradient(black, black)`,
+              maskPosition: "top center, top left, top right, 0 69px",
+              maskRepeat: "no-repeat, no-repeat, no-repeat, no-repeat",
+              maskSize: "340px 70px, calc(50% - 169px) 70px, calc(50% - 169px) 70px, 100% calc(100% - 69px)"
+            }}
+          >
             <div
               className="absolute inset-0 bg-center bg-cover"
               style={{ backgroundImage: "url('/assets/banner.jpg')" }}
@@ -47,8 +59,22 @@ export default function HeroSection() {
             <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(4,11,20,0.84),rgba(5,13,24,0.66)_42%,rgba(3,10,20,0.84)_100%)]" />
           </div>
 
-          {/* Top Notch - Placed outside overflow-hidden to break out of panel bounds */}
-          <div className="hero-top-notch" aria-hidden="true" />
+          {/* Top Notch Outline */}
+          <svg 
+            className="absolute top-0 left-1/2 -translate-x-1/2 z-20 pointer-events-none"
+            width="340" 
+            height="70" 
+            viewBox="0 0 340 70" 
+            fill="none" 
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path 
+              d="M60 0.5 C90 0.5 90 10.5 105 30.5 C115 45.5 120 59.5 130 59.5 L210 59.5 C220 59.5 225 45.5 235 30.5 C250 10.5 250 0.5 280 0.5" 
+              stroke="rgba(255, 255, 255, 0.1)" 
+              strokeWidth="1"
+            />
+          </svg>
 
           {/* Top Navigation Row */}
           <div className="relative z-20 w-full px-6 sm:px-12 pt-8 sm:pt-9 pb-6 flex items-center justify-between">
