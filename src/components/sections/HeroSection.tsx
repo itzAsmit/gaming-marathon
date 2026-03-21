@@ -25,10 +25,10 @@ export default function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-[100svh] md:min-h-screen flex items-start overflow-visible px-0 pt-3 sm:pt-4"
+      className="relative h-[100svh] md:h-screen flex items-start overflow-visible px-0 pt-3 sm:pt-4"
     >
       <motion.div
-        className="relative z-10 w-full max-w-none mx-auto min-h-[92vh] pt-9 sm:pt-10 pb-4 md:pb-6 flex flex-col justify-between"
+        className="relative z-10 w-full max-w-none mx-auto h-full min-h-0 pt-8 sm:pt-9 pb-3 sm:pb-4 flex flex-col"
         style={{ y, opacity }}
       >
         <img
@@ -37,7 +37,7 @@ export default function HeroSection() {
           className="absolute -top-3 sm:-top-4 md:-top-5 left-1/2 -translate-x-1/2 z-30 h-9 sm:h-10 md:h-11 object-contain pointer-events-none drop-shadow-[0_0_10px_rgba(255,255,255,0.08)]"
         />
 
-        <div className="relative w-full h-full flex flex-col flex-grow rounded-[2.2rem] shadow-[0_20px_70px_rgba(0,0,0,0.45)]">
+        <div className="relative w-full h-full min-h-0 flex flex-col flex-grow rounded-[2.2rem] shadow-[0_20px_70px_rgba(0,0,0,0.45)]">
           
           {/* Main Panel Background */}
           <div className="absolute inset-0 overflow-hidden rounded-[2.2rem] border border-white/10 bg-[#081321]/75 backdrop-blur-sm">
@@ -174,7 +174,7 @@ export default function HeroSection() {
           </div>
         </div>
 
-        <div className="mt-6 flex justify-center">
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-30 flex justify-center">
           <button
             className="text-white/55 hover:text-white transition-colors"
             onClick={() => document.getElementById("leaderboard")?.scrollIntoView({ behavior: "smooth" })}
