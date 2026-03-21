@@ -27,7 +27,7 @@ export default function HeroSection() {
       className="relative h-[100svh] md:h-screen flex items-start overflow-visible px-2 sm:px-3 pt-1 sm:pt-2"
     >
       <motion.div
-        className="relative z-10 w-[95%] sm:w-[96%] max-w-[1540px] mx-auto h-full min-h-0 pt-5 sm:pt-6 pb-3 sm:pb-4 flex flex-col"
+        className="relative z-10 w-[98%] sm:w-[98%] max-w-[1800px] mx-auto h-full min-h-0 pt-5 sm:pt-6 pb-3 sm:pb-4 flex flex-col"
         style={{ y }}
       >
         <img
@@ -42,14 +42,14 @@ export default function HeroSection() {
           <div 
             className="absolute inset-0 overflow-hidden rounded-[2.8rem] border border-white/10 backdrop-blur-sm"
             style={{
-              WebkitMaskImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 340 70'%3E%3Cpath d='M0 0 L60 0 C90 0 90 10 105 30 C115 45 120 60 130 60 L210 60 C220 60 225 45 235 30 C250 10 250 0 280 0 L340 0 L340 70 L0 70 Z' fill='black'/%3E%3C/svg%3E"), linear-gradient(black, black), linear-gradient(black, black), linear-gradient(black, black)`,
+              WebkitMaskImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 70'%3E%3Cpath d='M0 0 L120 0 C140 0 150 5 160 15 L180 35 C190 45 200 50 220 50 L260 50 C280 50 290 45 300 35 L320 15 C330 5 340 0 360 0 L480 0 L480 70 L0 70 Z' fill='black'/%3E%3C/svg%3E"), linear-gradient(black, black), linear-gradient(black, black), linear-gradient(black, black)`,
               WebkitMaskPosition: "top center, top left, top right, 0 69px",
               WebkitMaskRepeat: "no-repeat, no-repeat, no-repeat, no-repeat",
-              WebkitMaskSize: "340px 70px, calc(50% - 169px) 70px, calc(50% - 169px) 70px, 100% calc(100% - 69px)",
-              maskImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 340 70'%3E%3Cpath d='M0 0 L60 0 C90 0 90 10 105 30 C115 45 120 60 130 60 L210 60 C220 60 225 45 235 30 C250 10 250 0 280 0 L340 0 L340 70 L0 70 Z' fill='black'/%3E%3C/svg%3E"), linear-gradient(black, black), linear-gradient(black, black), linear-gradient(black, black)`,
+              WebkitMaskSize: "480px 70px, calc(50% - 239px) 70px, calc(50% - 239px) 70px, 100% calc(100% - 69px)",
+              maskImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 70'%3E%3Cpath d='M0 0 L120 0 C140 0 150 5 160 15 L180 35 C190 45 200 50 220 50 L260 50 C280 50 290 45 300 35 L320 15 C330 5 340 0 360 0 L480 0 L480 70 L0 70 Z' fill='black'/%3E%3C/svg%3E"), linear-gradient(black, black), linear-gradient(black, black), linear-gradient(black, black)`,
               maskPosition: "top center, top left, top right, 0 69px",
               maskRepeat: "no-repeat, no-repeat, no-repeat, no-repeat",
-              maskSize: "340px 70px, calc(50% - 169px) 70px, calc(50% - 169px) 70px, 100% calc(100% - 69px)"
+              maskSize: "480px 70px, calc(50% - 239px) 70px, calc(50% - 239px) 70px, 100% calc(100% - 69px)"
             }}
           >
             <div
@@ -62,15 +62,15 @@ export default function HeroSection() {
           {/* Top Notch Outline */}
           <svg 
             className="absolute top-0 left-1/2 -translate-x-1/2 z-20 pointer-events-none"
-            width="340" 
+            width="480" 
             height="70" 
-            viewBox="0 0 340 70" 
+            viewBox="0 0 480 70" 
             fill="none" 
             xmlns="http://www.w3.org/2000/svg"
             aria-hidden="true"
           >
             <path 
-              d="M60 0.5 C90 0.5 90 10.5 105 30.5 C115 45.5 120 59.5 130 59.5 L210 59.5 C220 59.5 225 45.5 235 30.5 C250 10.5 250 0.5 280 0.5" 
+              d="M120 0.5 C140 0.5 150 5.5 160 15.5 L180 35.5 C190 45.5 200 50.5 220 50.5 L260 50.5 C280 50.5 290 45.5 300 35.5 L320 15.5 C330 5.5 340 0.5 360 0.5" 
               stroke="rgba(255, 255, 255, 0.1)" 
               strokeWidth="1"
             />
