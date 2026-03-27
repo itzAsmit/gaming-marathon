@@ -18,12 +18,12 @@ const Index = () => {
             backgroundImage: `url(${SITE_MEDIA.heroBackgroundImage})`,
             backgroundSize: "cover",
             backgroundPosition: "center center",
-            filter: "blur(3px)",
-            opacity: 0.62,
+            filter: "blur(2px)",
+            opacity: 0.34,
             transform: "scale(1.03)",
           }}
         />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,7,12,0.16),rgba(3,7,12,0.5))]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.56),rgba(28,33,40,0.18))]" />
       </div>
 
       {/* Scrollable content layer */}

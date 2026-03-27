@@ -898,14 +898,14 @@ export default function AdminGames() {
       )}
 
       {imageCropDraft.open && (
-        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4" style={{ background: "rgba(0, 0, 0, 0.8)" }}>
-          <div className="w-full max-w-3xl rounded-2xl overflow-hidden" style={{ background: "#0b0b0b", border: "1px solid rgba(255,255,255,0.15)" }}>
-            <div className="flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: "rgba(255,255,255,0.12)" }}>
-              <button onClick={closeImageCropper} className="text-sm px-3 py-1.5 rounded-lg" style={{ color: "#f2f2f2", background: "rgba(255,255,255,0.08)" }}>
+        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4" style={{ background: "hsla(var(--brown-deep) / 0.45)", backdropFilter: "blur(6px)" }}>
+          <div className="w-full max-w-3xl rounded-2xl overflow-hidden" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
+            <div className="flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: "hsl(var(--cream-dark))" }}>
+              <button onClick={closeImageCropper} className="text-sm px-3 py-1.5 rounded-lg" style={{ color: "hsl(var(--brown-deep))", background: "hsl(var(--input))" }}>
                 Back
               </button>
-              <h3 className="text-lg font-semibold" style={{ color: "#fff" }}>Crop game image</h3>
-              <button onClick={applyImageCrop} className="text-sm px-4 py-1.5 rounded-full font-semibold" style={{ color: "#0b0b0b", background: "#f0f4f8" }}>
+              <h3 className="text-lg font-semibold" style={{ color: "hsl(var(--brown-deep))" }}>Crop game image</h3>
+              <button onClick={applyImageCrop} className="text-sm px-4 py-1.5 rounded-full font-semibold" style={{ color: "hsl(var(--cream))", background: "hsl(var(--brown))" }}>
                 Apply
               </button>
             </div>
@@ -917,9 +917,9 @@ export default function AdminGames() {
                   width: `${GAME_IMAGE_FRAME.width}px`,
                   height: `${GAME_IMAGE_FRAME.height}px`,
                   borderRadius: "12px",
-                  border: "3px solid #1fb6ff",
+                  border: "3px solid hsl(var(--brown))",
                   cursor: isDraggingCrop ? "grabbing" : "grab",
-                  background: "#050505",
+                  background: "hsl(var(--input))",
                   touchAction: "none",
                 }}
                 onPointerDown={(e) => {
@@ -953,7 +953,7 @@ export default function AdminGames() {
               </div>
 
               <div className="max-w-md mx-auto mt-5">
-                <label className="block text-xs mb-2" style={{ color: "#b7c4d1" }}>Zoom</label>
+                <label className="block text-xs mb-2" style={{ color: "hsl(var(--brown-light))" }}>Zoom</label>
                 <input
                   type="range"
                   min={1}
@@ -974,18 +974,18 @@ export default function AdminGames() {
       )}
 
       {videoTrimDraft.open && (
-        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4" style={{ background: "rgba(0, 0, 0, 0.8)" }}>
-          <div className="w-full max-w-4xl rounded-2xl overflow-hidden" style={{ background: "#0b0b0b", border: "1px solid rgba(255,255,255,0.15)" }}>
-            <div className="flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: "rgba(255,255,255,0.12)" }}>
-              <button onClick={closeVideoTrimmer} className="text-sm px-3 py-1.5 rounded-lg" style={{ color: "#f2f2f2", background: "rgba(255,255,255,0.08)" }}>
+        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4" style={{ background: "hsla(var(--brown-deep) / 0.45)", backdropFilter: "blur(6px)" }}>
+          <div className="w-full max-w-4xl rounded-2xl overflow-hidden" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
+            <div className="flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: "hsl(var(--cream-dark))" }}>
+              <button onClick={closeVideoTrimmer} className="text-sm px-3 py-1.5 rounded-lg" style={{ color: "hsl(var(--brown-deep))", background: "hsl(var(--input))" }}>
                 Back
               </button>
-              <h3 className="text-lg font-semibold" style={{ color: "#fff" }}>Trim video (max 0:30)</h3>
+              <h3 className="text-lg font-semibold" style={{ color: "hsl(var(--brown-deep))" }}>Trim video (max 0:30)</h3>
               <button
                 onClick={applyVideoTrim}
                 disabled={videoTrimDraft.processing}
                 className="text-sm px-4 py-1.5 rounded-full font-semibold disabled:opacity-60"
-                style={{ color: "#0b0b0b", background: "#f0f4f8" }}
+                style={{ color: "hsl(var(--cream))", background: "hsl(var(--brown))" }}
               >
                 {videoTrimDraft.processing ? "Processing..." : "Apply"}
               </button>
@@ -999,7 +999,8 @@ export default function AdminGames() {
                 muted
                 loop
                 playsInline
-                className="w-full max-h-[360px] rounded-xl bg-black"
+                className="w-full max-h-[360px] rounded-xl"
+                style={{ backgroundColor: "hsl(var(--input))" }}
                 onTimeUpdate={(e) => {
                   const v = e.currentTarget;
                   if (v.currentTime >= videoTrimDraft.end) {
@@ -1009,12 +1010,12 @@ export default function AdminGames() {
                 }}
               />
 
-              <div className="text-sm" style={{ color: "#d2dae3" }}>
+              <div className="text-sm" style={{ color: "hsl(var(--brown-light))" }}>
                 Total: <strong>{formatSeconds(videoTrimDraft.duration)}</strong> | Selected: <strong>{formatSeconds(videoTrimDraft.end - videoTrimDraft.start)}</strong> (max 00:30)
               </div>
 
               <div>
-                <label className="block text-xs mb-2" style={{ color: "#b7c4d1" }}>Start: {formatSeconds(videoTrimDraft.start)}</label>
+                <label className="block text-xs mb-2" style={{ color: "hsl(var(--brown-light))" }}>Start: {formatSeconds(videoTrimDraft.start)}</label>
                 <input
                   type="range"
                   min={0}
@@ -1033,7 +1034,7 @@ export default function AdminGames() {
               </div>
 
               <div>
-                <label className="block text-xs mb-2" style={{ color: "#b7c4d1" }}>End: {formatSeconds(videoTrimDraft.end)}</label>
+                <label className="block text-xs mb-2" style={{ color: "hsl(var(--brown-light))" }}>End: {formatSeconds(videoTrimDraft.end)}</label>
                 <input
                   type="range"
                   min={0}

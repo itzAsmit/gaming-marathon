@@ -142,7 +142,7 @@ export default function HeroSection() {
                 <ScrollReveal delay={0.32}>
                   <div className="mt-8 flex flex-col sm:flex-row sm:flex-wrap items-start gap-3">
                     <button
-                      className="px-8 py-3.5 text-[0.58rem] tracking-[0.22em] rounded-full font-bold transition-all duration-300 hover:scale-105 bg-[#d96c2c] text-black"
+                      className="px-8 py-3.5 text-[0.58rem] tracking-[0.22em] rounded-full font-bold transition-all duration-300 hover:scale-105 bg-white/90 text-black"
                       onClick={() => document.getElementById("players")?.scrollIntoView({ behavior: "smooth" })}
                     >
                       APPLY NOW
@@ -167,7 +167,7 @@ export default function HeroSection() {
 
               <div className="lg:pb-3 lg:pl-3">
                 <ScrollReveal delay={0.26}>
-                  <p className="text-[#f29f57] text-[0.56rem] tracking-[0.24em] font-semibold mb-3">
+                  <p className="text-white/85 text-[0.56rem] tracking-[0.24em] font-semibold mb-3">
                     EXPERIENCE THE THRILL OF THE GAMING MARATHON
                   </p>
                   <p className="text-white/74 text-sm sm:text-[0.98rem] leading-relaxed max-w-[34rem]">
@@ -178,17 +178,17 @@ export default function HeroSection() {
 
                 <ScrollReveal delay={0.38}>
                   <div className="mt-7 grid grid-cols-3 gap-3 max-w-[34rem]">
-                    <div className="rounded-xl border border-white/20 bg-[#0a1626]/70 px-3 py-3 text-center">
-                      <p className="text-white text-lg sm:text-xl font-semibold">11</p>
-                      <p className="text-[0.52rem] tracking-[0.24em] text-white/60 mt-1">GAMES</p>
+                    <div className="rounded-xl border border-black/20 bg-white/78 px-3 py-3 text-center">
+                      <p className="text-black text-lg sm:text-xl font-semibold">11</p>
+                      <p className="text-[0.52rem] tracking-[0.24em] text-black/60 mt-1">GAMES</p>
                     </div>
-                    <div className="rounded-xl border border-white/20 bg-[#0a1626]/70 px-3 py-3 text-center">
-                      <p className="text-white text-lg sm:text-xl font-semibold">1</p>
-                      <p className="text-[0.52rem] tracking-[0.24em] text-white/60 mt-1">CHAMPION</p>
+                    <div className="rounded-xl border border-black/20 bg-white/78 px-3 py-3 text-center">
+                      <p className="text-black text-lg sm:text-xl font-semibold">1</p>
+                      <p className="text-[0.52rem] tracking-[0.24em] text-black/60 mt-1">CHAMPION</p>
                     </div>
-                    <div className="rounded-xl border border-white/20 bg-[#0a1626]/70 px-3 py-3 text-center">
-                      <p className="text-white text-lg sm:text-xl font-semibold">LIVE</p>
-                      <p className="text-[0.52rem] tracking-[0.24em] text-white/60 mt-1">SEASON</p>
+                    <div className="rounded-xl border border-black/20 bg-white/78 px-3 py-3 text-center">
+                      <p className="text-black text-lg sm:text-xl font-semibold">LIVE</p>
+                      <p className="text-[0.52rem] tracking-[0.24em] text-black/60 mt-1">SEASON</p>
                     </div>
                   </div>
                 </ScrollReveal>

@@ -9,7 +9,7 @@ export default function AnimatedCursor() {
   const isMobile = useIsMobile();
   const location = useLocation();
   const isAdmin = location.pathname.startsWith("/admin");
-  const cursorColor = isAdmin ? "30 20% 15%" : "var(--cream)"; // dark brown on admin, cream elsewhere
+  const cursorColor = isAdmin ? "var(--brown-deep)" : "var(--brown)";
   const cursorRef = useRef<HTMLDivElement>(null);
   const followerRef = useRef<HTMLDivElement>(null);
   const [variant, setVariant] = useState<CursorVariant>("default");

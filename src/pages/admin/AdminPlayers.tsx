@@ -592,14 +592,14 @@ export default function AdminPlayers() {
 
       {/* Crop modal */}
       {cropDraft.open && cropDraft.kind && (
-        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4" style={{ background: "rgba(0, 0, 0, 0.8)" }}>
-          <div className="w-full max-w-3xl rounded-2xl overflow-hidden" style={{ background: "#0b0b0b", border: "1px solid rgba(255,255,255,0.15)" }}>
-            <div className="flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: "rgba(255,255,255,0.12)" }}>
-              <button onClick={closeCropper} className="text-sm px-3 py-1.5 rounded-lg" style={{ color: "#f2f2f2", background: "rgba(255,255,255,0.08)" }}>
+        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4" style={{ background: "hsla(var(--brown-deep) / 0.45)", backdropFilter: "blur(6px)" }}>
+          <div className="w-full max-w-3xl rounded-2xl overflow-hidden" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
+            <div className="flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: "hsl(var(--cream-dark))" }}>
+              <button onClick={closeCropper} className="text-sm px-3 py-1.5 rounded-lg" style={{ color: "hsl(var(--brown-deep))", background: "hsl(var(--input))" }}>
                 Back
               </button>
-              <h3 className="text-lg font-semibold" style={{ color: "#fff" }}>Edit media</h3>
-              <button onClick={applyCrop} className="text-sm px-4 py-1.5 rounded-full font-semibold" style={{ color: "#0b0b0b", background: "#f0f4f8" }}>
+              <h3 className="text-lg font-semibold" style={{ color: "hsl(var(--brown-deep))" }}>Edit media</h3>
+              <button onClick={applyCrop} className="text-sm px-4 py-1.5 rounded-full font-semibold" style={{ color: "hsl(var(--cream))", background: "hsl(var(--brown))" }}>
                 Apply
               </button>
             </div>
@@ -611,9 +611,9 @@ export default function AdminPlayers() {
                   width: `${getCropFrame(cropDraft.kind).width}px`,
                   height: `${getCropFrame(cropDraft.kind).height}px`,
                   borderRadius: cropDraft.kind === "avatar" ? "9999px" : "12px",
-                  border: "3px solid #1fb6ff",
+                  border: "3px solid hsl(var(--brown))",
                   cursor: isDraggingCrop ? "grabbing" : "grab",
-                  background: "#050505",
+                  background: "hsl(var(--input))",
                   touchAction: "none",
                 }}
                 onPointerDown={(e) => {
@@ -647,7 +647,7 @@ export default function AdminPlayers() {
               </div>
 
               <div className="max-w-md mx-auto mt-5">
-                <label className="block text-xs mb-2" style={{ color: "#b7c4d1" }}>Zoom</label>
+                <label className="block text-xs mb-2" style={{ color: "hsl(var(--brown-light))" }}>Zoom</label>
                 <input
                   type="range"
                   min={1}
