@@ -1,8 +1,9 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import MonolithThreeCanvas from "@/components/MonolithThreeCanvas";
+import MagicRings from "@/components/MagicRings";
 
 const navItems = [
   { id: "leaderboard", label: "LEADERBOARD" },
@@ -14,6 +15,8 @@ const navItems = [
 
 export default function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [hoverApply, setHoverApply] = useState(false);
+  const [hoverDiscord, setHoverDiscord] = useState(false);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"],
@@ -104,18 +107,85 @@ export default function HeroSection() {
             </p>
 
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-              <button
-                className="bg-black text-white px-10 py-4 font-black uppercase tracking-[0.2em] text-xs rounded-lg shadow-[0_14px_30px_rgba(0,0,0,0.12)] hover:bg-black/85 transition-colors"
-                onClick={() => document.getElementById("players")?.scrollIntoView({ behavior: "smooth" })}
+              <div
+                className="relative group"
+                onMouseEnter={() => setHoverApply(true)}
+                onMouseLeave={() => setHoverApply(false)}
               >
-                APPLY_TO_COMPETE
-              </button>
-              <button
-                className="border-2 border-black text-black px-10 py-4 font-black uppercase tracking-[0.2em] text-xs rounded-lg hover:bg-black hover:text-white transition-colors"
-                onClick={() => window.open("https://discord.gg/VwW8ktwzyb", "_blank")}
+                {hoverApply && (
+                  <div className="absolute inset-0 -m-3 pointer-events-none rounded-lg overflow-hidden">
+                    <MagicRings
+                      color="#000000"
+                      colorTwo="#333333"
+                      ringCount={4}
+                      speed={1}
+                      attenuation={8}
+                      lineThickness={2}
+                      baseRadius={0.35}
+                      radiusStep={0.1}
+                      scaleRate={0.1}
+                      opacity={0.6}
+                      blur={0}
+                      noiseAmount={0.05}
+                      rotation={0}
+                      ringGap={1.5}
+                      fadeIn={0.7}
+                      fadeOut={0.5}
+                      followMouse={false}
+                      mouseInfluence={0.2}
+                      hoverScale={1.2}
+                      parallax={0.05}
+                      clickBurst={false}
+                    />
+                  </div>
+                )}
+                <button
+                  className="relative bg-black text-white px-10 py-4 font-black uppercase tracking-[0.2em] text-xs rounded-lg shadow-[0_14px_30px_rgba(0,0,0,0.12)] hover:bg-black/85 transition-all duration-300"
+                  onClick={() => document.getElementById("players")?.scrollIntoView({ behavior: "smooth" })}
+                >
+                  APPLY_TO_COMPETE
+                </button>
+              </div>
+              
+              <div
+                className="relative group"
+                onMouseEnter={() => setHoverDiscord(true)}
+                onMouseLeave={() => setHoverDiscord(false)}
               >
-                JOIN_DISCORD
-              </button>
+                {hoverDiscord && (
+                  <div className="absolute inset-0 -m-3 pointer-events-none rounded-lg overflow-hidden">
+                    <MagicRings
+                      color="#5865F2"
+                      colorTwo="#4752C4"
+                      ringCount={4}
+                      speed={1}
+                      attenuation={8}
+                      lineThickness={2}
+                      baseRadius={0.35}
+                      radiusStep={0.1}
+                      scaleRate={0.1}
+                      opacity={0.6}
+                      blur={0}
+                      noiseAmount={0.05}
+                      rotation={0}
+                      ringGap={1.5}
+                      fadeIn={0.7}
+                      fadeOut={0.5}
+                      followMouse={false}
+                      mouseInfluence={0.2}
+                      hoverScale={1.2}
+                      parallax={0.05}
+                      clickBurst={false}
+                    />
+                  </div>
+                )}
+                <button
+                  className="relative border-2 border-black text-black px-10 py-4 font-black uppercase tracking-[0.2em] text-xs rounded-lg hover:bg-black hover:text-white transition-all duration-300"
+                  onClick={() => window.open("https://discord.gg/VwW8ktwzyb", "_blank")}
+                >
+                  JOIN_DISCORD
+                </button>
+              </div>
             </div>
           </div>
         </div>
