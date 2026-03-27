@@ -16,7 +16,7 @@ export default function MonolithThreeCanvas() {
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, mountEl.clientWidth / mountEl.clientHeight, 1, 1000);
-    camera.position.z = 400;
+    camera.position.z = 300;
     scene.add(camera);
 
     const circle = new THREE.Object3D();
@@ -63,11 +63,11 @@ export default function MonolithThreeCanvas() {
     });
 
     const planet = new THREE.Mesh(planetGeometry, planetMaterial);
-    planet.scale.setScalar(16);
+    planet.scale.setScalar(24);
     circle.add(planet);
 
     const wirePlanet = new THREE.Mesh(wireGeometry, wireMaterial);
-    wirePlanet.scale.setScalar(10);
+    wirePlanet.scale.setScalar(14);
     skelet.add(wirePlanet);
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.45);
