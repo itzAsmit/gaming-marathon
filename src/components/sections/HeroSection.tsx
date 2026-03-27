@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
+import MonolithThreeCanvas from "@/components/MonolithThreeCanvas";
 
 const navItems = [
   { id: "leaderboard", label: "LEADERBOARD" },
@@ -82,7 +83,13 @@ export default function HeroSection() {
         </nav>
 
         <div className="relative z-10 min-h-[calc(100svh-88px)] md:min-h-[calc(100vh-110px)] flex items-center justify-center px-6 sm:px-10 lg:px-12 pt-10 pb-32 md:pb-36">
-          <div className="text-center max-w-6xl">
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+            <div className="w-[84vw] h-[54vh] max-w-[1100px] max-h-[620px] opacity-[0.2] md:opacity-[0.16] grayscale">
+              <MonolithThreeCanvas />
+            </div>
+          </div>
+
+          <div className="relative z-10 text-center max-w-6xl">
             <p className="text-3xl md:text-5xl leading-none tracking-tight text-black/80" style={{ fontFamily: "ROWAN, serif" }}>
               The
             </p>

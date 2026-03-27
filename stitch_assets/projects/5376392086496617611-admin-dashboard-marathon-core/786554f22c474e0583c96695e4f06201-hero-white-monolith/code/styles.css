@@ -1,0 +1,16 @@
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+#canvas {
+  background: #ffffff;
+  overflow: hidden;
+  background-image: radial-gradient(#d1d1d1 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.particle-mesh {
+  background-image: radial-gradient(circle, #000000 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(circle, black, transparent 80%);
+}
