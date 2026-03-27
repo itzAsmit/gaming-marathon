@@ -17,6 +17,7 @@ export default function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [hoverApply, setHoverApply] = useState(false);
   const [hoverDiscord, setHoverDiscord] = useState(false);
+  const [hoverWhatsapp, setHoverWhatsapp] = useState(false);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"],
@@ -106,27 +107,27 @@ export default function HeroSection() {
               <span className="text-black"> Est. 2024</span>
             </p>
 
-            <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="mt-10 flex flex-col gap-3 justify-center items-center sm:items-stretch max-w-sm mx-auto">
               <div
                 className="relative group"
                 onMouseEnter={() => setHoverApply(true)}
                 onMouseLeave={() => setHoverApply(false)}
               >
                 {hoverApply && (
-                  <div className="absolute inset-0 -m-3 pointer-events-none rounded-lg overflow-hidden">
+                  <div className="absolute inset-0 -m-2 pointer-events-none rounded-lg overflow-hidden">
                     <MagicRings
                       color="#000000"
                       colorTwo="#333333"
-                      ringCount={4}
+                      ringCount={3}
                       speed={1}
                       attenuation={8}
-                      lineThickness={2}
+                      lineThickness={1.5}
                       baseRadius={0.35}
                       radiusStep={0.1}
                       scaleRate={0.1}
-                      opacity={0.6}
+                      opacity={0.3}
                       blur={0}
-                      noiseAmount={0.05}
+                      noiseAmount={0.02}
                       rotation={0}
                       ringGap={1.5}
                       fadeIn={0.7}
@@ -140,51 +141,105 @@ export default function HeroSection() {
                   </div>
                 )}
                 <button
-                  className="relative bg-black text-white px-10 py-4 font-black uppercase tracking-[0.2em] text-xs rounded-lg shadow-[0_14px_30px_rgba(0,0,0,0.12)] hover:bg-black/85 transition-all duration-300"
+                  className="w-full relative bg-black text-white px-10 py-4 font-black uppercase tracking-[0.2em] text-xs rounded-lg shadow-lg transition-all duration-300 ease-out"
+                  style={{
+                    transform: hoverApply ? "scale(1.05)" : "scale(1)",
+                    filter: hoverApply ? "drop-shadow(0 20px 25px rgba(0,0,0,0.3))" : "drop-shadow(0 4px 6px rgba(0,0,0,0.1))",
+                  }}
                   onClick={() => document.getElementById("players")?.scrollIntoView({ behavior: "smooth" })}
                 >
                   APPLY_TO_COMPETE
                 </button>
               </div>
               
-              <div
-                className="relative group"
-                onMouseEnter={() => setHoverDiscord(true)}
-                onMouseLeave={() => setHoverDiscord(false)}
-              >
-                {hoverDiscord && (
-                  <div className="absolute inset-0 -m-3 pointer-events-none rounded-lg overflow-hidden">
-                    <MagicRings
-                      color="#5865F2"
-                      colorTwo="#4752C4"
-                      ringCount={4}
-                      speed={1}
-                      attenuation={8}
-                      lineThickness={2}
-                      baseRadius={0.35}
-                      radiusStep={0.1}
-                      scaleRate={0.1}
-                      opacity={0.6}
-                      blur={0}
-                      noiseAmount={0.05}
-                      rotation={0}
-                      ringGap={1.5}
-                      fadeIn={0.7}
-                      fadeOut={0.5}
-                      followMouse={false}
-                      mouseInfluence={0.2}
-                      hoverScale={1.2}
-                      parallax={0.05}
-                      clickBurst={false}
-                    />
-                  </div>
-                )}
-                <button
-                  className="relative border-2 border-black text-black px-10 py-4 font-black uppercase tracking-[0.2em] text-xs rounded-lg hover:bg-black hover:text-white transition-all duration-300"
-                  onClick={() => window.open("https://discord.gg/VwW8ktwzyb", "_blank")}
+              <div className="flex gap-3 w-full">
+                <div
+                  className="relative group flex-1"
+                  onMouseEnter={() => setHoverDiscord(true)}
+                  onMouseLeave={() => setHoverDiscord(false)}
                 >
-                  JOIN_DISCORD
-                </button>
+                  {hoverDiscord && (
+                    <div className="absolute inset-0 -m-2 pointer-events-none rounded-lg overflow-hidden">
+                      <MagicRings
+                        color="#5865F2"
+                        colorTwo="#4752C4"
+                        ringCount={3}
+                        speed={1}
+                        attenuation={8}
+                        lineThickness={1.5}
+                        baseRadius={0.35}
+                        radiusStep={0.1}
+                        scaleRate={0.1}
+                        opacity={0.3}
+                        blur={0}
+                        noiseAmount={0.02}
+                        rotation={0}
+                        ringGap={1.5}
+                        fadeIn={0.7}
+                        fadeOut={0.5}
+                        followMouse={false}
+                        mouseInfluence={0.2}
+                        hoverScale={1.2}
+                        parallax={0.05}
+                        clickBurst={false}
+                      />
+                    </div>
+                  )}
+                  <button
+                    className="w-full relative border-2 border-black text-black px-8 py-3 font-black uppercase tracking-[0.2em] text-xs rounded-lg transition-all duration-300 ease-out"
+                    style={{
+                      transform: hoverDiscord ? "scale(1.05)" : "scale(1)",
+                      filter: hoverDiscord ? "drop-shadow(0 20px 25px rgba(0,0,0,0.25))" : "drop-shadow(0 4px 6px rgba(0,0,0,0.08))",
+                    }}
+                    onClick={() => window.open("https://discord.gg/VwW8ktwzyb", "_blank")}
+                  >
+                    JOIN_DISCORD
+                  </button>
+                </div>
+
+                <div
+                  className="relative group flex-1"
+                  onMouseEnter={() => setHoverWhatsapp(true)}
+                  onMouseLeave={() => setHoverWhatsapp(false)}
+                >
+                  {hoverWhatsapp && (
+                    <div className="absolute inset-0 -m-2 pointer-events-none rounded-lg overflow-hidden">
+                      <MagicRings
+                        color="#25D366"
+                        colorTwo="#20BA5A"
+                        ringCount={3}
+                        speed={1}
+                        attenuation={8}
+                        lineThickness={1.5}
+                        baseRadius={0.35}
+                        radiusStep={0.1}
+                        scaleRate={0.1}
+                        opacity={0.3}
+                        blur={0}
+                        noiseAmount={0.02}
+                        rotation={0}
+                        ringGap={1.5}
+                        fadeIn={0.7}
+                        fadeOut={0.5}
+                        followMouse={false}
+                        mouseInfluence={0.2}
+                        hoverScale={1.2}
+                        parallax={0.05}
+                        clickBurst={false}
+                      />
+                    </div>
+                  )}
+                  <button
+                    className="w-full relative border-2 border-black text-black px-8 py-3 font-black uppercase tracking-[0.2em] text-xs rounded-lg transition-all duration-300 ease-out"
+                    style={{
+                      transform: hoverWhatsapp ? "scale(1.05)" : "scale(1)",
+                      filter: hoverWhatsapp ? "drop-shadow(0 20px 25px rgba(0,0,0,0.25))" : "drop-shadow(0 4px 6px rgba(0,0,0,0.08))",
+                    }}
+                    onClick={() => window.open("https://wa.me/1234567890", "_blank")}
+                  >
+                    JOIN_WHATSAPP
+                  </button>
+                </div>
               </div>
             </div>
           </div>
