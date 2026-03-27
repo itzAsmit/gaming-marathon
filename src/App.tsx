@@ -23,7 +23,7 @@ const AdminHallOfFame = lazy(() => import("./pages/admin/AdminHallOfFame"));
 const queryClient = new QueryClient();
 
 const AdminFallback = () => (
-  <div className="flex items-center justify-center min-h-screen" style={{ background: "linear-gradient(135deg, hsl(var(--cream)), hsl(var(--cream-dark)))" }}>
+  <div className="flex items-center justify-center min-h-screen" style={{ background: "hsl(var(--background))" }}>
     <div className="text-center">
       <div className="w-10 h-10 border-3 border-t-transparent rounded-full animate-spin mx-auto mb-3" style={{ borderColor: "hsl(var(--brown))", borderTopColor: "transparent" }} />
       <p className="text-sm font-cinzel tracking-widest" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>LOADING...</p>

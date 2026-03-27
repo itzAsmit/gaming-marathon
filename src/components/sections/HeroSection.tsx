@@ -1,6 +1,5 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import ScrollReveal from "@/components/ScrollReveal";
 import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 
@@ -19,192 +18,132 @@ export default function HeroSection() {
     offset: ["start start", "end start"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "16%"]);
 
   return (
-    <section
-      ref={containerRef}
-      className="relative h-[100svh] md:h-screen flex items-start overflow-visible px-2 sm:px-3 pt-1 sm:pt-2"
-    >
+    <section ref={containerRef} className="relative min-h-[100svh] md:min-h-screen overflow-hidden" aria-label="Hero">
       <motion.div
-        className="relative z-10 w-[98%] sm:w-[98%] max-w-[1800px] mx-auto h-full min-h-0 pt-5 sm:pt-6 pb-3 sm:pb-4 flex flex-col"
+        className="relative min-h-[100svh] md:min-h-screen"
         style={{ y }}
       >
-        <img
-          src="/assets/logo.png"
-          alt="Gaming Marathon Logo"
-          className="absolute top-7 sm:top-7 md:top-8 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 h-11 sm:h-12 md:h-14 object-contain pointer-events-none drop-shadow-[0_0_10px_rgba(255,255,255,0.08)]"
-        />
-
-        <div 
-          className="relative w-full h-full min-h-0 flex flex-col flex-grow rounded-[2.8rem] shadow-[0_20px_70px_rgba(0,0,0,0.45)]"
-          style={{
-            WebkitMaskImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 82'%3E%3Cpath d='M0 0 L 84 0 C 108 0 124 1 136 10 C 148 20 154 37 164 51 C 172 61 183 66 196 66 L 204 66 C 217 66 228 61 236 51 C 246 37 252 20 264 10 C 276 1 292 0 316 0 L 400 0 L 400 82 L 0 82 Z' fill='black'/%3E%3C/svg%3E"), linear-gradient(black, black), linear-gradient(black, black), linear-gradient(black, black)`,
-            WebkitMaskPosition: "top center, top left, top right, 0 81px",
-            WebkitMaskRepeat: "no-repeat, no-repeat, no-repeat, no-repeat",
-            WebkitMaskSize: "400px 82px, calc(50% - 199px) 82px, calc(50% - 199px) 82px, 100% calc(100% - 81px)",
-            maskImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 82'%3E%3Cpath d='M0 0 L 84 0 C 108 0 124 1 136 10 C 148 20 154 37 164 51 C 172 61 183 66 196 66 L 204 66 C 217 66 228 61 236 51 C 246 37 252 20 264 10 C 276 1 292 0 316 0 L 400 0 L 400 82 L 0 82 Z' fill='black'/%3E%3C/svg%3E"), linear-gradient(black, black), linear-gradient(black, black), linear-gradient(black, black)`,
-            maskPosition: "top center, top left, top right, 0 81px",
-            maskRepeat: "no-repeat, no-repeat, no-repeat, no-repeat",
-            maskSize: "400px 82px, calc(50% - 199px) 82px, calc(50% - 199px) 82px, 100% calc(100% - 81px)"
-          }}
-        >
-          
-          {/* Main Panel Background */}
-          <div className="absolute inset-0 overflow-hidden rounded-[2.8rem] border border-white/10 backdrop-blur-sm">
-            <div
-              className="absolute inset-0 bg-center bg-cover"
-              style={{ backgroundImage: "url('/assets/banner.jpg')" }}
-            />
-            <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(4,11,20,0.84),rgba(5,13,24,0.66)_42%,rgba(3,10,20,0.84)_100%)]" />
-          </div>
-
-          <svg 
-            className="absolute top-0 left-1/2 -translate-x-1/2 z-20 pointer-events-none"
-            width="400" 
-            height="82" 
-            viewBox="0 0 400 82" 
-            fill="none" 
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path 
-              d="M84 0.5 C 108 0.5 124 1.5 136 10.5 C 148 20.5 154 37.5 164 51.5 C 172 61.5 183 66.5 196 66.5 L 204 66.5 C 217 66.5 228 61.5 236 51.5 C 246 37.5 252 20.5 264 10.5 C 276 1.5 292 0.5 316 0.5"
-              stroke="rgba(255, 255, 255, 0.1)" 
-              strokeWidth="1"
-            />
-          </svg>
-
-          {/* Top Navigation Row */}
-          <div className="relative z-20 w-full px-6 sm:px-12 pt-8 sm:pt-9 pb-6 flex items-center justify-between">
-            {/* Left Nav */}
-            <div className="hidden lg:flex w-[40%] items-center gap-8 text-[0.55rem] tracking-[0.25em] font-semibold text-white/55">
-              {navItems.slice(0, 2).map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth" })}
-                  className="hover:text-white/90 transition-colors"
-                >
-                  {item.label}
-                </button>
-              ))}
+        <div className="absolute inset-0 z-0 bg-white">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: "radial-gradient(#d4d4d4 1px, transparent 1px)",
+              backgroundSize: "32px 32px",
+            }}
+          />
+          <div
+            className="absolute inset-0 opacity-[0.06]"
+            style={{
+              backgroundImage: "radial-gradient(circle, #000 1px, transparent 1px)",
+              backgroundSize: "40px 40px",
+              maskImage: "radial-gradient(circle, black, transparent 80%)",
+              WebkitMaskImage: "radial-gradient(circle, black, transparent 80%)",
+            }}
+          />
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="relative w-[72vw] max-w-[620px] aspect-square border border-black/10 rounded-full flex items-center justify-center">
+              <div className="absolute w-[82%] h-[82%] border border-black/10 rotate-45" />
+              <div className="absolute w-[62%] h-[62%] border border-black/10 -rotate-12" />
+              <div className="w-1/2 h-1/2 border-2 border-black/10 rounded-full blur-[2px]" />
             </div>
+          </div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0)_30%,rgba(255,255,255,0.78)_100%)]" />
+        </div>
 
-            <div className="hidden lg:block w-[220px] shrink-0" aria-hidden="true" />
+        <nav className="relative z-20 w-full px-5 sm:px-8 lg:px-12 py-6 md:py-8 flex items-center justify-between border-b border-black/5 bg-white/80 backdrop-blur-md">
+          <div className="text-base sm:text-xl font-black tracking-tight text-black">MONOLITH_MARATHON</div>
 
-            {/* Right Nav */}
-            <div className="hidden lg:flex w-[40%] items-center justify-end gap-8 text-[0.55rem] tracking-[0.25em] font-semibold text-white/55">
-              {navItems.slice(2, 5).map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth" })}
-                  className="hover:text-white/90 transition-colors"
-                >
-                  {item.label}
-                </button>
-              ))}
-              <Link
-                to="/admin/login"
-                className="hover:text-white/90 transition-colors"
+          <div className="hidden lg:flex items-center gap-8 text-[0.62rem] tracking-[0.19em] font-bold text-black/70">
+            {navItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth" })}
+                className="uppercase hover:text-black transition-colors"
               >
-                ADMIN
-              </Link>
-            </div>
-            
-            {/* Mobile Nav Toggle Setup (optional fallback) */}
-            <div className="lg:hidden ml-auto">
-               <button className="text-white/60 hover:text-white text-xs tracking-wider font-semibold">MENU</button>
-            </div>
+                {item.label}
+              </button>
+            ))}
           </div>
 
-          <div className="relative z-10 flex-grow px-6 sm:px-12 lg:px-20 py-[120px] lg:py-[140px] flex flex-col justify-end">
-            <div className="grid lg:grid-cols-[1.15fr_1fr] gap-12 lg:gap-24 items-end">
-              <div>
-                <ScrollReveal delay={0.1}>
-                  <p className="text-[0.56rem] sm:text-[0.62rem] tracking-[0.35em] text-white/60 mb-5 font-medium">
-                    IF YOU DARE ENTER
-                  </p>
-                </ScrollReveal>
-
-                <ScrollReveal delay={0.2}>
-                  <h1
-                    className="text-[2.7rem] sm:text-[4.3rem] lg:text-[5.4rem] font-black leading-[0.92] text-white uppercase tracking-[0.02em]"
-                    style={{ fontFamily: "Orbitron, sans-serif" }}
-                  >
-                    THE
-                    <br />
-                    GAMING
-                    <br />
-                    MARATHON
-                  </h1>
-                </ScrollReveal>
-
-                <ScrollReveal delay={0.32}>
-                  <div className="mt-8 flex flex-col sm:flex-row sm:flex-wrap items-start gap-3">
-                    <button
-                      className="px-8 py-3.5 text-[0.58rem] tracking-[0.22em] rounded-full font-bold transition-all duration-300 hover:scale-105 bg-white/90 text-black"
-                      onClick={() => document.getElementById("players")?.scrollIntoView({ behavior: "smooth" })}
-                    >
-                      APPLY NOW
-                    </button>
-
-                    <button
-                      className="px-8 py-3.5 text-[0.58rem] tracking-[0.22em] rounded-full transition-all duration-300 hover:scale-105 flex items-center gap-2 border border-white/45 text-white/95 hover:bg-white/10"
-                      onClick={() => {}}
-                    >
-                      <span className="relative z-10">JOIN WHATSAPP</span>
-                    </button>
-
-                    <button
-                      className="px-8 py-3.5 text-[0.58rem] tracking-[0.22em] rounded-full transition-all duration-300 hover:scale-105 flex items-center gap-2 border border-white/45 text-white/95 hover:bg-white/10"
-                      onClick={() => window.open("https://discord.gg/VwW8ktwzyb", "_blank")}
-                    >
-                      <span className="relative z-10">JOIN DISCORD</span>
-                    </button>
-                  </div>
-                </ScrollReveal>
-              </div>
-
-              <div className="lg:pb-3 lg:pl-3">
-                <ScrollReveal delay={0.26}>
-                  <p className="text-white/85 text-[0.56rem] tracking-[0.24em] font-semibold mb-3">
-                    EXPERIENCE THE THRILL OF THE GAMING MARATHON
-                  </p>
-                  <p className="text-white/74 text-sm sm:text-[0.98rem] leading-relaxed max-w-[34rem]">
-                    Welcome to the ultimate gaming showdown where strategy, speed, and focus collide. Step into a world of intense challenges,
-                    high-stakes matches, and unforgettable moments. Every round can shift the leaderboard, and every decision can define the champion.
-                  </p>
-                </ScrollReveal>
-
-                <ScrollReveal delay={0.38}>
-                  <div className="mt-7 grid grid-cols-3 gap-3 max-w-[34rem]">
-                    <div className="rounded-xl border border-black/20 bg-white/78 px-3 py-3 text-center">
-                      <p className="text-black text-lg sm:text-xl font-semibold">11</p>
-                      <p className="text-[0.52rem] tracking-[0.24em] text-black/60 mt-1">GAMES</p>
-                    </div>
-                    <div className="rounded-xl border border-black/20 bg-white/78 px-3 py-3 text-center">
-                      <p className="text-black text-lg sm:text-xl font-semibold">1</p>
-                      <p className="text-[0.52rem] tracking-[0.24em] text-black/60 mt-1">CHAMPION</p>
-                    </div>
-                    <div className="rounded-xl border border-black/20 bg-white/78 px-3 py-3 text-center">
-                      <p className="text-black text-lg sm:text-xl font-semibold">LIVE</p>
-                      <p className="text-[0.52rem] tracking-[0.24em] text-black/60 mt-1">SEASON</p>
-                    </div>
-                  </div>
-                </ScrollReveal>
-              </div>
-            </div>
-          </div>
-
-          <div className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-30 flex justify-center">
+          <div className="flex items-center gap-4 sm:gap-6 text-[0.62rem] tracking-[0.16em] font-bold">
             <button
-              className="text-white/55 hover:text-white transition-colors"
-              onClick={() => document.getElementById("leaderboard")?.scrollIntoView({ behavior: "smooth" })}
-              aria-label="Scroll to next section"
+              onClick={() => document.getElementById("players")?.scrollIntoView({ behavior: "smooth" })}
+              className="hidden sm:inline uppercase text-black hover:opacity-70 transition-opacity"
             >
-              <ChevronRight className="rotate-90" size={24} />
+              REGISTER
             </button>
+            <Link to="/admin/login" className="uppercase text-black hover:opacity-70 transition-opacity">
+              ADMIN
+            </Link>
           </div>
+        </nav>
+
+        <div className="relative z-10 min-h-[calc(100svh-88px)] md:min-h-[calc(100vh-110px)] flex items-center justify-center px-6 sm:px-10 lg:px-12 pt-10 pb-32 md:pb-36">
+          <div className="text-center max-w-6xl">
+            <p className="text-3xl md:text-5xl leading-none tracking-tight text-black/80" style={{ fontFamily: "ROWAN, serif" }}>
+              The
+            </p>
+
+            <h1 className="mt-1 text-5xl sm:text-7xl md:text-[112px] font-black leading-[0.86] tracking-[-0.03em] text-black uppercase" style={{ fontFamily: "Orbitron, sans-serif" }}>
+              Gaming
+              <br />
+              Marathon
+            </h1>
+
+            <p className="mt-8 max-w-2xl mx-auto text-[0.68rem] sm:text-xs md:text-sm tracking-[0.23em] uppercase font-bold text-black/65 leading-relaxed">
+              Architecting the future of elite competitive performance.
+              <span className="text-black"> Est. 2024</span>
+            </p>
+
+            <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+              <button
+                className="bg-black text-white px-10 py-4 font-black uppercase tracking-[0.2em] text-xs rounded-lg shadow-[0_14px_30px_rgba(0,0,0,0.12)] hover:bg-black/85 transition-colors"
+                onClick={() => document.getElementById("players")?.scrollIntoView({ behavior: "smooth" })}
+              >
+                APPLY_TO_COMPETE
+              </button>
+              <button
+                className="border-2 border-black text-black px-10 py-4 font-black uppercase tracking-[0.2em] text-xs rounded-lg hover:bg-black hover:text-white transition-colors"
+                onClick={() => window.open("https://discord.gg/VwW8ktwzyb", "_blank")}
+              >
+                JOIN_DISCORD
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="absolute bottom-8 md:bottom-12 left-0 w-full px-6 sm:px-10 lg:px-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 z-20 pointer-events-none">
+          <div className="flex flex-col gap-1">
+            <div className="text-[10px] tracking-[0.3em] font-black text-black/35 uppercase">Registration Status</div>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+              <span className="text-black font-bold tracking-tight uppercase text-sm">Phase 01 Active</span>
+            </div>
+          </div>
+
+          <div className="flex gap-8 sm:gap-12 text-left md:text-right">
+            <div>
+              <div className="text-[10px] tracking-[0.3em] font-black text-black/35 uppercase">Prize Pool</div>
+              <div className="text-xl sm:text-2xl font-black tracking-tight text-black">$250,000.00</div>
+            </div>
+            <div>
+              <div className="text-[10px] tracking-[0.3em] font-black text-black/35 uppercase">Competitors</div>
+              <div className="text-xl sm:text-2xl font-black tracking-tight text-black">12,480</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="absolute bottom-2 sm:bottom-3 left-1/2 -translate-x-1/2 z-30 flex justify-center">
+          <button
+            className="text-black/45 hover:text-black transition-colors"
+            onClick={() => document.getElementById("leaderboard")?.scrollIntoView({ behavior: "smooth" })}
+            aria-label="Scroll to next section"
+          >
+            <ChevronRight className="rotate-90" size={24} />
+          </button>
         </div>
       </motion.div>
     </section>

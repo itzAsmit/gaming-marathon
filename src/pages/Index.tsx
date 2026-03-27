@@ -6,26 +6,10 @@ import GamesSection from "@/components/sections/GamesSection";
 import SpecialItemsSection from "@/components/sections/SpecialItemsSection";
 import HallOfFameSection from "@/components/sections/HallOfFameSection";
 import CreditsSection from "@/components/sections/CreditsSection";
-import { SITE_MEDIA } from "@/lib/siteMedia";
 
 const Index = () => {
   return (
     <div className="site-shell min-h-[100svh] md:min-h-screen">
-      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `url(${SITE_MEDIA.heroBackgroundImage})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center center",
-            filter: "blur(2px)",
-            opacity: 0.34,
-            transform: "scale(1.03)",
-          }}
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.56),rgba(28,33,40,0.18))]" />
-      </div>
-
       {/* Scrollable content layer */}
       <div className="relative z-10">
         <div className="hero-surface">

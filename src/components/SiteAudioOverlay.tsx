@@ -56,7 +56,7 @@ export default function SiteAudioOverlay() {
       <button
         type="button"
         onClick={() => setEnabled((prev) => !prev)}
-        className="relative w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/30 bg-black/45 backdrop-blur-sm text-white flex items-center justify-center transition-all duration-200 hover:border-white/70"
+        className="relative w-12 h-12 md:w-14 md:h-14 rounded-full border border-black/20 bg-white/85 backdrop-blur-sm text-black flex items-center justify-center transition-all duration-200 hover:border-black/45 hover:bg-white"
         title={hasTrack ? "Toggle soundtrack" : "Add soundtrack path in src/lib/siteMedia.ts"}
         aria-label={enabled ? "Sound on" : "Sound off"}
       >
