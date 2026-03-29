@@ -49,8 +49,8 @@ export default function HeroSection() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0)_30%,rgba(255,255,255,0.78)_100%)]" />
         </div>
 
-        <nav className="relative z-20 w-full px-5 sm:px-8 lg:px-12 py-6 md:py-8 flex items-center justify-between border-b border-black/5 bg-white/80 backdrop-blur-md">
-          <div className="text-base sm:text-xl font-black tracking-tight text-black">MONOLITH_MARATHON</div>
+        <nav className="relative z-20 w-full px-5 sm:px-8 lg:px-12 py-6 md:py-8 flex items-center justify-between border-b border-transparent bg-transparent">
+          <div className="hidden lg:block w-44" aria-hidden="true" />
 
           <div className="hidden lg:flex items-center gap-8 text-[0.62rem] tracking-[0.19em] font-bold text-black/70">
             {navItems.map((item) => (
@@ -247,12 +247,8 @@ export default function HeroSection() {
 
           <div className="flex gap-8 sm:gap-12 text-left md:text-right">
             <div>
-              <div className="text-[10px] tracking-[0.3em] font-black text-black/35 uppercase">Prize Pool</div>
-              <div className="text-xl sm:text-2xl font-black tracking-tight text-black">$250,000.00</div>
-            </div>
-            <div>
               <div className="text-[10px] tracking-[0.3em] font-black text-black/35 uppercase">Competitors</div>
-              <div className="text-xl sm:text-2xl font-black tracking-tight text-black">12,480</div>
+              <div className="text-xl sm:text-2xl font-black tracking-tight text-black/85">12,480</div>
             </div>
           </div>
         </div>
