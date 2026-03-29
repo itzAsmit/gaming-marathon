@@ -79,7 +79,7 @@ export default function HeroSection() {
 
         <div className="relative z-10 min-h-[calc(100svh-88px)] md:min-h-[calc(100vh-110px)] flex items-center justify-center px-6 sm:px-10 lg:px-12 pt-10 pb-32 md:pb-36">
           <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center">
-            <div className="w-[80vw] max-w-[940px] h-[58vh] max-h-[560px] opacity-[0.18] md:opacity-[0.15] grayscale">
+            <div className="w-[88vw] max-w-[520px] h-[40vh] max-h-[320px] sm:w-[82vw] sm:max-w-[700px] sm:h-[48vh] sm:max-h-[420px] lg:w-[74vw] lg:max-w-[980px] lg:h-[60vh] lg:max-h-[600px] opacity-[0.18] md:opacity-[0.15] grayscale">
               <MonolithThreeCanvas />
             </div>
           </div>
