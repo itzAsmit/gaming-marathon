@@ -39,15 +39,6 @@ export default function HeroSection() {
               backgroundSize: "32px 32px",
             }}
           />
-          <div
-            className="absolute inset-0 opacity-[0.06]"
-            style={{
-              backgroundImage: "radial-gradient(circle, #000 1px, transparent 1px)",
-              backgroundSize: "40px 40px",
-              maskImage: "radial-gradient(circle, black, transparent 80%)",
-              WebkitMaskImage: "radial-gradient(circle, black, transparent 80%)",
-            }}
-          />
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div className="relative w-[72vw] max-w-[620px] aspect-square border border-black/10 rounded-full flex items-center justify-center">
               <div className="absolute w-[82%] h-[82%] border border-black/10 rotate-45" />
@@ -87,8 +78,10 @@ export default function HeroSection() {
         </nav>
 
         <div className="relative z-10 min-h-[calc(100svh-88px)] md:min-h-[calc(100vh-110px)] flex items-center justify-center px-6 sm:px-10 lg:px-12 pt-10 pb-32 md:pb-36">
-          <div className="absolute inset-0 pointer-events-none z-0 opacity-[0.2] md:opacity-[0.16] grayscale">
-            <MonolithThreeCanvas />
+          <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center">
+            <div className="w-[80vw] max-w-[940px] h-[58vh] max-h-[560px] opacity-[0.18] md:opacity-[0.15] grayscale">
+              <MonolithThreeCanvas />
+            </div>
           </div>
 
           <div className="relative z-10 text-center max-w-6xl">
