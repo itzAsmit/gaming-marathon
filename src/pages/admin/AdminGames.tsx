@@ -4,6 +4,7 @@ import { raceDataFetch } from "@/lib/raceDataFetch";
 import { adminMutation } from "@/lib/adminMutation";
 import { raceUpload } from "@/lib/adminUpload";
 import { withTimeout } from "@/lib/withTimeout";
+import { useTextareaResize } from "@/hooks/use-textarea-resize";
 import SmartImage from "@/components/SmartImage";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { Plus, Pencil, Trash2, RefreshCw, X, Upload, ToggleLeft, ToggleRight, CalendarDays } from "lucide-react";
@@ -269,6 +270,7 @@ export default function AdminGames() {
   const [pickerPeriod, setPickerPeriod] = useState<"AM" | "PM">("PM");
   const imageRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLInputElement>(null);
+  const bioRef = useTextareaResize(form.bio ?? "", 2);
 
   const fetchGames = async () => {
     try {
@@ -287,11 +289,11 @@ export default function AdminGames() {
   const fetchPlayers = async () => {
     try {
       const data = await raceDataFetch<{ id: string; name: string; player_id: string }[]>(
-        () => supabase.from("players").select("id, name, player_id").eq("is_active", true),
+        () => supabase.from("players").select("id, name, player_id"),
         "admin_players",
       );
-      // Filter for active players client-side since the proxy returns all
-      setPlayers(data.filter((p: any) => p.is_active !== false));
+      // Keep a defensive client-side filter for payloads that may include is_active.
+      setPlayers(data.filter((p) => (p as { is_active?: boolean }).is_active !== false));
     } catch {
       // Non-critical
     }
@@ -763,7 +765,7 @@ export default function AdminGames() {
 
               <div>
                 <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>BIO</label>
-                <textarea rows={2} value={form.bio ?? ""} onChange={(e) => setForm((f) => ({ ...f, bio: e.target.value }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none resize-none" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} />
+                <textarea ref={bioRef} rows={2} value={form.bio ?? ""} onChange={(e) => setForm((f) => ({ ...f, bio: e.target.value }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none resize-none overflow-hidden" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} />
               </div>
 
               <div>

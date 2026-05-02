@@ -4,9 +4,10 @@ import { raceDataFetch } from "@/lib/raceDataFetch";
 import { adminMutation } from "@/lib/adminMutation";
 import { raceUpload } from "@/lib/adminUpload";
 import { withTimeout } from "@/lib/withTimeout";
+import { useTextareaResize } from "@/hooks/use-textarea-resize";
 import SmartImage from "@/components/SmartImage";
 import AdminLayout from "@/components/admin/AdminLayout";
-import { Plus, Pencil, Trash2, Eye, X, RefreshCw, Upload } from "lucide-react";
+import { Plus, Pencil, Trash2, X, RefreshCw, Upload } from "lucide-react";
 import { toast } from "sonner";
 
 interface Player {
@@ -21,6 +22,8 @@ interface Player {
   linkedin: string | null;
   is_active: boolean;
 }
+
+type PlayerRow = Omit<Player, "is_active"> & { is_active?: boolean | null };
 
 interface Proficiency { game_name: string; proficiency_percent: number; }
 interface GameOption { id: string; name: string; }
@@ -87,14 +90,15 @@ export default function AdminPlayers() {
   const [dragStartOffset, setDragStartOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const avatarRef = useRef<HTMLInputElement>(null);
   const portraitRef = useRef<HTMLInputElement>(null);
+  const bioRef = useTextareaResize(form.bio ?? "", 3);
 
   const fetchPlayers = async () => {
     try {
-      const data = await raceDataFetch<Player[]>(
+      const data = await raceDataFetch<PlayerRow[]>(
         () => supabase.from("players").select("*").order("player_id"),
         "admin_players",
       );
-      setPlayers(data.map((p: any) => ({ ...p, is_active: p.is_active ?? true })));
+      setPlayers(data.map((p) => ({ ...p, is_active: p.is_active ?? true })));
     } catch {
       toast.error("Failed to load players");
     } finally {
@@ -458,7 +462,7 @@ export default function AdminPlayers() {
               {/* Bio */}
               <div>
                 <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>BIO</label>
-                <textarea rows={3} value={form.bio ?? ""} onChange={(e) => setForm((f) => ({ ...f, bio: e.target.value }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none resize-none" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} placeholder="Short bio..." />
+                <textarea ref={bioRef} rows={3} value={form.bio ?? ""} onChange={(e) => setForm((f) => ({ ...f, bio: e.target.value }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none resize-none overflow-hidden" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} placeholder="Short bio..." />
               </div>
 
               {/* Image uploads */}

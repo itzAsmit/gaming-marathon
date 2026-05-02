@@ -1,5 +1,5 @@
 export async function withTimeout<T>(
-  promise: Promise<T>,
+  promise: PromiseLike<T>,
   timeoutMs = 12000,
   errorMessage = "Request timed out",
 ): Promise<T> {
@@ -7,7 +7,7 @@ export async function withTimeout<T>(
 
   try {
     return await Promise.race([
-      promise,
+      Promise.resolve(promise),
       new Promise<never>((_, reject) => {
         timeoutHandle = setTimeout(() => {
           reject(new Error(errorMessage));
