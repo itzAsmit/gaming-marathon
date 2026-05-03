@@ -37,15 +37,13 @@ export default function CreditsSection() {
 
         const teamTestimonials: Testimonial[] = [];
 
-        if (admin) {
+        if (admin && admin.portrait_url) {
           teamTestimonials.push({
             name: admin.name || "Marathon Admin",
             title: "Event Organiser",
             description:
               "The strategic mastermind orchestrating every detail of the marathon. Ensuring seamless coordination, unprecedented engagement, and an unforgettable gaming experience for all participants.",
-            imageUrl:
-              admin.portrait_url ||
-              "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80",
+            imageUrl: admin.portrait_url,
             githubUrl: "#",
             twitterUrl: "#",
             youtubeUrl: "#",
@@ -53,15 +51,13 @@ export default function CreditsSection() {
           });
         }
 
-        if (developer) {
+        if (developer && developer.portrait_url) {
           teamTestimonials.push({
             name: developer.name || "Developer",
             title: "Technical Architect",
             description:
               "Crafted this interactive platform with meticulous precision and unwavering passion. Every feature, animation, and integration reflects dedication to delivering an exceptional user experience.",
-            imageUrl:
-              developer.portrait_url ||
-              "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=600&q=80",
+            imageUrl: developer.portrait_url,
             githubUrl: "#",
             twitterUrl: "#",
             youtubeUrl: "#",
@@ -72,25 +68,8 @@ export default function CreditsSection() {
         setTestimonials(teamTestimonials);
       } catch (error) {
         console.error("Failed to load team data:", error);
-        // Fallback testimonials if data fetch fails
-        setTestimonials([
-          {
-            name: "Ritesh Dutta",
-            title: "Event Organiser",
-            description:
-              "The strategic mastermind orchestrating every detail of the marathon. Ensuring seamless coordination, unprecedented engagement, and an unforgettable gaming experience for all participants.",
-            imageUrl:
-              "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80",
-          },
-          {
-            name: "Asmit Biswas",
-            title: "Technical Architect",
-            description:
-              "Crafted this interactive platform with meticulous precision and unwavering passion. Every feature, animation, and integration reflects dedication to delivering an exceptional user experience.",
-            imageUrl:
-              "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=600&q=80",
-          },
-        ]);
+        // No fallback - only show data from database
+        setTestimonials([]);
       } finally {
         setIsLoading(false);
       }
