@@ -105,10 +105,10 @@ export default function CreditsSection() {
             href={url || "#"}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-12 h-12 bg-white rounded-full flex items-center justify-center transition-colors hover:scale-105 cursor-pointer shadow-sm"
+            className="w-12 h-12 bg-black rounded-full flex items-center justify-center transition-colors hover:scale-105 cursor-pointer shadow-sm"
             aria-label={label}
           >
-            <Icon className="w-5 h-5 text-black" />
+            <Icon className="w-5 h-5 text-white" />
           </a>
         ))}
       </div>
@@ -116,17 +116,17 @@ export default function CreditsSection() {
   };
 
   const MemberCard = ({ member }: { member: TeamMember }) => (
-    <div className="bg-[#18181A] rounded-3xl shadow-2xl p-8 max-w-xl w-full">
+    <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-lg w-full">
       <div className="mb-6">
-        <h3 className="text-2xl font-bold text-white mb-2">
+        <h3 className="text-2xl font-bold text-gray-900 mb-2">
           {member.name}
         </h3>
-        <p className="text-sm font-medium text-gray-400">
+        <p className="text-sm font-medium text-gray-500">
           {member.title}
         </p>
       </div>
 
-      <p className="text-base text-gray-200 leading-relaxed mb-8">
+      <p className="text-base text-gray-700 leading-relaxed mb-8">
         {member.description}
       </p>
 
@@ -146,19 +146,19 @@ export default function CreditsSection() {
             <div className="animate-pulse text-gray-500">Loading team...</div>
           </div>
         ) : (
-          <div className="mt-20">
-            <div className="flex flex-col gap-32">
+          <div className="mt-12">
+            <div className="flex flex-col gap-12 lg:gap-4">
               {/* Organiser - Image left, Card overlapping right */}
               {organiser && (
                 <ScrollReveal delay={0.1}>
                   <motion.div
-                    className="flex flex-col lg:flex-row items-center w-full lg:w-4/5 mx-auto relative lg:-translate-x-12"
+                    className="flex flex-col lg:flex-row items-center w-full lg:w-[85%] relative lg:-translate-x-12"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
                     viewport={{ once: true }}
                   >
-                    <div className="w-[350px] h-[350px] sm:w-[470px] sm:h-[470px] flex-shrink-0 z-0">
+                    <div className="w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] flex-shrink-0 z-0">
                       <div className="w-full h-full rounded-3xl overflow-hidden bg-gray-200 dark:bg-neutral-800">
                         <img
                           src={organiser.imageUrl}
@@ -169,7 +169,7 @@ export default function CreditsSection() {
                       </div>
                     </div>
                     
-                    <div className="z-10 lg:ml-[-100px] mt-[-50px] lg:mt-0 flex-1 w-full max-w-[600px]">
+                    <div className="z-10 lg:ml-[-80px] mt-[-60px] lg:mt-16 flex-1 w-full max-w-[500px]">
                       <MemberCard member={organiser} />
                     </div>
                   </motion.div>
@@ -180,13 +180,13 @@ export default function CreditsSection() {
               {developer && (
                 <ScrollReveal delay={0.2}>
                   <motion.div
-                    className="flex flex-col lg:flex-row-reverse items-center w-full lg:w-4/5 mx-auto relative lg:translate-x-12"
+                    className="flex flex-col lg:flex-row-reverse items-center w-full lg:w-[85%] ml-auto relative lg:translate-x-12 lg:-mt-24"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
                     viewport={{ once: true }}
                   >
-                    <div className="w-[350px] h-[350px] sm:w-[470px] sm:h-[470px] flex-shrink-0 z-0">
+                    <div className="w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] flex-shrink-0 z-0">
                       <div className="w-full h-full rounded-3xl overflow-hidden bg-gray-200 dark:bg-neutral-800">
                         <img
                           src={developer.imageUrl}
@@ -197,7 +197,7 @@ export default function CreditsSection() {
                       </div>
                     </div>
                     
-                    <div className="z-10 lg:mr-[-100px] mt-[-50px] lg:mt-0 flex-1 w-full max-w-[600px]">
+                    <div className="z-10 lg:mr-[-80px] mt-[-60px] lg:mt-16 flex-1 w-full max-w-[500px]">
                       <MemberCard member={developer} />
                     </div>
                   </motion.div>
