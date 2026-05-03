@@ -98,17 +98,17 @@ export default function CreditsSection() {
     ];
 
     return (
-      <div className="flex space-x-3">
+      <div className="flex space-x-4">
         {links.map(({ icon: Icon, url, label }) => (
           <a
             key={label}
             href={url || "#"}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-10 h-10 bg-gray-900 dark:bg-gray-100 rounded-full flex items-center justify-center transition-colors hover:bg-gray-800 dark:hover:bg-gray-200 hover:scale-105"
+            className="w-12 h-12 bg-white rounded-full flex items-center justify-center transition-colors hover:scale-105 cursor-pointer shadow-sm"
             aria-label={label}
           >
-            <Icon className="w-4 h-4 text-white dark:text-gray-900" />
+            <Icon className="w-5 h-5 text-black" />
           </a>
         ))}
       </div>
@@ -116,17 +116,17 @@ export default function CreditsSection() {
   };
 
   const MemberCard = ({ member }: { member: TeamMember }) => (
-    <div className="bg-white dark:bg-card rounded-2xl shadow-xl p-6">
-      <div className="mb-4">
-        <h3 className="text-lg font-cinzel font-bold text-gray-900 dark:text-white mb-1">
+    <div className="bg-[#18181A] rounded-3xl shadow-2xl p-8 max-w-xl w-full">
+      <div className="mb-6">
+        <h3 className="text-2xl font-bold text-white mb-2">
           {member.name}
         </h3>
-        <p className="text-xs font-medium text-gray-700 dark:text-gray-400">
+        <p className="text-sm font-medium text-gray-400">
           {member.title}
         </p>
       </div>
 
-      <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed mb-5">
+      <p className="text-base text-gray-200 leading-relaxed mb-8">
         {member.description}
       </p>
 
@@ -135,7 +135,7 @@ export default function CreditsSection() {
   );
 
   return (
-    <section id="credits" className="relative py-24 px-4">
+    <section id="credits" className="relative py-24 px-4 overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <ScrollReveal>
           <SectionHeader title="CREDITS" accent="THE TEAM" />
@@ -146,68 +146,59 @@ export default function CreditsSection() {
             <div className="animate-pulse text-gray-500">Loading team...</div>
           </div>
         ) : (
-          <div className="mt-16">
-            {/* Team members side-by-side with staggered layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              {/* Left: Organiser - Image on left, card on right, positioned higher */}
+          <div className="mt-20">
+            <div className="flex flex-col gap-32">
+              {/* Organiser - Image left, Card overlapping right */}
               {organiser && (
                 <ScrollReveal delay={0.1}>
                   <motion.div
-                    className="flex flex-col lg:flex-row gap-6 lg:items-start lg:-translate-y-6"
+                    className="flex flex-col lg:flex-row items-center w-full lg:w-4/5 mx-auto relative lg:-translate-x-12"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
                     viewport={{ once: true }}
                   >
-                    {/* Image - Left */}
-                    <div className="w-full lg:w-1/2 relative">
-                      <div className="rounded-2xl overflow-hidden shadow-lg">
+                    <div className="w-[350px] h-[350px] sm:w-[470px] sm:h-[470px] flex-shrink-0 z-0">
+                      <div className="w-full h-full rounded-3xl overflow-hidden bg-gray-200 dark:bg-neutral-800">
                         <img
                           src={organiser.imageUrl}
                           alt={organiser.name}
-                          className="w-full h-80 lg:h-96 object-cover"
+                          className="w-full h-full object-cover"
                           draggable={false}
                         />
                       </div>
                     </div>
-
-                    {/* Card - Overlapping Right */}
-                    <div className="w-full lg:w-1/2 flex items-start">
-                      <div className="-ml-20 lg:-ml-28 z-10 w-full">
-                        <MemberCard member={organiser} />
-                      </div>
+                    
+                    <div className="z-10 lg:ml-[-100px] mt-[-50px] lg:mt-0 flex-1 w-full max-w-[600px]">
+                      <MemberCard member={organiser} />
                     </div>
                   </motion.div>
                 </ScrollReveal>
               )}
 
-              {/* Right: Developer - Card on left, image on right, positioned lower */}
+              {/* Developer - Card overlapping left, Image right */}
               {developer && (
                 <ScrollReveal delay={0.2}>
                   <motion.div
-                    className="flex flex-col lg:flex-row-reverse gap-6 lg:items-end lg:translate-y-6"
+                    className="flex flex-col lg:flex-row-reverse items-center w-full lg:w-4/5 mx-auto relative lg:translate-x-12"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
                     viewport={{ once: true }}
                   >
-                    {/* Image - Right */}
-                    <div className="w-full lg:w-1/2 relative">
-                      <div className="rounded-2xl overflow-hidden shadow-lg">
+                    <div className="w-[350px] h-[350px] sm:w-[470px] sm:h-[470px] flex-shrink-0 z-0">
+                      <div className="w-full h-full rounded-3xl overflow-hidden bg-gray-200 dark:bg-neutral-800">
                         <img
                           src={developer.imageUrl}
                           alt={developer.name}
-                          className="w-full h-80 lg:h-96 object-cover"
+                          className="w-full h-full object-cover"
                           draggable={false}
                         />
                       </div>
                     </div>
-
-                    {/* Card - Overlapping Left */}
-                    <div className="w-full lg:w-1/2 flex items-end">
-                      <div className="-mr-20 lg:-mr-28 z-10 w-full">
-                        <MemberCard member={developer} />
-                      </div>
+                    
+                    <div className="z-10 lg:mr-[-100px] mt-[-50px] lg:mt-0 flex-1 w-full max-w-[600px]">
+                      <MemberCard member={developer} />
                     </div>
                   </motion.div>
                 </ScrollReveal>
