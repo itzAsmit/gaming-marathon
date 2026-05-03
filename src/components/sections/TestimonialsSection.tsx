@@ -68,7 +68,7 @@ export default function TestimonialsSection() {
 
     return {
       name: player.name,
-      role: `Player ${idStr.padStart(2, "0")}`,
+      role: `${idStr.padStart(2, "0")}`,
       image: player.image_url
         ? isConstrained
           ? toProxiedMediaSrc(player.image_url)
