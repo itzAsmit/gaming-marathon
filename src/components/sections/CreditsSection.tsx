@@ -44,9 +44,8 @@ export default function CreditsSection() {
             description:
               "The strategic mastermind orchestrating every detail of the marathon. Ensuring seamless coordination, unprecedented engagement, and an unforgettable gaming experience for all participants.",
             imageUrl: admin.portrait_url,
-            githubUrl: "#",
+            instagramUrl: "#",
             twitterUrl: "#",
-            youtubeUrl: "#",
             linkedinUrl: "#",
           });
         }
@@ -58,10 +57,9 @@ export default function CreditsSection() {
             description:
               "Crafted this interactive platform with meticulous precision and unwavering passion. Every feature, animation, and integration reflects dedication to delivering an exceptional user experience.",
             imageUrl: developer.portrait_url,
-            githubUrl: "#",
-            twitterUrl: "#",
-            youtubeUrl: "#",
-            linkedinUrl: "#",
+            instagramUrl: "https://instagram.com/aizenrishiii",
+            twitterUrl: "https://x.com/aizenrishiii",
+            linkedinUrl: "https://linkedin.com/in/asmit-biswas",
           });
         }
 

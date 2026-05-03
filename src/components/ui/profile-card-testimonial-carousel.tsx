@@ -3,9 +3,8 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Github,
+  Instagram,
   Twitter,
-  Youtube,
   Linkedin,
   ChevronLeft,
   ChevronRight,
@@ -17,9 +16,8 @@ export interface Testimonial {
   title: string;
   description: string;
   imageUrl: string;
-  githubUrl?: string;
+  instagramUrl?: string;
   twitterUrl?: string;
-  youtubeUrl?: string;
   linkedinUrl?: string;
 }
 
@@ -44,9 +42,8 @@ export function TestimonialCarousel({
   const currentTestimonial = testimonials[currentIndex];
 
   const socialIcons = [
-    { icon: Github, url: currentTestimonial.githubUrl, label: "GitHub" },
+    { icon: Instagram, url: currentTestimonial.instagramUrl, label: "Instagram" },
     { icon: Twitter, url: currentTestimonial.twitterUrl, label: "Twitter" },
-    { icon: Youtube, url: currentTestimonial.youtubeUrl, label: "YouTube" },
     { icon: Linkedin, url: currentTestimonial.linkedinUrl, label: "LinkedIn" },
   ];
 
