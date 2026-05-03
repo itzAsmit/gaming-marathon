@@ -4,15 +4,21 @@ import { supabase } from "@/integrations/supabase/client";
 import { withTimeout } from "@/lib/withTimeout";
 import { isConstrainedNetwork } from "@/hooks/use-constrained-network";
 import { ArrowLeft, Eye, EyeOff, Gamepad2 } from "lucide-react";
+import SlideButton from "@/components/ui/slide-button";
 
 export default function AdminLogin() {
   const navigate = useNavigate();
   const bgRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const resetSlider = () => {
+    formRef.current?.querySelector<HTMLButtonElement>("button[data-slider-button='true']")?.blur();
+  };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!bgRef.current) return;
@@ -162,6 +168,7 @@ export default function AdminLogin() {
       if (isCredentialIssue) {
         setError(proxyMessage);
         setLoading(false);
+        resetSlider();
         return;
       }
 
@@ -169,6 +176,7 @@ export default function AdminLogin() {
         console.log('[AdminLogin] On constrained network, skipping direct fallback');
         setError(proxyMessage || "Login failed on current network. Try again or switch network.");
         setLoading(false);
+        resetSlider();
         return;
       }
 
@@ -185,6 +193,7 @@ export default function AdminLogin() {
           /environment|missing|supabase/i.test(proxyMessage);
 
         setError(useProxyMessage ? proxyMessage : directMessage);
+        resetSlider();
       } finally {
         setLoading(false);
       }
@@ -240,7 +249,7 @@ export default function AdminLogin() {
 
         {/* Card */}
         <div className="rounded-2xl p-8 shadow-xl" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
-          <form onSubmit={handleLogin} className="space-y-5">
+          <form ref={formRef} onSubmit={handleLogin} className="space-y-5">
             {/* Email */}
             <div>
               <label className="block text-xs tracking-widest mb-2" style={{ color: "hsl(var(--brown))", fontFamily: "Jura, sans-serif" }}>
@@ -299,19 +308,15 @@ export default function AdminLogin() {
             )}
 
             {/* Submit */}
-            <button
-              type="submit"
+            <SlideButton
+              data-slider-button="true"
               disabled={loading}
-              className="w-full py-3 rounded-xl text-sm tracking-widest transition-all duration-300 hover:scale-[1.02] disabled:opacity-50"
-              style={{
-                background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))",
-                color: "hsl(var(--cream))",
-                fontFamily: "Jura, sans-serif",
-                boxShadow: "0 4px 20px hsla(var(--brown) / 0.3)",
-              }}
-            >
-              {loading ? "AUTHENTICATING..." : "ENTER ARENA"}
-            </button>
+              status={loading ? "loading" : error ? "error" : "idle"}
+              label="ENTER ARENA"
+              completedLabel="AUTHENTICATING..."
+              onSlideComplete={() => formRef.current?.requestSubmit()}
+              className="w-full"
+            />
           </form>
         </div>
 
