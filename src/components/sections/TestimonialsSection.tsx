@@ -4,7 +4,7 @@ import { raceDataFetch } from "@/lib/raceDataFetch";
 import { toMediaSrc, toProxiedMediaSrc } from "@/lib/mediaUrl";
 import { motion } from "motion/react";
 import { TestimonialsColumn } from "@/components/ui/testimonials-columns-1";
-import { displayedTestimonialPlayerIds, customQuotes, fallbackTestimonial } from "@/lib/testimonials-config";
+import { customQuotes, fallbackTestimonial } from "@/lib/testimonials-config";
 import { useConstrainedNetwork } from "@/hooks/use-constrained-network";
 import SectionHeader from "@/components/SectionHeader";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -53,18 +53,11 @@ export default function TestimonialsSection() {
   if (loading) return null; // or empty state
   if (players.length === 0) return null;
 
-  // Filter database players to ONLY the ones defined in your config list
-  const filteredPlayers = players.filter((player) =>
-    displayedTestimonialPlayerIds.includes(String(player.player_id).trim())
-  );
-
-  // If no matching players found, just hide the section
-  if (filteredPlayers.length === 0) return null;
-
   // Convert valid players into testimonials format
-  const testimonials = filteredPlayers.map((player) => {
+  const testimonials = players.map((player) => {
     const idStr = String(player.player_id).trim();
-    const quote = customQuotes[idStr] || fallbackTestimonial;
+    // Support exact match or padded match (e.g. "1" matches "01")
+    const quote = customQuotes[idStr] || customQuotes[idStr.replace(/^0+/, '')] || fallbackTestimonial;
 
     return {
       name: player.name,
