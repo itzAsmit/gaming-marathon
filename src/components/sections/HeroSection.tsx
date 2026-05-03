@@ -50,7 +50,13 @@ export default function HeroSection() {
         </div>
 
         <nav className="relative z-20 w-full px-5 sm:px-8 lg:px-12 py-6 md:py-8 flex items-center justify-between border-b border-transparent bg-transparent">
-          <div className="hidden lg:block w-44" aria-hidden="true" />
+          <Link to="/" className="flex items-center w-24 sm:w-28 lg:w-44" aria-label="Gaming Marathon home">
+            <img
+              src="/assets/logo.png"
+              alt="Gaming Marathon logo"
+              className="h-10 sm:h-12 lg:h-14 w-auto object-contain"
+            />
+          </Link>
 
           <div className="hidden lg:flex items-center gap-8 text-[0.62rem] tracking-[0.19em] font-bold text-black/70">
             {navItems.map((item) => (
