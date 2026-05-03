@@ -54,12 +54,19 @@ export default function TestimonialsSection() {
   if (players.length === 0) return null;
 
   // Convert players into testimonials format
-  const testimonials = players.map(player => ({
-    name: player.name,
-    role: `Player ${player.player_id}`,
-    image: player.image_url ? (isConstrained ? toProxiedMediaSrc(player.image_url) : toMediaSrc(player.image_url)) : "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
-    text: defaultTestimonials[player.player_id] || fallbackTestimonial
-  }));
+  const testimonials = players.map(player => {
+    // Make sure we have a clean string for the ID (e.g. "1", "2")
+    const idStr = String(player.player_id).trim();
+    // Use it to look up the quote, fallback if missing
+    const quote = defaultTestimonials[idStr] || defaultTestimonials[idStr.padStart(2, '0')] || fallbackTestimonial;
+
+    return {
+      name: player.name,
+      role: `Player ${idStr.padStart(2, '0')}`,
+      image: player.image_url ? (isConstrained ? toProxiedMediaSrc(player.image_url) : toMediaSrc(player.image_url)) : "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+      text: quote
+    };
+  });
 
   // Distribute testimonials
   // Shuffle array or divide
