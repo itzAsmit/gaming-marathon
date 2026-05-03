@@ -4,7 +4,7 @@ import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -31,25 +31,36 @@ const AdminFallback = () => (
   </div>
 );
 
+function AppShell() {
+  const location = useLocation();
+  const hideAudioOverlay = location.pathname.startsWith("/admin");
+
+  return (
+    <>
+      <AnimatedCursor />
+      {!hideAudioOverlay && <SiteAudioOverlay />}
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/admin/login" element={<Suspense fallback={<AdminFallback />}><AdminLogin /></Suspense>} />
+        <Route path="/admin/dashboard" element={<Suspense fallback={<AdminFallback />}><AdminDashboard /></Suspense>} />
+        <Route path="/admin/players" element={<Suspense fallback={<AdminFallback />}><AdminPlayers /></Suspense>} />
+        <Route path="/admin/games" element={<Suspense fallback={<AdminFallback />}><AdminGames /></Suspense>} />
+        <Route path="/admin/items" element={<Suspense fallback={<AdminFallback />}><AdminItems /></Suspense>} />
+        <Route path="/admin/logs" element={<Suspense fallback={<AdminFallback />}><AdminLogs /></Suspense>} />
+        <Route path="/admin/hall-of-fame" element={<Suspense fallback={<AdminFallback />}><AdminHallOfFame /></Suspense>} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </>
+  );
+}
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <AnimatedCursor />
-        <SiteAudioOverlay />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/admin/login" element={<Suspense fallback={<AdminFallback />}><AdminLogin /></Suspense>} />
-          <Route path="/admin/dashboard" element={<Suspense fallback={<AdminFallback />}><AdminDashboard /></Suspense>} />
-          <Route path="/admin/players" element={<Suspense fallback={<AdminFallback />}><AdminPlayers /></Suspense>} />
-          <Route path="/admin/games" element={<Suspense fallback={<AdminFallback />}><AdminGames /></Suspense>} />
-          <Route path="/admin/items" element={<Suspense fallback={<AdminFallback />}><AdminItems /></Suspense>} />
-          <Route path="/admin/logs" element={<Suspense fallback={<AdminFallback />}><AdminLogs /></Suspense>} />
-          <Route path="/admin/hall-of-fame" element={<Suspense fallback={<AdminFallback />}><AdminHallOfFame /></Suspense>} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AppShell />
       </BrowserRouter>
       <Analytics />
       <SpeedInsights />
