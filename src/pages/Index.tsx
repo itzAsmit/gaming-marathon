@@ -6,6 +6,7 @@ import GamesSection from "@/components/sections/GamesSection";
 import SpecialItemsSection from "@/components/sections/SpecialItemsSection";
 import HallOfFameSection from "@/components/sections/HallOfFameSection";
 import CreditsSection from "@/components/sections/CreditsSection";
+import TestimonialsSection from "@/components/sections/TestimonialsSection";
 
 const Index = () => {
   return (
@@ -43,6 +44,11 @@ const Index = () => {
         <LazyMount minHeight="80svh">
           <div className="site-section">
             <CreditsSection />
+          </div>
+        </LazyMount>
+        <LazyMount minHeight="80svh">
+          <div className="site-section">
+            <TestimonialsSection />
           </div>
         </LazyMount>
       </div>
