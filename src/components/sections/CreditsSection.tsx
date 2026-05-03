@@ -158,7 +158,7 @@ export default function CreditsSection() {
                     transition={{ duration: 0.6 }}
                     viewport={{ once: true }}
                   >
-                    <div className="w-[280px] h-[280px] sm:w-[350px] sm:h-[350px] flex-shrink-0 z-0">
+                    <div className="w-[280px] h-[360px] sm:w-[350px] sm:h-[460px] flex-shrink-0 z-0">
                       <div className="w-full h-full rounded-3xl overflow-hidden bg-gray-200 dark:bg-neutral-800">
                         <img
                           src={organiser.imageUrl}
@@ -169,7 +169,7 @@ export default function CreditsSection() {
                       </div>
                     </div>
                     
-                    <div className="z-10 lg:ml-[-60px] mt-[-60px] lg:mt-16 flex-1 w-full max-w-[600px]">
+                    <div className="z-10 lg:ml-[-60px] mt-[-60px] lg:mt-0 flex-1 w-full max-w-[600px]">
                       <MemberCard member={organiser} />
                     </div>
                   </motion.div>
@@ -186,7 +186,7 @@ export default function CreditsSection() {
                     transition={{ duration: 0.6 }}
                     viewport={{ once: true }}
                   >
-                    <div className="w-[280px] h-[280px] sm:w-[350px] sm:h-[350px] flex-shrink-0 z-0">
+                    <div className="w-[280px] h-[360px] sm:w-[350px] sm:h-[460px] flex-shrink-0 z-0">
                       <div className="w-full h-full rounded-3xl overflow-hidden bg-gray-200 dark:bg-neutral-800">
                         <img
                           src={developer.imageUrl}
@@ -197,7 +197,7 @@ export default function CreditsSection() {
                       </div>
                     </div>
                     
-                    <div className="z-10 lg:mr-[-60px] mt-[-60px] lg:mt-16 flex-1 w-full max-w-[600px]">
+                    <div className="z-10 lg:mr-[-60px] mt-[-60px] lg:mt-0 flex-1 w-full max-w-[600px]">
                       <MemberCard member={developer} />
                     </div>
                   </motion.div>
