@@ -1,6 +1,6 @@
 import { withTimeout } from "@/lib/withTimeout";
 
-type Resource = "leaderboard" | "players" | "games" | "hall_of_fame" | "rankings";
+type Resource = "leaderboard" | "players" | "games" | "hall_of_fame" | "rankings" | "admin_players" | "admin_games" | "admin_items" | "admin_hall_of_fame" | "admin_activity_logs" | "admin_players_with_items";
 
 export async function fetchPublicData<T>(resource: Resource, params?: Record<string, string>) {
   const search = new URLSearchParams({ resource, ...(params ?? {}) });
