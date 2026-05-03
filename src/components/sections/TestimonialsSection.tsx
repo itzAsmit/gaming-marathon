@@ -55,13 +55,21 @@ export default function TestimonialsSection() {
 
   // Convert valid players into testimonials format
   const testimonials = players.map((player) => {
+    // Extract just the numbers from formats like "#P01"
     const idStr = String(player.player_id).trim();
-    // Support exact match or padded match (e.g. "1" matches "01")
-    const quote = customQuotes[idStr] || customQuotes[idStr.replace(/^0+/, '')] || fallbackTestimonial;
+    const numberOnly = idStr.replace(/\D/g, ""); // "01" -> "01", "#P05" -> "05"
+    const stripped = numberOnly.replace(/^0+/, "") || "0"; // "05" -> "5"
+
+    // Try multiple matching formats
+    const quote = 
+      customQuotes[idStr] || // original e.g. "#P01"
+      customQuotes[numberOnly] || // e.g. "01" 
+      customQuotes[stripped] || // e.g. "1"
+      fallbackTestimonial;
 
     return {
       name: player.name,
-      role: `${idStr.padStart(2, "0")}`,
+      role: `${numberOnly.padStart(2, "0")}`,
       image: player.image_url
         ? isConstrained
           ? toProxiedMediaSrc(player.image_url)
