@@ -205,24 +205,6 @@ export default function CreditsSection() {
             </div>
           </div>
         )}
-
-        {/* Footer */}
-        <ScrollReveal delay={0.4}>
-          <div
-            className="mt-20 text-center border-t pt-8"
-            style={{ borderColor: "hsla(var(--gold) / 0.2)" }}
-          >
-            <p
-              className="font-cinzel text-xs tracking-[0.5em]"
-              style={{
-                color: "hsl(var(--gold) / 0.5)",
-                fontFamily: "Cinzel, serif",
-              }}
-            >
-              GAMING MARATHON © 2026 — ALL RIGHTS RESERVED
-            </p>
-          </div>
-        </ScrollReveal>
       </div>
     </section>
   );

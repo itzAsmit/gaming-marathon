@@ -84,9 +84,6 @@ export default function TestimonialsSection() {
           viewport={{ once: true }}
           className="flex flex-col items-center justify-center max-w-[540px] mx-auto text-center"
         >
-          <div className="flex justify-center">
-            <div className="border border-primary/20 py-1 px-4 rounded-lg tracking-widest text-xs font-cinzel text-primary mb-2">TESTIMONIALS</div>
-          </div>
           <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tighter mt-5 font-cinzel text-primary">
             WHAT OUR PLAYERS SAY
           </h2>
@@ -95,10 +92,26 @@ export default function TestimonialsSection() {
           </p>
         </motion.div>
 
-        <div className="flex justify-center gap-6 mt-10 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[740px] overflow-hidden">
+        <div className="flex justify-center gap-6 mt-10 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[740px] overflow-hidden relative">
           <TestimonialsColumn testimonials={col1} duration={25} />
           <TestimonialsColumn testimonials={col2} className="hidden md:block" duration={35} />
           <TestimonialsColumn testimonials={col3} className="hidden lg:block" duration={30} />
+        </div>
+
+        {/* Footer */}
+        <div
+          className="mt-20 text-center border-t pt-8"
+          style={{ borderColor: "hsla(var(--gold) / 0.2)" }}
+        >
+          <p
+            className="font-cinzel text-xs tracking-[0.5em]"
+            style={{
+              color: "hsl(var(--gold) / 0.5)",
+              fontFamily: "Cinzel, serif",
+            }}
+          >
+            GAMING MARATHON © 2026 — ALL RIGHTS RESERVED
+          </p>
         </div>
       </div>
     </section>
