@@ -43,7 +43,7 @@ const SlideButton = forwardRef<HTMLButtonElement, SlideButtonProps>(
     const [isDragging, setIsDragging] = useState(false);
 
     const dragX = useMotionValue(0);
-    const springX = useSpring(dragX, { type: "spring", stiffness: 420, damping: 36, mass: 0.8 });
+    const springX = useSpring(dragX, { stiffness: 420, damping: 36, mass: 0.8 });
     const maxDrag = Math.max(0, trackWidth - HANDLE_SIZE - TRACK_PADDING * 2);
     const dragProgress = useTransform(springX, [0, maxDrag || 1], [0, 1]);
 
@@ -94,10 +94,18 @@ const SlideButton = forwardRef<HTMLButtonElement, SlideButtonProps>(
     const trackFillWidth = useTransform(springX, (x) => Math.min(x + HANDLE_SIZE, maxDrag + HANDLE_SIZE));
 
     useLayoutEffect(() => {
-      if (status !== "error") return;
-      setCompleted(false);
-      resetDrag();
-    }, [resetDrag, status, resetSignal]);
+      if (status === "error") {
+        setCompleted(false);
+        resetDrag();
+      }
+    }, [resetDrag, status]);
+
+    useLayoutEffect(() => {
+      if (resetSignal) {
+        setCompleted(false);
+        resetDrag();
+      }
+    }, [resetDrag, resetSignal]);
 
     return (
       <motion.div

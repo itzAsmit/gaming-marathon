@@ -321,7 +321,14 @@ export default function AdminLogin() {
               status={loading ? "loading" : error ? "error" : "idle"}
               label="ENTER ARENA"
               completedLabel="AUTHENTICATING..."
-              onSlideComplete={() => formRef.current?.requestSubmit()}
+              onSlideComplete={() => {
+                if (formRef.current?.checkValidity()) {
+                  formRef.current.requestSubmit();
+                } else {
+                  formRef.current?.reportValidity();
+                  resetSlider();
+                }
+              }}
               resetSignal={sliderResetSignal}
               className="w-full"
             />
