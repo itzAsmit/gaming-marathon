@@ -4,9 +4,10 @@ interface SectionHeaderProps {
   title: string;
   subtitle?: string;
   accent?: string;
+  titleClassName?: string;
 }
 
-export default function SectionHeader({ title, subtitle, accent }: SectionHeaderProps) {
+export default function SectionHeader({ title, subtitle, accent, titleClassName }: SectionHeaderProps) {
   return (
     <div className="text-center mb-14 relative">
       {accent && (
@@ -18,7 +19,7 @@ export default function SectionHeader({ title, subtitle, accent }: SectionHeader
         </p>
       )}
       <h2
-        className="text-3xl sm:text-5xl md:text-6xl font-semibold uppercase tracking-[0.28em] pl-[0.28em] mb-4"
+        className={`text-3xl sm:text-5xl md:text-6xl font-semibold uppercase tracking-[0.28em] pl-[0.28em] mb-4 ${titleClassName ?? ""}`}
         style={{ color: "hsl(var(--brown-deep))", fontFamily: "Orbitron, sans-serif" }}
       >
         {title}

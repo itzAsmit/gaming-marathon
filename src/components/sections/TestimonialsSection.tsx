@@ -93,6 +93,7 @@ export default function TestimonialsSection() {
           <SectionHeader 
             title="WHAT OUR PLAYERS SAY" 
             subtitle="Hear from the competitors who bring the marathon to life." 
+            titleClassName="text-2xl sm:text-3xl md:text-4xl"
           />
         </ScrollReveal>
 
