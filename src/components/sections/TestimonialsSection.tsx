@@ -6,6 +6,8 @@ import { motion } from "motion/react";
 import { TestimonialsColumn } from "@/components/ui/testimonials-columns-1";
 import { defaultTestimonials, fallbackTestimonial } from "@/lib/testimonials-data";
 import { useConstrainedNetwork } from "@/hooks/use-constrained-network";
+import SectionHeader from "@/components/SectionHeader";
+import ScrollReveal from "@/components/ScrollReveal";
 
 interface Player {
   id: string;
@@ -77,20 +79,12 @@ export default function TestimonialsSection() {
   return (
     <section className="bg-background my-20 relative">
       <div className="container z-10 mx-auto px-4 md:px-0">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          viewport={{ once: true }}
-          className="flex flex-col items-center justify-center max-w-[540px] mx-auto text-center"
-        >
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tighter mt-5 font-cinzel text-primary">
-            WHAT OUR PLAYERS SAY
-          </h2>
-          <p className="text-center mt-5 opacity-75 font-inter text-secondary/80">
-            Hear from the competitors who bring the marathon to life.
-          </p>
-        </motion.div>
+        <ScrollReveal>
+          <SectionHeader 
+            title="WHAT OUR PLAYERS SAY" 
+            subtitle="Hear from the competitors who bring the marathon to life." 
+          />
+        </ScrollReveal>
 
         <div className="flex justify-center gap-6 mt-10 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[740px] overflow-hidden relative">
           <TestimonialsColumn testimonials={col1} duration={25} />
