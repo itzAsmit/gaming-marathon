@@ -55,9 +55,8 @@ export default function CreditsSection() {
               "The strategic mastermind orchestrating every detail of the marathon. Ensuring seamless coordination, unprecedented engagement, and an unforgettable gaming experience for all participants.",
             imageUrl: admin.portrait_url,
             role: "organiser",
-            instagramUrl: "#",
-            twitterUrl: "#",
-            linkedinUrl: "#",
+            twitterUrl: "https://x.com/ritesh_dutta_7",
+            linkedinUrl: "https://www.linkedin.com/in/ritesh-dutta7",
           });
         }
 
