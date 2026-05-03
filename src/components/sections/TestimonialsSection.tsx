@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { raceDataFetch } from "@/lib/raceDataFetch";
 import { toMediaSrc, toProxiedMediaSrc } from "@/lib/mediaUrl";
-import { motion } from "motion/react";
 import { TestimonialsColumn } from "@/components/ui/testimonials-columns-1";
 import { customQuotes, fallbackTestimonial } from "@/lib/testimonials-config";
 import { useConstrainedNetwork } from "@/hooks/use-constrained-network";
@@ -76,7 +75,7 @@ export default function TestimonialsSection() {
   const len = testimonials.length;
   const chunk1 = Math.ceil(len / 3);
   const chunk2 = Math.ceil((len - chunk1) / 2);
-  
+
   const firstColumn = testimonials.slice(0, chunk1);
   const secondColumn = testimonials.slice(chunk1, chunk1 + chunk2);
   const thirdColumn = testimonials.slice(chunk1 + chunk2);
@@ -90,10 +89,10 @@ export default function TestimonialsSection() {
     <section className="bg-background my-20 relative">
       <div className="container z-10 mx-auto px-4 md:px-0">
         <ScrollReveal>
-          <SectionHeader 
-            title="WHAT OUR PLAYERS SAY" 
-            subtitle="Hear from the competitors who bring the marathon to life." 
-            titleClassName="text-2xl sm:text-3xl md:text-4xl"
+          <SectionHeader
+            title="WHAT OUR PLAYERS SAY"
+            subtitle="Hear from the competitors who bring the marathon to life."
+            titleClassName="text-xl sm:text-2xl md:text-3xl"
           />
         </ScrollReveal>
 
