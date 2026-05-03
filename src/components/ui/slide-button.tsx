@@ -1,6 +1,6 @@
 "use client";
 
-import React, { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { forwardRef, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform, type PanInfo } from "framer-motion";
 import { Check, Loader2, SendHorizontal, X } from "lucide-react";
 
@@ -14,6 +14,7 @@ type SlideButtonProps = ButtonProps & {
   onSlideComplete?: () => void;
   label?: string;
   completedLabel?: string;
+  resetSignal?: number;
 };
 
 const DRAG_TRIGGER = 0.85;
@@ -35,7 +36,7 @@ function StatusIcon({ status }: { status: SlideButtonStatus }) {
 }
 
 const SlideButton = forwardRef<HTMLButtonElement, SlideButtonProps>(
-  ({ className, status = "idle", onSlideComplete, label = "SLIDE TO ENTER ARENA", completedLabel = "AUTHENTICATING...", disabled, ...props }, ref) => {
+  ({ className, status = "idle", onSlideComplete, label = "SLIDE TO ENTER ARENA", completedLabel = "AUTHENTICATING...", disabled, resetSignal, ...props }, ref) => {
     const trackRef = useRef<HTMLDivElement | null>(null);
     const [trackWidth, setTrackWidth] = useState(0);
     const [completed, setCompleted] = useState(false);
@@ -92,11 +93,11 @@ const SlideButton = forwardRef<HTMLButtonElement, SlideButtonProps>(
 
     const trackFillWidth = useTransform(springX, (x) => Math.min(x + HANDLE_SIZE, maxDrag + HANDLE_SIZE));
 
-    useEffect(() => {
+    useLayoutEffect(() => {
       if (status !== "error") return;
       setCompleted(false);
       resetDrag();
-    }, [resetDrag, status]);
+    }, [resetDrag, status, resetSignal]);
 
     return (
       <motion.div
@@ -104,14 +105,14 @@ const SlideButton = forwardRef<HTMLButtonElement, SlideButtonProps>(
         animate={{ width: "100%" }}
         transition={{ type: "spring", stiffness: 400, damping: 40, mass: 0.8 }}
         className={cn(
-          "relative flex h-12 w-full items-center justify-center overflow-hidden rounded-full bg-gray-100 shadow-inner",
+          "relative flex h-12 w-full items-center justify-center overflow-hidden rounded-full bg-white shadow-inner ring-1 ring-black/10",
           className
         )}
       >
         {!completed && (
           <motion.div
             style={{ width: trackFillWidth }}
-            className="absolute inset-y-1 left-1 rounded-full bg-accent"
+            className="absolute inset-y-1 left-1 rounded-full bg-black"
           />
         )}
 
@@ -131,7 +132,7 @@ const SlideButton = forwardRef<HTMLButtonElement, SlideButtonProps>(
             onDragEnd={handleDragEnd}
             onDrag={handleDrag}
             style={{ x: springX }}
-            className="absolute left-1 top-1 z-10 flex h-10 w-10 cursor-grab items-center justify-center rounded-full bg-white shadow-lg active:cursor-grabbing"
+            className="absolute left-1 top-1 z-10 flex h-10 w-10 cursor-grab items-center justify-center rounded-full bg-black text-white shadow-lg active:cursor-grabbing"
           >
             <Button
               ref={ref}

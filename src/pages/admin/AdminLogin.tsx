@@ -15,9 +15,10 @@ export default function AdminLogin() {
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [sliderResetSignal, setSliderResetSignal] = useState(0);
 
   const resetSlider = () => {
-    formRef.current?.querySelector<HTMLButtonElement>("button[data-slider-button='true']")?.blur();
+    setSliderResetSignal((value) => value + 1);
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -229,7 +230,7 @@ export default function AdminLogin() {
       <button
         onClick={() => (window.history.length > 1 ? navigate(-1) : navigate("/"))}
         className="absolute top-6 left-6 z-20 inline-flex items-center gap-2 px-3 py-2 rounded-xl text-xs tracking-widest transition-all hover:scale-105"
-        style={{ background: "hsla(var(--cream) / 0.8)", color: "hsl(var(--brown-deep))", border: "1px solid hsl(var(--cream-dark))", fontFamily: "Jura, sans-serif" }}
+        style={{ background: "hsla(0, 0%, 100%, 0.85)", color: "#000", border: "1px solid rgba(0,0,0,0.12)", fontFamily: "Jura, sans-serif" }}
       >
         <ArrowLeft size={14} />
         GO BACK
@@ -238,33 +239,36 @@ export default function AdminLogin() {
       <div className="relative z-10 w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4" style={{ background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))" }}>
-            <Gamepad2 size={28} style={{ color: "hsl(var(--cream))" }} />
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4" style={{ background: "linear-gradient(135deg, #000, #333)" }}>
+            <Gamepad2 size={28} style={{ color: "#fff" }} />
           </div>
-          <h1 className="text-3xl font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Jura, sans-serif" }}>
+          <h1 className="text-3xl font-bold uppercase tracking-[0.2em]" style={{ color: "#000", fontFamily: "Orbitron, sans-serif" }}>
             ADMIN ACCESS
           </h1>
-          <p className="text-sm mt-1" style={{ color: "hsl(var(--brown-light))" }}>Gaming Marathon Control Panel</p>
+          <p className="text-sm mt-1" style={{ color: "rgba(0,0,0,0.6)" }}>Gaming Marathon Control Panel</p>
         </div>
 
         {/* Card */}
-        <div className="rounded-2xl p-8 shadow-xl" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
+        <div className="rounded-2xl p-8 shadow-xl" style={{ background: "hsla(0,0%,100%,0.88)", border: "1px solid rgba(0,0,0,0.08)", backdropFilter: "blur(12px)" }}>
           <form ref={formRef} onSubmit={handleLogin} className="space-y-5">
             {/* Email */}
             <div>
-              <label className="block text-xs tracking-widest mb-2" style={{ color: "hsl(var(--brown))", fontFamily: "Jura, sans-serif" }}>
+              <label className="block text-xs tracking-widest mb-2" style={{ color: "rgba(0,0,0,0.75)", fontFamily: "Jura, sans-serif" }}>
                 EMAIL
               </label>
               <input
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (error) setError("");
+                }}
                 required
                 className="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all"
                 style={{
-                  background: "hsl(var(--input))",
-                  border: "1px solid hsl(var(--cream-dark))",
-                  color: "hsl(var(--brown-deep))",
+                  background: "hsla(0,0%,100%,0.95)",
+                  border: "1px solid rgba(0,0,0,0.12)",
+                  color: "#000",
                 }}
                 placeholder="admin@marathon.com"
               />
@@ -272,20 +276,23 @@ export default function AdminLogin() {
 
             {/* Password */}
             <div>
-              <label className="block text-xs tracking-widest mb-2" style={{ color: "hsl(var(--brown))", fontFamily: "Jura, sans-serif" }}>
+              <label className="block text-xs tracking-widest mb-2" style={{ color: "rgba(0,0,0,0.75)", fontFamily: "Jura, sans-serif" }}>
                 PASSWORD
               </label>
               <div className="relative">
                 <input
                   type={showPw ? "text" : "password"}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    if (error) setError("");
+                  }}
                   required
                   className="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all pr-12"
                   style={{
-                    background: "hsl(var(--input))",
-                    border: "1px solid hsl(var(--cream-dark))",
-                    color: "hsl(var(--brown-deep))",
+                    background: "hsla(0,0%,100%,0.95)",
+                    border: "1px solid rgba(0,0,0,0.12)",
+                    color: "#000",
                   }}
                   placeholder="••••••••"
                 />
@@ -293,7 +300,7 @@ export default function AdminLogin() {
                   type="button"
                   onClick={() => setShowPw((v) => !v)}
                   className="absolute right-4 top-1/2 -translate-y-1/2"
-                  style={{ color: "hsl(var(--brown-light))" }}
+                  style={{ color: "rgba(0,0,0,0.55)" }}
                 >
                   {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -302,7 +309,7 @@ export default function AdminLogin() {
 
             {/* Error */}
             {error && (
-              <p className="text-sm text-center py-2 px-4 rounded-lg" style={{ background: "hsl(0 80% 96%)", color: "hsl(0 70% 45%)", border: "1px solid hsl(0 60% 85%)" }}>
+              <p className="text-sm text-center py-2 px-4 rounded-lg" style={{ background: "hsl(0 0% 96%)", color: "hsl(0 0% 18%)", border: "1px solid rgba(0,0,0,0.12)" }}>
                 {error}
               </p>
             )}
@@ -315,12 +322,13 @@ export default function AdminLogin() {
               label="ENTER ARENA"
               completedLabel="AUTHENTICATING..."
               onSlideComplete={() => formRef.current?.requestSubmit()}
+              resetSignal={sliderResetSignal}
               className="w-full"
             />
           </form>
         </div>
 
-        <p className="text-center mt-6 text-xs" style={{ color: "hsl(var(--brown-light) / 0.6)" }}>
+        <p className="text-center mt-6 text-xs" style={{ color: "rgba(0,0,0,0.5)" }}>
           Restricted access — authorized personnel only
         </p>
       </div>
