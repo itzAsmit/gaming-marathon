@@ -7,8 +7,11 @@ export const displayedTestimonialPlayerIds = [
   "3",
   "4",
   "5",
-  "player_one", // example of custom string ID
-  "admin"       // example of custom string ID
+  "01", // added in case your DB uses 01 format
+  "02",
+  "03",
+  "04",
+  "05"
 ];
 
 // 2. ADD QUOTES HERE:
