@@ -147,7 +147,7 @@ export default function CreditsSection() {
           </div>
         ) : (
           <div className="mt-12">
-            <div className="flex flex-col gap-16 lg:gap-24">
+            <div className="flex flex-col gap-16 lg:gap-4">
               {/* Organiser - Image left, Card overlapping right */}
               {organiser && (
                 <ScrollReveal delay={0.1}>
@@ -180,7 +180,7 @@ export default function CreditsSection() {
               {developer && (
                 <ScrollReveal delay={0.2}>
                   <motion.div
-                    className="flex flex-col lg:flex-row-reverse items-center w-full lg:w-[85%] ml-auto relative lg:translate-x-12"
+                    className="flex flex-col lg:flex-row-reverse items-center w-full lg:w-[85%] ml-auto relative lg:translate-x-12 lg:-mt-12"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
