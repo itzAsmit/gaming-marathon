@@ -121,7 +121,7 @@ export default function AdminDashboard() {
   return (
     <AdminLayout>
       <div className="p-4 md:p-8 pb-12 min-h-full">
-        <h1 className="text-2xl font-cinzel font-bold mb-1" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>
+        <h1 className="text-2xl font-jura font-bold mb-1" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Jura, sans-serif" }}>
           Update Leaderboard
         </h1>
         <p className="text-sm mb-8" style={{ color: "hsl(var(--brown-light))" }}>Search a player and edit their stats</p>
@@ -173,15 +173,15 @@ export default function AdminDashboard() {
               <div className="rounded-2xl p-6" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <p className="text-xs font-cinzel tracking-widest" style={{ color: "hsl(var(--brown-light))", fontFamily: "Cinzel, serif" }}>{selected.player_id}</p>
-                    <h3 className="text-lg font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>{selected.name}</h3>
+                    <p className="text-xs font-jura tracking-widest" style={{ color: "hsl(var(--brown-light))", fontFamily: "Jura, sans-serif" }}>{selected.player_id}</p>
+                    <h3 className="text-lg font-jura font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Jura, sans-serif" }}>{selected.name}</h3>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 mb-6">
                   {fields.map((f) => (
                     <div key={f.key}>
-                      <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>
+                      <label className="block text-xs font-jura tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Jura, sans-serif" }}>
                         {f.label.toUpperCase()}
                       </label>
                       <input
@@ -200,11 +200,11 @@ export default function AdminDashboard() {
                 <button
                   onClick={saveStats}
                   disabled={saving}
-                  className="w-full py-2.5 rounded-xl font-cinzel text-sm tracking-widest flex items-center justify-center gap-2 transition-all"
+                  className="w-full py-2.5 rounded-xl font-jura text-sm tracking-widest flex items-center justify-center gap-2 transition-all"
                   style={{
                     background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))",
                     color: "hsl(var(--cream))",
-                    fontFamily: "Cinzel, serif",
+                    fontFamily: "Jura, sans-serif",
                   }}
                 >
                   {saving ? <RefreshCw size={14} className="animate-spin" /> : <Save size={14} />}

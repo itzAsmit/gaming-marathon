@@ -625,10 +625,10 @@ export default function AdminGames() {
         <div className="md:sticky md:top-0 z-20 mb-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h1 className="text-2xl font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>Games</h1>
+              <h1 className="text-2xl font-jura font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Jura, sans-serif" }}>Games</h1>
               <p className="text-sm mt-1" style={{ color: "hsl(var(--brown-light))" }}>{games.length} configured</p>
             </div>
-            <button onClick={openCreate} className="flex items-center gap-2 px-3 md:px-4 py-2.5 rounded-xl font-cinzel text-xs md:text-sm tracking-wider" style={{ background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))", color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}>
+            <button onClick={openCreate} className="flex items-center gap-2 px-3 md:px-4 py-2.5 rounded-xl font-jura text-xs md:text-sm tracking-wider" style={{ background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))", color: "hsl(var(--cream))", fontFamily: "Jura, sans-serif" }}>
               <Plus size={16} /> ADD GAME
             </button>
           </div>
@@ -680,7 +680,7 @@ export default function AdminGames() {
           <div className="w-full max-w-2xl rounded-2xl overflow-hidden" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
             <div className="max-h-[90dvh] overflow-y-auto overflow-x-hidden animated-scroll-area no-scrollbar">
               <div className="sticky top-0 z-20 flex items-center justify-between p-6 border-b" style={{ background: "hsl(var(--card))", borderColor: "hsl(var(--cream-dark))" }}>
-                <h2 className="text-lg font-cinzel font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>
+                <h2 className="text-lg font-jura font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Jura, sans-serif" }}>
                   {editing ? "Edit Game" : "Create Game"}
                 </h2>
                 <button onClick={() => setShowForm(false)} style={{ color: "hsl(var(--brown-light))" }}><X size={20} /></button>
@@ -688,18 +688,18 @@ export default function AdminGames() {
               <div className="p-6 space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>GAME ID</label>
+                  <label className="block text-xs font-jura tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Jura, sans-serif" }}>GAME ID</label>
                   <input value={form.game_id} readOnly className="w-full px-4 py-2.5 rounded-xl text-sm outline-none opacity-60" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} />
                 </div>
                 <div>
-                  <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>NAME *</label>
+                  <label className="block text-xs font-jura tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Jura, sans-serif" }}>NAME *</label>
                   <input value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value.toUpperCase() }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none uppercase" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} placeholder="Game name" />
                 </div>
               </div>
 
               <div>
                 <div>
-                  <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>DATE & TIME</label>
+                  <label className="block text-xs font-jura tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Jura, sans-serif" }}>DATE & TIME</label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <button
@@ -764,18 +764,18 @@ export default function AdminGames() {
               </div>
 
               <div>
-                <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>BIO</label>
+                <label className="block text-xs font-jura tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Jura, sans-serif" }}>BIO</label>
                 <textarea ref={bioRef} rows={2} value={form.bio ?? ""} onChange={(e) => setForm((f) => ({ ...f, bio: e.target.value }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none resize-none overflow-hidden" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} />
               </div>
 
               <div>
-                <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>RULES</label>
+                <label className="block text-xs font-jura tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Jura, sans-serif" }}>RULES</label>
                 <textarea rows={3} value={form.rules ?? ""} onChange={(e) => setForm((f) => ({ ...f, rules: e.target.value }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none resize-none" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>GAME IMAGE</label>
+                  <label className="block text-xs font-jura tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Jura, sans-serif" }}>GAME IMAGE</label>
                   <div className="border-2 border-dashed rounded-xl p-3 text-center cursor-pointer" style={{ borderColor: "hsl(var(--cream-dark))" }} onClick={() => imageRef.current?.click()}>
                     {imageFile ? <img src={URL.createObjectURL(imageFile)} alt="" className="h-16 object-cover mx-auto rounded" /> : form.image_url ? <SmartImage url={form.image_url} alt="" className="h-16 object-cover mx-auto rounded" /> : <Upload size={20} className="mx-auto" style={{ color: "hsl(var(--brown-light))" }} />}
                     <p className="text-xs mt-1" style={{ color: "hsl(var(--brown-light))" }}>Click to upload</p>
@@ -794,7 +794,7 @@ export default function AdminGames() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-cinzel tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>BG VIDEO</label>
+                  <label className="block text-xs font-jura tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Jura, sans-serif" }}>BG VIDEO</label>
                   <div className="border-2 border-dashed rounded-xl p-3 text-center cursor-pointer" style={{ borderColor: "hsl(var(--cream-dark))" }} onClick={() => videoRef.current?.click()}>
                     {videoFile ? (
                       <video src={URL.createObjectURL(videoFile)} autoPlay loop muted playsInline className="h-16 mx-auto rounded object-cover" />
@@ -822,7 +822,7 @@ export default function AdminGames() {
 
               {/* Status toggle */}
               <div>
-                <label className="block text-xs font-cinzel tracking-widest mb-2" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>STATUS</label>
+                <label className="block text-xs font-jura tracking-widest mb-2" style={{ color: "hsl(var(--brown))", fontFamily: "Jura, sans-serif" }}>STATUS</label>
                 <button
                   onClick={() => setForm((f) => ({ ...f, status: f.status === "upcoming" ? "completed" : "upcoming" }))}
                   className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm transition-all"
@@ -837,9 +837,9 @@ export default function AdminGames() {
               {form.status === "completed" && (
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <label className="text-xs font-cinzel tracking-widest" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>GAME RANKINGS</label>
+                    <label className="text-xs font-jura tracking-widest" style={{ color: "hsl(var(--brown))", fontFamily: "Jura, sans-serif" }}>GAME RANKINGS</label>
                     {rankings.length < 10 && (
-                      <button onClick={() => setRankings((r) => [...r, { rank: r.length + 1, player_id: "", points: 0 }])} className="text-xs font-cinzel" style={{ color: "hsl(var(--brown-light))", fontFamily: "Cinzel, serif" }}>+ Add</button>
+                      <button onClick={() => setRankings((r) => [...r, { rank: r.length + 1, player_id: "", points: 0 }])} className="text-xs font-jura" style={{ color: "hsl(var(--brown-light))", fontFamily: "Jura, sans-serif" }}>+ Add</button>
                     )}
                   </div>
                   <div className="space-y-2">
@@ -875,7 +875,7 @@ export default function AdminGames() {
                 </div>
               )}
 
-                <button onClick={saveGame} disabled={saving} className="w-full py-3 rounded-xl font-cinzel text-sm tracking-widest flex items-center justify-center gap-2" style={{ background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))", color: "hsl(var(--cream))", fontFamily: "Cinzel, serif" }}>
+                <button onClick={saveGame} disabled={saving} className="w-full py-3 rounded-xl font-jura text-sm tracking-widest flex items-center justify-center gap-2" style={{ background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))", color: "hsl(var(--cream))", fontFamily: "Jura, sans-serif" }}>
                   {saving ? <RefreshCw size={14} className="animate-spin" /> : null}
                   {saving ? "SAVING..." : editing ? "UPDATE GAME" : "CREATE GAME"}
                 </button>
@@ -889,7 +889,7 @@ export default function AdminGames() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "hsla(var(--brown-deep) / 0.5)", backdropFilter: "blur(8px)" }}>
           <div className="rounded-2xl p-8 max-w-sm w-full text-center" style={{ background: "hsl(var(--card))" }}>
             <Trash2 size={32} className="mx-auto mb-4" style={{ color: "hsl(var(--destructive))" }} />
-            <h3 className="font-cinzel font-bold text-lg mb-2" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>Delete Game?</h3>
+            <h3 className="font-jura font-bold text-lg mb-2" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Jura, sans-serif" }}>Delete Game?</h3>
             <p className="text-sm mb-6" style={{ color: "hsl(var(--brown-light))" }}>Delete <strong>{confirmDelete.name}</strong>?</p>
             <div className="flex gap-3">
               <button onClick={() => setConfirmDelete(null)} className="flex-1 py-2.5 rounded-xl text-sm" style={{ background: "hsl(var(--input))", color: "hsl(var(--brown))", border: "1px solid hsl(var(--cream-dark))" }}>Cancel</button>

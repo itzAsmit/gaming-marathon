@@ -82,12 +82,12 @@ export default function LeaderboardSection() {
           <div className="glass-card rounded-2xl overflow-x-auto md:overflow-hidden">
             {/* Header */}
             <div
-              className="grid gap-1 md:gap-2 px-3 md:px-6 py-3 md:py-4 text-[10px] md:text-sm font-cinzel tracking-widest"
+              className="grid gap-1 md:gap-2 px-3 md:px-6 py-3 md:py-4 text-[10px] md:text-sm font-jura tracking-widest"
               style={{
                 background: "hsla(var(--gold) / 0.15)",
                 borderBottom: "1px solid hsla(var(--gold) / 0.3)",
                 color: "hsl(var(--gold))",
-                fontFamily: "Cinzel, serif",
+                fontFamily: "Jura, sans-serif",
                 gridTemplateColumns: "repeat(auto-fit, minmax(0, 1fr))",
                 minWidth: "min-content",
               }}
@@ -119,9 +119,9 @@ export default function LeaderboardSection() {
               <div className="py-12 text-center" style={{ color: "hsl(var(--cream-dark))" }}>
                 <p className="mb-4">{error}</p>
                 <button
-                  className="px-4 py-2 rounded-full text-xs font-cinzel tracking-widest"
+                  className="px-4 py-2 rounded-full text-xs font-jura tracking-widest"
                   style={{
-                    fontFamily: "Cinzel, serif",
+                    fontFamily: "Jura, sans-serif",
                     color: "hsl(var(--gold))",
                     border: "1px solid hsla(var(--gold) / 0.45)",
                     background: "hsla(var(--gold) / 0.12)",
@@ -135,7 +135,7 @@ export default function LeaderboardSection() {
                 </button>
               </div>
             ) : entries.length === 0 ? (
-              <div className="py-20 text-center font-cinzel text-[10px] md:text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark) / 0.5)", fontFamily: "Cinzel, serif" }}>
+              <div className="py-20 text-center font-jura text-[10px] md:text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark) / 0.5)", fontFamily: "Jura, sans-serif" }}>
                 NO ENTRIES YET — ARENA AWAITS
               </div>
             ) : (
@@ -152,7 +152,7 @@ export default function LeaderboardSection() {
                   }}
                   whileHover={{ backgroundColor: "hsla(var(--gold) / 0.1)" }}
                 >
-                  <div className="font-cinzel font-bold whitespace-nowrap" style={{ fontFamily: "Cinzel, serif", color: i < 3 ? "hsl(var(--gold))" : "hsl(var(--cream-dark))" }}>
+                  <div className="font-jura font-bold whitespace-nowrap" style={{ fontFamily: "Jura, sans-serif", color: i < 3 ? "hsl(var(--gold))" : "hsl(var(--cream-dark))" }}>
                     {i < 3 ? CROWN[i] : `#${i + 1}`}
                   </div>
                   <div className="font-semibold truncate" style={{ fontFamily: "'ROWAN', serif", color: "hsl(var(--cream))" }}>
@@ -164,7 +164,7 @@ export default function LeaderboardSection() {
                   <div className="whitespace-nowrap" style={{ color: "hsl(var(--gold))", fontWeight: 600 }}>{entry.wins}</div>
                   <div className="whitespace-nowrap">{entry.seconds}</div>
                   <div className="whitespace-nowrap">{entry.thirds}</div>
-                  <div className="font-bold whitespace-nowrap" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>
+                  <div className="font-bold whitespace-nowrap" style={{ color: "hsl(var(--gold))", fontFamily: "Jura, sans-serif" }}>
                     {entry.points}
                   </div>
                 </motion.div>

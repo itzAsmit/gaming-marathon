@@ -106,19 +106,19 @@ export default function PlayersSection() {
         </ScrollReveal>
 
         {loading ? (
-          <div className="text-center py-20 font-cinzel text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark) / 0.6)", fontFamily: "Cinzel, serif" }}>
+          <div className="text-center py-20 font-jura text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark) / 0.6)", fontFamily: "Jura, sans-serif" }}>
             LOADING PLAYERS...
           </div>
         ) : error ? (
-          <div className="text-center py-20" style={{ color: "hsl(var(--cream-dark) / 0.8)", fontFamily: "Cinzel, serif" }}>
+          <div className="text-center py-20" style={{ color: "hsl(var(--cream-dark) / 0.8)", fontFamily: "Jura, sans-serif" }}>
             <p className="mb-4 text-sm tracking-widest">{error}</p>
             <button
-              className="px-4 py-2 rounded-full text-xs font-cinzel tracking-widest"
+              className="px-4 py-2 rounded-full text-xs font-jura tracking-widest"
               style={{
                 color: "hsl(var(--gold))",
                 border: "1px solid hsla(var(--gold) / 0.45)",
                 background: "hsla(var(--gold) / 0.12)",
-                fontFamily: "Cinzel, serif",
+                fontFamily: "Jura, sans-serif",
               }}
               onClick={() => {
                 setLoading(true);
@@ -129,7 +129,7 @@ export default function PlayersSection() {
             </button>
           </div>
         ) : players.length === 0 ? (
-          <div className="text-center py-20 font-cinzel text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark) / 0.5)", fontFamily: "Cinzel, serif" }}>
+          <div className="text-center py-20 font-jura text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark) / 0.5)", fontFamily: "Jura, sans-serif" }}>
             NO PLAYERS REGISTERED YET
           </div>
         ) : (
@@ -168,7 +168,7 @@ export default function PlayersSection() {
                             : "linear-gradient(135deg, #2a2a2a, #4a4a4a)",
                         }}
                       >
-                        <span className="text-4xl font-cinzel font-bold" style={{ color: player.is_active ? "hsl(var(--gold))" : "#888", fontFamily: "Cinzel, serif" }}>
+                        <span className="text-4xl font-jura font-bold" style={{ color: player.is_active ? "hsl(var(--gold))" : "#888", fontFamily: "Jura, sans-serif" }}>
                           {player.name.charAt(0)}
                         </span>
                       </div>
@@ -199,7 +199,7 @@ export default function PlayersSection() {
                       className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3"
                       style={{ background: "linear-gradient(to top, hsla(var(--brown-deep) / 0.9), transparent)" }}
                     >
-                      <span className="text-xs font-cinzel tracking-widest" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>
+                      <span className="text-xs font-jura tracking-widest" style={{ color: "hsl(var(--gold))", fontFamily: "Jura, sans-serif" }}>
                         VIEW PROFILE →
                       </span>
                     </div>
@@ -262,14 +262,14 @@ export default function PlayersSection() {
                           : "linear-gradient(135deg, #2a2a2a, #4a4a4a)",
                       }}
                     >
-                      <span className="text-7xl font-cinzel font-bold" style={{ color: selected.is_active ? "hsl(var(--gold))" : "#888", fontFamily: "Cinzel, serif" }}>
+                      <span className="text-7xl font-jura font-bold" style={{ color: selected.is_active ? "hsl(var(--gold))" : "#888", fontFamily: "Jura, sans-serif" }}>
                         {selected.name.charAt(0)}
                       </span>
                     </div>
                   )}
                   <div className="absolute bottom-0 left-0 right-0 p-4" style={{ background: "linear-gradient(to top, hsla(var(--brown-deep) / 0.95), transparent)" }}>
                     <div className="flex items-center gap-2 mb-1">
-                      <p className="text-xs tracking-widest font-cinzel" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>
+                      <p className="text-xs tracking-widest font-jura" style={{ color: "hsl(var(--gold))", fontFamily: "Jura, sans-serif" }}>
                         {selected.player_id}
                       </p>
                       <span
@@ -323,14 +323,14 @@ export default function PlayersSection() {
 
                   {selected.bio && (
                     <div>
-                      <p className="text-xs font-cinzel tracking-widest mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>BIO</p>
+                      <p className="text-xs font-jura tracking-widest mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Jura, sans-serif" }}>BIO</p>
                       <p className="text-sm leading-relaxed md:text-xs lg:text-sm md:line-clamp-3 lg:line-clamp-5" style={{ color: "hsl(var(--cream-dark))" }}>{selected.bio}</p>
                     </div>
                   )}
 
                   {/* Stats */}
                   <div>
-                    <p className="text-xs font-cinzel tracking-widest mb-3" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>STATS</p>
+                    <p className="text-xs font-jura tracking-widest mb-3" style={{ color: "hsl(var(--gold))", fontFamily: "Jura, sans-serif" }}>STATS</p>
                     <div className="grid grid-cols-2 gap-2 md:gap-1 lg:gap-2">
                       {[
                         { label: "POINTS", value: selected.leaderboard?.points ?? 0 },
@@ -341,8 +341,8 @@ export default function PlayersSection() {
                         { label: "PLAYED", value: selected.leaderboard?.games_played ?? 0 },
                       ].map((s) => (
                         <div key={s.label} className="rounded-xl p-2 md:p-1.5 lg:p-2.5 text-center" style={{ background: "hsla(var(--gold) / 0.08)", border: "1px solid hsla(var(--gold) / 0.2)" }}>
-                          <p className="text-lg md:text-sm lg:text-lg font-cinzel font-bold" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>{s.value}</p>
-                          <p className="text-xs md:text-[10px] font-cinzel tracking-wider" style={{ color: "hsl(var(--cream-dark) / 0.7)", fontFamily: "Cinzel, serif" }}>{s.label}</p>
+                          <p className="text-lg md:text-sm lg:text-lg font-jura font-bold" style={{ color: "hsl(var(--gold))", fontFamily: "Jura, sans-serif" }}>{s.value}</p>
+                          <p className="text-xs md:text-[10px] font-jura tracking-wider" style={{ color: "hsl(var(--cream-dark) / 0.7)", fontFamily: "Jura, sans-serif" }}>{s.label}</p>
                         </div>
                       ))}
                     </div>
@@ -350,16 +350,16 @@ export default function PlayersSection() {
 
                   {/* Items */}
                   <div>
-                    <p className="text-xs font-cinzel tracking-widest mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>ITEMS HOLDING</p>
+                    <p className="text-xs font-jura tracking-widest mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Jura, sans-serif" }}>ITEMS HOLDING</p>
                     <div className="flex flex-wrap gap-2">
                       {selected.items && selected.items.length > 0 ? (
                         selected.items.map((pi: any) => (
-                          <span key={pi.items.name} className="px-3 py-1 md:px-2 md:py-0.5 rounded-full text-xs md:text-[10px] font-cinzel" style={{ background: "hsla(var(--gold) / 0.15)", color: "hsl(var(--gold))", border: "1px solid hsla(var(--gold) / 0.3)", fontFamily: "Cinzel, serif" }}>
+                          <span key={pi.items.name} className="px-3 py-1 md:px-2 md:py-0.5 rounded-full text-xs md:text-[10px] font-jura" style={{ background: "hsla(var(--gold) / 0.15)", color: "hsl(var(--gold))", border: "1px solid hsla(var(--gold) / 0.3)", fontFamily: "Jura, sans-serif" }}>
                             {pi.items.name}
                           </span>
                         ))
                       ) : (
-                        <span className="text-xs font-cinzel" style={{ color: "hsl(var(--cream-dark) / 0.75)", fontFamily: "Cinzel, serif" }}>
+                        <span className="text-xs font-jura" style={{ color: "hsl(var(--cream-dark) / 0.75)", fontFamily: "Jura, sans-serif" }}>
                           NONE
                         </span>
                       )}
@@ -369,7 +369,7 @@ export default function PlayersSection() {
                   {/* Game Proficiency */}
                   {selected.proficiencies && selected.proficiencies.length > 0 && (
                     <div>
-                      <p className="text-xs font-cinzel tracking-widest mb-3 md:mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Cinzel, serif" }}>GAME PROFICIENCY</p>
+                      <p className="text-xs font-jura tracking-widest mb-3 md:mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Jura, sans-serif" }}>GAME PROFICIENCY</p>
                       <div className="space-y-3 md:space-y-2">
                         {selected.proficiencies.slice(0, 3).map((prof) => (
                           <div key={prof.game_name}>

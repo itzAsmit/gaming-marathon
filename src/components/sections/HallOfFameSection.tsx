@@ -86,7 +86,7 @@ export default function HallOfFameSection() {
           className="glass-card rounded-xl px-4 py-3 text-center min-w-[100px]"
           style={{ border: `1px solid ${cfg.color}30` }}
         >
-          <p className="text-lg font-cinzel font-bold mb-1" style={{ color: cfg.color, fontFamily: "Cinzel, serif" }}>
+          <p className="text-lg font-jura font-bold mb-1" style={{ color: cfg.color, fontFamily: "Jura, sans-serif" }}>
             {cfg.emoji} {cfg.label}
           </p>
           <p className="text-sm font-semibold" style={{ color: "hsl(var(--cream))", fontFamily: "'ROWAN', serif" }}>
@@ -126,9 +126,9 @@ export default function HallOfFameSection() {
               <button
                 key={s}
                 onClick={() => setActiveSeason(s)}
-                className="px-6 py-2 rounded-full font-cinzel text-sm tracking-widest transition-all duration-300"
+                className="px-6 py-2 rounded-full font-jura text-sm tracking-widest transition-all duration-300"
                 style={{
-                  fontFamily: "Cinzel, serif",
+                  fontFamily: "Jura, sans-serif",
                   background: activeSeason === s ? "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-light)))" : "hsla(var(--cream) / 0.1)",
                   color: activeSeason === s ? "hsl(var(--brown-deep))" : "hsl(var(--cream))",
                   border: `1px solid ${activeSeason === s ? "transparent" : "hsla(var(--cream) / 0.2)"}`,
@@ -143,19 +143,19 @@ export default function HallOfFameSection() {
 
         <ScrollReveal delay={0.3}>
           {loading ? (
-            <div className="text-center py-20 font-cinzel text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark) / 0.5)", fontFamily: "Cinzel, serif" }}>
+            <div className="text-center py-20 font-jura text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark) / 0.5)", fontFamily: "Jura, sans-serif" }}>
               LOADING HALL OF FAME...
             </div>
           ) : error ? (
-            <div className="text-center py-20" style={{ color: "hsl(var(--cream-dark) / 0.85)", fontFamily: "Cinzel, serif" }}>
+            <div className="text-center py-20" style={{ color: "hsl(var(--cream-dark) / 0.85)", fontFamily: "Jura, sans-serif" }}>
               <p className="mb-4 text-sm tracking-widest">{error}</p>
               <button
-                className="px-4 py-2 rounded-full text-xs font-cinzel tracking-widest"
+                className="px-4 py-2 rounded-full text-xs font-jura tracking-widest"
                 style={{
                   color: "hsl(var(--gold))",
                   border: "1px solid hsla(var(--gold) / 0.45)",
                   background: "hsla(var(--gold) / 0.12)",
-                  fontFamily: "Cinzel, serif",
+                  fontFamily: "Jura, sans-serif",
                 }}
                 onClick={() => {
                   setLoading(true);
@@ -166,7 +166,7 @@ export default function HallOfFameSection() {
               </button>
             </div>
           ) : seasonEntries.length === 0 ? (
-            <div className="text-center py-20 font-cinzel text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark) / 0.4)", fontFamily: "Cinzel, serif" }}>
+            <div className="text-center py-20 font-jura text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark) / 0.4)", fontFamily: "Jura, sans-serif" }}>
               SEASON RECORDS NOT YET WRITTEN
             </div>
           ) : (

@@ -103,9 +103,9 @@ function AnimatedListItem({ item, index, selected, onHover, onClick }: AnimatedL
 
           <div className="min-w-0">
             <h3
-              className="text-lg md:text-xl font-cinzel font-bold tracking-wide mb-1"
+              className="text-lg md:text-xl font-jura font-bold tracking-wide mb-1"
               style={{
-                fontFamily: "Cinzel, serif",
+                fontFamily: "Jura, sans-serif",
                 color: `hsl(${item.color})`,
                 textShadow: `0 0 18px hsla(${item.color} / 0.45)`,
               }}

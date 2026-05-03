@@ -12,7 +12,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        cinzel: ["Cinzel", "serif"],
+        jura: ["Jura", "sans-serif"],
         bebas: ["Bebas Neue", "sans-serif"],
         inter: ["Inter", "sans-serif"],
       },

@@ -26,7 +26,7 @@ const AdminFallback = () => (
   <div className="flex items-center justify-center min-h-screen" style={{ background: "hsl(var(--background))" }}>
     <div className="text-center">
       <div className="w-10 h-10 border-3 border-t-transparent rounded-full animate-spin mx-auto mb-3" style={{ borderColor: "hsl(var(--brown))", borderTopColor: "transparent" }} />
-      <p className="text-sm font-cinzel tracking-widest" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>LOADING...</p>
+      <p className="text-sm font-jura tracking-widest" style={{ color: "hsl(var(--brown))", fontFamily: "Jura, sans-serif" }}>LOADING...</p>
     </div>
   </div>
 );

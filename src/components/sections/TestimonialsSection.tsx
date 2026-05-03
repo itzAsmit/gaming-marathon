@@ -108,10 +108,10 @@ export default function TestimonialsSection() {
           style={{ borderColor: "hsla(var(--gold) / 0.2)" }}
         >
           <p
-            className="font-cinzel text-xs tracking-[0.5em]"
+            className="font-jura text-xs tracking-[0.5em]"
             style={{
               color: "hsl(var(--gold) / 0.5)",
-              fontFamily: "Cinzel, serif",
+              fontFamily: "Jura, sans-serif",
             }}
           >
             GAMING MARATHON © 2026 — ALL RIGHTS RESERVED

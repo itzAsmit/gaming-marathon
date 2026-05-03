@@ -220,7 +220,7 @@ export default function AdminLogin() {
       <button
         onClick={() => (window.history.length > 1 ? navigate(-1) : navigate("/"))}
         className="absolute top-6 left-6 z-20 inline-flex items-center gap-2 px-3 py-2 rounded-xl text-xs tracking-widest transition-all hover:scale-105"
-        style={{ background: "hsla(var(--cream) / 0.8)", color: "hsl(var(--brown-deep))", border: "1px solid hsl(var(--cream-dark))", fontFamily: "Cinzel, serif" }}
+        style={{ background: "hsla(var(--cream) / 0.8)", color: "hsl(var(--brown-deep))", border: "1px solid hsl(var(--cream-dark))", fontFamily: "Jura, sans-serif" }}
       >
         <ArrowLeft size={14} />
         GO BACK
@@ -232,7 +232,7 @@ export default function AdminLogin() {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4" style={{ background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))" }}>
             <Gamepad2 size={28} style={{ color: "hsl(var(--cream))" }} />
           </div>
-          <h1 className="text-3xl font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Cinzel, serif" }}>
+          <h1 className="text-3xl font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Jura, sans-serif" }}>
             ADMIN ACCESS
           </h1>
           <p className="text-sm mt-1" style={{ color: "hsl(var(--brown-light))" }}>Gaming Marathon Control Panel</p>
@@ -243,7 +243,7 @@ export default function AdminLogin() {
           <form onSubmit={handleLogin} className="space-y-5">
             {/* Email */}
             <div>
-              <label className="block text-xs tracking-widest mb-2" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>
+              <label className="block text-xs tracking-widest mb-2" style={{ color: "hsl(var(--brown))", fontFamily: "Jura, sans-serif" }}>
                 EMAIL
               </label>
               <input
@@ -263,7 +263,7 @@ export default function AdminLogin() {
 
             {/* Password */}
             <div>
-              <label className="block text-xs tracking-widest mb-2" style={{ color: "hsl(var(--brown))", fontFamily: "Cinzel, serif" }}>
+              <label className="block text-xs tracking-widest mb-2" style={{ color: "hsl(var(--brown))", fontFamily: "Jura, sans-serif" }}>
                 PASSWORD
               </label>
               <div className="relative">
@@ -306,7 +306,7 @@ export default function AdminLogin() {
               style={{
                 background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))",
                 color: "hsl(var(--cream))",
-                fontFamily: "Cinzel, serif",
+                fontFamily: "Jura, sans-serif",
                 boxShadow: "0 4px 20px hsla(var(--brown) / 0.3)",
               }}
             >
