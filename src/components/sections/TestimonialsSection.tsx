@@ -4,7 +4,7 @@ import { raceDataFetch } from "@/lib/raceDataFetch";
 import { toMediaSrc, toProxiedMediaSrc } from "@/lib/mediaUrl";
 import { motion } from "motion/react";
 import { TestimonialsColumn } from "@/components/ui/testimonials-columns-1";
-import { defaultTestimonials, fallbackTestimonial } from "@/lib/testimonials-data";
+import { displayedTestimonialPlayerIds, customQuotes, fallbackTestimonial } from "@/lib/testimonials-config";
 import { useConstrainedNetwork } from "@/hooks/use-constrained-network";
 import SectionHeader from "@/components/SectionHeader";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -53,18 +53,28 @@ export default function TestimonialsSection() {
   if (loading) return null; // or empty state
   if (players.length === 0) return null;
 
-  // Convert players into testimonials format
-  const testimonials = players.map(player => {
-    // Make sure we have a clean string for the ID (e.g. "1", "2")
+  // Filter database players to ONLY the ones defined in your config list
+  const filteredPlayers = players.filter((player) =>
+    displayedTestimonialPlayerIds.includes(String(player.player_id).trim())
+  );
+
+  // If no matching players found, just hide the section
+  if (filteredPlayers.length === 0) return null;
+
+  // Convert valid players into testimonials format
+  const testimonials = filteredPlayers.map((player) => {
     const idStr = String(player.player_id).trim();
-    // Use it to look up the quote, fallback if missing
-    const quote = defaultTestimonials[idStr] || defaultTestimonials[idStr.padStart(2, '0')] || fallbackTestimonial;
+    const quote = customQuotes[idStr] || fallbackTestimonial;
 
     return {
       name: player.name,
-      role: `Player ${idStr.padStart(2, '0')}`,
-      image: player.image_url ? (isConstrained ? toProxiedMediaSrc(player.image_url) : toMediaSrc(player.image_url)) : "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
-      text: quote
+      role: `Player ${idStr.padStart(2, "0")}`,
+      image: player.image_url
+        ? isConstrained
+          ? toProxiedMediaSrc(player.image_url)
+          : toMediaSrc(player.image_url)
+        : "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+      text: quote,
     };
   });
 
