@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
-import { TestimonialCarousel } from "@/components/ui/profile-card-testimonial-carousel";
 import { fetchPublicData } from "@/lib/fetchPublicData";
-import type { Testimonial } from "@/components/ui/profile-card-testimonial-carousel";
+import { Instagram, Twitter, Linkedin } from "lucide-react";
 
 interface Player {
   player_id: string;
@@ -13,8 +13,19 @@ interface Player {
   portrait_url?: string;
 }
 
+interface TeamMember {
+  name: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  role: "organiser" | "developer";
+  instagramUrl?: string;
+  twitterUrl?: string;
+  linkedinUrl?: string;
+}
+
 export default function CreditsSection() {
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -23,7 +34,8 @@ export default function CreditsSection() {
         setIsLoading(true);
         const players = await fetchPublicData<Player[]>("admin_players");
 
-        // Find Ritesh Dutta (Admin) and Asmit Biswas (Developer)
+        const members: TeamMember[] = [];
+
         const admin = players.find(
           (p) =>
             p.name?.toLowerCase().includes("ritesh") ||
@@ -35,15 +47,14 @@ export default function CreditsSection() {
             p.name?.toLowerCase().includes("biswas")
         );
 
-        const teamTestimonials: Testimonial[] = [];
-
         if (admin && admin.portrait_url) {
-          teamTestimonials.push({
+          members.push({
             name: admin.name || "Marathon Admin",
             title: "Event Organiser",
             description:
               "The strategic mastermind orchestrating every detail of the marathon. Ensuring seamless coordination, unprecedented engagement, and an unforgettable gaming experience for all participants.",
             imageUrl: admin.portrait_url,
+            role: "organiser",
             instagramUrl: "#",
             twitterUrl: "#",
             linkedinUrl: "#",
@@ -51,23 +62,23 @@ export default function CreditsSection() {
         }
 
         if (developer && developer.portrait_url) {
-          teamTestimonials.push({
+          members.push({
             name: developer.name || "Developer",
             title: "Technical Architect",
             description:
               "Crafted this interactive platform with meticulous precision and unwavering passion. Every feature, animation, and integration reflects dedication to delivering an exceptional user experience.",
             imageUrl: developer.portrait_url,
-            instagramUrl: "https://instagram.com/aizenrishiii",
+            role: "developer",
+            instagramUrl: "https://instagram.com/asmittzzz",
             twitterUrl: "https://x.com/aizenrishiii",
-            linkedinUrl: "https://linkedin.com/in/asmit-biswas",
+            linkedinUrl: "https://linkedin.com/in/asmittzzz",
           });
         }
 
-        setTestimonials(teamTestimonials);
+        setTeamMembers(members);
       } catch (error) {
         console.error("Failed to load team data:", error);
-        // No fallback - only show data from database
-        setTestimonials([]);
+        setTeamMembers([]);
       } finally {
         setIsLoading(false);
       }
@@ -76,27 +87,135 @@ export default function CreditsSection() {
     loadTeamData();
   }, []);
 
+  const organiser = teamMembers.find((m) => m.role === "organiser");
+  const developer = teamMembers.find((m) => m.role === "developer");
+
+  const SocialLinks = ({ member }: { member: TeamMember }) => {
+    const links = [
+      { icon: Instagram, url: member.instagramUrl, label: "Instagram" },
+      { icon: Twitter, url: member.twitterUrl, label: "Twitter" },
+      { icon: Linkedin, url: member.linkedinUrl, label: "LinkedIn" },
+    ];
+
+    return (
+      <div className="flex space-x-3">
+        {links.map(({ icon: Icon, url, label }) => (
+          <a
+            key={label}
+            href={url || "#"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-10 h-10 bg-gray-900 dark:bg-gray-100 rounded-full flex items-center justify-center transition-colors hover:bg-gray-800 dark:hover:bg-gray-200 hover:scale-105"
+            aria-label={label}
+          >
+            <Icon className="w-4 h-4 text-white dark:text-gray-900" />
+          </a>
+        ))}
+      </div>
+    );
+  };
+
+  const MemberCard = ({ member }: { member: TeamMember }) => (
+    <div className="bg-white dark:bg-card rounded-2xl shadow-xl p-6">
+      <div className="mb-4">
+        <h3 className="text-lg font-cinzel font-bold text-gray-900 dark:text-white mb-1">
+          {member.name}
+        </h3>
+        <p className="text-xs font-medium text-gray-700 dark:text-gray-400">
+          {member.title}
+        </p>
+      </div>
+
+      <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed mb-5">
+        {member.description}
+      </p>
+
+      <SocialLinks member={member} />
+    </div>
+  );
+
   return (
     <section id="credits" className="relative py-24 px-4">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <ScrollReveal>
           <SectionHeader title="CREDITS" accent="THE TEAM" />
         </ScrollReveal>
 
         {isLoading ? (
-          <div className="flex justify-center items-center py-16">
+          <div className="flex justify-center items-center py-24">
             <div className="animate-pulse text-gray-500">Loading team...</div>
           </div>
         ) : (
-          <ScrollReveal delay={0.2}>
-            <TestimonialCarousel testimonials={testimonials} />
-          </ScrollReveal>
+          <div className="mt-16">
+            {/* Team members side-by-side with staggered layout */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              {/* Left: Organiser - Image on left, card on right, positioned higher */}
+              {organiser && (
+                <ScrollReveal delay={0.1}>
+                  <motion.div
+                    className="flex flex-col lg:flex-row gap-6 lg:items-start"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    viewport={{ once: true }}
+                  >
+                    {/* Image - Left */}
+                    <div className="w-full lg:w-1/2">
+                      <div className="rounded-2xl overflow-hidden shadow-lg">
+                        <img
+                          src={organiser.imageUrl}
+                          alt={organiser.name}
+                          className="w-full h-80 lg:h-96 object-cover"
+                          draggable={false}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Card - Right */}
+                    <div className="w-full lg:w-1/2 lg:mt-0">
+                      <MemberCard member={organiser} />
+                    </div>
+                  </motion.div>
+                </ScrollReveal>
+              )}
+
+              {/* Right: Developer - Card on left, image on right, positioned lower */}
+              {developer && (
+                <ScrollReveal delay={0.2}>
+                  <motion.div
+                    className="flex flex-col lg:flex-row-reverse gap-6 lg:items-end"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    viewport={{ once: true }}
+                  >
+                    {/* Image - Right */}
+                    <div className="w-full lg:w-1/2">
+                      <div className="rounded-2xl overflow-hidden shadow-lg">
+                        <img
+                          src={developer.imageUrl}
+                          alt={developer.name}
+                          className="w-full h-80 lg:h-96 object-cover"
+                          draggable={false}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Card - Left */}
+                    <div className="w-full lg:w-1/2 lg:mb-0">
+                      <MemberCard member={developer} />
+                    </div>
+                  </motion.div>
+                </ScrollReveal>
+              )}
+            </div>
+          </div>
         )}
 
         {/* Footer */}
         <ScrollReveal delay={0.4}>
           <div
-            className="mt-16 text-center border-t pt-8"
+            className="mt-20 text-center border-t pt-8"
             style={{ borderColor: "hsla(var(--gold) / 0.2)" }}
           >
             <p
