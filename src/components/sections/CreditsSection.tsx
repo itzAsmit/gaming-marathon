@@ -153,14 +153,14 @@ export default function CreditsSection() {
               {organiser && (
                 <ScrollReveal delay={0.1}>
                   <motion.div
-                    className="flex flex-col lg:flex-row gap-6 lg:items-start"
+                    className="flex flex-col lg:flex-row gap-6 lg:items-start lg:-translate-y-6"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
                     viewport={{ once: true }}
                   >
                     {/* Image - Left */}
-                    <div className="w-full lg:w-1/2">
+                    <div className="w-full lg:w-1/2 relative">
                       <div className="rounded-2xl overflow-hidden shadow-lg">
                         <img
                           src={organiser.imageUrl}
@@ -171,9 +171,11 @@ export default function CreditsSection() {
                       </div>
                     </div>
 
-                    {/* Card - Right */}
-                    <div className="w-full lg:w-1/2 lg:mt-0">
-                      <MemberCard member={organiser} />
+                    {/* Card - Overlapping Right */}
+                    <div className="w-full lg:w-1/2 flex items-start">
+                      <div className="-ml-20 lg:-ml-28 z-10 w-full">
+                        <MemberCard member={organiser} />
+                      </div>
                     </div>
                   </motion.div>
                 </ScrollReveal>
@@ -183,14 +185,14 @@ export default function CreditsSection() {
               {developer && (
                 <ScrollReveal delay={0.2}>
                   <motion.div
-                    className="flex flex-col lg:flex-row-reverse gap-6 lg:items-end"
+                    className="flex flex-col lg:flex-row-reverse gap-6 lg:items-end lg:translate-y-6"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
                     viewport={{ once: true }}
                   >
                     {/* Image - Right */}
-                    <div className="w-full lg:w-1/2">
+                    <div className="w-full lg:w-1/2 relative">
                       <div className="rounded-2xl overflow-hidden shadow-lg">
                         <img
                           src={developer.imageUrl}
@@ -201,9 +203,11 @@ export default function CreditsSection() {
                       </div>
                     </div>
 
-                    {/* Card - Left */}
-                    <div className="w-full lg:w-1/2 lg:mb-0">
-                      <MemberCard member={developer} />
+                    {/* Card - Overlapping Left */}
+                    <div className="w-full lg:w-1/2 flex items-end">
+                      <div className="-mr-20 lg:-mr-28 z-10 w-full">
+                        <MemberCard member={developer} />
+                      </div>
                     </div>
                   </motion.div>
                 </ScrollReveal>
