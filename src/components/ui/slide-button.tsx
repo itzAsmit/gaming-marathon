@@ -1,7 +1,7 @@
 "use client";
 
 import React, { forwardRef, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { AnimatePresence, motion, useMotionValue, useSpring, useTransform, type PanInfo } from "framer-motion";
+import { AnimatePresence, motion, useMotionValue, useTransform, animate, type PanInfo } from "framer-motion";
 import { Check, Loader2, SendHorizontal, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -43,9 +43,8 @@ const SlideButton = forwardRef<HTMLButtonElement, SlideButtonProps>(
     const [isDragging, setIsDragging] = useState(false);
 
     const dragX = useMotionValue(0);
-    const springX = useSpring(dragX, { stiffness: 420, damping: 36, mass: 0.8 });
     const maxDrag = Math.max(0, trackWidth - HANDLE_SIZE - TRACK_PADDING * 2);
-    const dragProgress = useTransform(springX, [0, maxDrag || 1], [0, 1]);
+    const dragProgress = useTransform(dragX, [0, maxDrag || 1], [0, 1]);
 
     useEffect(() => {
       const el = trackRef.current;
@@ -65,7 +64,7 @@ const SlideButton = forwardRef<HTMLButtonElement, SlideButtonProps>(
     }, [completed, disabled]);
 
     const resetDrag = useCallback(() => {
-      dragX.set(0);
+      animate(dragX, 0, { type: "spring", stiffness: 420, damping: 36, mass: 0.8 });
       setIsDragging(false);
     }, [dragX]);
 
@@ -82,16 +81,7 @@ const SlideButton = forwardRef<HTMLButtonElement, SlideButtonProps>(
       resetDrag();
     }, [completed, disabled, dragProgress, maxDrag, onSlideComplete, resetDrag]);
 
-    const handleDrag = useCallback(
-      (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-        if (completed || disabled) return;
-        const nextX = Math.max(0, Math.min(info.offset.x, maxDrag));
-        dragX.set(nextX);
-      },
-      [completed, disabled, dragX, maxDrag]
-    );
-
-    const trackFillWidth = useTransform(springX, (x) => Math.min(x + HANDLE_SIZE, maxDrag + HANDLE_SIZE));
+    const trackFillWidth = useTransform(dragX, (x) => Math.min(x + HANDLE_SIZE, maxDrag + HANDLE_SIZE));
 
     useLayoutEffect(() => {
       if (status === "error") {
@@ -125,7 +115,7 @@ const SlideButton = forwardRef<HTMLButtonElement, SlideButtonProps>(
         )}
 
         {!completed && (
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center px-14 text-[0.65rem] font-semibold uppercase tracking-[0.35em] text-foreground/45">
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center px-14 text-[0.65rem] font-semibold uppercase tracking-[0.35em] text-white mix-blend-difference z-20">
             {label}
           </div>
         )}
@@ -138,8 +128,7 @@ const SlideButton = forwardRef<HTMLButtonElement, SlideButtonProps>(
             dragMomentum={false}
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
-            onDrag={handleDrag}
-            style={{ x: springX }}
+            style={{ x: dragX }}
             className="absolute left-1 top-1 z-10 flex h-10 w-10 cursor-grab items-center justify-center rounded-full bg-black text-white shadow-lg active:cursor-grabbing"
           >
             <Button
