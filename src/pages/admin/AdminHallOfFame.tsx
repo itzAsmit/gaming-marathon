@@ -4,7 +4,7 @@ import { raceDataFetch } from "@/lib/raceDataFetch";
 import { adminMutation } from "@/lib/adminMutation";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { toast } from "sonner";
-import { Trash2, AlertTriangle, PlayCircle } from "lucide-react";
+import { Trash2, AlertTriangle, PlayCircle, Pencil, X, Check } from "lucide-react";
 
 export default function AdminHallOfFame() {
   const [players, setPlayers] = useState<any[]>([]);
@@ -16,6 +16,7 @@ export default function AdminHallOfFame() {
   const [selectedSeasonForScores, setSelectedSeasonForScores] = useState(1);
   const [showEndSeasonModal, setShowEndSeasonModal] = useState(false);
   const [showDeleteSeasonModal, setShowDeleteSeasonModal] = useState<{ id: string, name: string } | null>(null);
+  const [editingSeason, setEditingSeason] = useState<number | null>(null);
 
   const fetchData = async () => {
     try {
@@ -463,18 +464,26 @@ export default function AdminHallOfFame() {
                         >
                           Season {seasonNum}
                         </h4>
-                        <button
-                          onClick={() => {
-                            const target = seasons.find(s => s.number === seasonNum);
-                            if (target) setShowDeleteSeasonModal({ id: target.id, name: target.name });
-                          }}
-                          disabled={saving}
-                          className="px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 transition-colors hover:bg-red-100"
-                          style={{ background: "hsl(0 80% 96%)", color: "hsl(var(--destructive))" }}
-                          title="Delete Season"
-                        >
-                          <AlertTriangle size={14} /> Delete
-                        </button>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => setEditingSeason(seasonNum)}
+                            className="px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 transition-colors hover:bg-amber-50"
+                            style={{ background: "hsl(var(--input))", color: "hsl(var(--brown))", border: "1px solid hsl(var(--cream-dark))" }}
+                          >
+                            <Pencil size={13} /> Edit
+                          </button>
+                          <button
+                            onClick={() => {
+                              const target = seasons.find(s => s.number === seasonNum);
+                              if (target) setShowDeleteSeasonModal({ id: target.id, name: target.name });
+                            }}
+                            disabled={saving}
+                            className="px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 transition-colors hover:bg-red-100"
+                            style={{ background: "hsl(0 80% 96%)", color: "hsl(var(--destructive))" }}
+                          >
+                            <AlertTriangle size={13} /> Delete
+                          </button>
+                        </div>
                       </div>
                       
                       {/* Games for this past season */}
@@ -513,6 +522,83 @@ export default function AdminHallOfFame() {
             <div className="flex gap-3">
               <button onClick={() => setShowDeleteSeasonModal(null)} className="flex-1 py-2.5 rounded-xl text-sm" style={{ background: "hsl(var(--input))", color: "hsl(var(--brown))", border: "1px solid hsl(var(--cream-dark))" }}>Cancel</button>
               <button onClick={() => deleteSeason(showDeleteSeasonModal.id, showDeleteSeasonModal.name)} className="flex-1 py-2.5 rounded-xl text-sm font-semibold" style={{ background: "hsl(var(--destructive))", color: "white" }}>Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Edit Archived Season Modal */}
+      {editingSeason !== null && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "hsla(var(--brown-deep) / 0.55)", backdropFilter: "blur(10px)" }}>
+          <div
+            className="w-full max-w-3xl rounded-2xl overflow-hidden flex flex-col"
+            style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))", maxHeight: "90dvh" }}
+          >
+            {/* Modal header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b shrink-0" style={{ borderColor: "hsl(var(--cream-dark))" }}>
+              <h2 className="text-lg font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}>
+                Edit Season {editingSeason} (Archived)
+              </h2>
+              <button onClick={() => setEditingSeason(null)} style={{ color: "hsl(var(--brown-light))" }}>
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Scrollable body */}
+            <div className="flex-1 overflow-y-auto no-scrollbar p-6 space-y-8">
+
+              {/* --- Player Rankings --- */}
+              <div>
+                <h3 className="text-base font-bold mb-4" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}>Player Rankings</h3>
+                <div className="space-y-2.5">
+                  {players.map((player) => {
+                    const currentRank = getPlayerRank(player.id, editingSeason);
+                    return (
+                      <div
+                        key={player.id}
+                        className="flex items-center gap-3 p-3 rounded-xl"
+                        style={{ background: "hsl(var(--input) / 0.7)", border: "1px solid hsl(var(--cream-dark) / 0.4)" }}
+                      >
+                        <div className="flex-1">
+                          <p className="text-sm font-semibold" style={{ color: "hsl(var(--brown-deep))" }}>{player.name}</p>
+                          <p className="text-xs" style={{ color: "hsl(var(--brown-light))" }}>{player.player_id}</p>
+                        </div>
+                        <select
+                          value={currentRank === null ? "unranked" : currentRank.toString()}
+                          onChange={(e) => updatePlayerRank(player.id, editingSeason, e.target.value)}
+                          disabled={saving}
+                          className="w-32 px-2 py-1.5 rounded-lg text-sm outline-none font-bold cursor-pointer"
+                          style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
+                        >
+                          <option value="unranked">Unranked</option>
+                          {players.map((_, i) => {
+                            const rankVal = i + 1;
+                            const taken = isRankTaken(rankVal, editingSeason, player.id);
+                            if (taken) return null;
+                            return <option key={rankVal} value={rankVal}>Rank {rankVal}</option>;
+                          })}
+                        </select>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* --- Season Games --- */}
+              <div>
+                <h3 className="text-base font-bold mb-4" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}>Season Games</h3>
+                {renderSeasonGamesSection(editingSeason, "Archived")}
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="px-6 py-4 border-t shrink-0 flex justify-end" style={{ borderColor: "hsl(var(--cream-dark))" }}>
+              <button
+                onClick={() => setEditingSeason(null)}
+                className="px-6 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2"
+                style={{ background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))", color: "hsl(var(--cream))" }}
+              >
+                <Check size={16} /> Done
+              </button>
             </div>
           </div>
         </div>
