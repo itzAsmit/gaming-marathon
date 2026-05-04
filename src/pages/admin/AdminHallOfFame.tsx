@@ -9,17 +9,15 @@ import { Trash2, AlertTriangle, PlayCircle } from "lucide-react";
 export default function AdminHallOfFame() {
   const [players, setPlayers] = useState<any[]>([]);
   const [games, setGames] = useState<any[]>([]);
-  const [entries, setEntries] = useState<any[]>([]);
+  const [entries, setEntries] = useState<any[]>([]); // hall_of_fame table
   const [seasons, setSeasons] = useState<any[]>([]);
-  const [seasonScores, setSeasonScores] = useState<any[]>([]);
   const [saving, setSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState<"podium" | "seasons" | "scores">("podium");
+  const [activeTab, setActiveTab] = useState<"rankings" | "seasons">("rankings");
   const [selectedSeasonForScores, setSelectedSeasonForScores] = useState(1);
-  const [editingScores, setEditingScores] = useState<{ [key: string]: number }>({});
 
   const fetchData = async () => {
     try {
-      const [p, g, h, s, ss] = await Promise.all([
+      const [p, g, h, s] = await Promise.all([
         raceDataFetch<any[]>(
           () => supabase.from("players").select("id, name, player_id"),
           "admin_players",
@@ -36,22 +34,24 @@ export default function AdminHallOfFame() {
           () => supabase.from("seasons").select("*").order("number"),
           "admin_seasons",
         ).catch(() => []),
-        raceDataFetch<any[]>(
-          () => supabase.from("season_player_scores").select("*"),
-          "admin_season_scores",
-        ).catch(() => []),
       ]);
-      setPlayers(p || []);
+      
+      // Sort players by player_id ascending
+      const sortedPlayers = (p || []).sort((a, b) => {
+        // e.g. player_id: "001", "002"
+        return String(a.player_id).localeCompare(String(b.player_id), undefined, { numeric: true });
+      });
+      setPlayers(sortedPlayers);
       setGames(g || []);
       setEntries(h || []);
       
       const seasonsData = s || [];
       setSeasons(seasonsData);
-      setSeasonScores(ss || []);
 
       if (seasonsData.length > 0) {
         const latest = Math.max(...seasonsData.map(s => s.number));
-        setSelectedSeasonForScores(latest);
+        // Only set it once on load if not already set or if it's the first time
+        setSelectedSeasonForScores(prev => prev === 1 && latest !== 1 ? latest : prev);
       }
     } catch {
       toast.error("Failed to load data");
@@ -73,24 +73,47 @@ export default function AdminHallOfFame() {
     return availableSeasons.filter(s => s < currentSeasonNumber).sort((a, b) => b - a);
   }, [availableSeasons, currentSeasonNumber]);
 
-  const getEntry = (season: number, rank: number) =>
-    entries.find((e) => e.season === season && e.rank === rank);
+  // Rankings logic
+  const getPlayerRank = (playerId: string, season: number) => {
+    const entry = entries.find(e => e.player_id === playerId && e.season === season);
+    return entry ? entry.rank : null;
+  };
 
-  const setEntry = async (season: number, rank: number, playerId: string) => {
+  const isRankTaken = (rank: number, season: number, excludePlayerId?: string) => {
+    return entries.some(e => e.season === season && e.rank === rank && e.player_id !== excludePlayerId);
+  };
+
+  const updatePlayerRank = async (playerId: string, season: number, rankStr: string) => {
     setSaving(true);
+    const newRank = rankStr === "unranked" ? null : parseInt(rankStr);
+    
+    if (newRank !== null && isRankTaken(newRank, season, playerId)) {
+      toast.error(`Rank ${newRank} is already assigned to another player!`);
+      setSaving(false);
+      return;
+    }
+
     try {
-      const existing = getEntry(season, rank);
-      if (existing) {
-        if (playerId) await adminMutation.update("hall_of_fame", { player_id: playerId }, { id: existing.id });
-        else await adminMutation.delete("hall_of_fame", { id: existing.id });
-      } else if (playerId) {
-        await adminMutation.insert("hall_of_fame", { season, rank, player_id: playerId });
+      const existingEntry = entries.find(e => e.player_id === playerId && e.season === season);
+      
+      if (newRank === null) {
+        if (existingEntry) {
+          await adminMutation.delete("hall_of_fame", { id: existingEntry.id });
+          toast.success("Player unranked");
+        }
+      } else {
+        if (existingEntry) {
+          await adminMutation.update("hall_of_fame", { rank: newRank }, { id: existingEntry.id });
+          toast.success(`Rank updated to ${newRank}`);
+        } else {
+          await adminMutation.insert("hall_of_fame", { season, rank: newRank, player_id: playerId });
+          toast.success(`Assigned Rank ${newRank}`);
+        }
       }
-      await adminMutation.insert("activity_logs", { action: "UPDATE_HALL_OF_FAME", target: `Season ${season} Rank ${rank}` });
-      toast.success("Hall of Fame updated!");
+      await adminMutation.insert("activity_logs", { action: "UPDATE_HALL_OF_FAME", target: `Season ${season} Player ${playerId} Rank ${newRank || "Unranked"}` });
       await fetchData();
     } catch {
-      toast.error("Failed to update");
+      toast.error("Failed to update rank");
     } finally {
       setSaving(false);
     }
@@ -149,241 +172,129 @@ export default function AdminHallOfFame() {
       });
       toast.success("Season deleted!");
       await fetchData();
-    } catch {
+    } catch (e) {
+      console.error("Error deleting season:", e);
       toast.error("Failed to delete season");
     } finally {
       setSaving(false);
     }
   };
 
-  const updatePlayerScore = async (playerId: string, points: number) => {
-    setSaving(true);
-    try {
-      const existing = seasonScores.find(
-        (s) => s.player_id === playerId && s.season === selectedSeasonForScores
-      );
-
-      if (existing) {
-        if (points > 0) {
-          await adminMutation.update("season_player_scores", { points }, { id: existing.id });
-        } else {
-          await adminMutation.delete("season_player_scores", { id: existing.id });
-        }
-      } else if (points > 0) {
-        await adminMutation.insert("season_player_scores", {
-          season: selectedSeasonForScores,
-          player_id: playerId,
-          points,
-        });
-      }
-
-      toast.success("Score updated!");
-      await fetchData();
-      setEditingScores({});
-    } catch (e) {
-      console.error("Error updating score:", e);
-      toast.error("Failed to update score");
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const RANK_LABELS = ["🥇 1st Place", "🥈 2nd Place", "🥉 3rd Place"];
-
-  const getGamesForSeason = (seasonNumber: number) => {
-    return games.filter((g) => g.season === seasonNumber);
-  };
-
-  const getSeasonScores = () => {
-    const scores = seasonScores.filter((s) => s.season === selectedSeasonForScores);
-    const playerScoresMap = new Map<string, number>();
-
-    scores.forEach((score: any) => {
-      playerScoresMap.set(score.player_id, score.points);
-    });
-
-    return playerScoresMap;
-  };
-
-  const renderSeasonGamesSection = (season: number, title: string) => {
-    const seasonGames = getGamesForSeason(season);
+  const renderSeasonGamesSection = (seasonNum: number, label: string) => {
+    const seasonGames = games.filter(g => g.season === seasonNum);
+    
     return (
-      <div 
-        key={season} 
-        className="rounded-2xl p-4 md:p-6 mb-6" 
-        style={{ background: "hsl(var(--input) / 0.3)", border: "1px solid hsl(var(--cream-dark))" }}
-      >
-        <h4 
-          className="font-bold mb-4 flex items-center gap-2" 
-          style={{ color: "hsl(var(--brown))", fontFamily: "Electrolize, sans-serif" }}
-        >
-          {title} (Season {season}) Games
+      <div className="bg-white/50 rounded-xl p-4 border border-[hsl(var(--cream-dark))]">
+        <h4 className="text-sm font-bold mb-3 flex items-center justify-between" style={{ color: "hsl(var(--brown-deep))" }}>
+          <span>{label} Season Games ({seasonGames.length})</span>
         </h4>
+        
         <div className="space-y-2 mb-4">
           {seasonGames.length > 0 ? (
             seasonGames.map((game: any) => (
               <div 
-                key={game.id} 
-                className="flex items-center justify-between p-2 rounded-lg"
-                style={{ 
-                  background: "hsl(var(--input) / 0.8)", 
-                  border: "1px solid hsl(var(--cream-dark) / 0.4)" 
-                }}
+                key={game.id}
+                className="flex items-center justify-between p-2.5 rounded-lg bg-white/80 text-sm border border-[hsl(var(--cream-dark))]"
               >
                 <div>
-                  <p style={{ color: "hsl(var(--brown-deep))", fontWeight: "500" }}>{game.name}</p>
+                  <span className="font-semibold" style={{ color: "hsl(var(--brown-deep))" }}>{game.name}</span>
+                  {game.game_date && (
+                    <span className="text-xs ml-2" style={{ color: "hsl(var(--brown-light))" }}>
+                      {new Date(game.game_date).toLocaleDateString()}
+                    </span>
+                  )}
                 </div>
                 <button
                   onClick={() => updateGameSeason(game.id, null)}
                   disabled={saving}
                   className="p-2 rounded-lg"
                   style={{ background: "hsl(0 80% 96%)", color: "hsl(var(--destructive))" }}
+                  title="Remove from Season"
                 >
                   <Trash2 size={14} />
                 </button>
               </div>
             ))
           ) : (
-            <p style={{ color: "hsl(var(--brown-light))" }} className="text-sm">No games assigned</p>
+            <p className="text-sm italic" style={{ color: "hsl(var(--brown-light))" }}>No games assigned to this season.</p>
           )}
         </div>
 
-        <select
-          onChange={(e) => {
-            if (e.target.value) {
-              updateGameSeason(e.target.value, season);
-              e.target.value = "";
-            }
-          }}
-          className="w-full px-3 py-2 rounded-lg text-sm outline-none font-medium"
-          style={{ 
-            background: "hsl(var(--card))", 
-            border: "1px solid hsl(var(--cream-dark))", 
-            color: "hsl(var(--brown-deep))" 
-          }}
-        >
-          <option value="">+ Add game to this season</option>
-          {games
-            .filter((g) => g.season !== season)
-            .map((g) => (
-              <option key={g.id} value={g.id}>
-                {g.name}
-              </option>
+        <div className="flex items-center gap-2 mt-4 pt-4 border-t border-[hsl(var(--cream-dark))]">
+          <select 
+            id={`add-game-season-${seasonNum}`}
+            className="flex-1 px-3 py-2 rounded-lg text-sm bg-white border border-[hsl(var(--cream-dark))]"
+            style={{ color: "hsl(var(--brown-deep))", outlineColor: "hsl(var(--gold))" }}
+            defaultValue=""
+          >
+            <option value="" disabled>Add a game to this season...</option>
+            {games.filter(g => g.season !== seasonNum).map(g => (
+              <option key={g.id} value={g.id}>{g.name} {g.season ? `(Currently S${g.season})` : ''}</option>
             ))}
-        </select>
+          </select>
+          <button
+            onClick={() => {
+              const sel = document.getElementById(`add-game-season-${seasonNum}`) as HTMLSelectElement;
+              if (sel && sel.value) {
+                updateGameSeason(sel.value, seasonNum);
+                sel.value = "";
+              }
+            }}
+            disabled={saving}
+            className="px-4 py-2 rounded-lg text-xs font-bold transition-transform hover:scale-105 active:scale-95"
+            style={{ background: "hsl(var(--gold))", color: "hsl(var(--brown-deep))" }}
+          >
+            Add Game
+          </button>
+        </div>
       </div>
     );
   };
 
   return (
     <AdminLayout>
-      <div className="p-4 md:p-8">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold mb-1" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}>
-            Hall of Fame Management
-          </h1>
-          <p className="text-sm" style={{ color: "hsl(var(--brown-light))" }}>
-            Manage seasons, top players, and game assignments
-          </p>
+      <div className="max-w-4xl mx-auto space-y-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 
+              className="text-3xl md:text-4xl font-bold" 
+              style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}
+            >
+              Hall of Fame & Seasons
+            </h1>
+            <p className="text-sm font-medium mt-1" style={{ color: "hsl(var(--brown))" }}>
+              Manage player rankings and season lifecycles
+            </p>
+          </div>
         </div>
 
-        {/* Tabs */}
-        <div className="flex gap-2 mb-8 border-b overflow-x-auto" style={{ borderColor: "hsl(var(--cream-dark))" }}>
+        <div className="flex gap-4 mb-8">
           <button
-            onClick={() => setActiveTab("podium")}
-            className="px-4 py-2 font-semibold transition-colors whitespace-nowrap"
+            onClick={() => setActiveTab("rankings")}
+            className="px-6 py-2.5 rounded-full font-bold text-sm transition-all"
             style={{
-              fontFamily: "Electrolize, sans-serif",
-              color: activeTab === "podium" ? "hsl(var(--gold))" : "hsl(var(--brown-light))",
-              borderBottom: activeTab === "podium" ? "2px solid hsl(var(--gold))" : "none",
+              background: activeTab === "rankings" ? "hsl(var(--gold))" : "transparent",
+              color: activeTab === "rankings" ? "hsl(var(--brown-deep))" : "hsl(var(--brown))",
+              border: activeTab === "rankings" ? "none" : "1px solid hsl(var(--brown-light))"
             }}
           >
-            Top 3 Finishers
-          </button>
-          <button
-            onClick={() => setActiveTab("scores")}
-            className="px-4 py-2 font-semibold transition-colors whitespace-nowrap"
-            style={{
-              fontFamily: "Electrolize, sans-serif",
-              color: activeTab === "scores" ? "hsl(var(--gold))" : "hsl(var(--brown-light))",
-              borderBottom: activeTab === "scores" ? "2px solid hsl(var(--gold))" : "none",
-            }}
-          >
-            Player Scores
+            Player Rankings
           </button>
           <button
             onClick={() => setActiveTab("seasons")}
-            className="px-4 py-2 font-semibold transition-colors whitespace-nowrap"
+            className="px-6 py-2.5 rounded-full font-bold text-sm transition-all"
             style={{
-              fontFamily: "Electrolize, sans-serif",
-              color: activeTab === "seasons" ? "hsl(var(--gold))" : "hsl(var(--brown-light))",
-              borderBottom: activeTab === "seasons" ? "2px solid hsl(var(--gold))" : "none",
+              background: activeTab === "seasons" ? "hsl(var(--gold))" : "transparent",
+              color: activeTab === "seasons" ? "hsl(var(--brown-deep))" : "hsl(var(--brown))",
+              border: activeTab === "seasons" ? "none" : "1px solid hsl(var(--brown-light))"
             }}
           >
             Manage Seasons
           </button>
         </div>
 
-        {/* Top 3 Finishers Tab */}
-        {activeTab === "podium" && (
-          <div className="space-y-8">
-            {availableSeasons.map((season) => (
-              <div 
-                key={season} 
-                className="rounded-2xl p-4 md:p-6 relative overflow-hidden" 
-                style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}
-              >
-                {season === currentSeasonNumber && (
-                  <div className="absolute top-0 right-0 px-3 py-1 bg-green-100 text-green-800 text-xs font-bold rounded-bl-lg">
-                    CURRENT SEASON
-                  </div>
-                )}
-                <h2 
-                  className="font-bold text-lg mb-4" 
-                  style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}
-                >
-                  Season {season}
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  {[1, 2, 3].map((rank) => {
-                    const entry = getEntry(season, rank);
-                    return (
-                      <div key={rank}>
-                        <label 
-                          className="block text-xs font-semibold tracking-widest mb-1.5" 
-                          style={{ color: "hsl(var(--brown))", fontFamily: "Electrolize, sans-serif" }}
-                        >
-                          {RANK_LABELS[rank - 1]}
-                        </label>
-                        <select
-                          value={entry?.player_id ?? ""}
-                          onChange={(e) => setEntry(season, rank, e.target.value)}
-                          disabled={saving}
-                          className="w-full px-3 py-2.5 rounded-xl text-sm outline-none font-medium"
-                          style={{ 
-                            background: "hsl(var(--input))", 
-                            border: "1px solid hsl(var(--cream-dark))", 
-                            color: "hsl(var(--brown-deep))" 
-                          }}
-                        >
-                          <option value="">— None —</option>
-                          {players.map((p) => (
-                            <option key={p.id} value={p.id}>
-                              {p.name} ({p.player_id})
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Player Scores Tab */}
-        {activeTab === "scores" && (
+        {/* Player Rankings Tab */}
+        {activeTab === "rankings" && (
           <div className="space-y-6">
             {/* Season selector */}
             <div 
@@ -421,22 +332,21 @@ export default function AdminHallOfFame() {
               </div>
             </div>
 
-            {/* Player scores */}
+            {/* Player Rankings List */}
             <div 
               className="rounded-2xl p-4 md:p-6" 
               style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}
             >
               <h3 
-                className="text-lg font-bold mb-4" 
+                className="text-lg font-bold mb-4 flex justify-between items-center" 
                 style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}
               >
-                Season {selectedSeasonForScores} Player Scores
+                <span>Season {selectedSeasonForScores} Player Rankings</span>
+                <span className="text-sm font-normal" style={{ color: "hsl(var(--brown))" }}>{players.length} Players</span>
               </h3>
               <div className="space-y-3">
                 {players.map((player) => {
-                  const playerScoresMap = getSeasonScores();
-                  const currentScore = playerScoresMap.get(player.player_id) || 0;
-                  const key = `${player.id}-score`;
+                  const currentRank = getPlayerRank(player.id, selectedSeasonForScores);
 
                   return (
                     <div 
@@ -450,38 +360,26 @@ export default function AdminHallOfFame() {
                       <div className="flex-1">
                         <p style={{ color: "hsl(var(--brown-deep))", fontWeight: "600" }}>{player.name}</p>
                         <p className="text-xs font-medium mt-0.5" style={{ color: "hsl(var(--brown-light))" }}>
-                          {player.player_id}
+                          ID: {player.player_id}
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
-                        <input
-                          type="number"
-                          value={editingScores[key] !== undefined ? editingScores[key] : currentScore}
-                          onChange={(e) => {
-                            setEditingScores({ ...editingScores, [key]: parseInt(e.target.value) || 0 });
-                          }}
-                          className="w-20 px-2 py-1.5 rounded-lg text-sm outline-none font-bold text-center"
+                        <select
+                          value={currentRank === null ? "unranked" : currentRank.toString()}
+                          onChange={(e) => updatePlayerRank(player.id, selectedSeasonForScores, e.target.value)}
+                          disabled={saving}
+                          className="w-32 px-2 py-1.5 rounded-lg text-sm outline-none font-bold cursor-pointer"
                           style={{ 
                             background: "hsl(var(--card))", 
                             border: "1px solid hsl(var(--cream-dark))", 
                             color: "hsl(var(--brown-deep))" 
                           }}
-                        />
-                        <button
-                          onClick={() => {
-                            const newScore = editingScores[key] !== undefined ? editingScores[key] : currentScore;
-                            updatePlayerScore(player.player_id, newScore);
-                          }}
-                          disabled={saving}
-                          className="px-4 py-1.5 rounded-lg text-xs font-bold transition-transform hover:scale-105 active:scale-95"
-                          style={{
-                            background: "hsl(var(--gold))",
-                            color: "hsl(var(--brown-deep))",
-                            boxShadow: "0 2px 10px hsla(var(--gold) / 0.3)"
-                          }}
                         >
-                          Save
-                        </button>
+                          <option value="unranked">Unranked</option>
+                          {players.map((_, i) => (
+                            <option key={i} value={i + 1}>Rank {i + 1}</option>
+                          ))}
+                        </select>
                       </div>
                     </div>
                   );

@@ -12,14 +12,11 @@ interface SeasonStats {
       player_id: string;
       portrait_url: string | null;
     };
-    points: number;
   }>;
   allPlayers: Array<{
+    rank: number;
     name: string;
     player_id: string;
-    points: number;
-    wins: number;
-    gamesPlayed: number;
   }>;
   games: Array<{
     name: string;
@@ -32,25 +29,19 @@ const RANK_CONFIG = {
     label: "1ST",
     emoji: "👑",
     color: "hsl(var(--gold))",
-    size: "w-20 h-20",
     zIndex: "z-30",
-    baseHeight: 80,
   },
   2: {
     label: "2ND",
     emoji: "🥈",
     color: "hsl(var(--silver))",
-    size: "w-16 h-16",
     zIndex: "z-20",
-    baseHeight: 60,
   },
   3: {
     label: "3RD",
     emoji: "🥉",
     color: "hsl(var(--bronze))",
-    size: "w-16 h-16",
     zIndex: "z-20",
-    baseHeight: 40,
   },
 };
 
@@ -58,9 +49,9 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
   if (!stats) return null;
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-16">
       {/* Top 3 Podium - Redesigned Layout */}
-      <div className="flex items-end justify-center gap-2 md:gap-6 relative h-80">
+      <div className="flex items-end justify-center gap-4 md:gap-8 relative h-80 pt-8">
         {/* 2nd Place (Left) */}
         {(() => {
           const rank = 2;
@@ -71,33 +62,14 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
           return (
             <motion.div
               key={rank}
-              className={`flex flex-col items-center ${cfg.zIndex} relative`}
+              className={`flex flex-col items-center ${cfg.zIndex} relative group cursor-default`}
               animate={{ y: [0, -4, 0] }}
               transition={{ duration: 3.5, repeat: Infinity, delay: 1 }}
             >
-              {/* Info card */}
+              {/* Avatar (Now ABOVE Name Card) */}
               <div
-                className="glass-card rounded-lg px-2 py-1 text-center w-28 mb-2"
-                style={{ border: `1px solid ${cfg.color}40` }}
-              >
-                <p
-                  className="text-xs font-bold"
-                  style={{ color: cfg.color, fontFamily: "Electrolize, sans-serif" }}
-                >
-                  {cfg.emoji} {cfg.label}
-                </p>
-                <p
-                  className="text-xs font-semibold truncate"
-                  style={{ color: "hsl(var(--cream))", fontFamily: "Electrolize, sans-serif" }}
-                >
-                  {topPlayer.player.name}
-                </p>
-              </div>
-
-              {/* Avatar */}
-              <div
-                className="w-24 h-24 rounded-2xl overflow-hidden"
-                style={{ border: `3px solid ${cfg.color}` }}
+                className="w-24 h-24 rounded-2xl overflow-hidden mb-4 transition-transform duration-300 group-hover:scale-105"
+                style={{ border: `3px solid ${cfg.color}`, boxShadow: `0 0 15px ${cfg.color}40` }}
               >
                 {toMediaSrc(topPlayer.player.portrait_url) ? (
                   <SmartImage
@@ -119,6 +91,26 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
                   </div>
                 )}
               </div>
+
+              {/* Info card (Now BELOW Avatar) */}
+              <div
+                className="glass-card rounded-lg px-2 py-2 text-center w-32 transition-all duration-300 group-hover:-translate-y-1"
+                style={{ border: `1px solid ${cfg.color}40` }}
+              >
+                <p
+                  className="text-xs font-bold mb-1"
+                  style={{ color: cfg.color, fontFamily: "Electrolize, sans-serif" }}
+                >
+                  {cfg.emoji} {cfg.label}
+                </p>
+                <p
+                  className="text-xs font-semibold truncate px-1"
+                  style={{ color: "hsl(var(--cream))", fontFamily: "Electrolize, sans-serif" }}
+                  title={topPlayer.player.name}
+                >
+                  {topPlayer.player.name}
+                </p>
+              </div>
             </motion.div>
           );
         })()}
@@ -133,39 +125,14 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
           return (
             <motion.div
               key={rank}
-              className={`flex flex-col items-center ${cfg.zIndex} relative scale-125`}
-              animate={{ y: [0, -12, 0] }}
+              className={`flex flex-col items-center ${cfg.zIndex} relative scale-110 md:scale-125 group cursor-default`}
+              animate={{ y: [0, -8, 0] }}
               transition={{ duration: 3.5, repeat: Infinity, delay: 0.5 }}
             >
-              {/* Info card */}
-              <div
-                className="glass-card rounded-xl px-4 py-2.5 text-center w-36 mb-3"
-                style={{ border: `2px solid ${cfg.color}50` }}
-              >
-                <p
-                  className="text-sm font-bold mb-0.5"
-                  style={{ color: cfg.color, fontFamily: "Electrolize, sans-serif" }}
-                >
-                  {cfg.emoji} {cfg.label}
-                </p>
-                <p
-                  className="text-sm font-semibold"
-                  style={{ color: "hsl(var(--cream))", fontFamily: "Electrolize, sans-serif" }}
-                >
-                  {topPlayer.player.name}
-                </p>
-                <p
-                  className="text-xs mt-1"
-                  style={{ color: cfg.color, opacity: 0.8 }}
-                >
-                  {topPlayer.points} pts
-                </p>
-              </div>
-
               {/* Avatar */}
               <div
-                className="w-28 h-28 rounded-full overflow-hidden"
-                style={{ border: `4px solid ${cfg.color}` }}
+                className="w-28 h-28 rounded-full overflow-hidden mb-5 transition-transform duration-300 group-hover:scale-105"
+                style={{ border: `4px solid ${cfg.color}`, boxShadow: `0 0 25px ${cfg.color}60` }}
               >
                 {toMediaSrc(topPlayer.player.portrait_url) ? (
                   <SmartImage
@@ -187,6 +154,26 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
                   </div>
                 )}
               </div>
+
+              {/* Info card */}
+              <div
+                className="glass-card rounded-xl px-4 py-3 text-center w-40 transition-all duration-300 group-hover:-translate-y-1"
+                style={{ border: `2px solid ${cfg.color}50` }}
+              >
+                <p
+                  className="text-sm font-bold mb-1.5"
+                  style={{ color: cfg.color, fontFamily: "Electrolize, sans-serif" }}
+                >
+                  {cfg.emoji} {cfg.label}
+                </p>
+                <p
+                  className="text-sm font-semibold truncate"
+                  style={{ color: "hsl(var(--cream))", fontFamily: "Electrolize, sans-serif" }}
+                  title={topPlayer.player.name}
+                >
+                  {topPlayer.player.name}
+                </p>
+              </div>
             </motion.div>
           );
         })()}
@@ -201,33 +188,14 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
           return (
             <motion.div
               key={rank}
-              className={`flex flex-col items-center ${cfg.zIndex} relative`}
+              className={`flex flex-col items-center ${cfg.zIndex} relative group cursor-default`}
               animate={{ y: [0, -4, 0] }}
               transition={{ duration: 3.5, repeat: Infinity, delay: 1.5 }}
             >
-              {/* Info card */}
-              <div
-                className="glass-card rounded-lg px-2 py-1 text-center w-28 mb-2"
-                style={{ border: `1px solid ${cfg.color}40` }}
-              >
-                <p
-                  className="text-xs font-bold"
-                  style={{ color: cfg.color, fontFamily: "Electrolize, sans-serif" }}
-                >
-                  {cfg.emoji} {cfg.label}
-                </p>
-                <p
-                  className="text-xs font-semibold truncate"
-                  style={{ color: "hsl(var(--cream))", fontFamily: "Electrolize, sans-serif" }}
-                >
-                  {topPlayer.player.name}
-                </p>
-              </div>
-
               {/* Avatar */}
               <div
-                className="w-24 h-24 rounded-2xl overflow-hidden"
-                style={{ border: `3px solid ${cfg.color}` }}
+                className="w-24 h-24 rounded-2xl overflow-hidden mb-4 transition-transform duration-300 group-hover:scale-105"
+                style={{ border: `3px solid ${cfg.color}`, boxShadow: `0 0 15px ${cfg.color}40` }}
               >
                 {toMediaSrc(topPlayer.player.portrait_url) ? (
                   <SmartImage
@@ -249,6 +217,26 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
                   </div>
                 )}
               </div>
+
+              {/* Info card */}
+              <div
+                className="glass-card rounded-lg px-2 py-2 text-center w-32 transition-all duration-300 group-hover:-translate-y-1"
+                style={{ border: `1px solid ${cfg.color}40` }}
+              >
+                <p
+                  className="text-xs font-bold mb-1"
+                  style={{ color: cfg.color, fontFamily: "Electrolize, sans-serif" }}
+                >
+                  {cfg.emoji} {cfg.label}
+                </p>
+                <p
+                  className="text-xs font-semibold truncate px-1"
+                  style={{ color: "hsl(var(--cream))", fontFamily: "Electrolize, sans-serif" }}
+                  title={topPlayer.player.name}
+                >
+                  {topPlayer.player.name}
+                </p>
+              </div>
             </motion.div>
           );
         })()}
@@ -256,14 +244,15 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
 
       {/* Players & Games Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* All Players */}
+        {/* All Players (4th and below) */}
         <div
-          className="rounded-2xl p-6"
+          className="rounded-2xl p-6 relative group"
           style={{
             background: "hsl(var(--card))",
             border: "1px solid hsl(var(--cream-dark))",
           }}
         >
+          <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ boxShadow: "0 0 30px hsla(var(--gold)/0.05)" }} />
           <h3
             className="text-lg font-semibold mb-4"
             style={{
@@ -271,45 +260,39 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
               fontFamily: "Electrolize, sans-serif",
             }}
           >
-            SEASON PLAYERS
+            LEADERBOARD
           </h3>
-          <div className="space-y-2 max-h-[400px] overflow-y-auto">
+          <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
             {stats.allPlayers.length > 0 ? (
               stats.allPlayers.map((player, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center justify-between p-3 rounded-lg"
+                  className="flex items-center justify-between p-3.5 rounded-xl transition-all duration-300 hover:scale-[1.02]"
                   style={{
-                    background: "hsl(var(--input) / 0.5)",
-                    border: "1px solid hsl(var(--cream-dark) / 0.3)",
+                    background: "white",
+                    border: "1px solid hsl(var(--cream-dark))",
+                    boxShadow: "0 4px 10px rgba(0,0,0,0.03)"
                   }}
                 >
-                  <div className="flex-1">
+                  <div className="flex items-center gap-4">
+                    <div 
+                      className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm"
+                      style={{ background: "hsla(var(--brown-light)/0.1)", color: "hsl(var(--brown-deep))" }}
+                    >
+                      {player.rank}
+                    </div>
                     <p
-                      className="text-sm font-semibold"
-                      style={{ color: "hsl(var(--cream))" }}
+                      className="text-sm font-bold"
+                      style={{ color: "hsl(var(--brown-deep))" }}
                     >
                       {player.name}
                     </p>
-                    <p
-                      className="text-xs"
-                      style={{ color: "hsl(var(--brown-light))" }}
-                    >
-                      {player.gamesPlayed} games • {player.wins}W
-                    </p>
-                  </div>
-                  <div
-                    className="text-right"
-                    style={{ color: "hsl(var(--gold))" }}
-                  >
-                    <p className="text-sm font-bold">{player.points}</p>
-                    <p className="text-xs">points</p>
                   </div>
                 </div>
               ))
             ) : (
-              <p style={{ color: "hsl(var(--cream-dark) / 0.5)" }}>
-                No players yet
+              <p className="italic text-sm py-4" style={{ color: "hsl(var(--brown-light))" }}>
+                No additional players ranked for this season yet.
               </p>
             )}
           </div>
@@ -317,12 +300,13 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
 
         {/* Season Games */}
         <div
-          className="rounded-2xl p-6"
+          className="rounded-2xl p-6 relative group"
           style={{
             background: "hsl(var(--card))",
             border: "1px solid hsl(var(--cream-dark))",
           }}
         >
+          <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ boxShadow: "0 0 30px hsla(var(--gold)/0.05)" }} />
           <h3
             className="text-lg font-semibold mb-4"
             style={{
@@ -332,42 +316,39 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
           >
             SEASON GAMES
           </h3>
-          <div className="space-y-2 max-h-[400px] overflow-y-auto">
+          <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
             {stats.games.length > 0 ? (
               stats.games.map((game, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center justify-between p-3 rounded-lg"
+                  className="flex items-center justify-between p-3.5 rounded-xl transition-all duration-300 hover:scale-[1.02]"
                   style={{
-                    background: "hsl(var(--input) / 0.5)",
-                    border: "1px solid hsl(var(--cream-dark) / 0.3)",
+                    background: "white",
+                    border: "1px solid hsl(var(--cream-dark))",
+                    boxShadow: "0 4px 10px rgba(0,0,0,0.03)"
                   }}
                 >
                   <div>
                     <p
-                      className="text-sm font-semibold"
-                      style={{ color: "hsl(var(--cream))" }}
+                      className="text-sm font-bold"
+                      style={{ color: "hsl(var(--brown-deep))" }}
                     >
                       {game.name}
                     </p>
                     {game.date && (
                       <p
-                        className="text-xs"
+                        className="text-xs font-medium mt-1"
                         style={{ color: "hsl(var(--brown-light))" }}
                       >
                         {new Date(game.date).toLocaleDateString()}
                       </p>
                     )}
                   </div>
-                  <div
-                    className="w-2 h-2 rounded-full"
-                    style={{ background: "hsl(var(--gold))" }}
-                  />
                 </div>
               ))
             ) : (
-              <p style={{ color: "hsl(var(--cream-dark) / 0.5)" }}>
-                No games yet
+              <p className="italic text-sm py-4" style={{ color: "hsl(var(--brown-light))" }}>
+                No games assigned to this season yet.
               </p>
             )}
           </div>

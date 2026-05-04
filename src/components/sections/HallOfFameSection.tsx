@@ -52,64 +52,39 @@ export default function HallOfFameSection() {
 
   const fetchSeasonStats = async (season: number) => {
     try {
-      // Fetch top 3 from hall_of_fame
+      // Fetch all hall_of_fame entries for this season
       const { data: hofData } = await supabase
         .from("hall_of_fame")
         .select("rank, players(name, player_id, portrait_url)")
         .eq("season", season)
         .order("rank");
 
-      // Fetch all players who participated + their scores
-      const { data: playerData } = await supabase
-        .from("player_game_stats")
-        .select("player_id, players(name, player_id), points")
-        .neq("points", null);
-
-      // Fetch games for this season (with proper typing)
+      // Fetch games for this season
       // @ts-ignore - season column will be added via migration
       const { data: gameData }: { data: Array<{ name: string; game_date: string | null }> | null } = await supabase
         .from("games")
         .select("name, game_date")
         .eq("season", season);
 
-      // Aggregate player stats by season/player
-      const playerStatsMap = new Map();
-      playerData?.forEach((stat: any) => {
-        const key = stat.players?.player_id;
-        if (key) {
-          if (!playerStatsMap.has(key)) {
-            playerStatsMap.set(key, {
-              name: stat.players?.name,
-              points: 0,
-              games: 0,
-              wins: 0,
-            });
-          }
-          const current = playerStatsMap.get(key);
-          current.points += stat.points || 0;
-          current.games += 1;
-        }
-      });
-
-      const allPlayers = Array.from(playerStatsMap.entries())
-        .map(([code, stats]) => ({
-          name: stats.name,
-          player_id: code,
-          points: stats.points,
-          wins: stats.wins,
-          gamesPlayed: stats.games,
-        }))
-        .sort((a, b) => b.points - a.points);
-
+      // Map Top 3
       const topPlayers = (hofData || [])
+        .filter((entry: any) => entry.rank <= 3)
         .map((entry: any) => ({
           rank: entry.rank,
           player: {
             name: entry.players?.name || "—",
             player_id: entry.players?.player_id || "—",
             portrait_url: entry.players?.portrait_url,
-          },
-          points: 0, // Would need to fetch from leaderboard if needed
+          }
+        }));
+
+      // Map 4th to Nth
+      const allPlayers = (hofData || [])
+        .filter((entry: any) => entry.rank >= 4)
+        .map((entry: any) => ({
+          rank: entry.rank,
+          name: entry.players?.name || "—",
+          player_id: entry.players?.player_id || "—",
         }));
 
       setSeasonStats({
@@ -149,7 +124,7 @@ export default function HallOfFameSection() {
               <button
                 key={s.id || s.number}
                 onClick={() => setActiveSeason(s.number)}
-                className="px-6 py-2.5 rounded-full text-sm font-semibold tracking-widest transition-all duration-300 uppercase"
+                className="px-6 py-2.5 rounded-full text-sm font-semibold tracking-widest transition-all duration-300 uppercase hover:scale-105"
                 style={{
                   fontFamily: "Electrolize, sans-serif",
                   background: activeSeason === s.number 
@@ -195,7 +170,7 @@ export default function HallOfFameSection() {
             >
               <p className="mb-4 text-sm tracking-widest">{error}</p>
               <button
-                className="px-4 py-2 rounded-full text-xs tracking-widest"
+                className="px-4 py-2 rounded-full text-xs tracking-widest transition-transform hover:scale-105"
                 style={{
                   color: "hsl(var(--gold))",
                   border: "1px solid hsla(var(--gold) / 0.45)",
