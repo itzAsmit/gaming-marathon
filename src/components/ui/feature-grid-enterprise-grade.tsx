@@ -61,7 +61,10 @@ const FeatureGrid: React.FC<FeatureGridProps> = ({
                 <div className="mb-3 p-2 w-fit rounded-lg bg-primary/10 text-primary border border-primary/20 transition-colors duration-200">
                   <feature.icon className="h-6 w-6" aria-hidden="true" />
                 </div>
-                <CardTitle className="text-xl font-semibold text-foreground">
+                <CardTitle
+                  className="text-lg md:text-xl font-semibold uppercase tracking-[0.16em] text-foreground"
+                  style={{ fontFamily: "Orbitron, sans-serif" }}
+                >
                   {feature.title}
                 </CardTitle>
               </CardHeader>
