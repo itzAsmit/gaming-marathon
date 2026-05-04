@@ -14,6 +14,8 @@ export default function AdminHallOfFame() {
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<"rankings" | "seasons">("rankings");
   const [selectedSeasonForScores, setSelectedSeasonForScores] = useState(1);
+  const [showEndSeasonModal, setShowEndSeasonModal] = useState(false);
+  const [showDeleteSeasonModal, setShowDeleteSeasonModal] = useState<{ id: string, name: string } | null>(null);
 
   const fetchData = async () => {
     try {
@@ -142,7 +144,7 @@ export default function AdminHallOfFame() {
   };
 
   const endSeasonAndStartNew = async () => {
-    if (!window.confirm("Are you sure you want to end the current season and start a new one?")) return;
+    setShowEndSeasonModal(false);
     
     setSaving(true);
     try {
@@ -167,7 +169,7 @@ export default function AdminHallOfFame() {
   };
 
   const deleteSeason = async (seasonId: string, seasonName: string) => {
-    if (!window.confirm(`CRITICAL WARNING: Are you sure you want to delete ${seasonName}? This will permanently remove it and cannot be undone.`)) return;
+    setShowDeleteSeasonModal(null);
     setSaving(true);
     try {
       await adminMutation.delete("seasons", { id: seasonId });
@@ -416,7 +418,7 @@ export default function AdminHallOfFame() {
                   </p>
                 </div>
                 <button
-                  onClick={endSeasonAndStartNew}
+                  onClick={() => setShowEndSeasonModal(true)}
                   disabled={saving}
                   className="px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-transform hover:scale-105 active:scale-95"
                   style={{
@@ -464,7 +466,7 @@ export default function AdminHallOfFame() {
                         <button
                           onClick={() => {
                             const target = seasons.find(s => s.number === seasonNum);
-                            if (target) deleteSeason(target.id, target.name);
+                            if (target) setShowDeleteSeasonModal({ id: target.id, name: target.name });
                           }}
                           disabled={saving}
                           className="px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 transition-colors hover:bg-red-100"
@@ -485,6 +487,36 @@ export default function AdminHallOfFame() {
           </div>
         )}
       </div>
+
+      {/* End Season Modal */}
+      {showEndSeasonModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "hsla(var(--brown-deep) / 0.5)", backdropFilter: "blur(8px)" }}>
+          <div className="rounded-2xl p-8 max-w-sm w-full text-center" style={{ background: "hsl(var(--card))" }}>
+            <PlayCircle size={32} className="mx-auto mb-4" style={{ color: "hsl(var(--gold))" }} />
+            <h3 className="font-bold text-lg mb-2" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}>End Current Season?</h3>
+            <p className="text-sm mb-6" style={{ color: "hsl(var(--brown-light))" }}>Are you sure you want to archive Season {currentSeasonNumber} and begin Season {currentSeasonNumber + 1}?</p>
+            <div className="flex gap-3">
+              <button onClick={() => setShowEndSeasonModal(false)} className="flex-1 py-2.5 rounded-xl text-sm" style={{ background: "hsl(var(--input))", color: "hsl(var(--brown))", border: "1px solid hsl(var(--cream-dark))" }}>Cancel</button>
+              <button onClick={endSeasonAndStartNew} className="flex-1 py-2.5 rounded-xl text-sm font-bold" style={{ background: "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-light)))", color: "hsl(var(--brown-deep))" }}>End & Start</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Season Modal */}
+      {showDeleteSeasonModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "hsla(var(--brown-deep) / 0.5)", backdropFilter: "blur(8px)" }}>
+          <div className="rounded-2xl p-8 max-w-sm w-full text-center" style={{ background: "hsl(var(--card))" }}>
+            <AlertTriangle size={32} className="mx-auto mb-4" style={{ color: "hsl(var(--destructive))" }} />
+            <h3 className="font-bold text-lg mb-2" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}>Delete Season?</h3>
+            <p className="text-sm mb-6" style={{ color: "hsl(var(--brown-light))" }}>CRITICAL WARNING: This will permanently delete <strong>{showDeleteSeasonModal.name}</strong>. This cannot be undone.</p>
+            <div className="flex gap-3">
+              <button onClick={() => setShowDeleteSeasonModal(null)} className="flex-1 py-2.5 rounded-xl text-sm" style={{ background: "hsl(var(--input))", color: "hsl(var(--brown))", border: "1px solid hsl(var(--cream-dark))" }}>Cancel</button>
+              <button onClick={() => deleteSeason(showDeleteSeasonModal.id, showDeleteSeasonModal.name)} className="flex-1 py-2.5 rounded-xl text-sm font-semibold" style={{ background: "hsl(var(--destructive))", color: "white" }}>Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
     </AdminLayout>
   );
 }
