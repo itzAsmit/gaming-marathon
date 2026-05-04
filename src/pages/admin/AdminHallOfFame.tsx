@@ -4,7 +4,8 @@ import { raceDataFetch } from "@/lib/raceDataFetch";
 import { adminMutation } from "@/lib/adminMutation";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { toast } from "sonner";
-import { Trash2, AlertTriangle, PlayCircle, Gamepad2, Calendar, Pencil, X, Check } from "lucide-react";
+import { Trash2, PlayCircle, Gamepad2, Calendar, Pencil, X, Check } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 export default function AdminHallOfFame() {
   const [players, setPlayers] = useState<any[]>([]);
@@ -12,9 +13,7 @@ export default function AdminHallOfFame() {
   const [entries, setEntries] = useState<any[]>([]);
   const [seasons, setSeasons] = useState<any[]>([]);
   const [saving, setSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState<"rankings" | "games" | "seasons">("rankings");
   const [showEndSeasonModal, setShowEndSeasonModal] = useState(false);
-  const [showDeleteSeasonModal, setShowDeleteSeasonModal] = useState<{ id: string; name: string } | null>(null);
   const [editingSeason, setEditingSeason] = useState<number | null>(null);
 
   const fetchData = async () => {
@@ -60,7 +59,7 @@ export default function AdminHallOfFame() {
   const currentSeasonNumber = useMemo(() => Math.max(...availableSeasons), [availableSeasons]);
 
   const pastSeasons = useMemo(
-    () => availableSeasons.filter((s) => s < currentSeasonNumber).sort((a, b) => a - b),
+    () => availableSeasons.filter((s) => s < currentSeasonNumber).sort((a, b) => b - a),
     [availableSeasons, currentSeasonNumber],
   );
 
@@ -132,12 +131,10 @@ export default function AdminHallOfFame() {
     try {
       const now = new Date().toISOString();
 
-      // Mark current season as ended — create the row first if it doesn't exist
       let currentSeason = seasons.find((s) => s.number === currentSeasonNumber);
       if (currentSeason) {
         await adminMutation.update("seasons", { ended_at: now }, { id: currentSeason.id });
       } else {
-        // Season row was never created (e.g. the very first season) — insert it as ended
         await adminMutation.insert("seasons", {
           number: currentSeasonNumber,
           name: `Season ${currentSeasonNumber.toString().padStart(2, "0")}`,
@@ -150,12 +147,10 @@ export default function AdminHallOfFame() {
       await adminMutation.insert("seasons", { number: nextNumber, name: newSeasonName });
       await adminMutation.insert("activity_logs", { action: "CREATE_SEASON", target: newSeasonName });
 
-      // Optimistically update local state so tabs refresh immediately
       setSeasons((prev) => {
         let updated = prev.map((s) =>
           s.number === currentSeasonNumber ? { ...s, ended_at: now } : s
         );
-        // If the current season didn't have a row, add it as ended
         if (!prev.find((s) => s.number === currentSeasonNumber)) {
           updated.push({
             id: crypto.randomUUID(),
@@ -165,7 +160,6 @@ export default function AdminHallOfFame() {
             ended_at: now,
           });
         }
-        // Add the new season
         updated.push({
           id: crypto.randomUUID(),
           number: nextNumber,
@@ -177,28 +171,10 @@ export default function AdminHallOfFame() {
       });
 
       toast.success(`${newSeasonName} has begun!`);
-
-      // Background re-fetch to sync with DB (non-blocking)
       fetchData();
     } catch (e) {
       console.error("Error creating season:", e);
       toast.error("Failed to start new season");
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const deleteSeason = async (seasonId: string, seasonName: string) => {
-    setShowDeleteSeasonModal(null);
-    setSaving(true);
-    try {
-      await adminMutation.delete("seasons", { id: seasonId });
-      await adminMutation.insert("activity_logs", { action: "DELETE_SEASON", target: seasonName });
-      toast.success("Season deleted!");
-      await fetchData();
-    } catch (e) {
-      console.error("Error deleting season:", e);
-      toast.error("Failed to delete season");
     } finally {
       setSaving(false);
     }
@@ -302,219 +278,190 @@ export default function AdminHallOfFame() {
     );
   };
 
-  // ── Tab button helper ──
-  const tabBtn = (key: typeof activeTab, label: string) => (
-    <button
-      onClick={() => setActiveTab(key)}
-      className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 ${
-        activeTab === key ? "shadow-sm" : "hover:bg-black/5"
-      }`}
-      style={{
-        background: activeTab === key ? "hsl(var(--gold))" : "transparent",
-        color: activeTab === key ? "hsl(var(--brown-deep))" : "hsl(var(--brown))",
-        border: activeTab === key ? "1px solid transparent" : "1px solid hsl(var(--brown-light))",
-      }}
-    >
-      {label}
-    </button>
-  );
-
   return (
     <AdminLayout>
       <div className="p-4 md:p-8 space-y-8">
         {/* Page title */}
-        <div className="mb-6">
+        <div className="mb-2">
           <h1 className="text-2xl font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}>
             Hall of Fame & Seasons
           </h1>
           <p className="text-sm mt-1" style={{ color: "hsl(var(--brown-light))" }}>Manage player rankings, season games, and season lifecycles</p>
         </div>
 
-        {/* Tabs */}
-        <div className="flex gap-4 mb-8 flex-wrap">
-          {tabBtn("rankings", "Player Rankings")}
-          {tabBtn("games", "Season Games")}
-          {tabBtn("seasons", "Manage Seasons")}
-        </div>
+        {/* Main Tabs */}
+        <Tabs defaultValue="rankings" className="w-full">
+          <TabsList className="bg-transparent gap-2 mb-6">
+            <TabsTrigger
+              value="rankings"
+              className="data-[state=active]:bg-[hsl(var(--gold))] data-[state=active]:text-[hsl(var(--brown-deep))] data-[state=active]:shadow-sm px-5 py-2 rounded-full text-sm font-bold"
+              style={{ fontFamily: "Electrolize, sans-serif" }}
+            >
+              Player Rankings
+            </TabsTrigger>
+            <TabsTrigger
+              value="games"
+              className="data-[state=active]:bg-[hsl(var(--gold))] data-[state=active]:text-[hsl(var(--brown-deep))] data-[state=active]:shadow-sm px-5 py-2 rounded-full text-sm font-bold"
+              style={{ fontFamily: "Electrolize, sans-serif" }}
+            >
+              Season Games
+            </TabsTrigger>
+            <TabsTrigger
+              value="seasons"
+              className="data-[state=active]:bg-[hsl(var(--gold))] data-[state=active]:text-[hsl(var(--brown-deep))] data-[state=active]:shadow-sm px-5 py-2 rounded-full text-sm font-bold"
+              style={{ fontFamily: "Electrolize, sans-serif" }}
+            >
+              Manage Seasons
+            </TabsTrigger>
+          </TabsList>
 
-        {/* ═══════════════════════════════════════════════════════════
-            TAB 1: Player Rankings — all seasons listed vertically
-           ═══════════════════════════════════════════════════════════ */}
-        {activeTab === "rankings" && (
-          <div className="space-y-8">
-            {availableSeasons.map((seasonNum) => (
-              <div
-                key={seasonNum}
-                className="rounded-2xl p-4 md:p-6"
-                style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}
-              >
-                <h3
-                  className="text-lg font-bold mb-4 flex justify-between items-center"
-                  style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}
-                >
-                  <span className="flex items-center gap-2">
-                    Season {seasonNum}
-                    {seasonNum === currentSeasonNumber && (
-                      <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                    )}
-                  </span>
-                  <span className="text-sm font-normal" style={{ color: "hsl(var(--brown))" }}>
-                    {entries.filter((e) => e.season === seasonNum && e.rank != null).length} ranked
-                  </span>
-                </h3>
-                {renderRankingsForSeason(seasonNum)}
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* ═══════════════════════════════════════════════════════════
-            TAB 2: Season Games — all seasons listed vertically
-           ═══════════════════════════════════════════════════════════ */}
-        {activeTab === "games" && (
-          <div className="space-y-8">
-            {availableSeasons.map((seasonNum) => (
-              <div
-                key={seasonNum}
-                className="rounded-2xl p-4 md:p-6"
-                style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}
-              >
-                <h3
-                  className="text-lg font-bold mb-4 flex justify-between items-center"
-                  style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}
-                >
-                  <span className="flex items-center gap-2">
-                    <Gamepad2 size={18} /> Season {seasonNum}
-                    {seasonNum === currentSeasonNumber && (
-                      <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                    )}
-                  </span>
-                  <span className="text-sm font-normal" style={{ color: "hsl(var(--brown))" }}>
-                    {games.filter((g) => g.season === seasonNum).length} games
-                  </span>
-                </h3>
-                {renderGamesForSeason(seasonNum)}
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* ═══════════════════════════════════════════════════════════
-            TAB 3: Manage Seasons — end/create + past seasons timeline
-           ═══════════════════════════════════════════════════════════ */}
-        {activeTab === "seasons" && (
-          <div className="space-y-8">
-            {/* Current season card */}
+          {/* ═══ TAB 1: Player Rankings (current season only) ═══ */}
+          <TabsContent value="rankings">
             <div
-              className="rounded-2xl p-6 relative overflow-hidden"
+              className="rounded-2xl p-4 md:p-6"
               style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}
             >
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <h3
+                className="text-lg font-bold mb-4 flex justify-between items-center"
+                style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}
+              >
+                <span className="flex items-center gap-2">
+                  Season {currentSeasonNumber}
+                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                </span>
+                <span className="text-sm font-normal" style={{ color: "hsl(var(--brown))" }}>
+                  {entries.filter((e) => e.season === currentSeasonNumber && e.rank != null).length} ranked · {players.length} players
+                </span>
+              </h3>
+              {renderRankingsForSeason(currentSeasonNumber)}
+            </div>
+          </TabsContent>
+
+          {/* ═══ TAB 2: Season Games (current season only) ═══ */}
+          <TabsContent value="games">
+            <div
+              className="rounded-2xl p-4 md:p-6"
+              style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}
+            >
+              <h3
+                className="text-lg font-bold mb-4 flex justify-between items-center"
+                style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}
+              >
+                <span className="flex items-center gap-2">
+                  <Gamepad2 size={18} /> Season {currentSeasonNumber}
+                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                </span>
+                <span className="text-sm font-normal" style={{ color: "hsl(var(--brown))" }}>
+                  {games.filter((g) => g.season === currentSeasonNumber).length} games
+                </span>
+              </h3>
+              {renderGamesForSeason(currentSeasonNumber)}
+            </div>
+          </TabsContent>
+
+          {/* ═══ TAB 3: Manage Seasons ═══ */}
+          <TabsContent value="seasons">
+            <div className="space-y-8">
+              {/* Current season card */}
+              <div
+                className="rounded-2xl p-6 relative overflow-hidden"
+                style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}
+              >
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                  <div>
+                    <h3
+                      className="text-xl font-bold mb-2 flex items-center gap-2"
+                      style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}
+                    >
+                      Current: Season {currentSeasonNumber}
+                      <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse ml-2 shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
+                    </h3>
+                    <p className="text-sm font-medium" style={{ color: "hsl(var(--brown-light))" }}>
+                      End the current season to archive it and begin Season {currentSeasonNumber + 1}.
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setShowEndSeasonModal(true)}
+                    disabled={saving}
+                    className="px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-transform hover:scale-105 active:scale-95 shrink-0"
+                    style={{
+                      background: "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-light)))",
+                      color: "hsl(var(--brown-deep))",
+                      boxShadow: "0 4px 15px hsla(var(--gold) / 0.4)",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    <PlayCircle size={18} /> End Season & Start New
+                  </button>
+                </div>
+              </div>
+
+              {/* Past seasons list */}
+              {pastSeasons.length > 0 && (
                 <div>
                   <h3
-                    className="text-xl font-bold mb-2 flex items-center gap-2"
+                    className="text-xl font-bold mb-6"
                     style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}
                   >
-                    Current: Season {currentSeasonNumber}
-                    <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse ml-2 shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
+                    Previous Seasons
                   </h3>
-                  <p className="text-sm font-medium" style={{ color: "hsl(var(--brown-light))" }}>
-                    End the current season to archive it and begin Season {currentSeasonNumber + 1}.
-                  </p>
-                </div>
-                <button
-                  onClick={() => setShowEndSeasonModal(true)}
-                  disabled={saving}
-                  className="px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-transform hover:scale-105 active:scale-95 shrink-0"
-                  style={{
-                    background: "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-light)))",
-                    color: "hsl(var(--brown-deep))",
-                    boxShadow: "0 4px 15px hsla(var(--gold) / 0.4)",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  <PlayCircle size={18} /> End Season & Start New
-                </button>
-              </div>
-            </div>
+                  <div className="space-y-4">
+                    {pastSeasons.map((seasonNum) => {
+                      const seasonObj = seasons.find((s) => s.number === seasonNum);
+                      const createdAt = seasonObj?.created_at ? new Date(seasonObj.created_at) : null;
+                      const endedAt = seasonObj?.ended_at ? new Date(seasonObj.ended_at) : null;
 
-            {/* Past seasons timeline */}
-            {pastSeasons.length > 0 && (
-              <div>
-                <h3
-                  className="text-xl font-bold mb-6"
-                  style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}
-                >
-                  Previous Seasons
-                </h3>
-                <div className="space-y-4">
-                  {[...pastSeasons].reverse().map((seasonNum) => {
-                    const seasonObj = seasons.find((s) => s.number === seasonNum);
-                    const createdAt = seasonObj?.created_at ? new Date(seasonObj.created_at) : null;
-                    const endedAt = seasonObj?.ended_at ? new Date(seasonObj.ended_at) : null;
-
-                    return (
-                      <div
-                        key={seasonNum}
-                        className="rounded-2xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-4"
-                        style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}
-                      >
-                        <div className="flex items-center gap-4">
-                          <div
-                            className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-                            style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))" }}
-                          >
-                            <Calendar size={16} style={{ color: "hsl(var(--brown))" }} />
-                          </div>
-                          <div>
-                            <p className="font-bold text-base" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}>
-                              {seasonObj?.name || `Season ${seasonNum}`}
-                            </p>
-                            <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1">
-                              {createdAt && (
-                                <span className="text-xs" style={{ color: "hsl(var(--brown-light))" }}>
-                                  Started: {createdAt.toLocaleDateString()} {createdAt.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                      return (
+                        <div
+                          key={seasonNum}
+                          className="rounded-2xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-4"
+                          style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}
+                        >
+                          <div className="flex items-center gap-4">
+                            <div
+                              className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                              style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))" }}
+                            >
+                              <Calendar size={16} style={{ color: "hsl(var(--brown))" }} />
+                            </div>
+                            <div>
+                              <p className="font-bold text-base" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}>
+                                {seasonObj?.name || `Season ${seasonNum}`}
+                              </p>
+                              <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1">
+                                {createdAt && (
+                                  <span className="text-xs" style={{ color: "hsl(var(--brown-light))" }}>
+                                    Started: {createdAt.toLocaleDateString()} {createdAt.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                                  </span>
+                                )}
+                                {endedAt && (
+                                  <span className="text-xs" style={{ color: "hsl(var(--brown-light))" }}>
+                                    Ended: {endedAt.toLocaleDateString()} {endedAt.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                                  </span>
+                                )}
+                                <span className="text-xs font-medium" style={{ color: "hsl(var(--brown))" }}>
+                                  {entries.filter((e) => e.season === seasonNum).length} rankings · {games.filter((g) => g.season === seasonNum).length} games
                                 </span>
-                              )}
-                              {endedAt && (
-                                <span className="text-xs" style={{ color: "hsl(var(--brown-light))" }}>
-                                  Ended: {endedAt.toLocaleDateString()} {endedAt.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                                </span>
-                              )}
-                              <span className="text-xs font-medium" style={{ color: "hsl(var(--brown))" }}>
-                                {entries.filter((e) => e.season === seasonNum).length} rankings · {games.filter((g) => g.season === seasonNum).length} games
-                              </span>
+                              </div>
                             </div>
                           </div>
-                        </div>
 
-                        <div className="flex items-center gap-2 shrink-0">
                           <button
                             onClick={() => setEditingSeason(seasonNum)}
-                            className="px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 transition-colors hover:bg-amber-50"
+                            className="px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors hover:bg-amber-50 shrink-0"
                             style={{ background: "hsl(var(--input))", color: "hsl(var(--brown))", border: "1px solid hsl(var(--cream-dark))" }}
                           >
-                            <Pencil size={13} /> Edit
-                          </button>
-                          <button
-                            onClick={() => {
-                              if (seasonObj) setShowDeleteSeasonModal({ id: seasonObj.id, name: seasonObj.name });
-                            }}
-                            disabled={saving}
-                            className="px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 transition-colors hover:bg-red-100"
-                            style={{ background: "hsl(0 80% 96%)", color: "hsl(var(--destructive))" }}
-                          >
-                            <AlertTriangle size={13} /> Delete
+                            <Pencil size={14} /> Edit
                           </button>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-        )}
+              )}
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
 
       {/* End Season Modal */}
@@ -534,30 +481,14 @@ export default function AdminHallOfFame() {
         </div>
       )}
 
-      {/* Delete Season Modal */}
-      {showDeleteSeasonModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "hsla(var(--brown-deep) / 0.5)", backdropFilter: "blur(8px)" }}>
-          <div className="rounded-2xl p-8 max-w-sm w-full text-center" style={{ background: "hsl(var(--card))" }}>
-            <AlertTriangle size={32} className="mx-auto mb-4" style={{ color: "hsl(var(--destructive))" }} />
-            <h3 className="font-bold text-lg mb-2" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}>Delete Season?</h3>
-            <p className="text-sm mb-6" style={{ color: "hsl(var(--brown-light))" }}>
-              CRITICAL WARNING: This will permanently delete <strong>{showDeleteSeasonModal.name}</strong>. This cannot be undone.
-            </p>
-            <div className="flex gap-3">
-              <button onClick={() => setShowDeleteSeasonModal(null)} className="flex-1 py-2.5 rounded-xl text-sm" style={{ background: "hsl(var(--input))", color: "hsl(var(--brown))", border: "1px solid hsl(var(--cream-dark))" }}>Cancel</button>
-              <button onClick={() => deleteSeason(showDeleteSeasonModal.id, showDeleteSeasonModal.name)} className="flex-1 py-2.5 rounded-xl text-sm font-semibold" style={{ background: "hsl(var(--destructive))", color: "white" }}>Delete</button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Edit Season Modal */}
+      {/* Edit Season Modal (with tabs inside) */}
       {editingSeason !== null && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "hsla(var(--brown-deep) / 0.55)", backdropFilter: "blur(10px)" }}>
           <div
             className="w-full max-w-3xl rounded-2xl overflow-hidden flex flex-col"
             style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))", maxHeight: "90dvh" }}
           >
+            {/* Modal header */}
             <div className="flex items-center justify-between px-6 py-4 border-b shrink-0" style={{ borderColor: "hsl(var(--cream-dark))" }}>
               <h2 className="text-lg font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}>
                 Edit Season {editingSeason}
@@ -567,20 +498,39 @@ export default function AdminHallOfFame() {
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto no-scrollbar p-6 space-y-8">
-              {/* Player Rankings */}
-              <div>
-                <h3 className="text-base font-bold mb-4" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}>Player Rankings</h3>
-                {renderRankingsForSeason(editingSeason)}
-              </div>
+            {/* Tabs inside modal */}
+            <div className="flex-1 overflow-y-auto no-scrollbar">
+              <Tabs defaultValue="edit-rankings" className="w-full">
+                <div className="px-6 pt-4">
+                  <TabsList className="bg-transparent gap-2">
+                    <TabsTrigger
+                      value="edit-rankings"
+                      className="data-[state=active]:bg-[hsl(var(--gold))] data-[state=active]:text-[hsl(var(--brown-deep))] data-[state=active]:shadow-sm px-4 py-1.5 rounded-full text-sm font-bold"
+                      style={{ fontFamily: "Electrolize, sans-serif" }}
+                    >
+                      Player Rankings
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="edit-games"
+                      className="data-[state=active]:bg-[hsl(var(--gold))] data-[state=active]:text-[hsl(var(--brown-deep))] data-[state=active]:shadow-sm px-4 py-1.5 rounded-full text-sm font-bold"
+                      style={{ fontFamily: "Electrolize, sans-serif" }}
+                    >
+                      Season Games
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
 
-              {/* Season Games */}
-              <div>
-                <h3 className="text-base font-bold mb-4" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}>Season Games</h3>
-                {renderGamesForSeason(editingSeason)}
-              </div>
+                <TabsContent value="edit-rankings" className="px-6 pb-6">
+                  {renderRankingsForSeason(editingSeason)}
+                </TabsContent>
+
+                <TabsContent value="edit-games" className="px-6 pb-6">
+                  {renderGamesForSeason(editingSeason)}
+                </TabsContent>
+              </Tabs>
             </div>
 
+            {/* Footer */}
             <div className="px-6 py-4 border-t shrink-0 flex justify-end" style={{ borderColor: "hsl(var(--cream-dark))" }}>
               <button
                 onClick={() => setEditingSeason(null)}
