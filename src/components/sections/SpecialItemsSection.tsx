@@ -53,8 +53,6 @@ export default function SpecialItemsSection() {
         <div className="relative mt-10 max-w-6xl mx-auto px-2 md:px-6">
           <FeatureGrid
             features={ITEMS}
-            sectionTitle="Special Items"
-            sectionSubtitle="Use these powers to shift momentum, lock ranks, and change the outcome of the marathon."
             className="py-0 bg-transparent"
           />
         </div>
