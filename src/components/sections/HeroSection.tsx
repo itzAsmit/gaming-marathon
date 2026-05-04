@@ -77,7 +77,7 @@ export default function HeroSection() {
             >
               REGISTER
             </button>
-            <Link to="/admin/login" className="uppercase text-black hover:opacity-70 transition-opacity">
+            <Link to="/admin/login" className="uppercase bg-black text-white px-5 py-2.5 rounded-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300">
               ADMIN
             </Link>
           </div>
