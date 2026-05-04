@@ -13,7 +13,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        jura: ["Jura", "sans-serif"],
+        jura: ["Electrolize", "sans-serif"],
         bebas: ["Bebas Neue", "sans-serif"],
         inter: ["Inter", "sans-serif"],
       },

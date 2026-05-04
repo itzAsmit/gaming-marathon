@@ -625,10 +625,10 @@ export default function AdminGames() {
         <div className="md:sticky md:top-0 z-20 mb-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h1 className="text-2xl font-jura font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Jura, sans-serif" }}>Games</h1>
+              <h1 className="text-2xl font-jura font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}>Games</h1>
               <p className="text-sm mt-1" style={{ color: "hsl(var(--brown-light))" }}>{games.length} configured</p>
             </div>
-            <button onClick={openCreate} className="flex items-center gap-2 px-3 md:px-4 py-2.5 rounded-xl font-jura text-xs md:text-sm tracking-wider" style={{ background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))", color: "hsl(var(--cream))", fontFamily: "Jura, sans-serif" }}>
+            <button onClick={openCreate} className="flex items-center gap-2 px-3 md:px-4 py-2.5 rounded-xl font-jura text-xs md:text-sm tracking-wider" style={{ background: "linear-gradient(135deg, hsl(var(--brown)), hsl(var(--brown-light)))", color: "hsl(var(--cream))", fontFamily: "Electrolize, sans-serif" }}>
               <Plus size={16} /> ADD GAME
             </button>
           </div>
@@ -680,7 +680,7 @@ export default function AdminGames() {
           <div className="w-full max-w-2xl rounded-2xl overflow-hidden" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--cream-dark))" }}>
             <div className="max-h-[90dvh] overflow-y-auto overflow-x-hidden animated-scroll-area no-scrollbar">
               <div className="sticky top-0 z-20 flex items-center justify-between p-6 border-b" style={{ background: "hsl(var(--card))", borderColor: "hsl(var(--cream-dark))" }}>
-                <h2 className="text-lg font-jura font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Jura, sans-serif" }}>
+                <h2 className="text-lg font-jura font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}>
                   {editing ? "Edit Game" : "Create Game"}
                 </h2>
                 <button onClick={() => setShowForm(false)} style={{ color: "hsl(var(--brown-light))" }}><X size={20} /></button>
@@ -688,18 +688,18 @@ export default function AdminGames() {
               <div className="p-6 space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-jura tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Jura, sans-serif" }}>GAME ID</label>
+                  <label className="block text-xs font-jura tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Electrolize, sans-serif" }}>GAME ID</label>
                   <input value={form.game_id} readOnly className="w-full px-4 py-2.5 rounded-xl text-sm outline-none opacity-60" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} />
                 </div>
                 <div>
-                  <label className="block text-xs font-jura tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Jura, sans-serif" }}>NAME *</label>
+                  <label className="block text-xs font-jura tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Electrolize, sans-serif" }}>NAME *</label>
                   <input value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value.toUpperCase() }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none uppercase" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} placeholder="Game name" />
                 </div>
               </div>
 
               <div>
                 <div>
-                  <label className="block text-xs font-jura tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Jura, sans-serif" }}>DATE & TIME</label>
+                  <label className="block text-xs font-jura tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Electrolize, sans-serif" }}>DATE & TIME</label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <button
@@ -764,12 +764,12 @@ export default function AdminGames() {
               </div>
 
               <div>
-                <label className="block text-xs font-jura tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Jura, sans-serif" }}>BIO</label>
+                <label className="block text-xs font-jura tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Electrolize, sans-serif" }}>BIO</label>
                 <textarea ref={bioRef} rows={2} value={form.bio ?? ""} onChange={(e) => setForm((f) => ({ ...f, bio: e.target.value }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none resize-none overflow-hidden" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} />
               </div>
 
               <div>
-                <label className="block text-xs font-jura tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Jura, sans-serif" }}>RULES</label>
+                <label className="block text-xs font-jura tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Electrolize, sans-serif" }}>RULES</label>
                 <textarea rows={3} value={form.rules ?? ""} onChange={(e) => setForm((f) => ({ ...f, rules: e.target.value }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none resize-none" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} />
               </div>
 
