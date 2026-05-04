@@ -150,7 +150,6 @@ export default function LeaderboardSection() {
                     gridTemplateColumns: "repeat(auto-fit, minmax(0, 1fr))",
                     minWidth: "min-content",
                   }}
-                  whileHover={{ backgroundColor: "hsla(var(--gold) / 0.1)" }}
                 >
                   <div className=" font-bold whitespace-nowrap" style={{ fontFamily: "Electrolize, sans-serif", color: i < 3 ? "hsl(var(--gold))" : "hsl(var(--cream-dark))" }}>
                     {i < 3 ? CROWN[i] : `#${i + 1}`}

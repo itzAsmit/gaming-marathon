@@ -68,8 +68,8 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
             >
               {/* Avatar (Now ABOVE Name Card) */}
               <div
-                className="w-24 h-24 rounded-2xl overflow-hidden mb-4 transition-transform duration-300 group-hover:scale-105"
-                style={{ border: `3px solid ${cfg.color}`, boxShadow: `0 0 15px ${cfg.color}40` }}
+                className="w-24 h-24 rounded-t-2xl overflow-hidden transition-transform duration-300 group-hover:scale-105 z-10"
+                style={{ border: `3px solid ${cfg.color}`, borderBottom: "none", boxShadow: `0 -5px 15px ${cfg.color}40` }}
               >
                 {toMediaSrc(topPlayer.player.portrait_url) ? (
                   <SmartImage
@@ -94,8 +94,8 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
 
               {/* Info card (Now BELOW Avatar) */}
               <div
-                className="glass-card rounded-lg px-2 py-2 text-center w-32 transition-all duration-300 group-hover:-translate-y-1"
-                style={{ border: `1px solid ${cfg.color}40` }}
+                className="glass-card rounded-b-lg px-2 py-2 text-center w-32 transition-all duration-300 z-20"
+                style={{ border: `1px solid ${cfg.color}40`, borderTop: `3px solid ${cfg.color}`, background: "hsl(var(--card))" }}
               >
                 <p
                   className="text-xs font-bold mb-1"
@@ -131,8 +131,8 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
             >
               {/* Avatar */}
               <div
-                className="w-28 h-28 rounded-full overflow-hidden mb-5 transition-transform duration-300 group-hover:scale-105"
-                style={{ border: `4px solid ${cfg.color}`, boxShadow: `0 0 25px ${cfg.color}60` }}
+                className="w-28 h-28 rounded-t-2xl overflow-hidden transition-transform duration-300 group-hover:scale-105 z-10"
+                style={{ border: `4px solid ${cfg.color}`, borderBottom: "none", boxShadow: `0 -5px 25px ${cfg.color}60` }}
               >
                 {toMediaSrc(topPlayer.player.portrait_url) ? (
                   <SmartImage
@@ -157,8 +157,8 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
 
               {/* Info card */}
               <div
-                className="glass-card rounded-xl px-4 py-3 text-center w-40 transition-all duration-300 group-hover:-translate-y-1"
-                style={{ border: `2px solid ${cfg.color}50` }}
+                className="glass-card rounded-b-xl px-4 py-3 text-center w-40 transition-all duration-300 z-20"
+                style={{ border: `2px solid ${cfg.color}50`, borderTop: `4px solid ${cfg.color}`, background: "hsl(var(--card))" }}
               >
                 <p
                   className="text-sm font-bold mb-1.5"
@@ -194,8 +194,8 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
             >
               {/* Avatar */}
               <div
-                className="w-24 h-24 rounded-2xl overflow-hidden mb-4 transition-transform duration-300 group-hover:scale-105"
-                style={{ border: `3px solid ${cfg.color}`, boxShadow: `0 0 15px ${cfg.color}40` }}
+                className="w-24 h-24 rounded-t-2xl overflow-hidden transition-transform duration-300 group-hover:scale-105 z-10"
+                style={{ border: `3px solid ${cfg.color}`, borderBottom: "none", boxShadow: `0 -5px 15px ${cfg.color}40` }}
               >
                 {toMediaSrc(topPlayer.player.portrait_url) ? (
                   <SmartImage
@@ -220,8 +220,8 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
 
               {/* Info card */}
               <div
-                className="glass-card rounded-lg px-2 py-2 text-center w-32 transition-all duration-300 group-hover:-translate-y-1"
-                style={{ border: `1px solid ${cfg.color}40` }}
+                className="glass-card rounded-b-lg px-2 py-2 text-center w-32 transition-all duration-300 z-20"
+                style={{ border: `1px solid ${cfg.color}40`, borderTop: `3px solid ${cfg.color}`, background: "hsl(var(--card))" }}
               >
                 <p
                   className="text-xs font-bold mb-1"
@@ -262,12 +262,12 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
           >
             LEADERBOARD
           </h3>
-          <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+          <div className="space-y-3 pr-2">
             {stats.allPlayers.length > 0 ? (
               stats.allPlayers.map((player, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center justify-between p-3.5 rounded-xl transition-all duration-300 hover:scale-[1.02]"
+                  className="flex items-center justify-between p-3.5 rounded-xl transition-all duration-300"
                   style={{
                     background: "white",
                     border: "1px solid hsl(var(--cream-dark))",
@@ -276,10 +276,11 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
                 >
                   <div className="flex items-center gap-4">
                     <div 
-                      className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm"
+                      className="w-10 h-8 rounded-full flex items-center justify-center font-bold text-sm"
                       style={{ background: "hsla(var(--brown-light)/0.1)", color: "hsl(var(--brown-deep))" }}
                     >
                       {player.rank}
+                      {["st", "nd", "rd"][((player.rank + 90) % 100 - 10) % 10 - 1] || "th"}
                     </div>
                     <p
                       className="text-sm font-bold"
@@ -316,12 +317,12 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
           >
             SEASON GAMES
           </h3>
-          <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+          <div className="space-y-3 pr-2">
             {stats.games.length > 0 ? (
               stats.games.map((game, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center justify-between p-3.5 rounded-xl transition-all duration-300 hover:scale-[1.02]"
+                  className="flex items-center justify-between p-3.5 rounded-xl transition-all duration-300"
                   style={{
                     background: "white",
                     border: "1px solid hsl(var(--cream-dark))",
