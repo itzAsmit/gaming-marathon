@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { withTimeout } from "@/lib/withTimeout";
@@ -15,7 +15,22 @@ export default function AdminLogin() {
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [sliderResetSignal, setSliderResetSignal] = useState(0);
+
+  useEffect(() => {
+    const savedData = localStorage.getItem("admin_login_remember");
+    if (savedData) {
+      try {
+        const { savedEmail, savedPassword } = JSON.parse(savedData);
+        if (savedEmail) setEmail(savedEmail);
+        if (savedPassword) setPassword(savedPassword);
+        setRememberMe(true);
+      } catch (e) {
+        // ignore
+      }
+    }
+  }, []);
 
   const resetSlider = () => {
     setSliderResetSignal((value) => value + 1);
@@ -45,6 +60,14 @@ export default function AdminLogin() {
     const normalizedPassword = password;
     const constrained = isConstrainedNetwork();
     console.log('[AdminLogin] Network constrained:', constrained);
+
+    const handleSuccess = () => {
+      if (rememberMe) {
+        localStorage.setItem("admin_login_remember", JSON.stringify({ savedEmail: normalizedEmail, savedPassword: normalizedPassword }));
+      } else {
+        localStorage.removeItem("admin_login_remember");
+      }
+    };
 
     const tryProxyLogin = async (): Promise<{ usedManualStorage: boolean }> => {
       let lastError: Error | null = null;
@@ -153,6 +176,8 @@ export default function AdminLogin() {
       const proxyResult = await tryProxyLogin();
       console.log('[AdminLogin] Login successful via proxy');
 
+      handleSuccess();
+
       if (proxyResult.usedManualStorage) {
         // Force a full reload so Supabase rehydrates session from localStorage.
         window.location.assign("/admin/dashboard");
@@ -185,6 +210,7 @@ export default function AdminLogin() {
         console.log('[AdminLogin] Attempting direct fallback');
         await tryDirectLogin();
         console.log('[AdminLogin] Direct fallback succeeded');
+        handleSuccess();
         navigate("/admin/dashboard");
       } catch (directErr) {
         console.log('[AdminLogin] Direct fallback failed:', directErr);
@@ -305,6 +331,20 @@ export default function AdminLogin() {
                   {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
+            </div>
+
+            {/* Remember Me */}
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="rememberMe"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                className="w-4 h-4 rounded border-gray-300 accent-black cursor-pointer"
+              />
+              <label htmlFor="rememberMe" className="text-xs text-black/70 font-jura tracking-wider cursor-pointer select-none">
+                REMEMBER ME
+              </label>
             </div>
 
             {/* Error */}
