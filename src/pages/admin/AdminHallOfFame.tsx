@@ -86,12 +86,6 @@ export default function AdminHallOfFame() {
   const updatePlayerRank = async (playerId: string, season: number, rankStr: string) => {
     setSaving(true);
     const newRank = rankStr === "unranked" ? null : parseInt(rankStr);
-    
-    if (newRank !== null && isRankTaken(newRank, season, playerId)) {
-      toast.error(`Rank ${newRank} is already assigned to another player!`);
-      setSaving(false);
-      return;
-    }
 
     try {
       const existingEntry = entries.find(e => e.player_id === playerId && e.season === season);
@@ -253,18 +247,13 @@ export default function AdminHallOfFame() {
 
   return (
     <AdminLayout>
-      <div className="max-w-4xl mx-auto space-y-8">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <h1 
-              className="text-3xl md:text-4xl font-bold" 
-              style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}
-            >
-              Hall of Fame & Seasons
-            </h1>
-            <p className="text-sm font-medium mt-1" style={{ color: "hsl(var(--brown))" }}>
-              Manage player rankings and season lifecycles
-            </p>
+      <div className="p-4 md:p-8 space-y-8">
+        <div className="md:sticky md:top-0 z-20 mb-6">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h1 className="text-2xl font-jura font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}>Hall of Fame & Seasons</h1>
+              <p className="text-sm mt-1" style={{ color: "hsl(var(--brown-light))" }}>Manage player rankings and season lifecycles</p>
+            </div>
           </div>
         </div>
 
@@ -376,9 +365,14 @@ export default function AdminHallOfFame() {
                           }}
                         >
                           <option value="unranked">Unranked</option>
-                          {players.map((_, i) => (
-                            <option key={i} value={i + 1}>Rank {i + 1}</option>
-                          ))}
+                          {players.map((_, i) => {
+                            const rankVal = i + 1;
+                            const taken = isRankTaken(rankVal, selectedSeasonForScores, player.id);
+                            if (taken) return null; // hide if taken
+                            return (
+                              <option key={rankVal} value={rankVal}>Rank {rankVal}</option>
+                            );
+                          })}
                         </select>
                       </div>
                     </div>
