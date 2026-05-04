@@ -339,7 +339,7 @@ export default function AdminHallOfFame() {
               <div className="space-y-3">
                 {players.map((player) => {
                   const playerScoresMap = getSeasonScores();
-                  const currentScore = playerScoresMap.get(player.id) || 0;
+                  const currentScore = playerScoresMap.get(player.player_id) || 0;
                   const key = `${player.id}-score`;
 
                   return (
@@ -374,7 +374,7 @@ export default function AdminHallOfFame() {
                         <button
                           onClick={() => {
                             const newScore = editingScores[key] !== undefined ? editingScores[key] : currentScore;
-                            updatePlayerScore(player.id, newScore);
+                            updatePlayerScore(player.player_id, newScore);
                           }}
                           disabled={saving}
                           className="px-3 py-1.5 rounded-lg text-xs font-semibold"
