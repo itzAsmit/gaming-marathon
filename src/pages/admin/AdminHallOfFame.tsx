@@ -130,18 +130,38 @@ export default function AdminHallOfFame() {
     setShowEndSeasonModal(false);
     setSaving(true);
     try {
+      const now = new Date().toISOString();
+
       // Mark current season as ended
       const currentSeason = seasons.find((s) => s.number === currentSeasonNumber);
       if (currentSeason) {
-        await adminMutation.update("seasons", { ended_at: new Date().toISOString() }, { id: currentSeason.id });
+        await adminMutation.update("seasons", { ended_at: now }, { id: currentSeason.id });
       }
 
       const nextNumber = currentSeasonNumber + 1;
       const newSeasonName = `Season ${nextNumber.toString().padStart(2, "0")}`;
       await adminMutation.insert("seasons", { number: nextNumber, name: newSeasonName });
       await adminMutation.insert("activity_logs", { action: "CREATE_SEASON", target: newSeasonName });
+
+      // Optimistically update local state so tabs refresh immediately
+      setSeasons((prev) => {
+        const updated = prev.map((s) =>
+          s.number === currentSeasonNumber ? { ...s, ended_at: now } : s
+        );
+        updated.push({
+          id: crypto.randomUUID(),
+          number: nextNumber,
+          name: newSeasonName,
+          created_at: now,
+          ended_at: null,
+        });
+        return updated;
+      });
+
       toast.success(`${newSeasonName} has begun!`);
-      await fetchData();
+
+      // Background re-fetch to sync with DB (non-blocking)
+      fetchData();
     } catch (e) {
       console.error("Error creating season:", e);
       toast.error("Failed to start new season");
