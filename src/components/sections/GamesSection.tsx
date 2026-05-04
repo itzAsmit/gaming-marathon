@@ -162,19 +162,19 @@ export default function GamesSection() {
         </ScrollReveal>
 
         {loading ? (
-          <p className="text-center mt-10 text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark) / 0.7)", fontFamily: "Jura, sans-serif" }}>
+          <p className="text-center mt-10 text-sm tracking-widest" style={{ color: "hsl(var(--cream-dark) / 0.7)", fontFamily: "Electrolize, sans-serif" }}>
             LOADING GAMES...
           </p>
         ) : error ? (
           <div className="text-center mt-10" style={{ color: "hsl(var(--cream-dark) / 0.85)" }}>
-            <p className="text-sm mb-4 tracking-widest" style={{ fontFamily: "Jura, sans-serif" }}>{error}</p>
+            <p className="text-sm mb-4 tracking-widest" style={{ fontFamily: "Electrolize, sans-serif" }}>{error}</p>
             <button
-              className="px-4 py-2 rounded-full text-xs font-jura tracking-widest"
+              className="px-4 py-2 rounded-full text-xs  tracking-widest"
               style={{
                 color: "hsl(var(--gold))",
                 border: "1px solid hsla(var(--gold) / 0.45)",
                 background: "hsla(var(--gold) / 0.12)",
-                fontFamily: "Jura, sans-serif",
+                fontFamily: "Electrolize, sans-serif",
               }}
               onClick={() => {
                 setLoading(true);
@@ -224,7 +224,7 @@ export default function GamesSection() {
                           </div>
                         )}
                         <div className="absolute inset-x-0 bottom-0 p-3" style={{ background: "linear-gradient(to top, rgba(10, 8, 20, 0.85), rgba(10, 8, 20, 0))" }}>
-                          <p className="text-xs tracking-widest mb-1" style={{ color: "#d8dce8", fontFamily: "Jura, sans-serif" }}>
+                          <p className="text-xs tracking-widest mb-1" style={{ color: "#d8dce8", fontFamily: "Electrolize, sans-serif" }}>
                             {game.game_id}
                           </p>
                           <p
@@ -242,12 +242,12 @@ export default function GamesSection() {
                         </div>
                         <div className="absolute top-2 right-2">
                           <span
-                            className="px-2 py-0.5 rounded-full text-xs font-jura tracking-wider flex items-center gap-1"
+                            className="px-2 py-0.5 rounded-full text-xs  tracking-wider flex items-center gap-1"
                             style={{
                               background: game.status === "completed" ? "hsla(120 60% 35% / 0.8)" : "hsla(var(--gold) / 0.2)",
                               color: game.status === "completed" ? "hsl(120 80% 75%)" : "hsl(var(--gold))",
                               border: `1px solid ${game.status === "completed" ? "hsla(120 60% 50% / 0.5)" : "hsla(var(--gold) / 0.4)"}`,
-                              fontFamily: "Jura, sans-serif",
+                              fontFamily: "Electrolize, sans-serif",
                               fontSize: "0.6rem",
                             }}
                           >
@@ -351,10 +351,10 @@ export default function GamesSection() {
                 <div className="absolute inset-0" style={{ background: "linear-gradient(to top, hsla(var(--brown-deep) / 0.95), hsla(var(--brown-deep) / 0.25))" }} />
                 <div className="absolute bottom-4 left-6">
                   <p
-                    className="text-xs font-jura tracking-widest"
+                    className="text-xs  tracking-widest"
                     style={{
                       color: "#d4dae8",
-                      fontFamily: "Jura, sans-serif",
+                      fontFamily: "Electrolize, sans-serif",
                       textShadow: "0 0 10px rgba(236,241,255,0.45)",
                     }}
                   >
@@ -384,15 +384,15 @@ export default function GamesSection() {
                 <div className="grid md:grid-cols-2 gap-6 items-start">
                   <div className="space-y-5">
                     <div>
-                      <p className="text-xs font-jura tracking-widest mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Jura, sans-serif" }}>STATS</p>
+                      <p className="text-xs  tracking-widest mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Electrolize, sans-serif" }}>STATS</p>
                       <div className="flex items-center gap-3 flex-wrap">
                         <span
-                          className="px-3 py-1 rounded-full text-xs font-jura tracking-widest"
+                          className="px-3 py-1 rounded-full text-xs  tracking-widest"
                           style={{
                             background: selected.status === "completed" ? "hsla(120 60% 35% / 0.3)" : "hsla(var(--gold) / 0.15)",
                             color: selected.status === "completed" ? "hsl(120 80% 70%)" : "hsl(var(--gold))",
                             border: `1px solid ${selected.status === "completed" ? "hsla(120 60% 50% / 0.4)" : "hsla(var(--gold) / 0.3)"}`,
-                            fontFamily: "Jura, sans-serif",
+                            fontFamily: "Electrolize, sans-serif",
                           }}
                         >
                           {selected.status.toUpperCase()}
@@ -417,18 +417,18 @@ export default function GamesSection() {
 
                     {selected.bio && (
                       <div>
-                        <p className="text-xs font-jura tracking-widest mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Jura, sans-serif" }}>ABOUT</p>
+                        <p className="text-xs  tracking-widest mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Electrolize, sans-serif" }}>ABOUT</p>
                         <p className="text-sm leading-relaxed" style={{ color: "hsl(var(--cream-dark))" }}>{selected.bio}</p>
                       </div>
                     )}
 
                     {selected.status === "completed" && rankings.length > 0 && (
                       <div>
-                        <p className="text-xs font-jura tracking-widest mb-3" style={{ color: "hsl(var(--gold))", fontFamily: "Jura, sans-serif" }}>RANKINGS</p>
+                        <p className="text-xs  tracking-widest mb-3" style={{ color: "hsl(var(--gold))", fontFamily: "Electrolize, sans-serif" }}>RANKINGS</p>
                         <div className="space-y-2">
                           {rankings.map((r) => (
                             <div key={`${r.rank}-${r.players?.player_id ?? "na"}`} className="flex items-center gap-3 px-4 py-2 rounded-xl" style={{ background: "hsla(var(--gold) / 0.05)", border: "1px solid hsla(var(--gold) / 0.15)" }}>
-                              <span className="text-xs px-2.5 py-1 rounded-full font-jura tracking-wide" style={{ color: "hsl(var(--gold))", border: "1px solid hsla(var(--gold) / 0.35)", background: "hsla(var(--gold) / 0.08)", fontFamily: "Jura, sans-serif" }}>
+                              <span className="text-xs px-2.5 py-1 rounded-full  tracking-wide" style={{ color: "hsl(var(--gold))", border: "1px solid hsla(var(--gold) / 0.35)", background: "hsla(var(--gold) / 0.08)", fontFamily: "Electrolize, sans-serif" }}>
                                 {getRankBadge(r.rank)}
                               </span>
                               <span className="text-sm" style={{ color: "hsl(var(--cream))", fontFamily: "'ROWAN', serif" }}>{r.players?.name ?? "-"}</span>
@@ -445,7 +445,7 @@ export default function GamesSection() {
                   <div className="md:pt-0">
                     {selected.rules && (
                       <div>
-                        <p className="text-xs font-jura tracking-widest mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Jura, sans-serif" }}>RULES</p>
+                        <p className="text-xs  tracking-widest mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Electrolize, sans-serif" }}>RULES</p>
                         <p className="text-sm leading-relaxed whitespace-pre-line" style={{ color: "hsl(var(--cream-dark))" }}>{selected.rules}</p>
                       </div>
                     )}

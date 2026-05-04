@@ -14,12 +14,12 @@ export default function SectionHeader({ title, subtitle, accent, titleClassName 
       {accent && (
         <p
           className="text-[0.62rem] sm:text-xs tracking-[0.5em] mb-4 uppercase"
-          style={{ color: "hsl(var(--brown-light))", fontFamily: "Orbitron, sans-serif" }}
+          style={{ color: "hsl(var(--brown-light))", fontFamily: "Electrolize, sans-serif" }}
         >
           {accent}
         </p>
       )}
-      <h2 className={baseClass} style={{ color: "hsl(var(--brown-deep))", fontFamily: "Orbitron, sans-serif" }}>
+      <h2 className={baseClass} style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}>
         {title}
       </h2>
       <div className="flex items-center justify-center gap-3 mb-5">

@@ -256,7 +256,7 @@ export default function AdminLogin() {
       <button
         onClick={() => (window.history.length > 1 ? navigate(-1) : navigate("/"))}
         className="absolute top-6 left-6 z-20 inline-flex items-center gap-2 px-3 py-2 rounded-xl text-xs tracking-widest transition-all hover:scale-105"
-        style={{ background: "hsla(0, 0%, 100%, 0.85)", color: "#000", border: "1px solid rgba(0,0,0,0.12)", fontFamily: "Jura, sans-serif" }}
+        style={{ background: "hsla(0, 0%, 100%, 0.85)", color: "#000", border: "1px solid rgba(0,0,0,0.12)", fontFamily: "Electrolize, sans-serif" }}
       >
         <ArrowLeft size={14} />
         GO BACK
@@ -268,7 +268,7 @@ export default function AdminLogin() {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4" style={{ background: "linear-gradient(135deg, #000, #333)" }}>
             <Gamepad2 size={28} style={{ color: "#fff" }} />
           </div>
-          <h1 className="text-3xl font-bold uppercase tracking-[0.2em]" style={{ color: "#000", fontFamily: "Orbitron, sans-serif" }}>
+          <h1 className="text-3xl font-bold uppercase tracking-[0.2em]" style={{ color: "#000", fontFamily: "Electrolize, sans-serif" }}>
             ADMIN ACCESS
           </h1>
           <p className="text-sm mt-1" style={{ color: "rgba(0,0,0,0.6)" }}>Gaming Marathon Control Panel</p>
@@ -279,7 +279,7 @@ export default function AdminLogin() {
           <form ref={formRef} onSubmit={handleLogin} className="space-y-5">
             {/* Email */}
             <div>
-              <label className="block text-xs tracking-widest mb-2" style={{ color: "rgba(0,0,0,0.75)", fontFamily: "Jura, sans-serif" }}>
+              <label className="block text-xs tracking-widest mb-2" style={{ color: "rgba(0,0,0,0.75)", fontFamily: "Electrolize, sans-serif" }}>
                 EMAIL
               </label>
               <input
@@ -302,7 +302,7 @@ export default function AdminLogin() {
 
             {/* Password */}
             <div>
-              <label className="block text-xs tracking-widest mb-2" style={{ color: "rgba(0,0,0,0.75)", fontFamily: "Jura, sans-serif" }}>
+              <label className="block text-xs tracking-widest mb-2" style={{ color: "rgba(0,0,0,0.75)", fontFamily: "Electrolize, sans-serif" }}>
                 PASSWORD
               </label>
               <div className="relative">
@@ -342,7 +342,7 @@ export default function AdminLogin() {
                 onChange={(e) => setRememberMe(e.target.checked)}
                 className="w-4 h-4 rounded border-gray-300 accent-black cursor-pointer"
               />
-              <label htmlFor="rememberMe" className="text-xs text-black/70 font-jura tracking-wider cursor-pointer select-none">
+              <label htmlFor="rememberMe" className="text-xs text-black/70  tracking-wider cursor-pointer select-none">
                 REMEMBER ME
               </label>
             </div>

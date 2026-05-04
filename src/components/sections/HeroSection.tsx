@@ -164,7 +164,7 @@ export default function HeroSection() {
               The
             </p>
 
-            <h1 className="mt-1 text-5xl sm:text-7xl md:text-[112px] font-black leading-[0.86] tracking-[-0.03em] text-black uppercase" style={{ fontFamily: "Orbitron, sans-serif" }}>
+            <h1 className="mt-1 text-5xl sm:text-7xl md:text-[112px] font-black leading-[0.86] tracking-[-0.03em] text-black uppercase" style={{ fontFamily: "Electrolize, sans-serif" }}>
               Gaming
               <br />
               Marathon

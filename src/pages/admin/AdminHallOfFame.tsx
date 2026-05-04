@@ -251,7 +251,7 @@ export default function AdminHallOfFame() {
         <div className="md:sticky md:top-0 z-20 mb-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h1 className="text-2xl font-jura font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}>Hall of Fame & Seasons</h1>
+              <h1 className="text-2xl  font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}>Hall of Fame & Seasons</h1>
               <p className="text-sm mt-1" style={{ color: "hsl(var(--brown-light))" }}>Manage player rankings and season lifecycles</p>
             </div>
           </div>
