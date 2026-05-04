@@ -5,12 +5,13 @@ import { createClient } from "@supabase/supabase-js";
  * Used on cellular networks where direct Supabase connections are blocked.
  */
 
-type AllowedTable = "players" | "games" | "items" | "hall_of_fame" | "leaderboard" | "player_proficiencies" | "player_items" | "player_game_stats" | "activity_logs";
+type AllowedTable = "players" | "games" | "items" | "hall_of_fame" | "leaderboard" | "player_proficiencies" | "player_items" | "player_game_stats" | "activity_logs" | "seasons" | "season_player_scores";
 type Operation = "insert" | "update" | "delete" | "upsert";
 
 const ALLOWED_TABLES: AllowedTable[] = [
   "players", "games", "items", "hall_of_fame", "leaderboard",
-  "player_proficiencies", "player_items", "player_game_stats", "activity_logs"
+  "player_proficiencies", "player_items", "player_game_stats", "activity_logs",
+  "seasons", "season_player_scores"
 ];
 
 const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;

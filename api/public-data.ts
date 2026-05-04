@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
-type Resource = "leaderboard" | "players" | "games" | "hall_of_fame" | "rankings" | "admin_players" | "admin_games" | "admin_items" | "admin_hall_of_fame" | "admin_activity_logs" | "admin_players_with_items";
+type Resource = "leaderboard" | "players" | "games" | "hall_of_fame" | "rankings" | "admin_players" | "admin_games" | "admin_items" | "admin_hall_of_fame" | "admin_activity_logs" | "admin_players_with_items" | "admin_seasons" | "admin_season_scores";
 
 const supabaseUrl =
   process.env.SUPABASE_URL ||
@@ -11,7 +11,7 @@ const supabaseAnonKey =
   process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
 const isAllowedResource = (value: string): value is Resource => {
-  return ["leaderboard", "players", "games", "hall_of_fame", "rankings", "admin_players", "admin_games", "admin_items", "admin_hall_of_fame", "admin_activity_logs", "admin_players_with_items"].includes(value);
+  return ["leaderboard", "players", "games", "hall_of_fame", "rankings", "admin_players", "admin_games", "admin_items", "admin_hall_of_fame", "admin_activity_logs", "admin_players_with_items", "admin_seasons", "admin_season_scores"].includes(value);
 };
 
 export default async function handler(req: any, res: any) {
@@ -82,7 +82,7 @@ export default async function handler(req: any, res: any) {
     }
 
     if (resourceRaw === "admin_hall_of_fame") {
-      const { data, error } = await supabase.from("hall_of_fame").select("*").order("created_at", { ascending: false });
+      const { data, error } = await supabase.from("hall_of_fame").select("*").order("season", { ascending: false }).order("rank", { ascending: true });
       if (error) return res.status(500).json({ error: error.message });
       return res.status(200).json({ data });
     }
@@ -99,6 +99,18 @@ export default async function handler(req: any, res: any) {
         .select("id, name, player_id, is_active, player_items(id, item_id, items(id, name))")
         .eq("is_active", true)
         .order("player_id");
+      if (error) return res.status(500).json({ error: error.message });
+      return res.status(200).json({ data });
+    }
+
+    if (resourceRaw === "admin_seasons") {
+      const { data, error } = await supabase.from("seasons").select("*").order("number");
+      if (error) return res.status(500).json({ error: error.message });
+      return res.status(200).json({ data });
+    }
+
+    if (resourceRaw === "admin_season_scores") {
+      const { data, error } = await supabase.from("season_player_scores").select("*");
       if (error) return res.status(500).json({ error: error.message });
       return res.status(200).json({ data });
     }
