@@ -1,9 +1,10 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import MonolithThreeCanvas from "@/components/MonolithThreeCanvas";
 import MagicRings from "@/components/MagicRings";
+import { fetchPublicData } from "@/lib/fetchPublicData";
 
 const navItems = [
   { id: "leaderboard", label: "LEADERBOARD" },
@@ -18,12 +19,30 @@ export default function HeroSection() {
   const [hoverApply, setHoverApply] = useState(false);
   const [hoverDiscord, setHoverDiscord] = useState(false);
   const [hoverWhatsapp, setHoverWhatsapp] = useState(false);
+  const [hoverAdmin, setHoverAdmin] = useState(false);
+  const [playerCount, setPlayerCount] = useState<number>(0);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"],
   });
 
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "16%"]);
+
+  // Fetch player count on mount
+  useEffect(() => {
+    const fetchPlayerCount = async () => {
+      try {
+        const playersData = await fetchPublicData("players");
+        if (Array.isArray(playersData)) {
+          setPlayerCount(playersData.length);
+        }
+      } catch (error) {
+        console.error("Failed to fetch player count:", error);
+        setPlayerCount(0);
+      }
+    };
+    fetchPlayerCount();
+  }, []);
 
   return (
     <section ref={containerRef} className="relative min-h-[100svh] md:min-h-screen overflow-hidden" aria-label="Hero">
@@ -62,7 +81,12 @@ export default function HeroSection() {
             {navItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth" })}
+                onClick={() => {
+                  const element = document.getElementById(item.id);
+                  if (element) {
+                    element.scrollIntoView({ behavior: "smooth", block: "start" });
+                  }
+                }}
                 className="uppercase hover:text-black transition-colors"
               >
                 {item.label}
@@ -72,14 +96,59 @@ export default function HeroSection() {
 
           <div className="flex items-center gap-4 sm:gap-6 text-[0.62rem] tracking-[0.16em] font-bold">
             <button
-              onClick={() => document.getElementById("players")?.scrollIntoView({ behavior: "smooth" })}
+              onClick={() => {
+                const element = document.getElementById("players");
+                if (element) {
+                  element.scrollIntoView({ behavior: "smooth", block: "start" });
+                }
+              }}
               className="hidden sm:inline uppercase text-black hover:opacity-70 transition-opacity"
             >
               REGISTER
             </button>
-            <Link to="/admin/login" className="uppercase bg-black text-white px-5 py-2.5 rounded-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300">
-              ADMIN
-            </Link>
+            <div
+              className="relative group"
+              onMouseEnter={() => setHoverAdmin(true)}
+              onMouseLeave={() => setHoverAdmin(false)}
+            >
+              {hoverAdmin && (
+                <div className="absolute inset-0 -m-2 pointer-events-none rounded-lg overflow-hidden">
+                  <MagicRings
+                    color="#000000"
+                    colorTwo="#333333"
+                    ringCount={3}
+                    speed={1}
+                    attenuation={8}
+                    lineThickness={1.5}
+                    baseRadius={0.35}
+                    radiusStep={0.1}
+                    scaleRate={0.1}
+                    opacity={0.3}
+                    blur={0}
+                    noiseAmount={0.02}
+                    rotation={0}
+                    ringGap={1.5}
+                    fadeIn={0.7}
+                    fadeOut={0.5}
+                    followMouse={false}
+                    mouseInfluence={0.2}
+                    hoverScale={1.2}
+                    parallax={0.05}
+                    clickBurst={false}
+                  />
+                </div>
+              )}
+              <Link
+                to="/admin/login"
+                className="relative uppercase bg-black text-white px-5 py-2.5 rounded-lg shadow-lg transition-all duration-300 ease-out inline-block"
+                style={{
+                  transform: hoverAdmin ? "scale(1.05)" : "scale(1)",
+                  filter: hoverAdmin ? "drop-shadow(0 20px 25px rgba(0,0,0,0.3))" : "drop-shadow(0 4px 6px rgba(0,0,0,0.1))",
+                }}
+              >
+                ADMIN
+              </Link>
+            </div>
           </div>
         </nav>
 
@@ -191,7 +260,7 @@ export default function HeroSection() {
                   }}
                   onClick={() => window.open("https://discord.gg/VwW8ktwzyb", "_blank")}
                 >
-                  JOIN_DISCORD
+                  JOIN DISCORD
                 </button>
               </div>
 
@@ -235,7 +304,7 @@ export default function HeroSection() {
                   }}
                   onClick={() => window.open("https://wa.me/1234567890", "_blank")}
                 >
-                  JOIN_WHATSAPP
+                  JOIN WHATSAPP
                 </button>
               </div>
             </div>
@@ -247,14 +316,14 @@ export default function HeroSection() {
             <div className="text-[10px] tracking-[0.3em] font-black text-black/35 uppercase">Registration Status</div>
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-              <span className="text-black font-bold tracking-tight uppercase text-sm">Phase 01 Active</span>
+              <span className="text-black font-bold tracking-tight uppercase text-sm">Season 04 Active</span>
             </div>
           </div>
 
           <div className="flex gap-8 sm:gap-12 text-left md:text-right">
             <div>
               <div className="text-[10px] tracking-[0.3em] font-black text-black/35 uppercase">Competitors</div>
-              <div className="text-xl sm:text-2xl font-black tracking-tight text-black/85">12,480</div>
+              <div className="text-xl sm:text-2xl font-black tracking-tight text-black/85">{playerCount.toLocaleString()}</div>
             </div>
           </div>
         </div>
