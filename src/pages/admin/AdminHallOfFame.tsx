@@ -132,10 +132,17 @@ export default function AdminHallOfFame() {
     try {
       const now = new Date().toISOString();
 
-      // Mark current season as ended
-      const currentSeason = seasons.find((s) => s.number === currentSeasonNumber);
+      // Mark current season as ended — create the row first if it doesn't exist
+      let currentSeason = seasons.find((s) => s.number === currentSeasonNumber);
       if (currentSeason) {
         await adminMutation.update("seasons", { ended_at: now }, { id: currentSeason.id });
+      } else {
+        // Season row was never created (e.g. the very first season) — insert it as ended
+        await adminMutation.insert("seasons", {
+          number: currentSeasonNumber,
+          name: `Season ${currentSeasonNumber.toString().padStart(2, "0")}`,
+          ended_at: now,
+        });
       }
 
       const nextNumber = currentSeasonNumber + 1;
@@ -145,9 +152,20 @@ export default function AdminHallOfFame() {
 
       // Optimistically update local state so tabs refresh immediately
       setSeasons((prev) => {
-        const updated = prev.map((s) =>
+        let updated = prev.map((s) =>
           s.number === currentSeasonNumber ? { ...s, ended_at: now } : s
         );
+        // If the current season didn't have a row, add it as ended
+        if (!prev.find((s) => s.number === currentSeasonNumber)) {
+          updated.push({
+            id: crypto.randomUUID(),
+            number: currentSeasonNumber,
+            name: `Season ${currentSeasonNumber.toString().padStart(2, "0")}`,
+            created_at: now,
+            ended_at: now,
+          });
+        }
+        // Add the new season
         updated.push({
           id: crypto.randomUUID(),
           number: nextNumber,
