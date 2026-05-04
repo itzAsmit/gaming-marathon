@@ -265,9 +265,7 @@ export default function AdminHallOfFame() {
           >
             <option value="" disabled>Add a game to this season…</option>
             {games.filter((g) => g.season !== seasonNum).map((g) => (
-              <option key={g.id} value={g.id}>
-                {g.name} {g.season ? `(Currently S${g.season})` : ""}
-              </option>
+              <option key={g.id} value={g.id}>{g.name}</option>
             ))}
           </select>
           <button
