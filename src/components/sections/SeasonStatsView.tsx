@@ -59,9 +59,11 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
 
   return (
     <div className="space-y-12">
-      {/* Top 3 Podium */}
-      <div className="flex items-end justify-center gap-4 md:gap-8">
-        {[2, 1, 3].map((rank) => {
+      {/* Top 3 Podium - Redesigned Layout */}
+      <div className="flex items-end justify-center gap-2 md:gap-6 relative h-80">
+        {/* 2nd Place (Left) */}
+        {(() => {
+          const rank = 2;
           const topPlayer = stats.topPlayers.find((p) => p.rank === rank);
           if (!topPlayer) return null;
 
@@ -70,13 +72,13 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
             <motion.div
               key={rank}
               className={`flex flex-col items-center ${cfg.zIndex} relative`}
-              animate={{ y: [0, rank === 1 ? -10 : -6, 0] }}
-              transition={{ duration: 3.5, repeat: Infinity, delay: rank * 0.5 }}
+              animate={{ y: [0, -4, 0] }}
+              transition={{ duration: 3.5, repeat: Infinity, delay: 1 }}
             >
               {/* Avatar */}
               <div
-                className={`${cfg.size} rounded-full overflow-hidden mb-3`}
-                style={{ border: `2px solid ${cfg.color}` }}
+                className="w-24 h-24 rounded-2xl overflow-hidden mb-2"
+                style={{ border: `3px solid ${cfg.color}` }}
               >
                 {toMediaSrc(topPlayer.player.portrait_url) ? (
                   <SmartImage
@@ -94,15 +96,77 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
                         "linear-gradient(135deg, hsl(var(--brown-deep)), hsl(var(--brown)))",
                     }}
                   >
-                    <span className="text-xl">{cfg.emoji}</span>
+                    <span className="text-3xl">{cfg.emoji}</span>
                   </div>
                 )}
               </div>
 
               {/* Info card */}
               <div
-                className="glass-card rounded-xl px-3 py-2 text-center min-w-[90px]"
-                style={{ border: `1px solid ${cfg.color}30` }}
+                className="glass-card rounded-lg px-2 py-1 text-center w-28"
+                style={{ border: `1px solid ${cfg.color}40` }}
+              >
+                <p
+                  className="text-xs font-bold"
+                  style={{ color: cfg.color, fontFamily: "Electrolize, sans-serif" }}
+                >
+                  {cfg.emoji} {cfg.label}
+                </p>
+                <p
+                  className="text-xs font-semibold truncate"
+                  style={{ color: "hsl(var(--cream))", fontFamily: "Electrolize, sans-serif" }}
+                >
+                  {topPlayer.player.name}
+                </p>
+              </div>
+            </motion.div>
+          );
+        })()}
+
+        {/* 1st Place (Center) - LARGER */}
+        {(() => {
+          const rank = 1;
+          const topPlayer = stats.topPlayers.find((p) => p.rank === rank);
+          if (!topPlayer) return null;
+
+          const cfg = RANK_CONFIG[rank as 1 | 2 | 3];
+          return (
+            <motion.div
+              key={rank}
+              className={`flex flex-col items-center ${cfg.zIndex} relative scale-125`}
+              animate={{ y: [0, -12, 0] }}
+              transition={{ duration: 3.5, repeat: Infinity, delay: 0.5 }}
+            >
+              {/* Avatar */}
+              <div
+                className="w-28 h-28 rounded-full overflow-hidden mb-3"
+                style={{ border: `4px solid ${cfg.color}` }}
+              >
+                {toMediaSrc(topPlayer.player.portrait_url) ? (
+                  <SmartImage
+                    url={topPlayer.player.portrait_url}
+                    alt={topPlayer.player.name}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div
+                    className="w-full h-full flex items-center justify-center"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, hsl(var(--brown-deep)), hsl(var(--brown)))",
+                    }}
+                  >
+                    <span className="text-5xl">{cfg.emoji}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Info card */}
+              <div
+                className="glass-card rounded-xl px-4 py-2.5 text-center w-36"
+                style={{ border: `2px solid ${cfg.color}50` }}
               >
                 <p
                   className="text-sm font-bold mb-0.5"
@@ -111,33 +175,83 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
                   {cfg.emoji} {cfg.label}
                 </p>
                 <p
-                  className="text-xs font-semibold"
+                  className="text-sm font-semibold"
                   style={{ color: "hsl(var(--cream))", fontFamily: "Electrolize, sans-serif" }}
                 >
                   {topPlayer.player.name}
                 </p>
                 <p
-                  className="text-xs mt-0.5"
-                  style={{ color: cfg.color, opacity: 0.7 }}
+                  className="text-xs mt-1"
+                  style={{ color: cfg.color, opacity: 0.8 }}
                 >
                   {topPlayer.points} pts
                 </p>
               </div>
-
-              {/* Podium base */}
-              <div
-                className="w-full mt-2 rounded-t-xl flex items-center justify-center py-1"
-                style={{
-                  background: `linear-gradient(135deg, ${cfg.color}20, ${cfg.color}10)`,
-                  border: `1px solid ${cfg.color}30`,
-                  borderBottom: "none",
-                  minWidth: 100,
-                  height: cfg.baseHeight,
-                }}
-              />
             </motion.div>
           );
-        })}
+        })()}
+
+        {/* 3rd Place (Right) */}
+        {(() => {
+          const rank = 3;
+          const topPlayer = stats.topPlayers.find((p) => p.rank === rank);
+          if (!topPlayer) return null;
+
+          const cfg = RANK_CONFIG[rank as 1 | 2 | 3];
+          return (
+            <motion.div
+              key={rank}
+              className={`flex flex-col items-center ${cfg.zIndex} relative`}
+              animate={{ y: [0, -4, 0] }}
+              transition={{ duration: 3.5, repeat: Infinity, delay: 1.5 }}
+            >
+              {/* Avatar */}
+              <div
+                className="w-24 h-24 rounded-2xl overflow-hidden mb-2"
+                style={{ border: `3px solid ${cfg.color}` }}
+              >
+                {toMediaSrc(topPlayer.player.portrait_url) ? (
+                  <SmartImage
+                    url={topPlayer.player.portrait_url}
+                    alt={topPlayer.player.name}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div
+                    className="w-full h-full flex items-center justify-center"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, hsl(var(--brown-deep)), hsl(var(--brown)))",
+                    }}
+                  >
+                    <span className="text-3xl">{cfg.emoji}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Info card */}
+              <div
+                className="glass-card rounded-lg px-2 py-1 text-center w-28"
+                style={{ border: `1px solid ${cfg.color}40` }}
+              >
+                <p
+                  className="text-xs font-bold"
+                  style={{ color: cfg.color, fontFamily: "Electrolize, sans-serif" }}
+                >
+                  {cfg.emoji} {cfg.label}
+                </p>
+                <p
+                  className="text-xs font-semibold truncate"
+                  style={{ color: "hsl(var(--cream))", fontFamily: "Electrolize, sans-serif" }}
+                >
+                  {topPlayer.player.name}
+                </p>
+              </div>
+            </motion.div>
+          );
+        })()}
       </div>
 
       {/* Players & Games Grid */}
