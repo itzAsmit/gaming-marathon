@@ -327,7 +327,7 @@ export default function AdminPlayers() {
   return (
     <AdminLayout>
       <div className="p-4 md:p-8">
-        <div className="md:sticky md:top-0 z-20 mb-6">
+        <div className="mb-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <h1 className="text-2xl  font-bold" style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}>Players</h1>
