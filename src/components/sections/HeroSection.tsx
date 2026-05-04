@@ -49,7 +49,7 @@ export default function HeroSection() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0)_30%,rgba(255,255,255,0.78)_100%)]" />
         </div>
 
-        <nav className="relative z-20 w-full px-5 sm:px-8 lg:px-12 py-6 md:py-8 flex items-center justify-between border-b border-transparent bg-transparent">
+        <nav className="relative z-20 w-full px-5 sm:px-8 lg:px-12 py-4 md:py-5 flex items-center justify-between border-b border-transparent bg-transparent">
           <Link to="/" className="flex items-center w-24 sm:w-28 lg:w-44" aria-label="Gaming Marathon home">
             <img
               src="/assets/logo.png"
@@ -83,7 +83,7 @@ export default function HeroSection() {
           </div>
         </nav>
 
-        <div className="relative z-10 min-h-[calc(100svh-88px)] md:min-h-[calc(100vh-110px)] flex items-center justify-center px-6 sm:px-10 lg:px-12 pt-10 pb-32 md:pb-36">
+        <div className="relative z-10 min-h-[calc(100svh-80px)] md:min-h-[calc(100vh-96px)] flex items-center justify-center px-6 sm:px-10 lg:px-12 pt-6 md:pt-4 pb-28 md:pb-32">
           <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center">
             <div className="w-[88vw] max-w-[520px] h-[40vh] max-h-[320px] sm:w-[82vw] sm:max-w-[700px] sm:h-[48vh] sm:max-h-[420px] lg:w-[74vw] lg:max-w-[980px] lg:h-[60vh] lg:max-h-[600px] opacity-[0.18] md:opacity-[0.15] grayscale">
               <MonolithThreeCanvas />
@@ -101,12 +101,12 @@ export default function HeroSection() {
               Marathon
             </h1>
 
-            <p className="mt-8 max-w-2xl mx-auto text-[0.68rem] sm:text-xs md:text-sm tracking-[0.23em] uppercase font-bold text-black/65 leading-relaxed">
+            <p className="mt-6 max-w-2xl mx-auto text-[0.68rem] sm:text-xs md:text-sm tracking-[0.23em] uppercase font-bold text-black/65 leading-relaxed">
               Architecting the future of elite competitive performance.
               <span className="text-black"> Est. 2024</span>
             </p>
 
-            <div className="mt-10 grid grid-cols-2 gap-3 justify-center w-full max-w-md mx-auto">
+            <div className="mt-8 grid grid-cols-2 gap-3 justify-center w-full max-w-md mx-auto">
               <div
                 className="relative group col-span-2"
                 onMouseEnter={() => setHoverApply(true)}
