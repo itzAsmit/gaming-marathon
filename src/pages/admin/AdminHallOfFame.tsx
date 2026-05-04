@@ -271,24 +271,22 @@ export default function AdminHallOfFame() {
         <div className="flex gap-4 mb-8">
           <button
             onClick={() => setActiveTab("rankings")}
-            className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 ${activeTab !== "rankings" ? "hover:bg-black/5" : ""}`}
+            className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 ${activeTab === "rankings" ? "shadow-sm" : "hover:bg-black/5"}`}
             style={{
               background: activeTab === "rankings" ? "hsl(var(--gold))" : "transparent",
               color: activeTab === "rankings" ? "hsl(var(--brown-deep))" : "hsl(var(--brown))",
               border: activeTab === "rankings" ? "1px solid transparent" : "1px solid hsl(var(--brown-light))",
-              boxShadow: activeTab === "rankings" ? "0 4px 14px 0 rgba(212, 175, 55, 0.39)" : "none"
             }}
           >
             Player Rankings
           </button>
           <button
             onClick={() => setActiveTab("seasons")}
-            className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 ${activeTab !== "seasons" ? "hover:bg-black/5" : ""}`}
+            className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 ${activeTab === "seasons" ? "shadow-sm" : "hover:bg-black/5"}`}
             style={{
               background: activeTab === "seasons" ? "hsl(var(--gold))" : "transparent",
               color: activeTab === "seasons" ? "hsl(var(--brown-deep))" : "hsl(var(--brown))",
               border: activeTab === "seasons" ? "1px solid transparent" : "1px solid hsl(var(--brown-light))",
-              boxShadow: activeTab === "seasons" ? "0 4px 14px 0 rgba(212, 175, 55, 0.39)" : "none"
             }}
           >
             Manage Seasons
