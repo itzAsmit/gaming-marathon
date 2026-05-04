@@ -1,7 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { getAccessToken } from "@/lib/authToken";
 
-type AllowedTable = "players" | "games" | "items" | "hall_of_fame" | "leaderboard" | "player_proficiencies" | "player_items" | "player_game_stats" | "activity_logs";
+type AllowedTable = "players" | "games" | "items" | "hall_of_fame" | "leaderboard" | "player_proficiencies" | "player_items" | "player_game_stats" | "activity_logs" | "seasons" | "season_player_scores";
 type Operation = "insert" | "update" | "delete" | "upsert";
 
 /**
