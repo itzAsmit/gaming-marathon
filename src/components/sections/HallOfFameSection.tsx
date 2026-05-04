@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { raceDataFetch } from "@/lib/raceDataFetch";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import SeasonStatsView from "@/components/sections/SeasonStatsView";
+import { GooeyFilter } from "@/components/ui/gooey-filter";
+import { useScreenSize } from "@/hooks/use-screen-size";
 
 interface HofEntry {
   id: string;
@@ -20,6 +23,7 @@ export default function HallOfFameSection() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [seasonStats, setSeasonStats] = useState<any>(null);
+  const screenSize = useScreenSize();
 
   const fetchHallOfFame = async () => {
     try {
@@ -34,13 +38,13 @@ export default function HallOfFameSection() {
         () => supabase.from("seasons").select("*").order("number"),
         "admin_seasons",
       ).catch(() => []);
-      
+
       if (sData && sData.length > 0) {
         setSeasonsList(sData);
-        const latest = Math.max(...sData.map(s => s.number));
+        const latest = Math.max(...sData.map((s) => s.number));
         setActiveSeason(latest);
       } else {
-        setSeasonsList([{ id: 'default', number: 1, name: 'Season 1' }]);
+        setSeasonsList([{ id: "default", number: 1, name: "Season 01" }]);
         setActiveSeason(1);
       }
     } catch {
@@ -52,21 +56,16 @@ export default function HallOfFameSection() {
 
   const fetchSeasonStats = async (season: number) => {
     try {
-      // Fetch all hall_of_fame entries for this season
       const { data: hofData } = await supabase
         .from("hall_of_fame")
         .select("rank, players(name, player_id, portrait_url)")
         .eq("season", season)
         .order("rank");
 
-      // Fetch games for this season
-      // @ts-ignore - season column will be added via migration
-      const { data: gameData }: { data: Array<{ name: string; game_date: string | null }> | null } = await supabase
-        .from("games")
-        .select("name, game_date")
-        .eq("season", season);
+      // @ts-ignore
+      const { data: gameData }: { data: Array<{ name: string; game_date: string | null }> | null } =
+        await supabase.from("games").select("name, game_date").eq("season", season);
 
-      // Map Top 3
       const topPlayers = (hofData || [])
         .filter((entry: any) => entry.rank <= 3)
         .map((entry: any) => ({
@@ -75,10 +74,9 @@ export default function HallOfFameSection() {
             name: entry.players?.name || "—",
             player_id: entry.players?.player_id || "—",
             portrait_url: entry.players?.portrait_url,
-          }
+          },
         }));
 
-      // Map 4th to Nth
       const allPlayers = (hofData || [])
         .filter((entry: any) => entry.rank >= 4)
         .map((entry: any) => ({
@@ -106,67 +104,103 @@ export default function HallOfFameSection() {
     fetchSeasonStats(activeSeason);
   }, [activeSeason]);
 
+  // The index of the active season in the list (for the gooey tab)
+  const activeIndex = seasonsList.findIndex((s) => s.number === activeSeason);
+
   return (
     <section id="hall-of-fame" className="relative min-h-screen py-24 px-4">
       <div className="max-w-6xl mx-auto">
         <ScrollReveal>
-          <SectionHeader 
-            title="HALL OF FAME" 
-            accent="LEGACY" 
-            subtitle="The champions who stood atop the Gaming Marathon podium" 
+          <SectionHeader
+            title="HALL OF FAME"
+            accent="LEGACY"
+            subtitle="The champions who stood atop the Gaming Marathon podium"
           />
         </ScrollReveal>
 
-        {/* Season tabs with curved button style */}
-        <ScrollReveal delay={0.2}>
-          <div className="flex justify-center gap-4 mb-16 flex-wrap">
-            {seasonsList.map((s) => (
-              <button
-                key={s.id || s.number}
-                onClick={() => setActiveSeason(s.number)}
-                className="px-6 py-2.5 rounded-full text-sm font-semibold tracking-widest transition-all duration-300 uppercase hover:scale-105"
-                style={{
-                  fontFamily: "Electrolize, sans-serif",
-                  background: activeSeason === s.number 
-                    ? "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-light)))" 
-                    : "hsla(var(--brown-light) / 0.1)",
-                  color: activeSeason === s.number 
-                    ? "hsl(var(--brown-deep))" 
-                    : "hsl(var(--brown))",
-                  border: `2px solid ${
-                    activeSeason === s.number 
-                      ? "transparent" 
-                      : "hsla(var(--brown-light) / 0.3)"
-                  }`,
-                  boxShadow: activeSeason === s.number 
-                    ? "0 0 20px hsla(var(--gold) / 0.4)" 
-                    : "none",
-                }}
-              >
-                {s.name || `Season ${s.number}`}
-              </button>
-            ))}
-          </div>
-        </ScrollReveal>
+        {/* Gooey Season Switcher */}
+        {seasonsList.length > 0 && (
+          <ScrollReveal delay={0.2}>
+            <div className="flex justify-center mb-16">
+              <div className="relative">
+                {/* Hidden SVG gooey filter */}
+                <GooeyFilter
+                  id="hof-gooey"
+                  strength={screenSize.lessThan("md") ? 6 : 12}
+                />
 
+                {/* The gooey pill layer (behind) */}
+                <div
+                  className="absolute inset-0 rounded-full"
+                  style={{ filter: "url(#hof-gooey)" }}
+                  aria-hidden="true"
+                >
+                  <div className="flex h-full">
+                    {seasonsList.map((_, idx) => (
+                      <div key={idx} className="relative flex-1 h-full">
+                        {activeIndex === idx && (
+                          <motion.div
+                            layoutId="hof-active-pill"
+                            className="absolute inset-0 rounded-full"
+                            style={{
+                              background: "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-light)))",
+                            }}
+                            transition={{
+                              type: "spring",
+                              bounce: 0.18,
+                              duration: 0.45,
+                            }}
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Clickable text overlay (no filter) */}
+                <div
+                  className="relative flex rounded-full overflow-hidden"
+                  style={{
+                    border: "1.5px solid hsla(var(--brown-light) / 0.25)",
+                    background: "hsla(var(--brown-light) / 0.08)",
+                  }}
+                >
+                  {seasonsList.map((s, idx) => (
+                    <button
+                      key={s.id || s.number}
+                      onClick={() => setActiveSeason(s.number)}
+                      className="px-5 py-2.5 text-sm font-semibold tracking-widest uppercase transition-colors duration-200 whitespace-nowrap"
+                      style={{
+                        fontFamily: "Electrolize, sans-serif",
+                        color:
+                          activeSeason === s.number
+                            ? "hsl(var(--brown-deep))"
+                            : "hsl(var(--brown))",
+                        minWidth: "7rem",
+                      }}
+                    >
+                      {s.name || `Season ${String(s.number).padStart(2, "0")}`}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </ScrollReveal>
+        )}
+
+        {/* Season content panel */}
         <ScrollReveal delay={0.3}>
           {loading ? (
-            <div 
+            <div
               className="text-center py-20 text-sm tracking-widest"
-              style={{ 
-                color: "hsl(var(--brown-light))", 
-                fontFamily: "Electrolize, sans-serif" 
-              }}
+              style={{ color: "hsl(var(--brown-light))", fontFamily: "Electrolize, sans-serif" }}
             >
               LOADING HALL OF FAME...
             </div>
           ) : error ? (
-            <div 
+            <div
               className="text-center py-20"
-              style={{ 
-                color: "hsl(var(--brown-light))", 
-                fontFamily: "Electrolize, sans-serif" 
-              }}
+              style={{ color: "hsl(var(--brown-light))", fontFamily: "Electrolize, sans-serif" }}
             >
               <p className="mb-4 text-sm tracking-widest">{error}</p>
               <button
@@ -186,7 +220,17 @@ export default function HallOfFameSection() {
               </button>
             </div>
           ) : seasonStats ? (
-            <SeasonStatsView stats={seasonStats} />
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeSeason}
+                initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                exit={{ opacity: 0, y: -24, filter: "blur(8px)" }}
+                transition={{ duration: 0.28, ease: "easeOut" }}
+              >
+                <SeasonStatsView stats={seasonStats} />
+              </motion.div>
+            </AnimatePresence>
           ) : null}
         </ScrollReveal>
       </div>
