@@ -13,10 +13,9 @@ interface HofEntry {
   players: { name: string; player_id: string; portrait_url: string | null } | null;
 }
 
-const SEASON_LABELS = ["Season 1", "Season 2", "Season 3"];
-
 export default function HallOfFameSection() {
   const [entries, setEntries] = useState<HofEntry[]>([]);
+  const [seasonsList, setSeasonsList] = useState<any[]>([]);
   const [activeSeason, setActiveSeason] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -30,6 +29,20 @@ export default function HallOfFameSection() {
         "hall_of_fame",
       );
       setEntries(data);
+
+      const sData = await raceDataFetch<any[]>(
+        () => supabase.from("seasons").select("*").order("number"),
+        "admin_seasons",
+      ).catch(() => []);
+      
+      if (sData && sData.length > 0) {
+        setSeasonsList(sData);
+        const latest = Math.max(...sData.map(s => s.number));
+        setActiveSeason(latest);
+      } else {
+        setSeasonsList([{ id: 'default', number: 1, name: 'Season 1' }]);
+        setActiveSeason(1);
+      }
     } catch {
       setError("Connection issue. Please tap retry.");
     } finally {
@@ -132,30 +145,30 @@ export default function HallOfFameSection() {
         {/* Season tabs with curved button style */}
         <ScrollReveal delay={0.2}>
           <div className="flex justify-center gap-4 mb-16 flex-wrap">
-            {[1, 2, 3].map((s) => (
+            {seasonsList.map((s) => (
               <button
-                key={s}
-                onClick={() => setActiveSeason(s)}
+                key={s.id || s.number}
+                onClick={() => setActiveSeason(s.number)}
                 className="px-6 py-2.5 rounded-full text-sm font-semibold tracking-widest transition-all duration-300 uppercase"
                 style={{
                   fontFamily: "Electrolize, sans-serif",
-                  background: activeSeason === s 
+                  background: activeSeason === s.number 
                     ? "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-light)))" 
-                    : "hsla(var(--cream) / 0.1)",
-                  color: activeSeason === s 
+                    : "hsla(var(--brown-light) / 0.1)",
+                  color: activeSeason === s.number 
                     ? "hsl(var(--brown-deep))" 
-                    : "hsl(var(--cream))",
+                    : "hsl(var(--brown))",
                   border: `2px solid ${
-                    activeSeason === s 
+                    activeSeason === s.number 
                       ? "transparent" 
-                      : "hsla(var(--cream) / 0.3)"
+                      : "hsla(var(--brown-light) / 0.3)"
                   }`,
-                  boxShadow: activeSeason === s 
+                  boxShadow: activeSeason === s.number 
                     ? "0 0 20px hsla(var(--gold) / 0.4)" 
                     : "none",
                 }}
               >
-                {SEASON_LABELS[s - 1]}
+                {s.name || `Season ${s.number}`}
               </button>
             ))}
           </div>
@@ -166,7 +179,7 @@ export default function HallOfFameSection() {
             <div 
               className="text-center py-20 text-sm tracking-widest"
               style={{ 
-                color: "hsl(var(--cream-dark) / 0.5)", 
+                color: "hsl(var(--brown-light))", 
                 fontFamily: "Electrolize, sans-serif" 
               }}
             >
@@ -176,7 +189,7 @@ export default function HallOfFameSection() {
             <div 
               className="text-center py-20"
               style={{ 
-                color: "hsl(var(--cream-dark) / 0.85)", 
+                color: "hsl(var(--brown-light))", 
                 fontFamily: "Electrolize, sans-serif" 
               }}
             >
