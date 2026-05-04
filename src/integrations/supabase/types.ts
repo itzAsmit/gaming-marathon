@@ -50,6 +50,7 @@ export type Database = {
           image_url: string | null
           name: string
           rules: string | null
+          season: number | null
           status: string
           updated_at: string
           video_url: string | null
@@ -65,6 +66,7 @@ export type Database = {
           image_url?: string | null
           name: string
           rules?: string | null
+          season?: number | null
           status?: string
           updated_at?: string
           video_url?: string | null
@@ -80,6 +82,7 @@ export type Database = {
           image_url?: string | null
           name?: string
           rules?: string | null
+          season?: number | null
           status?: string
           updated_at?: string
           video_url?: string | null
@@ -300,6 +303,7 @@ export type Database = {
           id: string
           image_url: string | null
           instagram: string | null
+          is_active: boolean
           linkedin: string | null
           name: string
           player_id: string
@@ -313,6 +317,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           instagram?: string | null
+          is_active?: boolean
           linkedin?: string | null
           name: string
           player_id: string
@@ -326,11 +331,71 @@ export type Database = {
           id?: string
           image_url?: string | null
           instagram?: string | null
+          is_active?: boolean
           linkedin?: string | null
           name?: string
           player_id?: string
           portrait_url?: string | null
           twitter?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      season_player_scores: {
+        Row: {
+          created_at: string
+          id: string
+          player_id: string
+          points: number
+          season: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          player_id: string
+          points?: number
+          season: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          player_id?: string
+          points?: number
+          season?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "season_player_scores_player_id_fkey"
+            columns: ["player_id"]
+            isOneToOne: false
+            referencedRelation: "players"
+            referencedColumns: ["player_id"]
+          },
+        ]
+      }
+      seasons: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          number: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          number: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          number?: number
           updated_at?: string
         }
         Relationships: []
