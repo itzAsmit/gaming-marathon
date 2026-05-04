@@ -102,6 +102,17 @@ export default function HallOfFameSection() {
     fetchSeasonStats(activeSeason);
   }, [activeSeason]);
 
+  // Re-fetch when the browser tab regains focus so admin edits show immediately
+  useEffect(() => {
+    const onVisible = () => {
+      if (document.visibilityState === "visible") {
+        fetchSeasonStats(activeSeason);
+      }
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => document.removeEventListener("visibilitychange", onVisible);
+  }, [activeSeason]);
+
   // The index of the active season in the list (for the gooey tab)
   const activeIndex = seasonsList.findIndex((s) => s.number === activeSeason);
 

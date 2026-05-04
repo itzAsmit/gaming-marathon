@@ -26,8 +26,9 @@ export default async function handler(req: any, res: any) {
       return res.status(400).json({ error: "Invalid resource" });
     }
 
-    // Cache public responses for 30s on CDN. Do not cache admin responses.
-    if (!resourceRaw.startsWith("admin_")) {
+    // Cache public responses for 30s on CDN. Do not cache admin or mutable game/hof data.
+    const noCacheResources = ["hall_of_fame", "games"];
+    if (!resourceRaw.startsWith("admin_") && !noCacheResources.includes(resourceRaw)) {
       res.setHeader("Cache-Control", "public, s-maxage=30, stale-while-revalidate=60");
     } else {
       res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
