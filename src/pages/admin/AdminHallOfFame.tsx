@@ -418,19 +418,34 @@ export default function AdminHallOfFame() {
                     When you are ready, end the current season to archive its data and begin Season {currentSeasonNumber + 1}.
                   </p>
                 </div>
-                <button
-                  onClick={() => setShowEndSeasonModal(true)}
-                  disabled={saving}
-                  className="px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-transform hover:scale-105 active:scale-95"
-                  style={{
-                    background: "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-light)))",
-                    color: "hsl(var(--brown-deep))",
-                    boxShadow: "0 4px 15px hsla(var(--gold) / 0.4)",
-                    whiteSpace: "nowrap"
-                  }}
-                >
-                  <PlayCircle size={18} /> End Season & Start New
-                </button>
+                <div className="flex items-center gap-3 shrink-0">
+                  <button
+                    onClick={() => setEditingSeason(currentSeasonNumber)}
+                    disabled={saving}
+                    className="px-5 py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-transform hover:scale-105 active:scale-95"
+                    style={{
+                      background: "hsl(var(--input))",
+                      color: "hsl(var(--brown))",
+                      border: "1px solid hsl(var(--cream-dark))",
+                      whiteSpace: "nowrap"
+                    }}
+                  >
+                    <Pencil size={16} /> Edit Season
+                  </button>
+                  <button
+                    onClick={() => setShowEndSeasonModal(true)}
+                    disabled={saving}
+                    className="px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-transform hover:scale-105 active:scale-95"
+                    style={{
+                      background: "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-light)))",
+                      color: "hsl(var(--brown-deep))",
+                      boxShadow: "0 4px 15px hsla(var(--gold) / 0.4)",
+                      whiteSpace: "nowrap"
+                    }}
+                  >
+                    <PlayCircle size={18} /> End Season & Start New
+                  </button>
+                </div>
               </div>
             </div>
 
