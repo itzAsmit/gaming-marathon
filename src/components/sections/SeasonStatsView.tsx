@@ -75,9 +75,28 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
               animate={{ y: [0, -4, 0] }}
               transition={{ duration: 3.5, repeat: Infinity, delay: 1 }}
             >
+              {/* Info card */}
+              <div
+                className="glass-card rounded-lg px-2 py-1 text-center w-28 mb-2"
+                style={{ border: `1px solid ${cfg.color}40` }}
+              >
+                <p
+                  className="text-xs font-bold"
+                  style={{ color: cfg.color, fontFamily: "Electrolize, sans-serif" }}
+                >
+                  {cfg.emoji} {cfg.label}
+                </p>
+                <p
+                  className="text-xs font-semibold truncate"
+                  style={{ color: "hsl(var(--cream))", fontFamily: "Electrolize, sans-serif" }}
+                >
+                  {topPlayer.player.name}
+                </p>
+              </div>
+
               {/* Avatar */}
               <div
-                className="w-24 h-24 rounded-2xl overflow-hidden mb-2"
+                className="w-24 h-24 rounded-2xl overflow-hidden"
                 style={{ border: `3px solid ${cfg.color}` }}
               >
                 {toMediaSrc(topPlayer.player.portrait_url) ? (
@@ -100,25 +119,6 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
                   </div>
                 )}
               </div>
-
-              {/* Info card */}
-              <div
-                className="glass-card rounded-lg px-2 py-1 text-center w-28"
-                style={{ border: `1px solid ${cfg.color}40` }}
-              >
-                <p
-                  className="text-xs font-bold"
-                  style={{ color: cfg.color, fontFamily: "Electrolize, sans-serif" }}
-                >
-                  {cfg.emoji} {cfg.label}
-                </p>
-                <p
-                  className="text-xs font-semibold truncate"
-                  style={{ color: "hsl(var(--cream))", fontFamily: "Electrolize, sans-serif" }}
-                >
-                  {topPlayer.player.name}
-                </p>
-              </div>
             </motion.div>
           );
         })()}
@@ -137,9 +137,34 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
               animate={{ y: [0, -12, 0] }}
               transition={{ duration: 3.5, repeat: Infinity, delay: 0.5 }}
             >
+              {/* Info card */}
+              <div
+                className="glass-card rounded-xl px-4 py-2.5 text-center w-36 mb-3"
+                style={{ border: `2px solid ${cfg.color}50` }}
+              >
+                <p
+                  className="text-sm font-bold mb-0.5"
+                  style={{ color: cfg.color, fontFamily: "Electrolize, sans-serif" }}
+                >
+                  {cfg.emoji} {cfg.label}
+                </p>
+                <p
+                  className="text-sm font-semibold"
+                  style={{ color: "hsl(var(--cream))", fontFamily: "Electrolize, sans-serif" }}
+                >
+                  {topPlayer.player.name}
+                </p>
+                <p
+                  className="text-xs mt-1"
+                  style={{ color: cfg.color, opacity: 0.8 }}
+                >
+                  {topPlayer.points} pts
+                </p>
+              </div>
+
               {/* Avatar */}
               <div
-                className="w-28 h-28 rounded-full overflow-hidden mb-3"
+                className="w-28 h-28 rounded-full overflow-hidden"
                 style={{ border: `4px solid ${cfg.color}` }}
               >
                 {toMediaSrc(topPlayer.player.portrait_url) ? (
@@ -162,31 +187,6 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
                   </div>
                 )}
               </div>
-
-              {/* Info card */}
-              <div
-                className="glass-card rounded-xl px-4 py-2.5 text-center w-36"
-                style={{ border: `2px solid ${cfg.color}50` }}
-              >
-                <p
-                  className="text-sm font-bold mb-0.5"
-                  style={{ color: cfg.color, fontFamily: "Electrolize, sans-serif" }}
-                >
-                  {cfg.emoji} {cfg.label}
-                </p>
-                <p
-                  className="text-sm font-semibold"
-                  style={{ color: "hsl(var(--cream))", fontFamily: "Electrolize, sans-serif" }}
-                >
-                  {topPlayer.player.name}
-                </p>
-                <p
-                  className="text-xs mt-1"
-                  style={{ color: cfg.color, opacity: 0.8 }}
-                >
-                  {topPlayer.points} pts
-                </p>
-              </div>
             </motion.div>
           );
         })()}
@@ -205,9 +205,28 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
               animate={{ y: [0, -4, 0] }}
               transition={{ duration: 3.5, repeat: Infinity, delay: 1.5 }}
             >
+              {/* Info card */}
+              <div
+                className="glass-card rounded-lg px-2 py-1 text-center w-28 mb-2"
+                style={{ border: `1px solid ${cfg.color}40` }}
+              >
+                <p
+                  className="text-xs font-bold"
+                  style={{ color: cfg.color, fontFamily: "Electrolize, sans-serif" }}
+                >
+                  {cfg.emoji} {cfg.label}
+                </p>
+                <p
+                  className="text-xs font-semibold truncate"
+                  style={{ color: "hsl(var(--cream))", fontFamily: "Electrolize, sans-serif" }}
+                >
+                  {topPlayer.player.name}
+                </p>
+              </div>
+
               {/* Avatar */}
               <div
-                className="w-24 h-24 rounded-2xl overflow-hidden mb-2"
+                className="w-24 h-24 rounded-2xl overflow-hidden"
                 style={{ border: `3px solid ${cfg.color}` }}
               >
                 {toMediaSrc(topPlayer.player.portrait_url) ? (
@@ -229,25 +248,6 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
                     <span className="text-3xl">{cfg.emoji}</span>
                   </div>
                 )}
-              </div>
-
-              {/* Info card */}
-              <div
-                className="glass-card rounded-lg px-2 py-1 text-center w-28"
-                style={{ border: `1px solid ${cfg.color}40` }}
-              >
-                <p
-                  className="text-xs font-bold"
-                  style={{ color: cfg.color, fontFamily: "Electrolize, sans-serif" }}
-                >
-                  {cfg.emoji} {cfg.label}
-                </p>
-                <p
-                  className="text-xs font-semibold truncate"
-                  style={{ color: "hsl(var(--cream))", fontFamily: "Electrolize, sans-serif" }}
-                >
-                  {topPlayer.player.name}
-                </p>
               </div>
             </motion.div>
           );
