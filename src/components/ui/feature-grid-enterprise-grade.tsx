@@ -64,7 +64,7 @@ const FeatureGrid: React.FC<FeatureGridProps> = ({
                 <CardTitle
                   className="text-lg md:text-2xl font-bold uppercase tracking-[0.2em] text-primary"
                   style={{
-                    fontFamily: "Jura, sans-serif",
+                    fontFamily: "ROWAN, serif",
                     textShadow: "0 0 12px hsl(var(--primary) / 0.4)",
                   }}
                 >
