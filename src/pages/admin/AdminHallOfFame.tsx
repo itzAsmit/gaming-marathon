@@ -98,12 +98,16 @@ export default function AdminHallOfFame() {
 
   const updateGameSeason = async (gameId: string, season: number | null) => {
     setSaving(true);
+    // Optimistic UI update
+    setGames(prev => prev.map(g => g.id === gameId ? { ...g, season } : g));
+    
     try {
       await adminMutation.update("games", { season }, { id: gameId });
-      toast.success(`Game season updated to ${season || "None"}`);
+      toast.success(season ? `Game added to Season ${season}` : "Game removed from season");
       await fetchData();
     } catch {
       toast.error("Failed to update game season");
+      await fetchData(); // Revert on failure
     } finally {
       setSaving(false);
     }

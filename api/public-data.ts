@@ -20,13 +20,19 @@ export default async function handler(req: any, res: any) {
       return res.status(500).json({ error: "Supabase env vars missing on server" });
     }
 
-    // Cache responses for 30s on CDN, serve stale while revalidating
-    res.setHeader("Cache-Control", "public, s-maxage=30, stale-while-revalidate=60");
-
     const resourceRaw = String(req.query.resource ?? "").trim();
 
     if (!isAllowedResource(resourceRaw)) {
       return res.status(400).json({ error: "Invalid resource" });
+    }
+
+    // Cache public responses for 30s on CDN. Do not cache admin responses.
+    if (!resourceRaw.startsWith("admin_")) {
+      res.setHeader("Cache-Control", "public, s-maxage=30, stale-while-revalidate=60");
+    } else {
+      res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+      res.setHeader("Pragma", "no-cache");
+      res.setHeader("Expires", "0");
     }
 
     const supabase = createClient(supabaseUrl, supabaseAnonKey);
