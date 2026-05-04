@@ -105,7 +105,7 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
                 </p>
                 <p
                   className="text-xs font-semibold truncate px-1"
-                  style={{ color: "hsl(var(--cream))", fontFamily: "Electrolize, sans-serif" }}
+                  style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}
                   title={topPlayer.player.name}
                 >
                   {topPlayer.player.name}
@@ -168,7 +168,7 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
                 </p>
                 <p
                   className="text-sm font-semibold truncate"
-                  style={{ color: "hsl(var(--cream))", fontFamily: "Electrolize, sans-serif" }}
+                  style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}
                   title={topPlayer.player.name}
                 >
                   {topPlayer.player.name}
@@ -231,7 +231,7 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
                 </p>
                 <p
                   className="text-xs font-semibold truncate px-1"
-                  style={{ color: "hsl(var(--cream))", fontFamily: "Electrolize, sans-serif" }}
+                  style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}
                   title={topPlayer.player.name}
                 >
                   {topPlayer.player.name}

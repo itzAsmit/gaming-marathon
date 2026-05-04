@@ -92,8 +92,19 @@ export default function AdminHallOfFame() {
       
       if (newRank === null) {
         if (existingEntry) {
+          const removedRank = existingEntry.rank;
           await adminMutation.delete("hall_of_fame", { id: existingEntry.id });
-          toast.success("Player unranked");
+          
+          // Shift up remaining ranks
+          const toShift = entries
+            .filter(e => e.season === season && e.rank > removedRank)
+            .sort((a, b) => a.rank - b.rank); // Sort ascending to avoid unique constraint issues if any
+            
+          for (const entry of toShift) {
+            await adminMutation.update("hall_of_fame", { rank: entry.rank - 1 }, { id: entry.id });
+          }
+          
+          toast.success("Player unranked and ranks adjusted");
         }
       } else {
         if (existingEntry) {
