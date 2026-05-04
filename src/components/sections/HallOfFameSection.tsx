@@ -5,8 +5,7 @@ import { raceDataFetch } from "@/lib/raceDataFetch";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import SeasonStatsView from "@/components/sections/SeasonStatsView";
-import { GooeyFilter } from "@/components/ui/gooey-filter";
-import { useScreenSize } from "@/hooks/use-screen-size";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface HofEntry {
   id: string;
@@ -23,7 +22,6 @@ export default function HallOfFameSection() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [seasonStats, setSeasonStats] = useState<any>(null);
-  const screenSize = useScreenSize();
 
   const fetchHallOfFame = async () => {
     try {
@@ -118,121 +116,76 @@ export default function HallOfFameSection() {
           />
         </ScrollReveal>
 
-        {/* Gooey Season Switcher */}
         {seasonsList.length > 0 && (
           <ScrollReveal delay={0.2}>
-            <div className="flex justify-center mb-16">
-              <div className="relative">
-                {/* Hidden SVG gooey filter */}
-                <GooeyFilter
-                  id="hof-gooey"
-                  strength={screenSize.lessThan("md") ? 6 : 12}
-                />
-
-                {/* The gooey pill layer (behind) */}
-                <div
-                  className="absolute inset-0 rounded-full"
-                  style={{ filter: "url(#hof-gooey)" }}
-                  aria-hidden="true"
-                >
-                  <div className="flex h-full">
-                    {seasonsList.map((_, idx) => (
-                      <div key={idx} className="relative flex-1 h-full">
-                        {activeIndex === idx && (
-                          <motion.div
-                            layoutId="hof-active-pill"
-                            className="absolute inset-0 rounded-full"
-                            style={{
-                              background: "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-light)))",
-                            }}
-                            transition={{
-                              type: "spring",
-                              bounce: 0.18,
-                              duration: 0.45,
-                            }}
-                          />
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Clickable text overlay (no filter) */}
-                <div
-                  className="relative flex rounded-full overflow-hidden"
-                  style={{
-                    border: "1.5px solid hsla(var(--brown-light) / 0.25)",
-                    background: "hsla(var(--brown-light) / 0.08)",
-                  }}
-                >
-                  {seasonsList.map((s, idx) => (
-                    <button
-                      key={s.id || s.number}
-                      onClick={() => setActiveSeason(s.number)}
-                      className="px-5 py-2.5 text-sm font-semibold tracking-widest uppercase transition-colors duration-200 whitespace-nowrap"
-                      style={{
-                        fontFamily: "Electrolize, sans-serif",
-                        color:
-                          activeSeason === s.number
-                            ? "hsl(var(--brown-deep))"
-                            : "hsl(var(--brown))",
-                        minWidth: "7rem",
-                      }}
+            <Tabs 
+              value={`season-${activeSeason}`} 
+              onValueChange={(val) => setActiveSeason(Number(val.replace('season-', '')))}
+              className="w-full flex flex-col items-center"
+            >
+              <div className="flex justify-center mb-16 w-full">
+                <TabsList className="h-auto gap-2 rounded-none border-b border-border bg-transparent px-0 py-1 text-foreground overflow-x-auto max-w-full justify-start md:justify-center">
+                  {seasonsList.map((s) => (
+                    <TabsTrigger
+                      key={s.number}
+                      value={`season-${s.number}`}
+                      className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 flex-shrink-0 after:h-0.5 hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
                     >
                       {s.name || `Season ${String(s.number).padStart(2, "0")}`}
-                    </button>
+                    </TabsTrigger>
                   ))}
-                </div>
+                </TabsList>
               </div>
-            </div>
+
+              {seasonsList.map((s) => (
+                <TabsContent key={s.number} value={`season-${s.number}`} className="w-full">
+                  {loading ? (
+                    <div
+                      className="text-center py-20 text-sm tracking-widest"
+                      style={{ color: "hsl(var(--brown-light))", fontFamily: "Electrolize, sans-serif" }}
+                    >
+                      LOADING HALL OF FAME...
+                    </div>
+                  ) : error ? (
+                    <div
+                      className="text-center py-20"
+                      style={{ color: "hsl(var(--brown-light))", fontFamily: "Electrolize, sans-serif" }}
+                    >
+                      <p className="mb-4 text-sm tracking-widest">{error}</p>
+                      <button
+                        className="px-4 py-2 rounded-full text-xs tracking-widest transition-transform hover:scale-105"
+                        style={{
+                          color: "hsl(var(--gold))",
+                          border: "1px solid hsla(var(--gold) / 0.45)",
+                          background: "hsla(var(--gold) / 0.12)",
+                          fontFamily: "Electrolize, sans-serif",
+                        }}
+                        onClick={() => {
+                          setLoading(true);
+                          fetchHallOfFame();
+                        }}
+                      >
+                        RETRY
+                      </button>
+                    </div>
+                  ) : seasonStats && activeSeason === s.number ? (
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={activeSeason}
+                        initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
+                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                        exit={{ opacity: 0, y: -24, filter: "blur(8px)" }}
+                        transition={{ duration: 0.28, ease: "easeOut" }}
+                      >
+                        <SeasonStatsView stats={seasonStats} />
+                      </motion.div>
+                    </AnimatePresence>
+                  ) : null}
+                </TabsContent>
+              ))}
+            </Tabs>
           </ScrollReveal>
         )}
-
-        {/* Season content panel */}
-        <ScrollReveal delay={0.3}>
-          {loading ? (
-            <div
-              className="text-center py-20 text-sm tracking-widest"
-              style={{ color: "hsl(var(--brown-light))", fontFamily: "Electrolize, sans-serif" }}
-            >
-              LOADING HALL OF FAME...
-            </div>
-          ) : error ? (
-            <div
-              className="text-center py-20"
-              style={{ color: "hsl(var(--brown-light))", fontFamily: "Electrolize, sans-serif" }}
-            >
-              <p className="mb-4 text-sm tracking-widest">{error}</p>
-              <button
-                className="px-4 py-2 rounded-full text-xs tracking-widest transition-transform hover:scale-105"
-                style={{
-                  color: "hsl(var(--gold))",
-                  border: "1px solid hsla(var(--gold) / 0.45)",
-                  background: "hsla(var(--gold) / 0.12)",
-                  fontFamily: "Electrolize, sans-serif",
-                }}
-                onClick={() => {
-                  setLoading(true);
-                  fetchHallOfFame();
-                }}
-              >
-                RETRY
-              </button>
-            </div>
-          ) : seasonStats ? (
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeSeason}
-                initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                exit={{ opacity: 0, y: -24, filter: "blur(8px)" }}
-                transition={{ duration: 0.28, ease: "easeOut" }}
-              >
-                <SeasonStatsView stats={seasonStats} />
-              </motion.div>
-            </AnimatePresence>
-          ) : null}
-        </ScrollReveal>
       </div>
     </section>
   );
