@@ -9,6 +9,7 @@ import { lazy, Suspense } from "react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AnimatedCursor from "./components/AnimatedCursor";
+import ClickSpark from "./components/ClickSpark";
 
 // Lazy-load admin pages so they don't inflate the homepage bundle
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
@@ -54,9 +55,11 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <AppShell />
-      </BrowserRouter>
+      <ClickSpark sparkColor="#111111" sparkSize={12} sparkRadius={18} sparkCount={8} duration={450}>
+        <BrowserRouter>
+          <AppShell />
+        </BrowserRouter>
+      </ClickSpark>
       <Analytics />
       <SpeedInsights />
     </TooltipProvider>
