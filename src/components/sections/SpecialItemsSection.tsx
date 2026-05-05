@@ -50,7 +50,7 @@ export default function SpecialItemsSection() {
           <SectionHeader title="SPECIAL ITEMS" accent="POWER UPS" subtitle="Rare artifacts that can change the course of the game" />
         </ScrollReveal>
 
-        <div className="relative mt-10 max-w-6xl mx-auto px-2 md:px-6">
+        <div className="relative mt-6 max-w-6xl mx-auto px-2 md:px-6">
           <FeatureGrid
             features={ITEMS}
             className="py-0 bg-transparent"
