@@ -78,7 +78,7 @@ export default function HeroSection() {
             />
           </Link>
 
-          <div className="pointer-events-none absolute left-1/2 top-1/2 hidden lg:flex -translate-x-1/2 -translate-y-1/2 items-center gap-8 text-[0.62rem] tracking-[0.19em] font-bold text-black/70">
+          <div className="absolute left-1/2 top-1/2 hidden lg:flex -translate-x-1/2 -translate-y-1/2 items-center gap-8 text-[0.62rem] tracking-[0.19em] font-bold text-black/70">
             {navItems.map((item) => (
               <button
                 key={item.id}
