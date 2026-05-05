@@ -69,7 +69,7 @@ export default function HeroSection() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0)_30%,rgba(255,255,255,0.78)_100%)]" />
         </div>
 
-        <nav className="relative z-20 w-full px-5 sm:px-8 lg:px-12 py-4 md:py-5 grid grid-cols-[auto,1fr,auto] items-center border-b border-transparent bg-transparent">
+        <nav className="relative z-20 w-full px-5 sm:px-8 lg:px-12 py-4 md:py-5 flex items-center border-b border-transparent bg-transparent">
           <Link to="/" className="flex items-center w-24 sm:w-28 lg:w-44" aria-label="Gaming Marathon home">
             <img
               src="/assets/logo.png"
@@ -78,7 +78,7 @@ export default function HeroSection() {
             />
           </Link>
 
-          <div className="hidden lg:flex items-center justify-self-center gap-8 text-[0.62rem] tracking-[0.19em] font-bold text-black/70">
+          <div className="pointer-events-none absolute left-1/2 top-1/2 hidden lg:flex -translate-x-1/2 -translate-y-1/2 items-center gap-8 text-[0.62rem] tracking-[0.19em] font-bold text-black/70">
             {navItems.map((item) => (
               <button
                 key={item.id}
@@ -95,7 +95,7 @@ export default function HeroSection() {
             ))}
           </div>
 
-          <div className="justify-self-end flex items-center gap-4 sm:gap-6 text-[0.62rem] tracking-[0.16em] font-bold">
+          <div className="ml-auto flex items-center gap-4 sm:gap-6 text-[0.62rem] tracking-[0.16em] font-bold">
             <div
               className="relative group"
               onMouseEnter={() => setHoverAdmin(true)}
