@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import ReactPlayer from "react-player";
 import { SITE_MEDIA } from "@/lib/siteMedia";
@@ -76,28 +76,24 @@ export default function SiteAudioOverlay() {
 
       {hasTrack && (
         <div className="hidden">
-          <ReactPlayer
-            url={SITE_MEDIA.soundtrackUrl}
-            playing={enabled && hasInteracted}
-            loop={true}
-            volume={0.4}
-            width="0"
-            height="0"
-            playsinline={true}
-            onError={handlePlayerError}
-            config={{
+          {React.createElement(ReactPlayer as any, {
+            url: SITE_MEDIA.soundtrackUrl,
+            playing: enabled && hasInteracted,
+            loop: true,
+            volume: 0.4,
+            width: "0",
+            height: "0",
+            playsinline: true,
+            onError: handlePlayerError,
+            config: {
               youtube: {
-                playerVars: {
-                  autoplay: 1,
-                  controls: 0,
-                  disablekb: 1,
-                  fs: 0,
-                  modestbranding: 1,
-                  iv_load_policy: 3
-                }
+                disablekb: 1,
+                fs: 0,
+                iv_load_policy: 3,
+                cc_load_policy: 0
               }
-            }}
-          />
+            }
+          })}
         </div>
       )}
     </>
