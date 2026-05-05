@@ -4,12 +4,11 @@ import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AnimatedCursor from "./components/AnimatedCursor";
-import SiteAudioOverlay from "./components/SiteAudioOverlay";
 
 // Lazy-load admin pages so they don't inflate the homepage bundle
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
@@ -32,13 +31,9 @@ const AdminFallback = () => (
 );
 
 function AppShell() {
-  const location = useLocation();
-  const hideAudioOverlay = location.pathname.startsWith("/admin");
-
   return (
     <>
       <AnimatedCursor />
-      {!hideAudioOverlay && <SiteAudioOverlay />}
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/admin/login" element={<Suspense fallback={<AdminFallback />}><AdminLogin /></Suspense>} />
