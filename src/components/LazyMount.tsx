@@ -5,6 +5,8 @@ interface LazyMountProps {
   rootMargin?: string;
   /** Reserved height before mount to avoid layout shifts */
   minHeight?: string;
+  /** Optional anchor id used before the section mounts */
+  id?: string;
   /** Fallback shown before the section mounts */
   fallback?: ReactNode;
   children: ReactNode;
@@ -20,6 +22,7 @@ interface LazyMountProps {
 export default function LazyMount({
   rootMargin = "700px",
   minHeight = "100svh",
+  id,
   fallback,
   children,
 }: LazyMountProps) {
@@ -53,7 +56,7 @@ export default function LazyMount({
   if (visible) return <>{children}</>;
 
   return (
-    <div ref={ref} style={{ minHeight }}>
+    <div ref={ref} id={id} style={{ minHeight }}>
       {fallback ?? null}
     </div>
   );

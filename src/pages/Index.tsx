@@ -21,27 +21,27 @@ const Index = () => {
         </div>
 
         {/* Sections below the fold: mount only when user scrolls near them */}
-        <LazyMount minHeight="100svh">
+        <LazyMount id="players" minHeight="100svh">
           <div className="site-section">
             <PlayersSection />
           </div>
         </LazyMount>
-        <LazyMount minHeight="100svh">
+        <LazyMount id="games" minHeight="100svh">
           <div className="site-section">
             <GamesSection />
           </div>
         </LazyMount>
-        <LazyMount minHeight="90svh">
+        <LazyMount id="items" minHeight="90svh">
           <div className="site-section">
             <SpecialItemsSection />
           </div>
         </LazyMount>
-        <LazyMount minHeight="100svh">
+        <LazyMount id="hall-of-fame" minHeight="100svh">
           <div className="site-section">
             <HallOfFameSection />
           </div>
         </LazyMount>
-        <LazyMount minHeight="80svh">
+        <LazyMount id="credits" minHeight="80svh">
           <div className="site-section">
             <CreditsSection />
           </div>
