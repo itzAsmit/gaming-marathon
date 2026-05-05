@@ -313,7 +313,7 @@ export default function HeroSection() {
 
             <div>
               <div className="text-[10px] tracking-[0.3em] font-black text-black/35 uppercase">Competitors</div>
-              <div className="text-xl sm:text-2xl font-black tracking-tight text-black/85">{playerCount.toLocaleString()}</div>
+              <div className="text-black font-bold tracking-tight uppercase text-sm">{playerCount.toLocaleString()}</div>
             </div>
           </div>
         </div>
