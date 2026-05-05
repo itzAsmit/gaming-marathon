@@ -50,6 +50,16 @@ export default function SiteAudioOverlay() {
     setEnabled((prev) => !prev);
   };
 
+  const handlePlayerError = (error: unknown) => {
+    // Silently handle AbortError which occurs when play/pause race conditions happen
+    // This is harmless and expected behavior when toggling rapidly
+    const err = error as Error;
+    if (err?.name === "AbortError") {
+      return;
+    }
+    console.warn("Audio player error:", error);
+  };
+
   return (
     <>
       <div className="fixed bottom-4 right-4 z-[120] md:bottom-6 md:right-6">
@@ -74,6 +84,7 @@ export default function SiteAudioOverlay() {
             width="0"
             height="0"
             playsinline={true}
+            onError={handlePlayerError}
             config={{
               youtube: {
                 playerVars: {
