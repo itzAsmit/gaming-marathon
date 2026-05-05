@@ -301,16 +301,16 @@ export default function HeroSection() {
           </div>
         </div>
 
-        <div className="absolute bottom-8 md:bottom-12 left-0 w-full px-6 sm:px-10 lg:px-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 z-20 pointer-events-none">
-          <div className="flex flex-col gap-1">
-            <div className="text-[10px] tracking-[0.3em] font-black text-black/35 uppercase">Registration Status</div>
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-              <span className="text-black font-bold tracking-tight uppercase text-sm">Season 04 Active</span>
+        <div className="absolute bottom-8 md:bottom-12 left-0 w-full px-6 sm:px-10 lg:px-12 flex justify-between items-end gap-6 z-20 pointer-events-none">
+          <div className="flex flex-col gap-3 text-left">
+            <div className="flex flex-col gap-1">
+              <div className="text-[10px] tracking-[0.3em] font-black text-black/35 uppercase">Registration Status</div>
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                <span className="text-black font-bold tracking-tight uppercase text-sm">Season 04 Active</span>
+              </div>
             </div>
-          </div>
 
-          <div className="flex gap-8 sm:gap-12 text-left md:text-right">
             <div>
               <div className="text-[10px] tracking-[0.3em] font-black text-black/35 uppercase">Competitors</div>
               <div className="text-xl sm:text-2xl font-black tracking-tight text-black/85">{playerCount.toLocaleString()}</div>
