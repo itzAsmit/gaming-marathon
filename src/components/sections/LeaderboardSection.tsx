@@ -72,7 +72,7 @@ export default function LeaderboardSection() {
   const cols = ["RANK", "PLAYER", "PLAYED", "EVENTS", "WINS", "2NDS", "3RDS", "POINTS"];
 
   return (
-    <section id="leaderboard" className="relative min-h-[100svh] md:min-h-screen py-16 px-4 scroll-mt-24 md:scroll-mt-28">
+    <section id="leaderboard" className="relative min-h-[100svh] md:min-h-screen py-16 px-4 scroll-mt-48 md:scroll-mt-52">
       <div className="max-w-6xl mx-auto">
         <ScrollReveal>
           <SectionHeader title="LEADERBOARD" accent="STANDINGS" subtitle="Live rankings updated in real time" />
