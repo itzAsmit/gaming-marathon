@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, ArrowUp } from "lucide-react";
 import MonolithThreeCanvas from "@/components/MonolithThreeCanvas";
 import MagicRings from "@/components/MagicRings";
 import { fetchPublicData } from "@/lib/fetchPublicData";
@@ -11,6 +11,7 @@ const navItems = [
   { id: "players", label: "PLAYERS" },
   { id: "games", label: "GAMES" },
   { id: "items", label: "ITEMS" },
+  { id: "hall-of-fame", label: "HALL OF FAME" },
   { id: "credits", label: "CREDITS" },
 ];
 
@@ -96,15 +97,11 @@ export default function HeroSection() {
 
           <div className="flex items-center gap-4 sm:gap-6 text-[0.62rem] tracking-[0.16em] font-bold">
             <button
-              onClick={() => {
-                const element = document.getElementById("players");
-                if (element) {
-                  element.scrollIntoView({ behavior: "smooth", block: "start" });
-                }
-              }}
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               className="hidden sm:inline uppercase text-black hover:opacity-70 transition-opacity"
+              aria-label="Scroll to top"
             >
-              REGISTER
+              ↑ TOP
             </button>
             <div
               className="relative group"
