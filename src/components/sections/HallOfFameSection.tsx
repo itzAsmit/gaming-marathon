@@ -134,7 +134,7 @@ export default function HallOfFameSection() {
               onValueChange={(val) => setActiveSeason(Number(val.replace('season-', '')))}
               className="w-full flex flex-col items-center"
             >
-              <div className="flex justify-center mb-16 w-full">
+              <div className="flex justify-center mb-10 -mt-2 w-full">
                 <TabsList className="h-auto gap-2 rounded-none border-b border-border bg-transparent px-0 py-1 text-foreground overflow-x-auto max-w-full justify-start md:justify-center">
                   {seasonsList.map((s) => (
                     <TabsTrigger
