@@ -86,7 +86,7 @@ export default function TestimonialsSection() {
   const col3 = thirdColumn.length ? thirdColumn : testimonials;
 
   return (
-    <section className="bg-background my-20 relative">
+    <section className="bg-background py-16 relative">
       <div className="container z-10 mx-auto px-4 md:px-0">
         <ScrollReveal>
           <SectionHeader

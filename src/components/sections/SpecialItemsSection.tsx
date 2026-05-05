@@ -44,7 +44,7 @@ const ITEMS: FeatureItem[] = [
 
 export default function SpecialItemsSection() {
   return (
-    <section id="items" className="relative min-h-[100svh] md:min-h-screen py-24 px-4">
+    <section id="items" className="relative min-h-[100svh] md:min-h-screen py-16 px-4">
       <div className="max-w-6xl mx-auto">
         <ScrollReveal>
           <SectionHeader title="SPECIAL ITEMS" accent="POWER UPS" subtitle="Rare artifacts that can change the course of the game" />

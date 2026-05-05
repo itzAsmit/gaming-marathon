@@ -134,7 +134,7 @@ export default function CreditsSection() {
   );
 
   return (
-    <section id="credits" className="relative pt-14 pb-24 px-4 overflow-hidden">
+    <section id="credits" className="relative py-16 px-4 overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <ScrollReveal>
           <SectionHeader title="CREDITS" accent="THE TEAM" />

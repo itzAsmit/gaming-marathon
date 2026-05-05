@@ -155,7 +155,7 @@ export default function GamesSection() {
   };
 
   return (
-    <section id="games" className="relative min-h-[100svh] md:min-h-screen py-24 px-4">
+    <section id="games" className="relative min-h-[100svh] md:min-h-screen py-16 px-4">
       <div className="max-w-6xl mx-auto">
         <ScrollReveal>
           <SectionHeader title="GAMES" accent="THE ARENA" subtitle="Battlegrounds where every match tests a different skill" />
