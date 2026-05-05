@@ -218,8 +218,8 @@ export default function HeroSection() {
                 {hoverDiscord && (
                   <div className="absolute inset-0 -m-2 pointer-events-none rounded-lg overflow-hidden">
                     <MagicRings
-                      color="#5865F2"
-                      colorTwo="#4752C4"
+                      color="#000000"
+                      colorTwo="#333333"
                       ringCount={3}
                       speed={1}
                       attenuation={8}
@@ -262,8 +262,8 @@ export default function HeroSection() {
                 {hoverWhatsapp && (
                   <div className="absolute inset-0 -m-2 pointer-events-none rounded-lg overflow-hidden">
                     <MagicRings
-                      color="#25D366"
-                      colorTwo="#20BA5A"
+                      color="#000000"
+                      colorTwo="#333333"
                       ringCount={3}
                       speed={1}
                       attenuation={8}
@@ -285,7 +285,7 @@ export default function HeroSection() {
                       clickBurst={false}
                     />
                   </div>
-                )}
+                )}}
                 <button
                   className="w-full relative border-2 border-black text-black px-6 py-3 font-black uppercase tracking-[0.2em] text-xs rounded-lg transition-all duration-300 ease-out"
                   style={{
