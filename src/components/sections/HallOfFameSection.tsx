@@ -117,7 +117,7 @@ export default function HallOfFameSection() {
   const activeIndex = seasonsList.findIndex((s) => s.number === activeSeason);
 
   return (
-    <section id="hall-of-fame" className="relative min-h-screen py-24 px-4">
+    <section id="hall-of-fame" className="relative min-h-screen py-16 px-4">
       <div className="max-w-6xl mx-auto">
         <ScrollReveal>
           <SectionHeader
@@ -134,7 +134,7 @@ export default function HallOfFameSection() {
               onValueChange={(val) => setActiveSeason(Number(val.replace('season-', '')))}
               className="w-full flex flex-col items-center"
             >
-              <div className="flex justify-center mb-10 -mt-2 w-full">
+              <div className="flex justify-center mb-4 -mt-6 w-full">
                 <TabsList className="h-auto gap-2 rounded-none border-b border-border bg-transparent px-0 py-1 text-foreground overflow-x-auto max-w-full justify-start md:justify-center">
                   {seasonsList.map((s) => (
                     <TabsTrigger

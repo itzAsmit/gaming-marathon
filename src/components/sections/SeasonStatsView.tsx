@@ -49,9 +49,9 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
   if (!stats) return null;
 
   return (
-    <div className="space-y-16">
+    <div className="space-y-10">
       {/* Top 3 Podium - Redesigned Layout */}
-      <div className="flex items-end justify-center gap-4 md:gap-8 relative h-80 pt-8">
+      <div className="flex items-end justify-center gap-4 md:gap-8 relative h-64 pt-2">
         {/* 2nd Place (Left) */}
         {(() => {
           const rank = 2;
