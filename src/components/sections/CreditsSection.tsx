@@ -134,7 +134,7 @@ export default function CreditsSection() {
   );
 
   return (
-    <section id="credits" className="relative py-24 px-4 overflow-hidden">
+    <section id="credits" className="relative pt-14 pb-24 px-4 overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <ScrollReveal>
           <SectionHeader title="CREDITS" accent="THE TEAM" />
@@ -145,8 +145,8 @@ export default function CreditsSection() {
             <div className="animate-pulse text-gray-500">Loading team...</div>
           </div>
         ) : (
-          <div className="mt-12">
-            <div className="flex flex-col gap-16 lg:gap-4">
+          <div className="mt-8">
+              <div className="flex flex-col gap-16 lg:gap-4">
               {/* Organiser - Image left, Card overlapping right */}
               {organiser && (
                 <ScrollReveal delay={0.1}>
