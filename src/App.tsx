@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
+import { ArrowUp } from "lucide-react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AnimatedCursor from "./components/AnimatedCursor";
@@ -59,6 +60,15 @@ const App = () => (
         <BrowserRouter>
           <AppShell />
         </BrowserRouter>
+        <button
+          type="button"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="fixed bottom-4 right-4 z-[120] md:bottom-6 md:right-6 w-12 h-12 md:w-14 md:h-14 rounded-full border border-black/20 bg-white/85 backdrop-blur-sm text-black flex items-center justify-center transition-all duration-200 hover:border-black/45 hover:bg-white"
+          aria-label="Scroll to top"
+          title="Scroll to top"
+        >
+          <ArrowUp size={18} />
+        </button>
       </ClickSpark>
       <Analytics />
       <SpeedInsights />

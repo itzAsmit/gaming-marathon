@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ChevronRight, ArrowUp } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import MonolithThreeCanvas from "@/components/MonolithThreeCanvas";
 import MagicRings from "@/components/MagicRings";
 import { fetchPublicData } from "@/lib/fetchPublicData";
@@ -96,13 +96,6 @@ export default function HeroSection() {
           </div>
 
           <div className="flex items-center gap-4 sm:gap-6 text-[0.62rem] tracking-[0.16em] font-bold">
-            <button
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              className="hidden sm:inline uppercase text-black hover:opacity-70 transition-opacity"
-              aria-label="Scroll to top"
-            >
-              ↑ TOP
-            </button>
             <div
               className="relative group"
               onMouseEnter={() => setHoverAdmin(true)}
