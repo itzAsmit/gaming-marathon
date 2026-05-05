@@ -4,5 +4,5 @@ export const SITE_MEDIA = {
 
   // Add a YouTube link or local audio file path here for the background soundtrack
   // Example: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-  soundtrackUrl: "",
+  soundtrackUrl: "https://youtu.be/m3eJBloYuxI",
 } as const;

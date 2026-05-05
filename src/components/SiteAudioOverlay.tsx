@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Volume2, VolumeX } from "lucide-react";
-import ReactPlayer from "react-player/lazy";
+import ReactPlayer from "react-player";
 import { SITE_MEDIA } from "@/lib/siteMedia";
 
 const STORAGE_KEY = "gm-sound-enabled";
