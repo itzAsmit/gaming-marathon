@@ -215,38 +215,11 @@ export default function HeroSection() {
                 onMouseEnter={() => setHoverDiscord(true)}
                 onMouseLeave={() => setHoverDiscord(false)}
               >
-                {hoverDiscord && (
-                  <div className="absolute inset-0 -m-2 pointer-events-none rounded-lg overflow-hidden">
-                    <MagicRings
-                      color="#000000"
-                      colorTwo="#333333"
-                      ringCount={3}
-                      speed={1}
-                      attenuation={8}
-                      lineThickness={1.5}
-                      baseRadius={0.35}
-                      radiusStep={0.1}
-                      scaleRate={0.1}
-                      opacity={0.3}
-                      blur={0}
-                      noiseAmount={0.02}
-                      rotation={0}
-                      ringGap={1.5}
-                      fadeIn={0.7}
-                      fadeOut={0.5}
-                      followMouse={false}
-                      mouseInfluence={0.2}
-                      hoverScale={1.2}
-                      parallax={0.05}
-                      clickBurst={false}
-                    />
-                  </div>
-                )}
                 <button
                   className="w-full relative border-2 border-black text-black px-6 py-3 font-black uppercase tracking-[0.2em] text-xs rounded-lg transition-all duration-300 ease-out"
                   style={{
                     transform: hoverDiscord ? "scale(1.05)" : "scale(1)",
-                    filter: hoverDiscord ? "drop-shadow(0 20px 25px rgba(0,0,0,0.25))" : "drop-shadow(0 4px 6px rgba(0,0,0,0.08))",
+                    filter: hoverDiscord ? "drop-shadow(0 2px 4px rgba(0,0,0,0.1))" : "drop-shadow(0 1px 2px rgba(0,0,0,0.05))",
                   }}
                   onClick={() => window.open("https://discord.gg/VwW8ktwzyb", "_blank")}
                 >
@@ -259,38 +232,11 @@ export default function HeroSection() {
                 onMouseEnter={() => setHoverWhatsapp(true)}
                 onMouseLeave={() => setHoverWhatsapp(false)}
               >
-                {hoverWhatsapp && (
-                  <div className="absolute inset-0 -m-2 pointer-events-none rounded-lg overflow-hidden">
-                    <MagicRings
-                      color="#000000"
-                      colorTwo="#333333"
-                      ringCount={3}
-                      speed={1}
-                      attenuation={8}
-                      lineThickness={1.5}
-                      baseRadius={0.35}
-                      radiusStep={0.1}
-                      scaleRate={0.1}
-                      opacity={0.3}
-                      blur={0}
-                      noiseAmount={0.02}
-                      rotation={0}
-                      ringGap={1.5}
-                      fadeIn={0.7}
-                      fadeOut={0.5}
-                      followMouse={false}
-                      mouseInfluence={0.2}
-                      hoverScale={1.2}
-                      parallax={0.05}
-                      clickBurst={false}
-                    />
-                  </div>
-                )}}
                 <button
                   className="w-full relative border-2 border-black text-black px-6 py-3 font-black uppercase tracking-[0.2em] text-xs rounded-lg transition-all duration-300 ease-out"
                   style={{
                     transform: hoverWhatsapp ? "scale(1.05)" : "scale(1)",
-                    filter: hoverWhatsapp ? "drop-shadow(0 20px 25px rgba(0,0,0,0.25))" : "drop-shadow(0 4px 6px rgba(0,0,0,0.08))",
+                    filter: hoverWhatsapp ? "drop-shadow(0 2px 4px rgba(0,0,0,0.1))" : "drop-shadow(0 1px 2px rgba(0,0,0,0.05))",
                   }}
                   onClick={() => window.open("https://wa.me/1234567890", "_blank")}
                 >
