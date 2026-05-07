@@ -94,6 +94,19 @@ export default function GamesSection() {
 
   useEffect(() => { fetchGames(); }, []);
 
+  // Lock body scroll when modal open
+  useEffect(() => {
+    const prev = typeof document !== 'undefined' ? document.body.style.overflow : '';
+    if (selected) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      if (typeof document !== 'undefined') document.body.style.overflow = prev || '';
+    }
+    return () => {
+      if (typeof document !== 'undefined') document.body.style.overflow = prev || '';
+    };
+  }, [selected]);
+
   const formatGameTime = (rawTime: string) => {
     const normalized = rawTime.trim().toUpperCase().replace(/\s+/g, " ");
     return /^([1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM)$/.test(normalized) ? normalized : rawTime;
@@ -163,24 +176,47 @@ export default function GamesSection() {
   };
 
   // Calculate thumb dimensions and position
+  const rafRef = useRef<number | null>(null);
+  const lastThumb = useRef({ top: 24, height: 46, visible: false });
+
   const recalcThumb = () => {
     const el = scrollRef.current;
     if (!el) return;
     const ch = el.clientHeight;
     const sh = el.scrollHeight;
     if (sh <= ch + 2) {
-      setThumbVisible(false);
+      if (lastThumb.current.visible) {
+        lastThumb.current.visible = false;
+        setThumbVisible(false);
+      }
       return;
     }
-    setThumbVisible(true);
+
     const trackHeight = Math.max(40, ch - 48);
     const ratio = ch / sh;
     const h = Math.max(36, Math.round(ratio * trackHeight));
-    setThumbHeight(h);
     const maxScroll = sh - ch;
     const maxThumbTop = Math.max(0, trackHeight - h);
     const top = Math.round((el.scrollTop / Math.max(1, maxScroll)) * maxThumbTop);
-    setThumbTop(24 + top);
+    const newTop = 24 + top;
+
+    // throttle updates to animation frame for smoother/less frequent state updates
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = null;
+      if (!lastThumb.current.visible) {
+        lastThumb.current.visible = true;
+        setThumbVisible(true);
+      }
+      if (lastThumb.current.height !== h) {
+        lastThumb.current.height = h;
+        setThumbHeight(h);
+      }
+      if (lastThumb.current.top !== newTop) {
+        lastThumb.current.top = newTop;
+        setThumbTop(newTop);
+      }
+    });
   };
 
   useEffect(() => {
@@ -269,7 +305,7 @@ export default function GamesSection() {
                     transition={{ duration: 0.3 }}
                     onClick={() => openGame(game)}
                   >
-                    <div className="glass-card card-3d shadow-deep rounded-2xl overflow-hidden relative">
+                    <div className="glass-card block-card shadow-strong rounded-2xl overflow-hidden relative">
                       <div className="aspect-[3/4] overflow-hidden relative">
                         {toMediaSrc(game.image_url) ? (
                           <SmartImage
@@ -356,7 +392,7 @@ export default function GamesSection() {
           >
             <motion.div
               ref={scrollRef}
-              className="glass-card card-3d shadow-deep no-scrollbar rounded-3xl overflow-hidden max-w-4xl w-full max-h-[calc(100dvh-6rem)] md:max-h-[calc(100dvh-7rem)] overflow-y-auto relative card-3d no-native-scroll"
+              className="glass-card block-card shadow-strong no-scrollbar rounded-3xl overflow-hidden max-w-4xl w-full max-h-[calc(100dvh-6rem)] md:max-h-[calc(100dvh-7rem)] overflow-y-auto relative no-native-scroll"
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}

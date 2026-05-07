@@ -157,43 +157,18 @@
     box-shadow: 0 12px 28px hsla(var(--brown-deep) / 0.24);
   }
 
-  /* 3D outline and layered depth for cards */
-  .card-3d {
+  /* simpler block-card effect with stronger drop shadow */
+  .block-card {
     position: relative;
+    border-radius: 1rem;
+    border: 1px solid hsla(var(--cream-dark) / 0.14);
+    background: linear-gradient(180deg, hsla(var(--glass-bg) / 0.94), hsla(var(--card) / 0.92));
+    box-shadow: 0 18px 40px rgba(5,8,12,0.35), 0 6px 18px rgba(8,10,15,0.22), inset 0 1px 0 rgba(255,255,255,0.02);
     isolation: isolate;
   }
 
-  .card-3d::before,
-  .card-3d::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  /* subtle rim / outline */
-  .card-3d::before {
-    transform: translateY(6px) scale(1.02);
-    background: linear-gradient(180deg, rgba(0,0,0,0.06), rgba(0,0,0,0.14));
-    filter: blur(10px);
-    opacity: 0.9;
-  }
-
-  /* colored edge highlight */
-  .card-3d::after {
-    inset: 1px;
-    background: linear-gradient(120deg, rgba(255,255,255,0.02), rgba(255,220,120,0.04) 30%, rgba(0,0,0,0.06));
-    mix-blend-mode: overlay;
-  }
-
-  /* stronger layered drop-shadows to sell depth */
-  .card-3d.shadow-deep {
-    box-shadow:
-      0 18px 40px rgba(5,8,12,0.45),
-      0 6px 18px rgba(8,10,15,0.35),
-      inset 0 1px 0 rgba(255,255,255,0.02);
+  .block-card.shadow-strong {
+    box-shadow: 0 28px 64px rgba(5,8,12,0.45), 0 8px 26px rgba(8,10,15,0.28), inset 0 1px 0 rgba(255,255,255,0.03);
   }
 
   /* Custom scroll slider (vertical) */
@@ -230,6 +205,7 @@
     box-shadow: 0 6px 18px rgba(12,14,18,0.45), 0 2px 6px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.6);
     cursor: grab;
     touch-action: none;
+    transition: top 420ms cubic-bezier(.22,.9,.3,1), height 280ms ease;
   }
 
   .scroll-slider .thumb:active {
@@ -238,7 +214,7 @@
   }
 
   /* hide native scrollbar when using custom slider */
-  .card-3d.no-native-scroll::-webkit-scrollbar { display: none; }
+  .block-card.no-native-scroll::-webkit-scrollbar { display: none; }
 
   .electric-card {
     position: relative;
