@@ -388,9 +388,6 @@ export default function GamesSection() {
                     {selected.name}
                   </h3>
                 </div>
-                <button onClick={() => setSelected(null)} className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "hsla(var(--brown-deep) / 0.6)", color: "hsl(var(--cream))" }}>
-                  <X size={16} />
-                </button>
               </div>
 
               <div className="p-6">
@@ -466,6 +463,13 @@ export default function GamesSection() {
                 </div>
               </div>
             </motion.div>
+            <button 
+              onClick={() => setSelected(null)} 
+              className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center" 
+              style={{ background: "hsla(var(--brown-deep) / 0.6)", color: "hsl(var(--cream))", zIndex: 50 }}
+            >
+              <X size={16} />
+            </button>
           </motion.div>
         )}
       </AnimatePresence>
