@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { raceDataFetch } from "@/lib/raceDataFetch";
 import { toMediaSrc, toProxiedMediaSrc } from "@/lib/mediaUrl";
@@ -37,6 +37,14 @@ export default function GamesSection() {
   const [useProxyForSelectedVideo, setUseProxyForSelectedVideo] = useState(false);
   const [selectedVideoFailed, setSelectedVideoFailed] = useState(false);
   const [selectedVideoLoaded, setSelectedVideoLoaded] = useState(false);
+
+  // Scroll slider refs/state for the modal overlay
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const [thumbTop, setThumbTop] = useState(24);
+  const [thumbHeight, setThumbHeight] = useState(46);
+  const [thumbVisible, setThumbVisible] = useState(false);
+  const draggingRef = useRef(false);
+  const pointerIdRef = useRef<number | null>(null);
 
   const fetchGames = async () => {
     try {
@@ -154,6 +162,72 @@ export default function GamesSection() {
     return `🎯 #${rank}`;
   };
 
+  // Calculate thumb dimensions and position
+  const recalcThumb = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const ch = el.clientHeight;
+    const sh = el.scrollHeight;
+    if (sh <= ch + 2) {
+      setThumbVisible(false);
+      return;
+    }
+    setThumbVisible(true);
+    const trackHeight = Math.max(40, ch - 48);
+    const ratio = ch / sh;
+    const h = Math.max(36, Math.round(ratio * trackHeight));
+    setThumbHeight(h);
+    const maxScroll = sh - ch;
+    const maxThumbTop = Math.max(0, trackHeight - h);
+    const top = Math.round((el.scrollTop / Math.max(1, maxScroll)) * maxThumbTop);
+    setThumbTop(24 + top);
+  };
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    recalcThumb();
+    const onScroll = () => recalcThumb();
+    const onResize = () => recalcThumb();
+    el.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [selected]);
+
+  // Pointer dragging
+  useEffect(() => {
+    const onMove = (ev: PointerEvent) => {
+      const el = scrollRef.current;
+      if (!el || !draggingRef.current) return;
+      const track = el.getBoundingClientRect();
+      const y = ev.clientY - (track.top + 24);
+      const trackHeight = Math.max(40, el.clientHeight - 48);
+      const maxThumbTop = Math.max(0, trackHeight - thumbHeight);
+      const clamped = Math.max(0, Math.min(y, trackHeight - thumbHeight));
+      const ratio = clamped / Math.max(1, maxThumbTop);
+      const scrollTop = ratio * Math.max(0, el.scrollHeight - el.clientHeight);
+      el.scrollTop = scrollTop;
+    };
+
+    const onUp = (ev: PointerEvent) => {
+      draggingRef.current = false;
+      pointerIdRef.current = null;
+      (document.activeElement as HTMLElement | null)?.releasePointerCapture?.(ev.pointerId);
+    };
+
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
+    };
+  }, [thumbHeight]);
+
   return (
     <section id="games" className="relative min-h-[100svh] md:min-h-screen py-16 px-4">
       <div className="max-w-6xl mx-auto">
@@ -195,7 +269,7 @@ export default function GamesSection() {
                     transition={{ duration: 0.3 }}
                     onClick={() => openGame(game)}
                   >
-                    <div className="glass-card rounded-2xl overflow-hidden relative">
+                    <div className="glass-card card-3d shadow-deep rounded-2xl overflow-hidden relative">
                       <div className="aspect-[3/4] overflow-hidden relative">
                         {toMediaSrc(game.image_url) ? (
                           <SmartImage
@@ -272,7 +346,7 @@ export default function GamesSection() {
 
       <AnimatePresence>
         {selected && (
-          <motion.div
+            <motion.div
             className="fixed inset-0 z-[100] flex items-center justify-center p-4 pt-14 md:pt-16"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -281,13 +355,29 @@ export default function GamesSection() {
             onClick={() => setSelected(null)}
           >
             <motion.div
-              className="glass-card no-scrollbar rounded-3xl overflow-hidden max-w-4xl w-full max-h-[calc(100dvh-6rem)] md:max-h-[calc(100dvh-7rem)] overflow-y-auto relative"
+              ref={scrollRef}
+              className="glass-card card-3d shadow-deep no-scrollbar rounded-3xl overflow-hidden max-w-4xl w-full max-h-[calc(100dvh-6rem)] md:max-h-[calc(100dvh-7rem)] overflow-y-auto relative card-3d no-native-scroll"
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
               style={{ background: "hsla(var(--brown-deep) / 0.8)" }}
               onClick={(e) => e.stopPropagation()}
             >
+              {thumbVisible && (
+                <div className="scroll-slider" aria-hidden>
+                  <div className="track">
+                    <div
+                      className="thumb"
+                      style={{ top: `${thumbTop}px`, height: `${thumbHeight}px` }}
+                      onPointerDown={(e) => {
+                        e.currentTarget.setPointerCapture?.(e.pointerId);
+                        draggingRef.current = true;
+                        pointerIdRef.current = e.pointerId;
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
               <div className="relative h-[52vh] min-h-[320px] max-h-[520px] overflow-hidden">
                 {(() => {
                   const selectedVideoSrc = useProxyForSelectedVideo
