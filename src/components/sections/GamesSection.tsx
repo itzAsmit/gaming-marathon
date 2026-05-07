@@ -466,6 +466,7 @@ export default function GamesSection() {
                 </div>
               </div>
             </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
     </section>
