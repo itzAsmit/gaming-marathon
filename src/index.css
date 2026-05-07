@@ -171,51 +171,6 @@
     box-shadow: 0 28px 64px rgba(5,8,12,0.45), 0 8px 26px rgba(8,10,15,0.28), inset 0 1px 0 rgba(255,255,255,0.03);
   }
 
-  /* Custom scroll slider (vertical) */
-  .scroll-slider {
-    position: absolute;
-    right: 10px;
-    top: 24px;
-    bottom: 24px;
-    width: 12px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    z-index: 40;
-    pointer-events: auto;
-  }
-
-  .scroll-slider .track {
-    width: 4px;
-    height: 100%;
-    border-radius: 999px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.06));
-    box-shadow: inset 0 0 6px rgba(0,0,0,0.35);
-    position: relative;
-  }
-
-  .scroll-slider .thumb {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 12px;
-    height: 46px;
-    border-radius: 10px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(245,235,200,0.9));
-    box-shadow: 0 6px 18px rgba(12,14,18,0.45), 0 2px 6px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.6);
-    cursor: grab;
-    touch-action: none;
-    transition: top 420ms cubic-bezier(.22,.9,.3,1), height 280ms ease;
-  }
-
-  .scroll-slider .thumb:active {
-    cursor: grabbing;
-    transform: translateX(-50%) scale(0.98);
-  }
-
-  /* hide native scrollbar when using custom slider */
-  .block-card.no-native-scroll::-webkit-scrollbar { display: none; }
-
   .electric-card {
     position: relative;
     background: linear-gradient(120deg, #d7dce7, #9aa4b8, #4e5a72, #c7cfde);

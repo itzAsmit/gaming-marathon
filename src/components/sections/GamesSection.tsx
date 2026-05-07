@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { raceDataFetch } from "@/lib/raceDataFetch";
 import { toMediaSrc, toProxiedMediaSrc } from "@/lib/mediaUrl";
@@ -37,14 +37,6 @@ export default function GamesSection() {
   const [useProxyForSelectedVideo, setUseProxyForSelectedVideo] = useState(false);
   const [selectedVideoFailed, setSelectedVideoFailed] = useState(false);
   const [selectedVideoLoaded, setSelectedVideoLoaded] = useState(false);
-
-  // Scroll slider refs/state for the modal overlay
-  const scrollRef = useRef<HTMLDivElement | null>(null);
-  const [thumbTop, setThumbTop] = useState(24);
-  const [thumbHeight, setThumbHeight] = useState(46);
-  const [thumbVisible, setThumbVisible] = useState(false);
-  const draggingRef = useRef(false);
-  const pointerIdRef = useRef<number | null>(null);
 
   const fetchGames = async () => {
     try {
@@ -175,95 +167,6 @@ export default function GamesSection() {
     return `🎯 #${rank}`;
   };
 
-  // Calculate thumb dimensions and position
-  const rafRef = useRef<number | null>(null);
-  const lastThumb = useRef({ top: 24, height: 46, visible: false });
-
-  const recalcThumb = () => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const ch = el.clientHeight;
-    const sh = el.scrollHeight;
-    if (sh <= ch + 2) {
-      if (lastThumb.current.visible) {
-        lastThumb.current.visible = false;
-        setThumbVisible(false);
-      }
-      return;
-    }
-
-    const trackHeight = Math.max(40, ch - 48);
-    const ratio = ch / sh;
-    const h = Math.max(36, Math.round(ratio * trackHeight));
-    const maxScroll = sh - ch;
-    const maxThumbTop = Math.max(0, trackHeight - h);
-    const top = Math.round((el.scrollTop / Math.max(1, maxScroll)) * maxThumbTop);
-    const newTop = 24 + top;
-
-    // throttle updates to animation frame for smoother/less frequent state updates
-    if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    rafRef.current = requestAnimationFrame(() => {
-      rafRef.current = null;
-      if (!lastThumb.current.visible) {
-        lastThumb.current.visible = true;
-        setThumbVisible(true);
-      }
-      if (lastThumb.current.height !== h) {
-        lastThumb.current.height = h;
-        setThumbHeight(h);
-      }
-      if (lastThumb.current.top !== newTop) {
-        lastThumb.current.top = newTop;
-        setThumbTop(newTop);
-      }
-    });
-  };
-
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    recalcThumb();
-    const onScroll = () => recalcThumb();
-    const onResize = () => recalcThumb();
-    el.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onResize);
-    return () => {
-      el.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onResize);
-    };
-  }, [selected]);
-
-  // Pointer dragging
-  useEffect(() => {
-    const onMove = (ev: PointerEvent) => {
-      const el = scrollRef.current;
-      if (!el || !draggingRef.current) return;
-      const track = el.getBoundingClientRect();
-      const y = ev.clientY - (track.top + 24);
-      const trackHeight = Math.max(40, el.clientHeight - 48);
-      const maxThumbTop = Math.max(0, trackHeight - thumbHeight);
-      const clamped = Math.max(0, Math.min(y, trackHeight - thumbHeight));
-      const ratio = clamped / Math.max(1, maxThumbTop);
-      const scrollTop = ratio * Math.max(0, el.scrollHeight - el.clientHeight);
-      el.scrollTop = scrollTop;
-    };
-
-    const onUp = (ev: PointerEvent) => {
-      draggingRef.current = false;
-      pointerIdRef.current = null;
-      (document.activeElement as HTMLElement | null)?.releasePointerCapture?.(ev.pointerId);
-    };
-
-    window.addEventListener("pointermove", onMove);
-    window.addEventListener("pointerup", onUp);
-    window.addEventListener("pointercancel", onUp);
-    return () => {
-      window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("pointerup", onUp);
-      window.removeEventListener("pointercancel", onUp);
-    };
-  }, [thumbHeight]);
-
   return (
     <section id="games" className="relative min-h-[100svh] md:min-h-screen py-16 px-4">
       <div className="max-w-6xl mx-auto">
@@ -391,29 +294,13 @@ export default function GamesSection() {
             onClick={() => setSelected(null)}
           >
             <motion.div
-              ref={scrollRef}
-              className="glass-card block-card shadow-strong no-scrollbar rounded-3xl overflow-hidden max-w-4xl w-full max-h-[calc(100dvh-6rem)] md:max-h-[calc(100dvh-7rem)] overflow-y-auto relative no-native-scroll"
+              className="glass-card block-card shadow-strong no-scrollbar rounded-3xl overflow-hidden max-w-4xl w-full max-h-[calc(100dvh-6rem)] md:max-h-[calc(100dvh-7rem)] overflow-y-auto relative"
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
               style={{ background: "hsla(var(--brown-deep) / 0.8)" }}
               onClick={(e) => e.stopPropagation()}
             >
-              {thumbVisible && (
-                <div className="scroll-slider" aria-hidden>
-                  <div className="track">
-                    <div
-                      className="thumb"
-                      style={{ top: `${thumbTop}px`, height: `${thumbHeight}px` }}
-                      onPointerDown={(e) => {
-                        e.currentTarget.setPointerCapture?.(e.pointerId);
-                        draggingRef.current = true;
-                        pointerIdRef.current = e.pointerId;
-                      }}
-                    />
-                  </div>
-                </div>
-              )}
               <div className="relative h-[52vh] min-h-[320px] max-h-[520px] overflow-hidden">
                 {(() => {
                   const selectedVideoSrc = useProxyForSelectedVideo
@@ -579,7 +466,6 @@ export default function GamesSection() {
                 </div>
               </div>
             </motion.div>
-          </motion.div>
         )}
       </AnimatePresence>
     </section>
