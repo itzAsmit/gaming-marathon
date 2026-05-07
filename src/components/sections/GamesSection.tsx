@@ -294,21 +294,23 @@ export default function GamesSection() {
             onClick={() => setSelected(null)}
           >
             <motion.div
-              className="glass-card block-card shadow-strong no-scrollbar rounded-3xl overflow-hidden max-w-4xl w-full max-h-[calc(100dvh-6rem)] md:max-h-[calc(100dvh-7rem)] overflow-y-auto relative"
+              className="glass-card block-card shadow-strong no-scrollbar rounded-3xl overflow-hidden max-w-4xl w-full relative"
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
               style={{ background: "hsla(var(--brown-deep) / 0.8)" }}
               onClick={(e) => e.stopPropagation()}
             >
-              <button 
-                onClick={() => setSelected(null)} 
-                className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center z-50" 
+              <button
+                onClick={() => setSelected(null)}
+                className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center z-50"
                 style={{ background: "hsla(var(--brown-deep) / 0.6)", color: "hsl(var(--cream))" }}
               >
                 <X size={16} />
               </button>
-              <div className="relative h-[52vh] min-h-[320px] max-h-[520px] overflow-hidden">
+
+              <div className="max-h-[calc(100dvh-6rem)] md:max-h-[calc(100dvh-7rem)] overflow-y-auto no-scrollbar">
+                <div className="relative h-[52vh] min-h-[320px] max-h-[520px] overflow-hidden">
                 {(() => {
                   const selectedVideoSrc = useProxyForSelectedVideo
                     ? toProxiedMediaSrc(selected.video_url)
@@ -397,7 +399,7 @@ export default function GamesSection() {
                 </div>
               </div>
 
-              <div className="p-6">
+                <div className="p-6">
                 <div className="grid md:grid-cols-2 gap-6 items-start">
                   <div className="space-y-5">
                     <div>
@@ -467,6 +469,7 @@ export default function GamesSection() {
                       </div>
                     )}
                   </div>
+                </div>
                 </div>
               </div>
             </motion.div>

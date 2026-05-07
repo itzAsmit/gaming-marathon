@@ -244,12 +244,16 @@ export default function PlayersSection() {
             onClick={() => setSelected(null)}
           >
             <motion.div
-              className="glass-card rounded-3xl overflow-hidden w-full max-w-[870px] md:h-[min(86vh,620px)] lg:h-[min(82vh,680px)]"
+              className="glass-card rounded-3xl overflow-hidden w-full max-w-[870px] md:h-[min(86vh,620px)] lg:h-[min(82vh,680px)] relative"
               initial={{ scale: 0.9, y: 40 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 40 }}
               onClick={(e) => e.stopPropagation()}
             >
+              <button onClick={() => setSelected(null)} className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center z-50" style={{ background: "hsla(var(--cream) / 0.1)", color: "hsl(var(--cream))" }}>
+                <X size={16} />
+              </button>
+
               <div className="max-h-[calc(100dvh-6rem)] overflow-y-auto overflow-x-hidden md:max-h-none md:h-full md:overflow-hidden">
                 <div className="grid md:grid-cols-[40%_60%] md:h-full">
                 {/* Left */}
@@ -330,9 +334,6 @@ export default function PlayersSection() {
 
                 {/* Right */}
                 <div className="relative p-5 md:p-3 lg:p-5 space-y-4 md:space-y-2 lg:space-y-4 md:h-full md:flex md:flex-col md:justify-start">
-                  <button onClick={() => setSelected(null)} className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "hsla(var(--cream) / 0.1)", color: "hsl(var(--cream))" }}>
-                    <X size={16} />
-                  </button>
 
                   {selected.bio && (
                     <div>
