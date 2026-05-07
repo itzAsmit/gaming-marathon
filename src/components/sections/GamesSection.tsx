@@ -301,6 +301,13 @@ export default function GamesSection() {
               style={{ background: "hsla(var(--brown-deep) / 0.8)" }}
               onClick={(e) => e.stopPropagation()}
             >
+              <button 
+                onClick={() => setSelected(null)} 
+                className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center z-50" 
+                style={{ background: "hsla(var(--brown-deep) / 0.6)", color: "hsl(var(--cream))" }}
+              >
+                <X size={16} />
+              </button>
               <div className="relative h-[52vh] min-h-[320px] max-h-[520px] overflow-hidden">
                 {(() => {
                   const selectedVideoSrc = useProxyForSelectedVideo
@@ -463,13 +470,6 @@ export default function GamesSection() {
                 </div>
               </div>
             </motion.div>
-            <button 
-              onClick={() => setSelected(null)} 
-              className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center" 
-              style={{ background: "hsla(var(--brown-deep) / 0.6)", color: "hsl(var(--cream))", zIndex: 50 }}
-            >
-              <X size={16} />
-            </button>
           </motion.div>
         )}
       </AnimatePresence>

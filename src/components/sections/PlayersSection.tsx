@@ -98,6 +98,19 @@ export default function PlayersSection() {
     return () => { supabase.removeChannel(channel); };
   }, [isConstrained]);
 
+  // Lock body scroll when modal open
+  useEffect(() => {
+    const prev = typeof document !== 'undefined' ? document.body.style.overflow : '';
+    if (selected) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      if (typeof document !== 'undefined') document.body.style.overflow = prev || '';
+    }
+    return () => {
+      if (typeof document !== 'undefined') document.body.style.overflow = prev || '';
+    };
+  }, [selected]);
+
   return (
     <section id="players" className="relative min-h-[100svh] md:min-h-screen py-16 px-4 scroll-mt-48 md:scroll-mt-52">
       <div className="max-w-6xl mx-auto">
