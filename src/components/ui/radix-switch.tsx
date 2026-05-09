@@ -50,7 +50,7 @@ const Switch = React.forwardRef<
         <motion.button
           ref={ref}
           className={cn(
-            'relative flex p-[3px] h-6 w-10 shrink-0 cursor-pointer items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input',
+            'relative flex p-[2px] h-[31px] w-[51px] shrink-0 cursor-pointer items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-[#34C759] data-[state=unchecked]:bg-[#E9E9EA] dark:data-[state=unchecked]:bg-[#39393D]',
             className,
           )}
           style={{
@@ -91,18 +91,18 @@ const Switch = React.forwardRef<
             <motion.div
               whileTap="tab"
               className={cn(
-                'relative z-[1] flex items-center justify-center rounded-full bg-background shadow-lg ring-0 dark:text-neutral-400 text-neutral-500',
+                'relative z-[1] flex items-center justify-center rounded-full bg-white shadow-[0_3px_8px_rgba(0,0,0,0.15)] ring-[0.5px] ring-black/5 dark:ring-white/10 dark:text-neutral-400 text-neutral-500',
               )}
               layout
-              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+              transition={{ type: 'spring', stiffness: 500, damping: 30 }}
               style={{
-                width: 18,
-                height: 18,
+                width: 27,
+                height: 27,
               }}
               animate={
                 isTapped
-                  ? { width: 21, transition: { duration: 0.1 } }
-                  : { width: 18, transition: { duration: 0.1 } }
+                  ? { width: 34, transition: { duration: 0.1 } }
+                  : { width: 27, transition: { duration: 0.1 } }
               }
             >
               {ThumbIcon && <ThumbIcon className="size-3" />}
