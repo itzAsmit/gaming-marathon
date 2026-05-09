@@ -347,12 +347,12 @@ export default function PlayersSection() {
                     <p className="text-xs  tracking-widest mb-3" style={{ color: "hsl(var(--gold))", fontFamily: "Electrolize, sans-serif" }}>STATS</p>
                     <div className="grid grid-cols-2 gap-2 md:gap-1 lg:gap-2">
                       {[
-                        { label: "POINTS", value: selected.leaderboard?.points ?? 0 },
-                        { label: "RANK", value: selected.leaderboard?.rank ? `#${selected.leaderboard.rank}` : "—" },
-                        { label: "WINS", value: selected.leaderboard?.wins ?? 0 },
-                        { label: "2NDS", value: selected.leaderboard?.seconds ?? 0 },
-                        { label: "3RDS", value: selected.leaderboard?.thirds ?? 0 },
-                        { label: "PLAYED", value: selected.leaderboard?.games_played ?? 0 },
+                        { label: "POINTS", value: !selected.is_active ? 0 : selected.leaderboard?.points ?? 0 },
+                        { label: "RANK", value: !selected.is_active ? "—" : (selected.leaderboard?.rank ? `#${selected.leaderboard.rank}` : "—") },
+                        { label: "WINS", value: !selected.is_active ? 0 : selected.leaderboard?.wins ?? 0 },
+                        { label: "2NDS", value: !selected.is_active ? 0 : selected.leaderboard?.seconds ?? 0 },
+                        { label: "3RDS", value: !selected.is_active ? 0 : selected.leaderboard?.thirds ?? 0 },
+                        { label: "PLAYED", value: !selected.is_active ? 0 : selected.leaderboard?.games_played ?? 0 },
                       ].map((s) => (
                         <div key={s.label} className="rounded-xl p-2 md:p-1.5 lg:p-2.5 text-center" style={{ background: "hsla(var(--gold) / 0.08)", border: "1px solid hsla(var(--gold) / 0.2)" }}>
                           <p className="text-lg md:text-sm lg:text-lg  font-bold" style={{ color: "hsl(var(--gold))", fontFamily: "Electrolize, sans-serif" }}>{s.value}</p>
@@ -366,7 +366,7 @@ export default function PlayersSection() {
                   <div>
                     <p className="text-xs  tracking-widest mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Electrolize, sans-serif" }}>ITEMS HOLDING</p>
                     <div className="flex flex-wrap gap-2">
-                      {selected.items && selected.items.length > 0 ? (
+                      {selected.is_active && selected.items && selected.items.length > 0 ? (
                         selected.items.map((pi: any) => (
                           <span key={pi.items.name} className="px-3 py-1 md:px-2 md:py-0.5 rounded-full text-xs md:text-[10px] " style={{ background: "hsla(var(--gold) / 0.15)", color: "hsl(var(--gold))", border: "1px solid hsla(var(--gold) / 0.3)", fontFamily: "Electrolize, sans-serif" }}>
                             {pi.items.name}
@@ -374,14 +374,14 @@ export default function PlayersSection() {
                         ))
                       ) : (
                         <span className="text-xs " style={{ color: "hsl(var(--cream-dark) / 0.75)", fontFamily: "Electrolize, sans-serif" }}>
-                          NONE
+                          —
                         </span>
                       )}
                     </div>
                   </div>
 
                   {/* Game Proficiency */}
-                  {selected.proficiencies && selected.proficiencies.length > 0 && (
+                  {selected.is_active && selected.proficiencies && selected.proficiencies.length > 0 && (
                     <div>
                       <p className="text-xs  tracking-widest mb-3 md:mb-2" style={{ color: "hsl(var(--gold))", fontFamily: "Electrolize, sans-serif" }}>GAME PROFICIENCY</p>
                       <div className="space-y-3 md:space-y-2">
