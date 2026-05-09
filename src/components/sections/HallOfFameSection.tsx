@@ -56,7 +56,7 @@ export default function HallOfFameSection() {
     try {
       const { data: hofData } = await supabase
         .from("hall_of_fame")
-        .select("rank, players(name, player_id, portrait_url, is_active)")
+        .select("rank, players(name, player_id, portrait_url)")
         .eq("season", season)
         .order("rank");
 
@@ -65,7 +65,7 @@ export default function HallOfFameSection() {
         await supabase.from("games").select("name, game_date").eq("season", season);
 
       const topPlayers = (hofData || [])
-        .filter((entry: any) => entry.rank <= 3 && entry.players?.is_active !== false)
+        .filter((entry: any) => entry.rank <= 3)
         .map((entry: any) => ({
           rank: entry.rank,
           player: {
@@ -76,7 +76,7 @@ export default function HallOfFameSection() {
         }));
 
       const allPlayers = (hofData || [])
-        .filter((entry: any) => entry.rank >= 4 && entry.players?.is_active !== false)
+        .filter((entry: any) => entry.rank >= 4)
         .map((entry: any) => ({
           rank: entry.rank,
           name: entry.players?.name || "—",

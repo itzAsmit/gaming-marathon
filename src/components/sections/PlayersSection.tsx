@@ -66,17 +66,17 @@ export default function PlayersSection() {
         return parseInt(match[0], 10);
       };
 
-      // Filter to only active players
-      const activePlayers = mappedPlayers.filter((p: any) => p.is_active);
-
-      activePlayers.sort((a: any, b: any) => {
+      mappedPlayers.sort((a: any, b: any) => {
+        if (a.is_active !== b.is_active) {
+          return a.is_active ? -1 : 1;
+        }
         const aPlayerOrder = getPlayerOrder(a);
         const bPlayerOrder = getPlayerOrder(b);
         if (aPlayerOrder !== bPlayerOrder) return aPlayerOrder - bPlayerOrder;
         return (a.player_id ?? "").localeCompare(b.player_id ?? "");
       });
 
-      setPlayers(activePlayers);
+      setPlayers(mappedPlayers);
     } catch {
       setError("Connection issue. Please tap retry.");
     } finally {
