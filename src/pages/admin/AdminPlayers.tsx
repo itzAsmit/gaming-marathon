@@ -7,6 +7,7 @@ import { withTimeout } from "@/lib/withTimeout";
 import { useTextareaResize } from "@/hooks/use-textarea-resize";
 import SmartImage from "@/components/SmartImage";
 import AdminLayout from "@/components/admin/AdminLayout";
+import { Switch } from "@/components/ui/radix-switch";
 import { Plus, Pencil, Trash2, X, RefreshCw, Upload } from "lucide-react";
 import { toast } from "sonner";
 
@@ -28,7 +29,7 @@ type PlayerRow = Omit<Player, "is_active"> & { is_active?: boolean | null };
 interface Proficiency { game_name: string; proficiency_percent: number; }
 interface GameOption { id: string; name: string; }
 
-const BLANK: Omit<Player, "id"> = { player_id: "", name: "", bio: null, image_url: null, portrait_url: null, instagram: null, twitter: null, linkedin: null, is_active: true };
+const BLANK: Omit<Player, "id"> = { player_id: "", name: "", bio: null, image_url: null, portrait_url: null, instagram: null, twitter: null, linkedin: null, is_active: false };
 const AVATAR_OUTPUT_SIZE = 600;
 const PORTRAIT_WIDTH = 900;
 const PORTRAIT_HEIGHT = 1200;
@@ -362,13 +363,19 @@ export default function AdminPlayers() {
                       <p className="text-xs mt-0.5" style={{ color: "hsl(var(--brown-light))" }}>{p.player_id}</p>
                     </div>
                     <div className="flex items-center gap-3">
-                      <div
-                        className="w-3 h-3 rounded-full"
-                        style={{
-                          background: p.is_active ? "rgb(34, 197, 94)" : "rgb(60, 60, 60)",
-                          boxShadow: p.is_active 
-                            ? "0 0 8px rgba(34, 197, 94, 0.8), 0 0 16px rgba(34, 197, 94, 0.4)" 
-                            : "0 0 8px rgba(60, 60, 60, 0.8), 0 0 16px rgba(60, 60, 60, 0.4)",
+                      <Switch
+                        checked={p.is_active}
+                        onCheckedChange={async (checked) => {
+                          const previousPlayers = [...players];
+                          setPlayers(players.map(player => player.id === p.id ? { ...player, is_active: checked } : player));
+                          try {
+                            await adminMutation.update("players", { is_active: checked }, { id: p.id });
+                            toast.success(`Player ${p.name} marked as ${checked ? 'active' : 'inactive'}`);
+                            await logActivity(checked ? "ACTIVATE_PLAYER" : "DEACTIVATE_PLAYER", p.name);
+                          } catch {
+                            setPlayers(previousPlayers);
+                            toast.error("Failed to update status");
+                          }
                         }}
                       />
                       <button onClick={() => openEdit(p)} className="w-8 h-8 rounded-lg flex items-center justify-center hover:scale-110 transition-transform" style={{ background: "hsl(var(--input))", color: "hsl(var(--brown))" }}>
@@ -405,52 +412,6 @@ export default function AdminPlayers() {
               <div>
                 <label className="block text-xs  tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Electrolize, sans-serif" }}>PLAYER ID</label>
                 <input value={form.player_id} readOnly className="w-full px-4 py-2.5 rounded-xl text-sm outline-none opacity-60" style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }} />
-              </div>
-
-              {/* Active Status */}
-              <div>
-                <label className="block text-xs  tracking-widest mb-1.5" style={{ color: "hsl(var(--brown))", fontFamily: "Electrolize, sans-serif" }}>STATUS</label>
-                <div className="flex gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setForm((f) => ({ ...f, is_active: true }))}
-                    className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2"
-                    style={{
-                      background: "transparent",
-                      color: form.is_active ? "rgb(34, 197, 94)" : "hsl(var(--brown-light))",
-                      border: form.is_active ? "2px solid rgb(34, 197, 94)" : "1px solid hsl(var(--cream-dark))",
-                    }}
-                  >
-                    <span
-                      className="w-2 h-2 rounded-full"
-                      style={{
-                        background: form.is_active ? "rgb(34, 197, 94)" : "transparent",
-                        boxShadow: form.is_active ? "0 0 6px rgba(34, 197, 94, 0.8)" : "none",
-                        border: form.is_active ? "none" : "1px solid hsl(var(--brown-light))",
-                      }}
-                    />
-                    ACTIVE
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setForm((f) => ({ ...f, is_active: false }))}
-                    className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2"
-                    style={{
-                      background: "transparent",
-                      color: !form.is_active ? "rgb(100, 100, 100)" : "hsl(var(--brown-light))",
-                      border: !form.is_active ? "2px solid rgb(100, 100, 100)" : "1px solid hsl(var(--cream-dark))",
-                    }}
-                  >
-                    <span
-                      className="w-2 h-2 rounded-full"
-                      style={{
-                        background: !form.is_active ? "rgb(150, 150, 150)" : "transparent",
-                        border: !form.is_active ? "none" : "1px solid hsl(var(--brown-light))",
-                      }}
-                    />
-                    INACTIVE
-                  </button>
-                </div>
               </div>
 
               {/* Name */}
