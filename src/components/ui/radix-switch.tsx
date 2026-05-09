@@ -50,7 +50,7 @@ const Switch = React.forwardRef<
         <motion.button
           ref={ref}
           className={cn(
-            'relative flex p-[2px] h-[26px] w-[42px] shrink-0 cursor-pointer items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-[#34C759] data-[state=unchecked]:bg-[#E9E9EA] dark:data-[state=unchecked]:bg-[#39393D]',
+            'relative flex p-[2px] h-[22px] w-[36px] shrink-0 cursor-pointer items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-[#34C759] data-[state=unchecked]:bg-[#E9E9EA] dark:data-[state=unchecked]:bg-[#39393D]',
             className,
           )}
           style={{
@@ -96,13 +96,13 @@ const Switch = React.forwardRef<
               layout
               transition={{ type: 'spring', stiffness: 500, damping: 30 }}
               style={{
-                width: 22,
-                height: 22,
+                width: 18,
+                height: 18,
               }}
               animate={
                 isTapped
-                  ? { width: 28, transition: { duration: 0.1 } }
-                  : { width: 22, transition: { duration: 0.1 } }
+                  ? { width: 22, transition: { duration: 0.1 } }
+                  : { width: 18, transition: { duration: 0.1 } }
               }
             >
               {ThumbIcon && <ThumbIcon className="size-3" />}
