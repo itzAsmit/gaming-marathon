@@ -38,11 +38,12 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchPlayers = async () => {
       try {
-        const data = await raceDataFetch<Array<Pick<Player, "id" | "player_id" | "name">>>(
-          () => supabase.from("players").select("id, player_id, name").order("player_id"),
+        const data = await raceDataFetch<Array<Pick<Player, "id" | "player_id" | "name" | "is_active">>>(
+          () => supabase.from("players").select("id, player_id, name, is_active").order("player_id"),
           "admin_players",
         );
-        setPlayers(data.map((player) => ({ ...player, is_active: true })));
+        const activePlayers = data.filter((player) => player.is_active !== false);
+        setPlayers(activePlayers);
       } catch {
         toast.error("Failed to load players");
       }
