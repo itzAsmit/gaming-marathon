@@ -58,9 +58,9 @@ export function hasStoredAccessToken(): boolean {
   return Boolean(getStoredAccessToken());
 }
 
-export async function verifyAdminSession(): Promise<boolean> {
+export async function getAdminSessionStatus(): Promise<{ ok: boolean; error?: string }> {
   const accessToken = await getAccessToken();
-  if (!accessToken) return false;
+  if (!accessToken) return { ok: false, error: "Missing authorization token" };
 
   try {
     const response = await fetch("/api/admin-session", {
@@ -72,8 +72,16 @@ export async function verifyAdminSession(): Promise<boolean> {
       cache: "no-store",
     });
 
-    return response.ok;
+    if (response.ok) return { ok: true };
+
+    const json = (await response.json().catch(() => ({}))) as { error?: string };
+    return { ok: false, error: json.error || `Admin verification failed (${response.status})` };
   } catch {
-    return false;
+    return { ok: false, error: "Admin verification request failed" };
   }
+}
+
+export async function verifyAdminSession(): Promise<boolean> {
+  const status = await getAdminSessionStatus();
+  return status.ok;
 }
