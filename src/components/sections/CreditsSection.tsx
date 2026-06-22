@@ -32,7 +32,7 @@ export default function CreditsSection() {
     const loadTeamData = async () => {
       try {
         setIsLoading(true);
-        const players = await fetchPublicData<Player[]>("players");
+        const players = await fetchPublicData<Player[]>("admin_players");
 
         const members: TeamMember[] = [];
 

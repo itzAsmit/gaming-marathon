@@ -11,7 +11,6 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AnimatedCursor from "./components/AnimatedCursor";
 import ClickSpark from "./components/ClickSpark";
-import AdminRouteGuard from "./components/admin/AdminRouteGuard";
 
 // Lazy-load admin pages so they don't inflate the homepage bundle
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
@@ -43,12 +42,12 @@ function AppShell() {
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/admin/login" element={<Suspense fallback={<AdminFallback />}><AdminLogin /></Suspense>} />
-        <Route path="/admin/dashboard" element={<AdminRouteGuard><Suspense fallback={<AdminFallback />}><AdminDashboard /></Suspense></AdminRouteGuard>} />
-        <Route path="/admin/players" element={<AdminRouteGuard><Suspense fallback={<AdminFallback />}><AdminPlayers /></Suspense></AdminRouteGuard>} />
-        <Route path="/admin/games" element={<AdminRouteGuard><Suspense fallback={<AdminFallback />}><AdminGames /></Suspense></AdminRouteGuard>} />
-        <Route path="/admin/items" element={<AdminRouteGuard><Suspense fallback={<AdminFallback />}><AdminItems /></Suspense></AdminRouteGuard>} />
-        <Route path="/admin/logs" element={<AdminRouteGuard><Suspense fallback={<AdminFallback />}><AdminLogs /></Suspense></AdminRouteGuard>} />
-        <Route path="/admin/hall-of-fame" element={<AdminRouteGuard><Suspense fallback={<AdminFallback />}><AdminHallOfFame /></Suspense></AdminRouteGuard>} />
+        <Route path="/admin/dashboard" element={<Suspense fallback={<AdminFallback />}><AdminDashboard /></Suspense>} />
+        <Route path="/admin/players" element={<Suspense fallback={<AdminFallback />}><AdminPlayers /></Suspense>} />
+        <Route path="/admin/games" element={<Suspense fallback={<AdminFallback />}><AdminGames /></Suspense>} />
+        <Route path="/admin/items" element={<Suspense fallback={<AdminFallback />}><AdminItems /></Suspense>} />
+        <Route path="/admin/logs" element={<Suspense fallback={<AdminFallback />}><AdminLogs /></Suspense>} />
+        <Route path="/admin/hall-of-fame" element={<Suspense fallback={<AdminFallback />}><AdminHallOfFame /></Suspense>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       

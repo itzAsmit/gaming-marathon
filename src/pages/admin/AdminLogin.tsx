@@ -22,8 +22,9 @@ export default function AdminLogin() {
     const savedData = localStorage.getItem("admin_login_remember");
     if (savedData) {
       try {
-        const { savedEmail } = JSON.parse(savedData);
+        const { savedEmail, savedPassword } = JSON.parse(savedData);
         if (savedEmail) setEmail(savedEmail);
+        if (savedPassword) setPassword(savedPassword);
         setRememberMe(true);
       } catch (e) {
         // ignore
@@ -62,7 +63,7 @@ export default function AdminLogin() {
 
     const handleSuccess = () => {
       if (rememberMe) {
-        localStorage.setItem("admin_login_remember", JSON.stringify({ savedEmail: normalizedEmail }));
+        localStorage.setItem("admin_login_remember", JSON.stringify({ savedEmail: normalizedEmail, savedPassword: normalizedPassword }));
       } else {
         localStorage.removeItem("admin_login_remember");
       }

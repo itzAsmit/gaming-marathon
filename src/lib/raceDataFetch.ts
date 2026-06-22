@@ -8,9 +8,7 @@
  * of a sequential fallback approach.
  */
 
-import { getAccessToken } from "@/lib/authToken";
-
-type Resource = "leaderboard" | "players" | "games" | "hall_of_fame" | "rankings" | "seasons" | "admin_players" | "admin_games" | "admin_items" | "admin_hall_of_fame" | "admin_activity_logs" | "admin_players_with_items" | "admin_seasons" | "admin_season_scores";
+type Resource = "leaderboard" | "players" | "games" | "hall_of_fame" | "rankings" | "admin_players" | "admin_games" | "admin_items" | "admin_hall_of_fame" | "admin_activity_logs" | "admin_players_with_items" | "admin_seasons" | "admin_season_scores";
 
 interface SupabaseResult<T> {
   data: T | null;
@@ -52,13 +50,9 @@ export async function raceDataFetch<T>(
   });
 
   const search = new URLSearchParams({ resource, ...(proxyParams ?? {}) });
-  const accessToken = resource.startsWith("admin_") ? await getAccessToken() : null;
   const proxyPromise = fetch(`/api/public-data?${search.toString()}`, {
     method: "GET",
-    headers: {
-      Accept: "application/json",
-      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
-    },
+    headers: { Accept: "application/json" },
   }).then(async (response) => {
     if (!response.ok) throw new Error(`Proxy ${response.status}`);
     const json = (await response.json()) as { data?: T; error?: string };

@@ -34,7 +34,7 @@ export default function HallOfFameSection() {
 
       const sData = await raceDataFetch<any[]>(
         () => supabase.from("seasons").select("*").order("number"),
-        "seasons",
+        "admin_seasons",
       ).catch(() => []);
 
       if (sData && sData.length > 0) {

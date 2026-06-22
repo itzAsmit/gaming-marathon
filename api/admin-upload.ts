@@ -1,5 +1,4 @@
 import { createClient } from "@supabase/supabase-js";
-import { sendAuthError, verifyAdminRequest } from "./_adminAuth";
 
 /**
  * Proxy for Supabase Storage uploads.
@@ -26,7 +25,13 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    const { accessToken } = await verifyAdminRequest(req);
+    // Get user's access token
+    const authHeader = String(req.headers.authorization ?? "");
+    const accessToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
+
+    if (!accessToken) {
+      return res.status(401).json({ error: "Missing authorization token" });
+    }
 
     if (!supabaseUrl) {
       return res.status(500).json({ error: "Missing Supabase URL" });
@@ -80,9 +85,6 @@ export default async function handler(req: any, res: any) {
       publicUrl: urlData.publicUrl,
     });
   } catch (error) {
-    if ([401, 403].includes(Number((error as any)?.status))) {
-      return sendAuthError(res, error);
-    }
     const message = error instanceof Error ? error.message : "Upload failed";
     return res.status(500).json({ error: message });
   }

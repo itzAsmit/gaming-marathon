@@ -1,5 +1,4 @@
 import { createClient } from "@supabase/supabase-js";
-import { sendAuthError, verifyAdminRequest } from "./_adminAuth";
 
 /**
  * Authenticated proxy for admin write operations (insert, update, delete).
@@ -17,10 +16,6 @@ const ALLOWED_TABLES: AllowedTable[] = [
 
 const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const supabaseAnonKey =
-  process.env.SUPABASE_ANON_KEY ||
-  process.env.VITE_SUPABASE_ANON_KEY ||
-  process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
 export default async function handler(req: any, res: any) {
   if (req.method !== "POST") {
@@ -28,7 +23,13 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    const { accessToken } = await verifyAdminRequest(req);
+    // Get user's access token from Authorization header
+    const authHeader = String(req.headers.authorization ?? "");
+    const accessToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
+
+    if (!accessToken) {
+      return res.status(401).json({ error: "Missing authorization token" });
+    }
 
     if (!supabaseUrl) {
       return res.status(500).json({ error: "Missing Supabase URL" });
@@ -53,16 +54,20 @@ export default async function handler(req: any, res: any) {
       return res.status(400).json({ error: "Invalid operation" });
     }
 
-    if (!supabaseServiceKey && !supabaseAnonKey) {
-      return res.status(500).json({ error: "Missing Supabase anon key" });
-    }
-
-    // Use service role only after the bearer token has been verified above.
+    // Use service role key if available (bypasses RLS), otherwise use user's token
     const supabase = supabaseServiceKey
       ? createClient(supabaseUrl, supabaseServiceKey)
-      : createClient(supabaseUrl, supabaseAnonKey as string, {
+      : createClient(supabaseUrl, accessToken, {
           global: { headers: { Authorization: `Bearer ${accessToken}` } },
         });
+
+    // Verify user is authenticated by checking the token
+    if (!supabaseServiceKey) {
+      const { data: userData, error: userError } = await supabase.auth.getUser(accessToken);
+      if (userError || !userData?.user) {
+        return res.status(401).json({ error: "Invalid or expired token" });
+      }
+    }
 
     let result: { data: any; error: any };
 
@@ -105,9 +110,6 @@ export default async function handler(req: any, res: any) {
 
     return res.status(200).json({ data: result.data });
   } catch (error) {
-    if ([401, 403].includes(Number((error as any)?.status))) {
-      return sendAuthError(res, error);
-    }
     const message = error instanceof Error ? error.message : "Mutation failed";
     return res.status(500).json({ error: message });
   }
