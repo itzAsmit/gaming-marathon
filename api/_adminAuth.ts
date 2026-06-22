@@ -13,7 +13,6 @@ const supabaseAnonKey =
   process.env.SUPABASE_ANON_KEY ||
   process.env.VITE_SUPABASE_ANON_KEY ||
   process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 function parseList(value?: string) {
   return new Set(
@@ -33,52 +32,6 @@ const allowAnyAuthenticatedAdmin =
 export function getBearerToken(req: any) {
   const authHeader = String(req.headers.authorization ?? "");
   return authHeader.startsWith("Bearer ") ? authHeader.slice(7).trim() : "";
-}
-
-async function isAdminInDatabase(accessToken: string) {
-  if (!supabaseUrl || !supabaseAnonKey) return false;
-
-  try {
-    const dbAuthClient = createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        persistSession: false,
-        autoRefreshToken: false,
-      },
-      global: {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      },
-    });
-
-    const { data, error } = await dbAuthClient.rpc("is_admin");
-    if (error) return null;
-    return data === true;
-  } catch {
-    return null;
-  }
-}
-
-async function isAdminByServiceRole(userId: string) {
-  if (!supabaseUrl || !supabaseServiceKey) return null;
-
-  try {
-    const serviceClient = createClient(supabaseUrl, supabaseServiceKey, {
-      auth: {
-        persistSession: false,
-        autoRefreshToken: false,
-      },
-    });
-
-    const { data, error } = await serviceClient
-      .from("admin_users")
-      .select("user_id")
-      .eq("user_id", userId)
-      .maybeSingle();
-
-    if (error) return null;
-    return Boolean(data);
-  } catch {
-    return null;
-  }
 }
 
 export async function verifyAdminRequest(req: any): Promise<VerifiedAdmin> {
@@ -119,37 +72,13 @@ export async function verifyAdminRequest(req: any): Promise<VerifiedAdmin> {
   const email = user.email?.toLowerCase();
   const id = user.id.toLowerCase();
 
-  if (hasAllowList && !(email && allowedEmails.has(email)) && !allowedUserIds.has(id)) {
-    const forbidden = new Error("User is not allowed to access admin");
-    (forbidden as any).status = 403;
-    throw forbidden;
-  }
-
-  if (!hasAllowList) {
-    const databaseAdmin = await isAdminInDatabase(accessToken);
-    if (databaseAdmin === true) {
-      return {
-        accessToken,
-        user: {
-          id: user.id,
-          email: user.email,
-        },
-      };
-    }
-
-    const serviceRoleAdmin = await isAdminByServiceRole(user.id);
-    if (serviceRoleAdmin === true) {
-      return {
-        accessToken,
-        user: {
-          id: user.id,
-          email: user.email,
-        },
-      };
-    }
-  }
-
   if (!hasAllowList && !allowAnyAuthenticatedAdmin) {
+    const configError = new Error("Admin allowlist is not configured");
+    (configError as any).status = 500;
+    throw configError;
+  }
+
+  if (hasAllowList && !(email && allowedEmails.has(email)) && !allowedUserIds.has(id)) {
     const forbidden = new Error("User is not allowed to access admin");
     (forbidden as any).status = 403;
     throw forbidden;

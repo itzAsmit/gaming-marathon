@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { getAdminSessionStatus } from "@/lib/authToken";
 import { withTimeout } from "@/lib/withTimeout";
 import { isConstrainedNetwork } from "@/hooks/use-constrained-network";
 import { ArrowLeft, Eye, EyeOff, Gamepad2 } from "lucide-react";
@@ -66,13 +65,6 @@ export default function AdminLogin() {
         localStorage.setItem("admin_login_remember", JSON.stringify({ savedEmail: normalizedEmail }));
       } else {
         localStorage.removeItem("admin_login_remember");
-      }
-    };
-
-    const verifyAdminAccess = async () => {
-      const adminStatus = await getAdminSessionStatus();
-      if (!adminStatus.ok) {
-        throw new Error(adminStatus.error || "This account is not allowed to access admin");
       }
     };
 
@@ -183,7 +175,6 @@ export default function AdminLogin() {
       const proxyResult = await tryProxyLogin();
       console.log('[AdminLogin] Login successful via proxy');
 
-      await verifyAdminAccess();
       handleSuccess();
 
       if (proxyResult.usedManualStorage) {
@@ -218,7 +209,6 @@ export default function AdminLogin() {
         console.log('[AdminLogin] Attempting direct fallback');
         await tryDirectLogin();
         console.log('[AdminLogin] Direct fallback succeeded');
-        await verifyAdminAccess();
         handleSuccess();
         navigate("/admin/dashboard");
       } catch (directErr) {
