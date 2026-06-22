@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { hasStoredAccessToken } from "@/lib/authToken";
+import { verifyAdminSession } from "@/lib/authToken";
 import { LayoutDashboard, Users, Gamepad2, Sword, History, LogOut, ChevronRight, Trophy, Menu, X } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
@@ -84,23 +84,18 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     let active = true;
 
     const checkAuth = async () => {
-      const { data } = await supabase.auth.getSession();
+      const isAdmin = await verifyAdminSession();
       if (!active) return;
 
-      if (data.session) {
-        setChecking(false);
-        return;
-      }
-
-      if (hasStoredAccessToken()) {
+      if (isAdmin) {
         setChecking(false);
         return;
       }
 
       const waitForSession = window.setTimeout(async () => {
-        const { data: retryData } = await supabase.auth.getSession();
+        const retryIsAdmin = await verifyAdminSession();
         if (!active) return;
-        if (!retryData.session && !hasStoredAccessToken()) {
+        if (!retryIsAdmin) {
           navigate("/admin/login");
         }
         setChecking(false);
@@ -111,9 +106,14 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       } = supabase.auth.onAuthStateChange((_event, session) => {
         if (!active) return;
         if (session) {
-          clearTimeout(waitForSession);
-          setChecking(false);
-          subscription.unsubscribe();
+          void verifyAdminSession().then((sessionIsAdmin) => {
+            if (!active) return;
+            if (sessionIsAdmin) {
+              clearTimeout(waitForSession);
+              setChecking(false);
+              subscription.unsubscribe();
+            }
+          });
         }
       });
     };

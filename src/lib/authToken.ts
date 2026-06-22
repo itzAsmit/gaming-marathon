@@ -57,3 +57,23 @@ export async function getAccessToken(): Promise<string | null> {
 export function hasStoredAccessToken(): boolean {
   return Boolean(getStoredAccessToken());
 }
+
+export async function verifyAdminSession(): Promise<boolean> {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return false;
+
+  try {
+    const response = await fetch("/api/admin-session", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      cache: "no-store",
+    });
+
+    return response.ok;
+  } catch {
+    return false;
+  }
+}

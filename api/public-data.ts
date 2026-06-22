@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
+import { sendAuthError, verifyAdminRequest } from "./_adminAuth";
 
-type Resource = "leaderboard" | "players" | "games" | "hall_of_fame" | "rankings" | "admin_players" | "admin_games" | "admin_items" | "admin_hall_of_fame" | "admin_activity_logs" | "admin_players_with_items" | "admin_seasons" | "admin_season_scores";
+type Resource = "leaderboard" | "players" | "games" | "hall_of_fame" | "rankings" | "seasons" | "admin_players" | "admin_games" | "admin_items" | "admin_hall_of_fame" | "admin_activity_logs" | "admin_players_with_items" | "admin_seasons" | "admin_season_scores";
 
 const supabaseUrl =
   process.env.SUPABASE_URL ||
@@ -11,7 +12,7 @@ const supabaseAnonKey =
   process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
 const isAllowedResource = (value: string): value is Resource => {
-  return ["leaderboard", "players", "games", "hall_of_fame", "rankings", "admin_players", "admin_games", "admin_items", "admin_hall_of_fame", "admin_activity_logs", "admin_players_with_items", "admin_seasons", "admin_season_scores"].includes(value);
+  return ["leaderboard", "players", "games", "hall_of_fame", "rankings", "seasons", "admin_players", "admin_games", "admin_items", "admin_hall_of_fame", "admin_activity_logs", "admin_players_with_items", "admin_seasons", "admin_season_scores"].includes(value);
 };
 
 export default async function handler(req: any, res: any) {
@@ -26,9 +27,21 @@ export default async function handler(req: any, res: any) {
       return res.status(400).json({ error: "Invalid resource" });
     }
 
+    const isAdminResource = resourceRaw.startsWith("admin_");
+    let adminAccessToken = "";
+
+    if (isAdminResource) {
+      try {
+        const verified = await verifyAdminRequest(req);
+        adminAccessToken = verified.accessToken;
+      } catch (error) {
+        return sendAuthError(res, error);
+      }
+    }
+
     // Cache public responses for 30s on CDN. Do not cache admin or mutable game/hof data.
     const noCacheResources = ["hall_of_fame", "games"];
-    if (!resourceRaw.startsWith("admin_") && !noCacheResources.includes(resourceRaw)) {
+    if (!isAdminResource && !noCacheResources.includes(resourceRaw)) {
       res.setHeader("Cache-Control", "public, s-maxage=30, stale-while-revalidate=60");
     } else {
       res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
@@ -36,7 +49,13 @@ export default async function handler(req: any, res: any) {
       res.setHeader("Expires", "0");
     }
 
-    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+    const supabase = createClient(supabaseUrl, supabaseAnonKey, isAdminResource ? {
+      global: { headers: { Authorization: `Bearer ${adminAccessToken}` } },
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+    } : undefined);
 
     if (resourceRaw === "leaderboard") {
       const { data, error } = await supabase
@@ -65,6 +84,12 @@ export default async function handler(req: any, res: any) {
       const { data, error } = await supabase
         .from("hall_of_fame")
         .select("*, players(name, player_id, portrait_url)");
+      if (error) return res.status(500).json({ error: error.message });
+      return res.status(200).json({ data });
+    }
+
+    if (resourceRaw === "seasons") {
+      const { data, error } = await supabase.from("seasons").select("*").order("number");
       if (error) return res.status(500).json({ error: error.message });
       return res.status(200).json({ data });
     }
