@@ -40,6 +40,18 @@ const ITEMS: FeatureItem[] = [
     title: "Immunity Seal",
     description: "Locks your leaderboard position for that game. Your points do not increase, but players below you cannot overtake your rank even if they earn more.",
   },
+  {
+    id: "double-or-nothing",
+    icon: Ticket,
+    title: "Double or Nothing",
+    description: "Wheel of Luck",
+  },
+  {
+    id: "time-capsule",
+    icon: ShieldCheck,
+    title: "Time Capsule",
+    description: "Rewind the points",
+  },
 ];
 
 export default function SpecialItemsSection() {
