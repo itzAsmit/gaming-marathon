@@ -74,7 +74,16 @@ export default function AdminDashboard() {
     if (!selected) return;
     setSaving(true);
     try {
-      const payload = { ...stats, player_id: selected.id, updated_at: new Date().toISOString() };
+      const payload = {
+        player_id: selected.id,
+        games_played: Number(stats.games_played),
+        events_completed: Number(stats.events_completed),
+        wins: Number(stats.wins),
+        seconds: Number(stats.seconds),
+        thirds: Number(stats.thirds),
+        points: Number(stats.points),
+        updated_at: new Date().toISOString(),
+      };
 
       const existingEntries = await raceDataFetch<{ id: string; player_id: string }[]>(
         () => supabase.from("leaderboard").select("id, player_id"),
