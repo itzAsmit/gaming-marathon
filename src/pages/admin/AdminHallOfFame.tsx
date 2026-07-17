@@ -24,7 +24,7 @@ export default function AdminHallOfFame() {
           "admin_players",
         ),
         raceDataFetch<any[]>(
-          () => supabase.from("games").select("id, name, season, game_date").order("game_date"),
+          () => supabase.from("games").select("id, name, seasons, game_date").order("game_date"),
           "admin_games",
         ),
         raceDataFetch<any[]>(
@@ -110,12 +110,19 @@ export default function AdminHallOfFame() {
     }
   };
 
-  const updateGameSeason = async (gameId: string, season: number | null) => {
+  const updateGameSeason = async (gameId: string, season: number, remove: boolean = false) => {
     setSaving(true);
-    setGames((prev) => prev.map((g) => (g.id === gameId ? { ...g, season } : g)));
+    
+    const game = games.find(g => g.id === gameId);
+    const currentSeasons: number[] = game?.seasons || [];
+    const newSeasons = remove 
+      ? currentSeasons.filter(s => s !== season) 
+      : Array.from(new Set([...currentSeasons, season]));
+
+    setGames((prev) => prev.map((g) => (g.id === gameId ? { ...g, seasons: newSeasons } : g)));
     try {
-      await adminMutation.update("games", { season }, { id: gameId });
-      toast.success(season ? `Game added to Season ${season}` : "Game removed from season");
+      await adminMutation.update("games", { seasons: newSeasons }, { id: gameId });
+      toast.success(!remove ? `Game added to Season ${season}` : "Game removed from season");
       await fetchData();
     } catch {
       toast.error("Failed to update game season");
@@ -217,7 +224,7 @@ export default function AdminHallOfFame() {
 
   // ── Reusable: games list for a season ──
   const renderGamesForSeason = (seasonNum: number) => {
-    const seasonGames = games.filter((g) => g.season === seasonNum);
+    const seasonGames = games.filter((g) => g.seasons?.includes(seasonNum));
     return (
       <div>
         <div className="space-y-2 mb-4">
@@ -237,7 +244,7 @@ export default function AdminHallOfFame() {
                   )}
                 </div>
                 <button
-                  onClick={() => updateGameSeason(game.id, null)}
+                  onClick={() => updateGameSeason(game.id, seasonNum, true)}
                   disabled={saving}
                   className="p-2 rounded-lg"
                   style={{ background: "hsl(0 80% 96%)", color: "hsl(var(--destructive))" }}
@@ -258,14 +265,14 @@ export default function AdminHallOfFame() {
             defaultValue=""
           >
             <option value="" disabled>Add a game to this season…</option>
-            {games.filter((g) => g.season !== seasonNum).map((g) => (
+            {games.filter((g) => !g.seasons?.includes(seasonNum)).map((g) => (
               <option key={g.id} value={g.id}>{g.name}</option>
             ))}
           </select>
           <button
             onClick={() => {
               const sel = document.getElementById(`add-game-season-${seasonNum}`) as HTMLSelectElement;
-              if (sel && sel.value) { updateGameSeason(sel.value, seasonNum); sel.value = ""; }
+              if (sel && sel.value) { updateGameSeason(sel.value, seasonNum, false); sel.value = ""; }
             }}
             disabled={saving}
             className="px-4 py-2 rounded-lg text-xs font-bold transition-transform hover:scale-105 active:scale-95"
@@ -352,7 +359,7 @@ export default function AdminHallOfFame() {
                   <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                 </span>
                 <span className="text-sm font-normal" style={{ color: "hsl(var(--brown))" }}>
-                  {games.filter((g) => g.season === currentSeasonNumber).length} games
+                  {games.filter((g) => g.seasons?.includes(currentSeasonNumber)).length} games
                 </span>
               </h3>
               {renderGamesForSeason(currentSeasonNumber)}
@@ -440,7 +447,7 @@ export default function AdminHallOfFame() {
                                   </span>
                                 )}
                                 <span className="text-xs font-medium" style={{ color: "hsl(var(--brown))" }}>
-                                  {entries.filter((e) => e.season === seasonNum).length} rankings · {games.filter((g) => g.season === seasonNum).length} games
+                                  {entries.filter((e) => e.season === seasonNum).length} rankings · {games.filter((g) => g.seasons?.includes(seasonNum)).length} games
                                 </span>
                               </div>
                             </div>

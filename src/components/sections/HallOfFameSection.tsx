@@ -60,9 +60,8 @@ export default function HallOfFameSection() {
         .eq("season", season)
         .order("rank");
 
-      // @ts-ignore
-      const { data: gameData }: { data: Array<{ name: string; game_date: string | null }> | null } =
-        await supabase.from("games").select("name, game_date").eq("season", season);
+      const { data: gameData } =
+        await supabase.from("games").select("name, game_date").contains("seasons", [season]);
 
       const topPlayers = (hofData || [])
         .filter((entry: any) => entry.rank <= 3)
