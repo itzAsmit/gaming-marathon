@@ -134,12 +134,12 @@ export default function HallOfFameSection() {
               className="w-full flex flex-col items-center"
             >
               <div className="flex justify-center mb-4 -mt-6 w-full">
-                <TabsList className="h-auto gap-2 rounded-none border-b border-border bg-transparent px-0 py-1 text-foreground overflow-x-auto max-w-full justify-start md:justify-center">
+                <TabsList className="h-auto gap-2 !rounded-none !border-none !bg-transparent px-0 py-1 text-foreground overflow-x-auto max-w-full justify-start md:justify-center">
                   {seasonsList.map((s) => (
                     <TabsTrigger
                       key={s.number}
                       value={`season-${s.number}`}
-                      className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 flex-shrink-0 after:h-0.5 hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+                      className="relative flex-shrink-0 hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:hover:bg-accent"
                     >
                       {s.name || `Season ${String(s.number).padStart(2, "0")}`}
                     </TabsTrigger>
