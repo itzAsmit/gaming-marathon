@@ -51,196 +51,198 @@ export default function SeasonStatsView({ stats }: { stats: SeasonStats }) {
   return (
     <div className="space-y-6 md:space-y-10">
       {/* Top 3 Podium - Redesigned Layout */}
-      <div className="flex items-end justify-center gap-2 md:gap-8 relative h-56 md:h-64 pt-2">
-        {/* 2nd Place (Left) */}
-        {(() => {
-          const rank = 2;
-          const topPlayer = stats.topPlayers.find((p) => p.rank === rank);
-          if (!topPlayer) return null;
+      {stats.topPlayers.length > 0 && (
+        <div className="flex items-end justify-center gap-2 md:gap-8 relative h-56 md:h-64 pt-2">
+          {/* 2nd Place (Left) */}
+          {(() => {
+            const rank = 2;
+            const topPlayer = stats.topPlayers.find((p) => p.rank === rank);
+            if (!topPlayer) return null;
 
-          const cfg = RANK_CONFIG[rank as 1 | 2 | 3];
-          return (
-            <motion.div
-              key={rank}
-              className={`flex flex-col items-center ${cfg.zIndex} relative group cursor-default`}
-              animate={{ y: [0, -4, 0] }}
-              transition={{ duration: 3.5, repeat: Infinity, delay: 1 }}
-            >
-              {/* Avatar (Now ABOVE Name Card) */}
-              <div
-                className="w-16 h-16 md:w-24 md:h-24 rounded-t-2xl overflow-hidden transition-transform duration-300 group-hover:scale-105 z-10"
-                style={{ border: `3px solid ${cfg.color}`, borderBottom: "none", boxShadow: `0 -5px 15px ${cfg.color}40` }}
+            const cfg = RANK_CONFIG[rank as 1 | 2 | 3];
+            return (
+              <motion.div
+                key={rank}
+                className={`flex flex-col items-center ${cfg.zIndex} relative group cursor-default`}
+                animate={{ y: [0, -4, 0] }}
+                transition={{ duration: 3.5, repeat: Infinity, delay: 1 }}
               >
-                {toMediaSrc(topPlayer.player.portrait_url) ? (
-                  <SmartImage
-                    url={topPlayer.player.portrait_url}
-                    alt={topPlayer.player.name}
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div
-                    className="w-full h-full flex items-center justify-center"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, hsl(var(--brown-deep)), hsl(var(--brown)))",
-                    }}
+                {/* Avatar (Now ABOVE Name Card) */}
+                <div
+                  className="w-16 h-16 md:w-24 md:h-24 rounded-t-2xl overflow-hidden transition-transform duration-300 group-hover:scale-105 z-10"
+                  style={{ border: `3px solid ${cfg.color}`, borderBottom: "none", boxShadow: `0 -5px 15px ${cfg.color}40` }}
+                >
+                  {toMediaSrc(topPlayer.player.portrait_url) ? (
+                    <SmartImage
+                      url={topPlayer.player.portrait_url}
+                      alt={topPlayer.player.name}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div
+                      className="w-full h-full flex items-center justify-center"
+                      style={{
+                        background:
+                          "linear-gradient(135deg, hsl(var(--brown-deep)), hsl(var(--brown)))",
+                      }}
+                    >
+                      <span className="text-xl md:text-3xl">{cfg.emoji}</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Info card (Now BELOW Avatar) */}
+                <div
+                  className="glass-card rounded-b-lg px-1 md:px-2 py-1 md:py-2 text-center w-24 md:w-32 transition-all duration-300 z-20"
+                  style={{ border: `1px solid ${cfg.color}40`, borderTop: `3px solid ${cfg.color}`, background: "hsl(var(--card))" }}
+                >
+                  <p
+                    className="text-[9px] md:text-xs font-bold mb-0.5 md:mb-1"
+                    style={{ color: cfg.color, fontFamily: "Electrolize, sans-serif" }}
                   >
-                    <span className="text-xl md:text-3xl">{cfg.emoji}</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Info card (Now BELOW Avatar) */}
-              <div
-                className="glass-card rounded-b-lg px-1 md:px-2 py-1 md:py-2 text-center w-24 md:w-32 transition-all duration-300 z-20"
-                style={{ border: `1px solid ${cfg.color}40`, borderTop: `3px solid ${cfg.color}`, background: "hsl(var(--card))" }}
-              >
-                <p
-                  className="text-[9px] md:text-xs font-bold mb-0.5 md:mb-1"
-                  style={{ color: cfg.color, fontFamily: "Electrolize, sans-serif" }}
-                >
-                  {cfg.emoji} {cfg.label}
-                </p>
-                <p
-                  className="text-[10px] md:text-xs font-semibold truncate px-1"
-                  style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}
-                  title={topPlayer.player.name}
-                >
-                  {topPlayer.player.name}
-                </p>
-              </div>
-            </motion.div>
-          );
-        })()}
-
-        {/* 1st Place (Center) - LARGER */}
-        {(() => {
-          const rank = 1;
-          const topPlayer = stats.topPlayers.find((p) => p.rank === rank);
-          if (!topPlayer) return null;
-
-          const cfg = RANK_CONFIG[rank as 1 | 2 | 3];
-          return (
-            <motion.div
-              key={rank}
-              className={`flex flex-col items-center ${cfg.zIndex} relative scale-105 md:scale-125 group cursor-default`}
-              animate={{ y: [0, -8, 0] }}
-              transition={{ duration: 3.5, repeat: Infinity, delay: 0.5 }}
-            >
-              {/* Avatar */}
-              <div
-                className="w-20 h-20 md:w-28 md:h-28 rounded-t-2xl overflow-hidden transition-transform duration-300 group-hover:scale-105 z-10"
-                style={{ border: `4px solid ${cfg.color}`, borderBottom: "none", boxShadow: `0 -5px 25px ${cfg.color}60` }}
-              >
-                {toMediaSrc(topPlayer.player.portrait_url) ? (
-                  <SmartImage
-                    url={topPlayer.player.portrait_url}
-                    alt={topPlayer.player.name}
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div
-                    className="w-full h-full flex items-center justify-center"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, hsl(var(--brown-deep)), hsl(var(--brown)))",
-                    }}
+                    {cfg.emoji} {cfg.label}
+                  </p>
+                  <p
+                    className="text-[10px] md:text-xs font-semibold truncate px-1"
+                    style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}
+                    title={topPlayer.player.name}
                   >
-                    <span className="text-3xl md:text-5xl">{cfg.emoji}</span>
-                  </div>
-                )}
-              </div>
+                    {topPlayer.player.name}
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })()}
 
-              {/* Info card */}
-              <div
-                className="glass-card rounded-b-xl px-2 md:px-4 py-1.5 md:py-3 text-center w-28 md:w-40 transition-all duration-300 z-20"
-                style={{ border: `2px solid ${cfg.color}50`, borderTop: `4px solid ${cfg.color}`, background: "hsl(var(--card))" }}
+          {/* 1st Place (Center) - LARGER */}
+          {(() => {
+            const rank = 1;
+            const topPlayer = stats.topPlayers.find((p) => p.rank === rank);
+            if (!topPlayer) return null;
+
+            const cfg = RANK_CONFIG[rank as 1 | 2 | 3];
+            return (
+              <motion.div
+                key={rank}
+                className={`flex flex-col items-center ${cfg.zIndex} relative scale-105 md:scale-125 group cursor-default`}
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 3.5, repeat: Infinity, delay: 0.5 }}
               >
-                <p
-                  className="text-[10px] md:text-sm font-bold mb-1 md:mb-1.5"
-                  style={{ color: cfg.color, fontFamily: "Electrolize, sans-serif" }}
+                {/* Avatar */}
+                <div
+                  className="w-20 h-20 md:w-28 md:h-28 rounded-t-2xl overflow-hidden transition-transform duration-300 group-hover:scale-105 z-10"
+                  style={{ border: `4px solid ${cfg.color}`, borderBottom: "none", boxShadow: `0 -5px 25px ${cfg.color}60` }}
                 >
-                  {cfg.emoji} {cfg.label}
-                </p>
-                <p
-                  className="text-xs md:text-sm font-semibold truncate px-1"
-                  style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}
-                  title={topPlayer.player.name}
+                  {toMediaSrc(topPlayer.player.portrait_url) ? (
+                    <SmartImage
+                      url={topPlayer.player.portrait_url}
+                      alt={topPlayer.player.name}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div
+                      className="w-full h-full flex items-center justify-center"
+                      style={{
+                        background:
+                          "linear-gradient(135deg, hsl(var(--brown-deep)), hsl(var(--brown)))",
+                      }}
+                    >
+                      <span className="text-3xl md:text-5xl">{cfg.emoji}</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Info card */}
+                <div
+                  className="glass-card rounded-b-xl px-2 md:px-4 py-1.5 md:py-3 text-center w-28 md:w-40 transition-all duration-300 z-20"
+                  style={{ border: `2px solid ${cfg.color}50`, borderTop: `4px solid ${cfg.color}`, background: "hsl(var(--card))" }}
                 >
-                  {topPlayer.player.name}
-                </p>
-              </div>
-            </motion.div>
-          );
-        })()}
-
-        {/* 3rd Place (Right) */}
-        {(() => {
-          const rank = 3;
-          const topPlayer = stats.topPlayers.find((p) => p.rank === rank);
-          if (!topPlayer) return null;
-
-          const cfg = RANK_CONFIG[rank as 1 | 2 | 3];
-          return (
-            <motion.div
-              key={rank}
-              className={`flex flex-col items-center ${cfg.zIndex} relative group cursor-default`}
-              animate={{ y: [0, -4, 0] }}
-              transition={{ duration: 3.5, repeat: Infinity, delay: 1.5 }}
-            >
-              {/* Avatar */}
-              <div
-                className="w-16 h-16 md:w-24 md:h-24 rounded-t-2xl overflow-hidden transition-transform duration-300 group-hover:scale-105 z-10"
-                style={{ border: `3px solid ${cfg.color}`, borderBottom: "none", boxShadow: `0 -5px 15px ${cfg.color}40` }}
-              >
-                {toMediaSrc(topPlayer.player.portrait_url) ? (
-                  <SmartImage
-                    url={topPlayer.player.portrait_url}
-                    alt={topPlayer.player.name}
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div
-                    className="w-full h-full flex items-center justify-center"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, hsl(var(--brown-deep)), hsl(var(--brown)))",
-                    }}
+                  <p
+                    className="text-[10px] md:text-sm font-bold mb-1 md:mb-1.5"
+                    style={{ color: cfg.color, fontFamily: "Electrolize, sans-serif" }}
                   >
-                    <span className="text-xl md:text-3xl">{cfg.emoji}</span>
-                  </div>
-                )}
-              </div>
+                    {cfg.emoji} {cfg.label}
+                  </p>
+                  <p
+                    className="text-xs md:text-sm font-semibold truncate px-1"
+                    style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}
+                    title={topPlayer.player.name}
+                  >
+                    {topPlayer.player.name}
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })()}
 
-              {/* Info card */}
-              <div
-                className="glass-card rounded-b-lg px-1 md:px-2 py-1 md:py-2 text-center w-24 md:w-32 transition-all duration-300 z-20"
-                style={{ border: `1px solid ${cfg.color}40`, borderTop: `3px solid ${cfg.color}`, background: "hsl(var(--card))" }}
+          {/* 3rd Place (Right) */}
+          {(() => {
+            const rank = 3;
+            const topPlayer = stats.topPlayers.find((p) => p.rank === rank);
+            if (!topPlayer) return null;
+
+            const cfg = RANK_CONFIG[rank as 1 | 2 | 3];
+            return (
+              <motion.div
+                key={rank}
+                className={`flex flex-col items-center ${cfg.zIndex} relative group cursor-default`}
+                animate={{ y: [0, -4, 0] }}
+                transition={{ duration: 3.5, repeat: Infinity, delay: 1.5 }}
               >
-                <p
-                  className="text-[9px] md:text-xs font-bold mb-0.5 md:mb-1"
-                  style={{ color: cfg.color, fontFamily: "Electrolize, sans-serif" }}
+                {/* Avatar */}
+                <div
+                  className="w-16 h-16 md:w-24 md:h-24 rounded-t-2xl overflow-hidden transition-transform duration-300 group-hover:scale-105 z-10"
+                  style={{ border: `3px solid ${cfg.color}`, borderBottom: "none", boxShadow: `0 -5px 15px ${cfg.color}40` }}
                 >
-                  {cfg.emoji} {cfg.label}
-                </p>
-                <p
-                  className="text-[10px] md:text-xs font-semibold truncate px-1"
-                  style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}
-                  title={topPlayer.player.name}
+                  {toMediaSrc(topPlayer.player.portrait_url) ? (
+                    <SmartImage
+                      url={topPlayer.player.portrait_url}
+                      alt={topPlayer.player.name}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div
+                      className="w-full h-full flex items-center justify-center"
+                      style={{
+                        background:
+                          "linear-gradient(135deg, hsl(var(--brown-deep)), hsl(var(--brown)))",
+                      }}
+                    >
+                      <span className="text-xl md:text-3xl">{cfg.emoji}</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Info card */}
+                <div
+                  className="glass-card rounded-b-lg px-1 md:px-2 py-1 md:py-2 text-center w-24 md:w-32 transition-all duration-300 z-20"
+                  style={{ border: `1px solid ${cfg.color}40`, borderTop: `3px solid ${cfg.color}`, background: "hsl(var(--card))" }}
                 >
-                  {topPlayer.player.name}
-                </p>
-              </div>
-            </motion.div>
-          );
-        })()}
-      </div>
+                  <p
+                    className="text-[9px] md:text-xs font-bold mb-0.5 md:mb-1"
+                    style={{ color: cfg.color, fontFamily: "Electrolize, sans-serif" }}
+                  >
+                    {cfg.emoji} {cfg.label}
+                  </p>
+                  <p
+                    className="text-[10px] md:text-xs font-semibold truncate px-1"
+                    style={{ color: "hsl(var(--brown-deep))", fontFamily: "Electrolize, sans-serif" }}
+                    title={topPlayer.player.name}
+                  >
+                    {topPlayer.player.name}
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })()}
+        </div>
+      )}
 
       {/* Players & Games Grid */}
       <div className="grid grid-cols-2 gap-3 md:gap-8">
