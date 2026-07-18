@@ -196,10 +196,14 @@ export default function AdminDashboard() {
                       </label>
                       <input
                         type="number"
-                        min={0}
+                        min={f.key === "points" ? undefined : 0}
                         value={stats[f.key] as number}
                         onFocus={(e) => e.currentTarget.select()}
-                        onChange={(e) => setStats((s) => ({ ...s, [f.key]: parseInt(e.target.value) || 0 }))}
+                        onChange={(e) => {
+                          const val = parseInt(e.target.value, 10);
+                          const parsed = Number.isNaN(val) ? 0 : val;
+                          setStats((s) => ({ ...s, [f.key]: f.key === "points" ? parsed : Math.max(0, parsed) }));
+                        }}
                         className="w-full px-3 py-2 rounded-lg text-sm outline-none"
                         style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
                       />

@@ -432,7 +432,7 @@ export default function AdminGames() {
             .filter((r) => r.player_id)
             .map((r, index) => ({ ...r, rank: index + 1, points: Number.isFinite(r.points) ? r.points : 0 }));
           if (validRanks.length > 0) {
-            await adminMutation.insert("player_game_stats", validRanks.map((r) => ({ game_id: editing.id, player_id: r.player_id, rank: r.rank, points: Math.max(0, r.points) })));
+            await adminMutation.insert("player_game_stats", validRanks.map((r) => ({ game_id: editing.id, player_id: r.player_id, rank: r.rank, points: r.points })));
           }
         }
 
@@ -445,7 +445,7 @@ export default function AdminGames() {
             .filter((r) => r.player_id)
             .map((r, index) => ({ ...r, rank: index + 1, points: Number.isFinite(r.points) ? r.points : 0 }));
           if (validRanks.length > 0) {
-            await adminMutation.insert("player_game_stats", validRanks.map((r) => ({ game_id: newGame.id, player_id: r.player_id, rank: r.rank, points: Math.max(0, r.points) })));
+            await adminMutation.insert("player_game_stats", validRanks.map((r) => ({ game_id: newGame.id, player_id: r.player_id, rank: r.rank, points: r.points })));
           }
         }
         await logActivity("CREATE_GAME", form.name);
@@ -857,12 +857,11 @@ export default function AdminGames() {
                         </select>
                         <input
                           type="number"
-                          min={0}
                           value={r.points}
                           onFocus={(e) => e.currentTarget.select()}
                           onChange={(e) => {
                             const nextValue = parseInt(e.target.value, 10);
-                            setRankings((ranks) => ranks.map((x, j) => j === i ? { ...x, points: Number.isNaN(nextValue) ? 0 : Math.max(0, nextValue) } : x));
+                            setRankings((ranks) => ranks.map((x, j) => j === i ? { ...x, points: Number.isNaN(nextValue) ? 0 : nextValue } : x));
                           }}
                           className="w-24 px-3 py-2 rounded-xl text-xs outline-none text-center"
                           style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
