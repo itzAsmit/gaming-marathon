@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { raceDataFetch } from "@/lib/raceDataFetch";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import { motion } from "framer-motion";
 import { useConstrainedNetwork } from "@/hooks/use-constrained-network";
+import { Download, RefreshCw } from "lucide-react";
+import { toJpeg } from "html-to-image";
+import { toast } from "sonner";
 
 interface LeaderboardEntry {
   id: string;
@@ -26,6 +29,8 @@ export default function LeaderboardSection() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const isConstrained = useConstrainedNetwork();
+  const leaderboardRef = useRef<HTMLDivElement>(null);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const fetchLeaderboard = async () => {
     try {
@@ -50,6 +55,42 @@ export default function LeaderboardSection() {
       setError("Connection issue. Please tap retry.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDownload = async () => {
+    if (!leaderboardRef.current) return;
+    setIsDownloading(true);
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      const element = leaderboardRef.current;
+      const width = element.scrollWidth;
+      const height = element.scrollHeight;
+
+      const dataUrl = await toJpeg(element, {
+        width,
+        height,
+        style: {
+          transform: "none",
+          width: `${width}px`,
+          height: `${height}px`,
+          overflow: "visible",
+        },
+        backgroundColor: "#0d0c0f",
+        quality: 0.95,
+      });
+
+      const link = document.createElement("a");
+      link.download = `leaderboard-${Date.now()}.jpg`;
+      link.href = dataUrl;
+      link.click();
+      toast.success("Leaderboard downloaded successfully!");
+    } catch (err) {
+      console.error("Failed to generate image", err);
+      toast.error("Failed to download leaderboard screenshot.");
+    } finally {
+      setIsDownloading(false);
     }
   };
 
@@ -79,7 +120,7 @@ export default function LeaderboardSection() {
         </ScrollReveal>
 
         <ScrollReveal delay={0.2}>
-          <div className="glass-card rounded-2xl overflow-x-auto md:overflow-hidden">
+          <div ref={leaderboardRef} className="glass-card rounded-2xl overflow-x-auto md:overflow-hidden">
             {/* Header */}
             <div
               className="grid gap-1 md:gap-2 px-3 md:px-6 py-3 md:py-4 text-[10px] md:text-sm  tracking-widest"
@@ -169,6 +210,29 @@ export default function LeaderboardSection() {
                 </motion.div>
               ))
             )}
+          </div>
+        </ScrollReveal>
+
+        <ScrollReveal delay={0.3}>
+          <div className="flex justify-center">
+            <button
+              onClick={handleDownload}
+              disabled={isDownloading}
+              className="mt-8 px-6 py-3 rounded-xl text-xs tracking-widest font-bold flex items-center gap-2 transition-all duration-300 transform hover:scale-105"
+              style={{
+                background: "hsla(var(--gold) / 0.12)",
+                border: "1px solid hsla(var(--gold) / 0.45)",
+                color: "hsl(var(--gold))",
+                fontFamily: "Electrolize, sans-serif",
+              }}
+            >
+              {isDownloading ? (
+                <RefreshCw size={14} className="animate-spin" />
+              ) : (
+                <Download size={14} />
+              )}
+              {isDownloading ? "GENERATING JPG..." : "DOWNLOAD LEADERBOARD"}
+            </button>
           </div>
         </ScrollReveal>
       </div>
