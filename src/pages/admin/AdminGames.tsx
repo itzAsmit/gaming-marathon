@@ -27,7 +27,7 @@ interface Game {
   status: string;
 }
 
-interface GameRanking { rank: number; player_id: string; points: number; player_name?: string; }
+interface GameRanking { rank: number; player_id: string; points: number | string; player_name?: string; }
 
 interface ImageCropDraft {
   open: boolean;
@@ -430,7 +430,14 @@ export default function AdminGames() {
           await adminMutation.delete("player_game_stats", { game_id: editing.id });
           const validRanks = rankings
             .filter((r) => r.player_id)
-            .map((r, index) => ({ ...r, rank: index + 1, points: Number.isFinite(r.points) ? r.points : 0 }));
+            .map((r, index) => {
+              const parsedPoints = typeof r.points === "string" ? parseInt(r.points, 10) : r.points;
+              return {
+                ...r,
+                rank: index + 1,
+                points: Number.isFinite(parsedPoints) ? parsedPoints : 0,
+              };
+            });
           if (validRanks.length > 0) {
             await adminMutation.insert("player_game_stats", validRanks.map((r) => ({ game_id: editing.id, player_id: r.player_id, rank: r.rank, points: r.points })));
           }
@@ -443,7 +450,14 @@ export default function AdminGames() {
         if (newGame && form.status === "completed") {
           const validRanks = rankings
             .filter((r) => r.player_id)
-            .map((r, index) => ({ ...r, rank: index + 1, points: Number.isFinite(r.points) ? r.points : 0 }));
+            .map((r, index) => {
+              const parsedPoints = typeof r.points === "string" ? parseInt(r.points, 10) : r.points;
+              return {
+                ...r,
+                rank: index + 1,
+                points: Number.isFinite(parsedPoints) ? parsedPoints : 0,
+              };
+            });
           if (validRanks.length > 0) {
             await adminMutation.insert("player_game_stats", validRanks.map((r) => ({ game_id: newGame.id, player_id: r.player_id, rank: r.rank, points: r.points })));
           }
@@ -856,12 +870,14 @@ export default function AdminGames() {
                           {players.map((p) => <option key={p.id} value={p.id}>{p.name} ({p.player_id})</option>)}
                         </select>
                         <input
-                          type="number"
+                          type="text"
                           value={r.points}
                           onFocus={(e) => e.currentTarget.select()}
                           onChange={(e) => {
-                            const nextValue = parseInt(e.target.value, 10);
-                            setRankings((ranks) => ranks.map((x, j) => j === i ? { ...x, points: Number.isNaN(nextValue) ? 0 : nextValue } : x));
+                            const val = e.target.value;
+                            if (/^-?\d*$/.test(val)) {
+                              setRankings((ranks) => ranks.map((x, j) => j === i ? { ...x, points: val } : x));
+                            }
                           }}
                           className="w-24 px-3 py-2 rounded-xl text-xs outline-none text-center"
                           style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}

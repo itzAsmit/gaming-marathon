@@ -15,7 +15,7 @@ interface LeaderboardEntry {
   wins: number;
   seconds: number;
   thirds: number;
-  points: number;
+  points: number | string;
 }
 
 const logActivity = async (action: string, target: string) => {
@@ -81,7 +81,7 @@ export default function AdminDashboard() {
         wins: Number(stats.wins),
         seconds: Number(stats.seconds),
         thirds: Number(stats.thirds),
-        points: Number(stats.points),
+        points: parseInt(String(stats.points), 10) || 0,
         updated_at: new Date().toISOString(),
       };
 
@@ -195,14 +195,21 @@ export default function AdminDashboard() {
                         {f.label.toUpperCase()}
                       </label>
                       <input
-                        type="number"
+                        type={f.key === "points" ? "text" : "number"}
                         min={f.key === "points" ? undefined : 0}
-                        value={stats[f.key] as number}
+                        value={stats[f.key]}
                         onFocus={(e) => e.currentTarget.select()}
                         onChange={(e) => {
-                          const val = parseInt(e.target.value, 10);
-                          const parsed = Number.isNaN(val) ? 0 : val;
-                          setStats((s) => ({ ...s, [f.key]: f.key === "points" ? parsed : Math.max(0, parsed) }));
+                          const val = e.target.value;
+                          if (f.key === "points") {
+                            if (/^-?\d*$/.test(val)) {
+                              setStats((s) => ({ ...s, points: val }));
+                            }
+                          } else {
+                            const parsed = parseInt(val, 10);
+                            const finalVal = Number.isNaN(parsed) ? 0 : Math.max(0, parsed);
+                            setStats((s) => ({ ...s, [f.key]: finalVal }));
+                          }
                         }}
                         className="w-full px-3 py-2 rounded-lg text-sm outline-none"
                         style={{ background: "hsl(var(--input))", border: "1px solid hsl(var(--cream-dark))", color: "hsl(var(--brown-deep))" }}
