@@ -5,7 +5,7 @@ import { raceDataFetch } from "@/lib/raceDataFetch";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionHeader from "@/components/SectionHeader";
 import SeasonStatsView from "@/components/sections/SeasonStatsView";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/underline-tabs";
 
 interface HofEntry {
   id: string;
@@ -134,12 +134,12 @@ export default function HallOfFameSection() {
               className="w-full flex flex-col items-center"
             >
               <div className="flex justify-center mb-4 -mt-6 w-full">
-                <TabsList className="h-auto gap-2 !rounded-none !border-none !bg-transparent px-0 py-1 text-foreground overflow-x-auto max-w-full justify-start md:justify-center">
+                <TabsList variant="underline" className="h-auto grid grid-rows-2 grid-flow-col gap-3 overflow-x-auto overflow-y-hidden max-w-full justify-start !rounded-none !border-none !bg-transparent px-0 py-1 text-foreground sm:flex sm:flex-row sm:justify-center sm:gap-6 md:gap-8">
                   {seasonsList.map((s) => (
                     <TabsTrigger
                       key={s.number}
                       value={`season-${s.number}`}
-                      className="relative flex-shrink-0 hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:hover:bg-accent"
+                      className="relative flex-shrink-0 px-4 py-2 hover:bg-accent hover:text-foreground data-[active]:bg-transparent data-[active]:shadow-none data-[active]:hover:bg-accent"
                     >
                       {s.name || `Season ${String(s.number).padStart(2, "0")}`}
                     </TabsTrigger>
