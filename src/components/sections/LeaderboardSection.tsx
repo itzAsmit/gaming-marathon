@@ -22,7 +22,7 @@ interface LeaderboardEntry {
   players: { name: string; player_id: string } | null;
 }
 
-const CROWN = ["🥇", "🥈", "🥉"];
+// Custom badges are used in place of standard crowns
 
 export default function LeaderboardSection() {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
@@ -138,7 +138,7 @@ export default function LeaderboardSection() {
             />
 
             {/* Layer 1: Semi-transparent Dark Tint / Glass Overlay */}
-            <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] pointer-events-none z-10" />
+            <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px] pointer-events-none z-10" />
 
             {/* Layer 2: Points Table */}
             <div ref={leaderboardRef} className="relative z-20 glass-card rounded-2xl overflow-x-auto md:overflow-hidden">
@@ -207,14 +207,31 @@ export default function LeaderboardSection() {
                     className="grid gap-1 md:gap-2 px-3 md:px-6 py-3 md:py-4 text-[10px] md:text-sm text-center items-center transition-all duration-300"
                     style={{
                       borderBottom: "1px solid hsla(var(--cream) / 0.1)",
-                      background: i < 3 ? `hsla(var(--gold) / ${0.08 - i * 0.02})` : "transparent",
+                      background:
+                        i === 0
+                          ? "linear-gradient(90deg, rgba(251, 191, 36, 0.08) 0%, rgba(251, 191, 36, 0.01) 60%, transparent 100%)"
+                          : i === 1
+                            ? "linear-gradient(90deg, rgba(203, 213, 225, 0.08) 0%, rgba(203, 213, 225, 0.01) 60%, transparent 100%)"
+                            : i === 2
+                              ? "linear-gradient(90deg, rgba(249, 115, 22, 0.06) 0%, rgba(249, 115, 22, 0.01) 60%, transparent 100%)"
+                              : "transparent",
                       color: "hsl(var(--cream))",
                       gridTemplateColumns: "repeat(auto-fit, minmax(0, 1fr))",
                       minWidth: "min-content",
                     }}
                   >
-                    <div className=" font-bold whitespace-nowrap" style={{ fontFamily: "Electrolize, sans-serif", color: i < 3 ? "hsl(var(--gold))" : "hsl(var(--cream-dark))" }}>
-                      {i < 3 ? CROWN[i] : `#${i + 1}`}
+                    <div className="font-bold whitespace-nowrap text-center" style={{ fontFamily: "Electrolize, sans-serif" }}>
+                      {i === 0 ? (
+                        <span style={{ color: "#FFA751" }}>#1</span>
+                      ) : i === 1 ? (
+                        <span style={{ color: "#E2E8F0" }}>#2</span>
+                      ) : i === 2 ? (
+                        <span style={{ color: "#FF9966" }}>#3</span>
+                      ) : (
+                        <span style={{ color: "hsl(var(--cream-dark) / 0.6)" }}>
+                          #{i + 1}
+                        </span>
+                      )}
                     </div>
                     <div className="font-semibold truncate" style={{ fontFamily: "'ROWAN', serif", color: "hsl(var(--cream))" }}>
                       <span className="sm:hidden">{entry.players?.name?.split(" ")[0] ?? "—"}</span>
@@ -222,10 +239,10 @@ export default function LeaderboardSection() {
                     </div>
                     <div className="whitespace-nowrap">{entry.games_played}</div>
                     <div className="whitespace-nowrap">{entry.events_completed}</div>
-                    <div className="whitespace-nowrap" style={{ color: "hsl(var(--gold))", fontWeight: 600 }}>{entry.wins}</div>
-                    <div className="whitespace-nowrap">{entry.seconds}</div>
-                    <div className="whitespace-nowrap">{entry.thirds}</div>
-                    <div className="font-bold whitespace-nowrap" style={{ color: "hsl(var(--gold))", fontFamily: "Electrolize, sans-serif" }}>
+                    <div className="whitespace-nowrap" style={{ color: "hsl(var(--cream-dark))", fontWeight: 600 }}>{entry.wins}</div>
+                    <div className="whitespace-nowrap" style={{ color: "hsl(var(--gold))" }}>{entry.seconds}</div>
+                    <div className="whitespace-nowrap" style={{ color: "hsl(var(--gold))" }}>{entry.thirds}</div>
+                    <div className="font-bold whitespace-nowrap" style={{ color: "#978653ff", fontFamily: "Electrolize, sans-serif" }}>
                       {entry.points}
                     </div>
                   </motion.div>
