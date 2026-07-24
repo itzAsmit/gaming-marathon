@@ -119,7 +119,7 @@ export default function LeaderboardSection() {
   const cols = ["RANK", "PLAYER", "PLAYED", "EVENTS", "WINS", "2NDS", "3RDS", "POINTS"];
 
   return (
-    <section id="leaderboard" className="relative min-h-[100svh] md:min-h-screen py-16 px-4 scroll-mt-64 md:scroll-mt-72">
+    <section id="leaderboard" className="relative min-h-[100svh] md:min-h-screen py-16 px-2 sm:px-4 scroll-mt-64 md:scroll-mt-72">
       <div className="max-w-6xl mx-auto">
         <ScrollReveal>
           <SectionHeader title="LEADERBOARD" accent="STANDINGS" subtitle="Live rankings updated in real time" />
@@ -128,30 +128,28 @@ export default function LeaderboardSection() {
         <ScrollReveal delay={0.2}>
           <div
             ref={leaderboardContainerRef}
-            className="relative p-3 md:p-6 rounded-3xl overflow-hidden shadow-2xl"
+            className="relative p-2 md:p-6 rounded-3xl overflow-hidden shadow-2xl"
           >
             {/* Layer 0: Background Image */}
             <img
               src="/assets/leaderboard-bg.jpeg"
               alt=""
-              className="absolute inset-0 w-full h-full object-cover pointer-events-none z-0"
+              className="absolute inset-0 w-full h-full object-cover pointer-events-none z-0 blur-[2px] scale-105"
             />
 
-            {/* Layer 1: Semi-transparent Dark Tint / Glass Overlay */}
-            <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px] pointer-events-none z-10" />
+            {/* Layer 1: Semi-transparent Dark Tint / Glass Overlay (removed backdrop-blur to fix iOS Safari render bugs) */}
+            <div className="absolute inset-0 bg-black/25 pointer-events-none z-10" />
 
             {/* Layer 2: Points Table */}
             <div ref={leaderboardRef} className="relative z-20 glass-card rounded-2xl overflow-x-auto md:overflow-hidden">
               {/* Header */}
               <div
-                className="grid gap-1 md:gap-2 px-3 md:px-6 py-3 md:py-4 text-[10px] md:text-sm  tracking-widest"
+                className="leaderboard-row-grid px-2 md:px-6 py-3 md:py-4 text-[9px] sm:text-xs md:text-sm tracking-wider md:tracking-widest"
                 style={{
                   background: "hsla(var(--gold) / 0.15)",
                   borderBottom: "1px solid hsla(var(--gold) / 0.3)",
                   color: "hsl(var(--gold))",
                   fontFamily: "Electrolize, sans-serif",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(0, 1fr))",
-                  minWidth: "min-content",
                 }}
               >
                 {cols.map((c) => (
@@ -204,7 +202,7 @@ export default function LeaderboardSection() {
                 entries.map((entry, i) => (
                   <motion.div
                     key={entry.id}
-                    className="grid gap-1 md:gap-2 px-3 md:px-6 py-3 md:py-4 text-[10px] md:text-sm text-center items-center transition-all duration-300"
+                    className="leaderboard-row-grid px-2 md:px-6 py-3 md:py-4 text-[10px] sm:text-xs md:text-sm text-center items-center transition-all duration-300"
                     style={{
                       borderBottom: "1px solid hsla(var(--cream) / 0.1)",
                       background:
@@ -216,8 +214,6 @@ export default function LeaderboardSection() {
                               ? "linear-gradient(90deg, rgba(249, 115, 22, 0.06) 0%, rgba(249, 115, 22, 0.01) 60%, transparent 100%)"
                               : "transparent",
                       color: "hsl(var(--cream))",
-                      gridTemplateColumns: "repeat(auto-fit, minmax(0, 1fr))",
-                      minWidth: "min-content",
                     }}
                   >
                     <div className="font-bold whitespace-nowrap text-center" style={{ fontFamily: "Electrolize, sans-serif" }}>
